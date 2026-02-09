@@ -22,7 +22,8 @@ target "default" {
     FIPS_VERSION = "${FIPS_VERSION}"
     FIPS_SHA256 = "${FIPS_SHA256}"
     CORE_VERSION = "${CORE_VERSION}"
-    CORE_SHA256 = "${CORE_SHA256}"
+    BASE_IMAGE = "${BASE_IMAGE}"
+    STATIC_IMAGE="${STATIC_IMAGE}"
   }
   tags = ["openssl-fips:wolfi-${CORE_VERSION}"]
 }
