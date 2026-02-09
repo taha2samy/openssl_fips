@@ -2,8 +2,6 @@ variable "FIPS_VERSION" {
   default = "3.1.2"
 }
 
-
-
 variable "CORE_VERSION" {
   default = "3.5.5"
 }
@@ -40,25 +38,22 @@ target "standard" {
   inherits   = ["common"]
   target     = "openssl-standard"
   tags       = ["${REGISTRY}/${REPO}-base:latest", "${REGISTRY}/${REPO}:${CORE_VERSION}"]
-  cache-from = ["type=registry,${REGISTRY}/${REPO}-base:cache"]
-  cache-to   = ["type=gha,mode=max"]
+  cache-from = ["type=registry,ref=${REGISTRY}/${REPO}-base:cache"]
+  cache-to   = ["type=gha,mode=max,ref=${REGISTRY}/${REPO}-distroless:cache"]
   attest = [
     "type=provenance,mode=max",
     "type=sbom,format=cyclonedx-json"
-
   ]
-  }
+}
 
 target "distroless" {
   inherits   = ["common"]
   target     = "openssl-distroless"
   tags       = ["${REGISTRY}/${REPO}-distroless:latest", "${REGISTRY}/${REPO}:${CORE_VERSION}-distroless"]
-  cache-from = ["type=registry,ref=${REGISTRY}/${REPO}-distroless:cache]
-  cache-to   = ["type=gha,mode=max",ref=${REGISTRY}/${REPO}-distroless:cache]
+  cache-from = ["type=registry,ref=${REGISTRY}/${REPO}-distroless:cache"]
+  cache-to   = ["type=gha,mode=max,ref=${REGISTRY}/${REPO}-distroless:cache"]
   attest = [
     "type=provenance,mode=max",
     "type=sbom,format=cyclonedx-json"
-
   ]
-
 }
