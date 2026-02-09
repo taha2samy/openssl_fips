@@ -1,0 +1,27 @@
+{
+    "name": "Distroless Builder Environment",
+    "build": {
+        "dockerfile": "dockerfile"
+    },
+    "mounts": [
+        "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+    ],
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {
+            "version": "latest",
+            "moby": false
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-azuretools.vscode-docker",
+                "redhat.vscode-yaml",
+                "timonwong.shellcheck",
+                "skellock.just"
+            ]
+        }
+    },
+    "postCreateCommand": "echo '....'",
+    "remoteUser": "root"
+}
