@@ -14,7 +14,7 @@ tasks:
   build:
     desc: Build the Docker image locally
     cmds:
-      - docker buildx build --load --platform {{.ARCH}} -t {{.IMAGE_NAME}} .
+      - docker buildx bake -f docker-bake.hcl -f versions.hcl
 
   test:
     desc: Run all FIPS verification tests

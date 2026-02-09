@@ -61,14 +61,19 @@ ENTRYPOINT ["/usr/local/bin/openssl"]
 FROM ${STATIC_IMAGE} AS openssl-distroless
 COPY --from=helper /etc/passwd /etc/group /etc/
 COPY --from=helper /etc/nsswitch.conf /etc/nsswitch.conf
+COPY --from=helper /usr/share/zoneinfo /usr/share/zoneinfo
 COPY --from=helper /etc/localtime /etc/localtime
 COPY --from=helper /etc/timezone /etc/timezone
 COPY --from=helper /etc/ssl/certs /etc/ssl/certs
 COPY --from=helper /usr/lib/libstdc++.so* /usr/lib/
 COPY --from=helper /usr/lib/libgcc_s.so* /usr/lib/
 COPY --from=helper /usr/lib/libz.so* /usr/lib/
-COPY --from=helper /lib/ld-linux-* /lib/ 2>/dev/null || true
-COPY --from=helper /lib/libc.so* /lib/
+COPY --from=helper /usr/lib/libc.so* /usr/lib/
+COPY --from=helper /usr/lib/libpthread.so* /usr/lib/
+COPY --from=helper /usr/lib/libm.so* /usr/lib/
+COPY --from=helper /usr/lib/libdl.so* /usr/lib/
+COPY --from=helper /usr/lib/librt.so* /usr/lib/
+COPY --from=helper /lib/ld-linux-* /lib/
 
 COPY --from=fips-integrator /usr/local /usr/local
 
