@@ -15,7 +15,7 @@ RUN wget -q https://www.openssl.org/source/old/3.1/openssl-${FIPS_VERSION}.tar.g
     tar -xf openssl-${FIPS_VERSION}.tar.gz && \
     cd openssl-${FIPS_VERSION} && \
     ./Configure enable-fips && \
-    make -j$(nproc)
+    make -j$(nproc) build_libs
 
 FROM ${BASE_IMAGE} AS core-builder
 ARG CORE_VERSION
@@ -32,6 +32,7 @@ RUN wget -q https://www.openssl.org/source/openssl-${CORE_VERSION}.tar.gz || \
 
 FROM core-builder AS fips-integrator
 ARG FIPS_VERSION
+
 COPY --from=fips-builder /src/openssl-${FIPS_VERSION}/providers/fips.so /usr/local/lib/ossl-modules/fips.so
 RUN /usr/local/bin/openssl fipsinstall \
     -out /usr/local/ssl/fipsmodule.cnf \
