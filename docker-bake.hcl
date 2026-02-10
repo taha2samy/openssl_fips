@@ -33,7 +33,7 @@ target "common" {
   context    = "."
   dockerfile = "Dockerfile"
   platforms  = ["linux/amd64"]
-  
+  output = ["type=registry"]
   args = {
     FIPS_VERSION = FIPS_VERSION
     CORE_VERSION = CORE_VERSION
