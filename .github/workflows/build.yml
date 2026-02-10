@@ -1,4 +1,4 @@
-name: Build and Push with Cache
+name: Build
 
 on:
   workflow_dispatch:
