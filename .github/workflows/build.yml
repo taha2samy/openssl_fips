@@ -110,7 +110,7 @@ jobs:
         run: pip install jinja2
 
       - name: Generate README.md
-        run: python scripts/generate_readme.py
+        run: python scripts/update_readme.py
 
       - name: Commit README.md
         run: |
