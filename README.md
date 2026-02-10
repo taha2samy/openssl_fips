@@ -1245,57 +1245,11 @@ This project builds upon the excellent work of:
 
 </div>
 
----
-
-## 🗺️ Roadmap
-
-### Q1 2025
-- [ ] Add FIPS 140-3 Level 2 module support
-- [ ] Implement SBOM auto-generation in CI
-- [ ] Add Helm charts for Kubernetes deployment
-
-### Q2 2025
-- [ ] Multi-arch support (ARM32, s390x)
-- [ ] Integration with HashiCorp Vault
-- [ ] Performance optimization (10% throughput improvement)
-
-### Q3 2025
-- [ ] OpenSSL 3.4 upgrade
-- [ ] Windows container support
-- [ ] Automated compliance reporting dashboard
-
-### Q4 2025
-- [ ] Quantum-resistant cryptography preview
-- [ ] Integration with cloud KMS providers
-- [ ] FIPS 140-4 readiness assessment
-
----
-
-## 💬 Community & Support
-
-<div align="center">
-
-### Get Help
-
-[![GitHub Discussions](https://img.shields.io/badge/Discussions-Q&A-blue?logo=github&style=for-the-badge)](https://github.com/taha2samy/openssl_fips/discussions)
-[![Stack Overflow](https://img.shields.io/badge/Stack%20Overflow-Ask-orange?logo=stackoverflow&style=for-the-badge)](https://stackoverflow.com/questions/tagged/openssl+fips)
-
-### Stay Updated
-
-[![Twitter Follow](https://img.shields.io/twitter/follow/taha2samy?style=for-the-badge&logo=twitter)](https://twitter.com/taha2samy)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/taha2samy)
-
-</div>
 
 ---
 
 <div align="center">
 
-## ⭐ Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=taha2samy/wolfi-openssl-fips&type=Date)](https://star-history.com/#taha2samy/wolfi-openssl-fips&Date)
-
----
 
 ### 📅 Version Information
 
