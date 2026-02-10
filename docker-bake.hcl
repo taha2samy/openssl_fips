@@ -32,7 +32,7 @@ group "default" {
 target "common" {
   context    = "."
   dockerfile = "Dockerfile"
-  platforms  = ["linux/amd64"]
+  platforms  = ["linux/amd64", "linux/arm64"]
   output = ["type=registry"]
   args = {
     FIPS_VERSION = FIPS_VERSION
