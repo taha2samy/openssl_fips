@@ -3,7 +3,7 @@ variable "FIPS_VERSION" {
 }
 
 variable "CORE_VERSION" {
-  default = "3.4.0" # تم التعديل ليطابق الـ Dockerfile
+  default = "3.4.0" 
 }
 
 
