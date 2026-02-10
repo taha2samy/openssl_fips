@@ -33,15 +33,17 @@ jobs:
         uses: docker/bake-action@v6
         with:
           push: true
-          targets: default
           files: |
             docker-bake.hcl
             versions.hcl
-          metadata: bake-metadata.json
-        
+          targets: default
+          source: .
+
+      - name: Save bake metadata to file
+        run: echo '${{ steps.bake.outputs.metadata }}' > bake-metadata.json
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
-          path: |
-            bake-metadata.json
+          path: bake-metadata.json
