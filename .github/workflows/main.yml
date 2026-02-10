@@ -1,0 +1,53 @@
+name: Update Base Images
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'
+
+jobs:
+  update-images:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate versions.hcl
+        id: generate_hcl
+        run: |
+          OUTFILE="versions.hcl"
+          echo "" > "$OUTFILE"
+          declare -A IMAGES
+          IMAGES=(
+            ["STATIC_IMAGE"]="chainguard/wolfi-base"
+            ["BASE_IMAGE"]="chainguard/wolfi-base"
+          )
+          for var in "${!IMAGES[@]}"; do
+            image="${IMAGES[$var]}"
+            digest=$(docker manifest inspect "$image:latest" -v | jq -r '.Descriptor.digest' 2>/dev/null || \
+                     docker pull "$image:latest" >/dev/null && docker inspect --format='{{index .RepoDigests 0}}' "$image:latest" | cut -d'@' -f2)
+            if [ -z "$digest" ] || [ "$digest" == "null" ]; then
+              exit 1
+            fi
+            cat >> "$OUTFILE" <<EOL
+          variable "$var" {
+            default = "$image@$digest"
+          }
+          EOL
+          done
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update base image digests"
+          branch: update-base-images
+          title: "Update Base Image Digests"
+          body: "This PR updates the image digests in `versions.hcl` to the latest available versions."
+          labels: |
+            dependencies
+            automated-pr
