@@ -36,3 +36,14 @@ jobs:
           files: |
             docker-bake.hcl
             versions.hcl
+
+
+      - name: Save metadata
+        run: echo '${{ steps.bake.outputs.metadata }}' > bake-metadata.json
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            bake-metadata.json
