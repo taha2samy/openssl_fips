@@ -6,6 +6,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository_owner }}/wolfi-openssl-fips
+  repo_of_registry: wolfi-openssl-fips
 
 jobs:
   build:
@@ -100,7 +101,7 @@ jobs:
         run: |
           echo "PROJECT_NAME=Wolfi OpenSSL FIPS Images" >> $GITHUB_ENV
           echo "OWNER=${{ github.repository_owner }}" >> $GITHUB_ENV
-          echo "REPO_NAME=${{ env.IMAGE_NAME }}" >> $GITHUB_ENV
+          echo "REPO_NAME=${{ env.repo_of_registry }}" >> $GITHUB_ENV
           echo "REPO_URL=https://github.com/${{ github.repository }}" >> $GITHUB_ENV
           echo "REGISTRY=${{ env.REGISTRY }}" >> $GITHUB_ENV
           echo "GENERATION_DATE=$(date -u +%Y-%m-%d)" >> $GITHUB_ENV
