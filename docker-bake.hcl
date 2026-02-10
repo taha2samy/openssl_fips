@@ -3,71 +3,76 @@ variable "FIPS_VERSION" {
 }
 
 variable "CORE_VERSION" {
-  default = "3.5.5"
+  default = "3.4.0" # تم التعديل ليطابق الـ Dockerfile
 }
+
+
 
 variable "REGISTRY" {
   default = "ghcr.io"
 }
 
-variable "REPO" {
-  default = "taha2samy/wolfi_os"
+variable "OWNER" {
+  default = "taha2samy"
+}
+
+variable "REPO_NAME" {
+  default = "wolfi-openssl-fips"
+}
+
+function "tag" {
+  params = [tag_name]
+  result = ["${REGISTRY}/${OWNER}/${REPO_NAME}:${tag_name}"]
 }
 
 group "default" {
-  targets = ["base", "distroless"]
+  targets = ["standard", "distroless"]
 }
 
 target "common" {
   context    = "."
   dockerfile = "Dockerfile"
   platforms  = ["linux/amd64", "linux/arm64"]
-
+  
   args = {
     FIPS_VERSION = FIPS_VERSION
     CORE_VERSION = CORE_VERSION
+    BASE_IMAGE   = BASE_IMAGE
+    STATIC_IMAGE = STATIC_IMAGE
   }
 }
 
-### ---------- BASE ----------
-target "base" {
+### ---------- STANDARD IMAGE ----------
+target "standard" {
   inherits = ["common"]
   target   = "openssl-standard"
 
-  tags = [
-    "${REGISTRY}/${REPO}:latest"
-  ]
+  tags = concat(
+    tag("${CORE_VERSION}"),
+    tag("latest")
+  )
 
-  cache-from = [
-    "type=registry,ref=${REGISTRY}/${REPO}:cache-base"
-  ]
-
-  cache-to = [
-    "type=registry,ref=${REGISTRY}/${REPO}:cache-base,mode=max"
-  ]
-
+  cache-from = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-standard"]
+  cache-to   = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-standard,mode=max"]
+  
   attest = [
     "type=provenance,mode=max",
     "type=sbom,format=cyclonedx-json"
   ]
 }
 
-### ---------- DISTROLESS ----------
+### ---------- DISTROLESS IMAGE ----------
 target "distroless" {
   inherits = ["common"]
   target   = "openssl-distroless"
 
-  tags = [
-    "${REGISTRY}/${REPO}-distroless:latest"
-  ]
+  tags = concat(
+    tag("${CORE_VERSION}-distroless"),
+    tag("distroless")
+  )
 
-  cache-from = [
-    "type=registry,ref=${REGISTRY}/${REPO}:cache-distroless"
-  ]
-
-  cache-to = [
-    "type=registry,ref=${REGISTRY}/${REPO}:cache-distroless,mode=max"
-  ]
+  cache-from = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-distroless"]
+  cache-to   = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-distroless,mode=max"]
 
   attest = [
     "type=provenance,mode=max",
