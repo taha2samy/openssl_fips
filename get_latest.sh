@@ -12,8 +12,7 @@ IMAGES=(
 for var in "${!IMAGES[@]}"; do
   image="${IMAGES[$var]}"
   
-  digest=$(docker manifest inspect "$image:latest" -v | jq -r 'if type=="array" then .[0].Descriptor.digest else .Descriptor.digest end' 2>/dev/null || \
-           docker pull "$image:latest" >/dev/null && docker inspect --format='{{index .RepoDigests 0}}' "$image:latest" | cut -d'@' -f2)
+  digest=$(skopeo inspect docker://"$image:latest" | jq -r '.Digest')
 
   if [ -z "$digest" ] || [ "$digest" == "null" ]; then
     echo "Error: Could not find digest for $image"
