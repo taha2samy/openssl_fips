@@ -46,9 +46,8 @@ jobs:
           
       - name: my_digits
         run: |
-          INDEX_DIGEST=$(echo bake-metadata.json | jq -r '.standard."containerimage.descriptor"."digest"')
-          echo "ROOT INDEX DIGEST = $INDEX_DIGEST"
-
+          cat bake-metadata.json 
+          
 
       # - name: Attest Build Provenance
       #   uses: actions/attest-build-provenance@v2
