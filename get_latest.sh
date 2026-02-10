@@ -4,7 +4,7 @@ echo "" > "$OUTFILE"
 
 declare -A IMAGES
 IMAGES=(
-  ["STATIC_IMAGE"]="chainguard/wolfi-base"
+  ["STATIC_IMAGE"]="chainguard/static"
   ["BASE_IMAGE"]="chainguard/wolfi-base"
 )
 
