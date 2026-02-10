@@ -46,7 +46,7 @@ jobs:
           
       - name: my_digits
         run: |
-          INDEX_DIGEST=$(echo "$METADATA" | jq -r '.standard."containerimage.descriptor"."digest"')
+          INDEX_DIGEST=$(echo bake-metadata.json | jq -r '.standard."containerimage.descriptor"."digest"')
           echo "ROOT INDEX DIGEST = $INDEX_DIGEST"
 
 
