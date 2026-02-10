@@ -405,28 +405,27 @@ FROM {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }} AS fips-opens
 # ==================================
 # Stage 2: Your Application
 # ==================================
-FROM ubuntu:22.04
 
-# Install runtime dependencies (if any)
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apk update && apk add --no-cache \
     ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+    libgcc \
+    libstdc++
 
-# Copy FIPS-enabled OpenSSL
 COPY --from=fips-openssl /usr/local/bin/openssl /usr/local/bin/
 COPY --from=fips-openssl /usr/local/ssl /usr/local/ssl
+COPY --from=fips-openssl /usr/local/lib /usr/local/lib
 COPY --from=fips-openssl /usr/local/lib/ossl-modules /usr/local/lib/ossl-modules
 
-# Set OpenSSL environment
 ENV OPENSSL_CONF=/usr/local/ssl/openssl.cnf
 ENV OPENSSL_MODULES=/usr/local/lib/ossl-modules
+ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
-# Verify FIPS mode
 RUN openssl list -providers | grep fips || exit 1
 
-# Your application setup
-COPY . /app
 WORKDIR /app
+COPY . .
+
+USER nonroot
 
 CMD ["./your-app"]
 ```
