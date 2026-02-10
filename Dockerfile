@@ -15,7 +15,7 @@ RUN wget -q https://www.openssl.org/source/old/3.1/openssl-${FIPS_VERSION}.tar.g
     tar -xf openssl-${FIPS_VERSION}.tar.gz && \
     cd openssl-${FIPS_VERSION} && \
     ./Configure enable-fips && \
-    make -j$(nproc) build_libs
+    make -j$(nproc)
 
 FROM ${BASE_IMAGE} AS core-builder
 ARG CORE_VERSION
