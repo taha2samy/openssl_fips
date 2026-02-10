@@ -5,15 +5,13 @@ on:
   schedule:
     - cron: '0 */6 * * *'
 
-
-
 jobs:
-  update-images:
+  update:
     runs-on: ubuntu-latest
     steps:
-      - name: Get Bot Token
+      - name: Generate Token
         uses: actions/create-github-app-token@v1
-        id: app-token
+        id: bot-token
         with:
           app-id: ${{ secrets.BOT_APP_ID }}
           private-key: ${{ secrets.BOT_PRIVATE_KEY }}
@@ -21,7 +19,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          token: ${{ steps.app-token.outputs.token }}
+          token: ${{ steps.bot-token.outputs.token }}
 
       - name: Update versions.hcl
         run: |
@@ -47,10 +45,11 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ steps.app-token.outputs.token }}
+          token: ${{ steps.bot-token.outputs.token }}
+          author: "${{ steps.bot-token.outputs.app-slug }}[bot] <${{ steps.bot-token.outputs.app-slug }}[bot]@users.noreply.github.com>"
+          committer: "${{ steps.bot-token.outputs.app-slug }}[bot] <${{ steps.bot-token.outputs.app-slug }}[bot]@users.noreply.github.com>"
           commit-message: "chore: update base image digests"
           branch: update-base-images
           title: "🤖 Update Base Image Digests"
-          body: "Automated update to sync base images with latest digests."
+          body: "Automated update for images in versions.hcl"
           delete-branch: true
-
