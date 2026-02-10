@@ -10,7 +10,7 @@
 
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/taha2samy/openssl_fips/main/.github/assets/logo.svg" alt="Wolfi OpenSSL FIPS Images Logo" width="200"/>
+<img src="https://raw.githubusercontent.com/taha2samy/taha2samy/wolfi-openssl-fips/main/.github/assets/logo.svg" alt="Wolfi OpenSSL FIPS Images Logo" width="200"/>
 
 # 🛡️ Wolfi OpenSSL FIPS Images
 
@@ -39,7 +39,7 @@
 
 [![Container Registry](https://img.shields.io/badge/Registry-GHCR-2088FF?logo=github&logoColor=white&style=for-the-badge)](https://github.com/taha2samy/openssl_fips)
 [![License](https://img.shields.io/badge/License-Apache%202.0-yellowgreen?style=for-the-badge)](LICENSE)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/taha2samy/openssl_fips/build.yml?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/taha2samy/openssl_fips/actions)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/taha2samy/taha2samy/wolfi-openssl-fips/build.yml?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/taha2samy/openssl_fips/actions)
 
 </div>
 
@@ -213,20 +213,20 @@ graph TB
 
 ```bash
 # Latest stable release (recommended for production)
-docker pull ghcr.io/taha2samy/openssl_fips:latest
+docker pull ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest
 
 # Specific version (for reproducibility)
-docker pull ghcr.io/taha2samy/openssl_fips:3.4.0
+docker pull ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:3.4.0
 
 # Distroless variant (maximum security)
-docker pull ghcr.io/taha2samy/openssl_fips:distroless
+docker pull ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:distroless
 ```
 
 ### 2️⃣ Verify FIPS Compliance
 
 ```bash
 # Quick verification
-docker run --rm ghcr.io/taha2samy/openssl_fips:latest version -a
+docker run --rm ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest version -a
 
 # Expected output should include:
 # OpenSSL 3.4.0 
@@ -238,12 +238,12 @@ docker run --rm ghcr.io/taha2samy/openssl_fips:latest version -a
 ```bash
 # Generate a FIPS-compliant RSA keypair
 docker run --rm -v $(pwd):/workspace \
-  ghcr.io/taha2samy/openssl_fips:latest \
+  ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest \
   genpkey -algorithm RSA -out /workspace/private.pem -pkeyopt rsa_keygen_bits:2048
 
 # Create a certificate signing request
 docker run --rm -v $(pwd):/workspace \
-  ghcr.io/taha2samy/openssl_fips:latest \
+  ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest \
   req -new -key /workspace/private.pem -out /workspace/csr.pem \
   -subj "/C=US/ST=CA/L=San Francisco/O=YourOrg/CN=example.com"
 ```
@@ -365,10 +365,10 @@ Development teams needing flexibility and debugging capabilities
 
 ```bash
 # For development/testing
-docker pull ghcr.io/taha2samy/openssl_fips:latest
+docker pull ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest
 
 # For production (recommended)
-docker pull ghcr.io/taha2samy/openssl_fips:distroless
+docker pull ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:distroless
 ```
 
 ---
@@ -381,14 +381,14 @@ Perfect for testing, experimentation, and one-off commands.
 
 ```bash
 # Interactive shell (standard image only)
-docker run --rm -it ghcr.io/taha2samy/openssl_fips:latest sh
+docker run --rm -it ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest sh
 
 # Run specific command
-docker run --rm ghcr.io/taha2samy/openssl_fips:latest version
+docker run --rm ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest version
 
 # Mount host directory for file operations
 docker run --rm -v $(pwd)/certs:/certs \
-  ghcr.io/taha2samy/openssl_fips:latest \
+  ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest \
   x509 -in /certs/cert.pem -text -noout
 ```
 
@@ -400,33 +400,32 @@ Recommended approach for integrating FIPS-compliant OpenSSL into your applicatio
 # ==================================
 # Stage 1: Extract FIPS OpenSSL
 # ==================================
-FROM ghcr.io/taha2samy/openssl_fips:3.4.0 AS fips-openssl
+FROM ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:3.4.0 AS fips-openssl
 
 # ==================================
 # Stage 2: Your Application
 # ==================================
-FROM ubuntu:22.04
 
-# Install runtime dependencies (if any)
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apk update && apk add --no-cache \
     ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+    libgcc \
+    libstdc++
 
-# Copy FIPS-enabled OpenSSL
 COPY --from=fips-openssl /usr/local/bin/openssl /usr/local/bin/
 COPY --from=fips-openssl /usr/local/ssl /usr/local/ssl
+COPY --from=fips-openssl /usr/local/lib /usr/local/lib
 COPY --from=fips-openssl /usr/local/lib/ossl-modules /usr/local/lib/ossl-modules
 
-# Set OpenSSL environment
 ENV OPENSSL_CONF=/usr/local/ssl/openssl.cnf
 ENV OPENSSL_MODULES=/usr/local/lib/ossl-modules
+ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
-# Verify FIPS mode
 RUN openssl list -providers | grep fips || exit 1
 
-# Your application setup
-COPY . /app
 WORKDIR /app
+COPY . .
+
+USER nonroot
 
 CMD ["./your-app"]
 ```
@@ -440,7 +439,7 @@ version: '3.9'
 
 services:
   openssl-fips:
-    image: ghcr.io/taha2samy/openssl_fips:3.4.0
+    image: ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:3.4.0
     container_name: openssl-fips
     volumes:
       - ./certs:/workspace:rw
@@ -488,7 +487,7 @@ spec:
       # Use distroless for production
       initContainers:
       - name: fips-cert-generator
-        image: ghcr.io/taha2samy/openssl_fips:3.4.0-distroless
+        image: ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:3.4.0-distroless
         imagePullPolicy: Always
         command:
           - /usr/local/bin/openssl
@@ -545,7 +544,7 @@ jobs:
   fips-validation:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/taha2samy/openssl_fips:3.4.0
+      image: ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:3.4.0
     
     steps:
       - name: Checkout Code
@@ -571,7 +570,7 @@ jobs:
 
 ```yaml
 .fips-template:
-  image: ghcr.io/taha2samy/openssl_fips:distroless
+  image: ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:distroless
   before_script:
     - openssl version | grep "FIPS"
 
@@ -597,7 +596,7 @@ Run these tests to ensure your container is operating in full FIPS mode:
 #### Test 1: Provider Verification
 
 ```bash
-docker run --rm ghcr.io/taha2samy/openssl_fips:latest list -providers
+docker run --rm ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest list -providers
 ```
 
 **✅ Expected Output:**
@@ -620,7 +619,7 @@ Providers:
 #### Test 2: FIPS Module Self-Test
 
 ```bash
-docker run --rm ghcr.io/taha2samy/openssl_fips:latest \
+docker run --rm ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest \
   list -providers -verbose
 ```
 
@@ -631,7 +630,7 @@ docker run --rm ghcr.io/taha2samy/openssl_fips:latest \
 MD5 is prohibited in FIPS mode. This command **MUST FAIL**:
 
 ```bash
-docker run --rm ghcr.io/taha2samy/openssl_fips:latest \
+docker run --rm ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest \
   dgst -md5 /etc/ssl/certs/ca-certificates.crt
 ```
 
@@ -648,7 +647,7 @@ Global properties (fips=yes) don't match
 SHA-256 is FIPS-approved and should work:
 
 ```bash
-docker run --rm ghcr.io/taha2samy/openssl_fips:latest \
+docker run --rm ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest \
   dgst -sha256 /etc/ssl/certs/ca-certificates.crt
 ```
 
@@ -660,7 +659,7 @@ SHA2-256(/etc/ssl/certs/ca-certificates.crt)= a1b2c3d4...
 #### Test 5: Cipher Suite Validation
 
 ```bash
-docker run --rm ghcr.io/taha2samy/openssl_fips:latest \
+docker run --rm ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest \
   ciphers -v 'FIPS@SECLEVEL=2'
 ```
 
@@ -669,7 +668,7 @@ docker run --rm ghcr.io/taha2samy/openssl_fips:latest \
 #### Test 6: Configuration Audit
 
 ```bash
-docker run --rm ghcr.io/taha2samy/openssl_fips:latest sh -c \
+docker run --rm ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest sh -c \
   "cat /usr/local/ssl/openssl.cnf | grep -A5 'fips='"
 ```
 
@@ -695,7 +694,7 @@ Run all tests and generate a compliance report:
 #!/bin/bash
 # fips-compliance-check.sh
 
-IMAGE="ghcr.io/taha2samy/openssl_fips:latest"
+IMAGE="ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest"
 REPORT="fips-compliance-$(date +%Y%m%d-%H%M%S).txt"
 
 echo "FIPS 140-3 Compliance Report" > $REPORT
@@ -753,9 +752,9 @@ sudo mv cosign-linux-amd64 /usr/local/bin/cosign
 
 ```bash
 cosign verify \
-  --certificate-identity-regexp "^https://github.com/taha2samy/openssl_fips/.*" \
+  --certificate-identity-regexp "^https://github.com/taha2samy/taha2samy/wolfi-openssl-fips/.*" \
   --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
-  ghcr.io/taha2samy/openssl_fips:3.4.0
+  ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:3.4.0
 ```
 
 **✅ Successful Verification Output:**
@@ -764,7 +763,7 @@ cosign verify \
   {
     "critical": {
       "identity": {
-        "docker-reference": "ghcr.io/taha2samy/openssl_fips"
+        "docker-reference": "ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips"
       },
       "image": {
         "docker-manifest-digest": "sha256:abc123..."
@@ -790,9 +789,9 @@ Verify the **build process integrity** and **build environment**:
 ```bash
 cosign verify-attestation \
   --type slsaprovenance \
-  --certificate-identity-regexp "^https://github.com/taha2samy/openssl_fips/.*" \
+  --certificate-identity-regexp "^https://github.com/taha2samy/taha2samy/wolfi-openssl-fips/.*" \
   --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
-  ghcr.io/taha2samy/openssl_fips:3.4.0 | jq -r '.payload' | base64 -d | jq
+  ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:3.4.0 | jq -r '.payload' | base64 -d | jq
 ```
 
 **Key Fields to Verify:**
@@ -802,11 +801,11 @@ cosign verify-attestation \
   "predicate": {
     "buildType": "https://slsa.dev/provenance/v1",
     "builder": {
-      "id": "https://github.com/taha2samy/openssl_fips/.github/workflows/build.yml@refs/heads/main"
+      "id": "https://github.com/taha2samy/taha2samy/wolfi-openssl-fips/.github/workflows/build.yml@refs/heads/main"
     },
     "invocation": {
       "configSource": {
-        "uri": "git+https://github.com/taha2samy/openssl_fips@refs/heads/main",
+        "uri": "git+https://github.com/taha2samy/taha2samy/wolfi-openssl-fips@refs/heads/main",
         "digest": {
           "sha1": "..."
         }
@@ -824,12 +823,12 @@ Download and inspect the complete dependency tree:
 # Using Cosign
 cosign download attestation \
   --predicate-type="https://cyclonedx.org/bom" \
-  ghcr.io/taha2samy/openssl_fips:3.4.0 | \
+  ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:3.4.0 | \
   jq -r '.payload' | base64 -d | jq > sbom.json
 
 # Using Docker Buildx (experimental)
 docker buildx imagetools inspect \
-  ghcr.io/taha2samy/openssl_fips:3.4.0 \
+  ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:3.4.0 \
   --format '{{ json .SBOM }}' | jq
 ```
 
@@ -851,13 +850,13 @@ Images are automatically scanned on every build:
 
 ```bash
 # Using Trivy
-trivy image ghcr.io/taha2samy/openssl_fips:3.4.0
+trivy image ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:3.4.0
 
 # Using Grype
-grype ghcr.io/taha2samy/openssl_fips:3.4.0
+grype ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:3.4.0
 
 # Using Docker Scout
-docker scout cves ghcr.io/taha2samy/openssl_fips:3.4.0
+docker scout cves ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:3.4.0
 ```
 
 ### 📋 Complete Verification Checklist
@@ -866,7 +865,7 @@ docker scout cves ghcr.io/taha2samy/openssl_fips:3.4.0
 #!/bin/bash
 # complete-security-audit.sh
 
-IMAGE="ghcr.io/taha2samy/openssl_fips:3.4.0"
+IMAGE="ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:3.4.0"
 
 echo "🔐 Complete Security Audit for: $IMAGE"
 echo "================================================"
@@ -919,7 +918,7 @@ docker run --rm \
   -e OPENSSL_MODULES=/custom/modules \
   -e OPENSSL_ENGINES=/custom/engines \
   -v $(pwd)/custom-config:/custom \
-  ghcr.io/taha2samy/openssl_fips:latest \
+  ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest \
   version -a
 ```
 
@@ -955,7 +954,7 @@ EOF
 # Use custom config
 docker run --rm \
   -v $(pwd)/custom-fips.cnf:/usr/local/ssl/openssl.cnf \
-  ghcr.io/taha2samy/openssl_fips:latest \
+  ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest \
   list -providers
 ```
 
@@ -966,7 +965,7 @@ Run a FIPS-compliant TLS server:
 ```bash
 # Generate server certificate
 docker run --rm -v $(pwd)/certs:/certs \
-  ghcr.io/taha2samy/openssl_fips:latest \
+  ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest \
   req -x509 -newkey rsa:2048 -nodes \
   -keyout /certs/server.key \
   -out /certs/server.crt \
@@ -975,7 +974,7 @@ docker run --rm -v $(pwd)/certs:/certs \
 
 # Start TLS server (requires standard image)
 docker run --rm -it -p 4433:4433 -v $(pwd)/certs:/certs \
-  ghcr.io/taha2samy/openssl_fips:latest \
+  ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest \
   s_server -accept 4433 \
   -cert /certs/server.crt \
   -key /certs/server.key \
@@ -983,7 +982,7 @@ docker run --rm -it -p 4433:4433 -v $(pwd)/certs:/certs \
 
 # Test with client (from another terminal)
 docker run --rm \
-  ghcr.io/taha2samy/openssl_fips:latest \
+  ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest \
   s_client -connect host.docker.internal:4433
 ```
 
@@ -1011,7 +1010,7 @@ def verify_fips_openssl(image):
         return False
 
 # Usage
-verify_fips_openssl("ghcr.io/taha2samy/openssl_fips:3.4.0")
+verify_fips_openssl("ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:3.4.0")
 ```
 
 ---
@@ -1024,7 +1023,7 @@ Benchmark FIPS vs non-FIPS performance:
 
 ```bash
 # FIPS-enabled (this image)
-docker run --rm ghcr.io/taha2samy/openssl_fips:latest speed rsa2048
+docker run --rm ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest speed rsa2048
 
 # Compare with standard OpenSSL
 docker run --rm alpine/openssl speed rsa2048
@@ -1044,15 +1043,15 @@ SHA-256          | 850 MB/s     | 870 MB/s    | ~2.3%
 
 ```bash
 # Standard image
-docker images ghcr.io/taha2samy/openssl_fips:3.4.0 --format "{{.Size}}"
+docker images ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:3.4.0 --format "{{.Size}}"
 # Output: ~25MB
 
 # Distroless image
-docker images ghcr.io/taha2samy/openssl_fips:3.4.0-distroless --format "{{.Size}}"
+docker images ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:3.4.0-distroless --format "{{.Size}}"
 # Output: ~12MB
 
 # Layer breakdown
-docker history ghcr.io/taha2samy/openssl_fips:3.4.0 --no-trunc
+docker history ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:3.4.0 --no-trunc
 ```
 
 ### Container Startup Benchmark
@@ -1063,7 +1062,7 @@ docker history ghcr.io/taha2samy/openssl_fips:3.4.0 --no-trunc
 
 for i in {1..10}; do
   /usr/bin/time -f "%E" docker run --rm \
-    ghcr.io/taha2samy/openssl_fips:distroless \
+    ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:distroless \
     version > /dev/null 2>&1
 done | awk '{sum+=$1; count++} END {print "Average: " sum/count " seconds"}'
 ```
@@ -1084,11 +1083,11 @@ error:1E08010C:DECODER routines::unsupported:crypto/encode_decode/decoder_meth.c
 **Solution:**
 ```bash
 # Verify FIPS module is present
-docker run --rm ghcr.io/taha2samy/openssl_fips:latest \
+docker run --rm ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest \
   sh -c "ls -lh /usr/local/lib/ossl-modules/fips.so"
 
 # Check config file
-docker run --rm ghcr.io/taha2samy/openssl_fips:latest \
+docker run --rm ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest \
   cat /usr/local/ssl/openssl.cnf | grep fips
 ```
 
@@ -1107,7 +1106,7 @@ chmod 777 $(pwd)/output
 # Or run with user ID mapping
 docker run --rm --user $(id -u):$(id -g) \
   -v $(pwd)/output:/output \
-  ghcr.io/taha2samy/openssl_fips:latest \
+  ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest \
   genpkey -out /output/key.pem -algorithm RSA
 ```
 
@@ -1116,14 +1115,14 @@ docker run --rm --user $(id -u):$(id -g) \
 **Symptom:**
 ```bash
 # This should FAIL but doesn't
-docker run --rm ghcr.io/taha2samy/openssl_fips:latest dgst -md5 /etc/passwd
+docker run --rm ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest dgst -md5 /etc/passwd
 # Output: MD5(...)= abc123...  # ← WRONG!
 ```
 
 **Solution:**
 ```bash
 # Verify FIPS enforcement
-docker run --rm ghcr.io/taha2samy/openssl_fips:latest sh -c \
+docker run --rm ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest sh -c \
   "grep -q 'default_properties = fips=yes' /usr/local/ssl/openssl.cnf && echo 'Config OK' || echo 'Config BROKEN'"
 
 # Rebuild with correct config
@@ -1141,7 +1140,7 @@ Error: no matching signatures
 ```bash
 # Use full image digest instead of tag
 export IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' \
-  ghcr.io/taha2samy/openssl_fips:3.4.0)
+  ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:3.4.0)
 
 cosign verify \
   --certificate-identity-regexp "^https://github.com/taha2samy/.*" \
@@ -1157,11 +1156,11 @@ Enable verbose output:
 # Standard image (with shell)
 docker run --rm -it \
   -e OPENSSL_CONF=/usr/local/ssl/openssl.cnf \
-  ghcr.io/taha2samy/openssl_fips:latest \
+  ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest \
   sh -x  # Enable shell debug mode
 
 # Check loaded libraries
-docker run --rm ghcr.io/taha2samy/openssl_fips:latest sh -c \
+docker run --rm ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest sh -c \
   "ldd /usr/local/bin/openssl"
 ```
 
@@ -1169,13 +1168,13 @@ docker run --rm ghcr.io/taha2samy/openssl_fips:latest sh -c \
 
 ```bash
 # Full version information
-docker run --rm ghcr.io/taha2samy/openssl_fips:latest version -a
+docker run --rm ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest version -a
 
 # List all available commands
-docker run --rm ghcr.io/taha2samy/openssl_fips:latest help
+docker run --rm ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest help
 
 # Configuration dump
-docker run --rm ghcr.io/taha2samy/openssl_fips:latest \
+docker run --rm ghcr.io/taha2samy/taha2samy/wolfi-openssl-fips:latest \
   config -dump-providers
 ```
 
@@ -1285,7 +1284,7 @@ Have an idea? [Submit a feature request](https://github.com/taha2samy/openssl_fi
 ```bash
 # Clone repository
 git clone https://github.com/taha2samy/openssl_fips.git
-cd openssl_fips
+cd taha2samy/wolfi-openssl-fips
 
 # Build locally
 docker build -t openssl-fips:test .
@@ -1350,10 +1349,10 @@ This project builds upon the excellent work of:
 
 <div align="center">
 
-![GitHub Stars](https://img.shields.io/github/stars/taha2samy/openssl_fips?style=social)
-![GitHub Forks](https://img.shields.io/github/forks/taha2samy/openssl_fips?style=social)
-![GitHub Issues](https://img.shields.io/github/issues/taha2samy/openssl_fips)
-![GitHub PRs](https://img.shields.io/github/issues-pr/taha2samy/openssl_fips)
+![GitHub Stars](https://img.shields.io/github/stars/taha2samy/taha2samy/wolfi-openssl-fips?style=social)
+![GitHub Forks](https://img.shields.io/github/forks/taha2samy/taha2samy/wolfi-openssl-fips?style=social)
+![GitHub Issues](https://img.shields.io/github/issues/taha2samy/taha2samy/wolfi-openssl-fips)
+![GitHub PRs](https://img.shields.io/github/issues-pr/taha2samy/taha2samy/wolfi-openssl-fips)
 
 </div>
 
@@ -1405,7 +1404,7 @@ This project builds upon the excellent work of:
 
 ## ⭐ Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=taha2samy/openssl_fips&type=Date)](https://star-history.com/#taha2samy/openssl_fips&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=taha2samy/taha2samy/wolfi-openssl-fips&type=Date)](https://star-history.com/#taha2samy/taha2samy/wolfi-openssl-fips&Date)
 
 ---
 
