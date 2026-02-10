@@ -44,6 +44,9 @@ jobs:
           source: .
 
           
+      - name: Save bake metadata to file
+        run: echo '${{ steps.bake.outputs.metadata }}' > bake-metadata.json
+  
       - name: Extract digests
         run: |
           DISTROLESS_DIGEST=$(jq -r '.distroless."containerimage.descriptor".digest' bake-metadata.json)
@@ -61,9 +64,6 @@ jobs:
       #     subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
       #     subject-digest: ${{ steps.bake.outputs.digest }}
       #     push-to-registry: true
-
-      # - name: Save bake metadata to file
-      #   run: echo '${{ steps.bake.outputs.metadata }}' > bake-metadata.json
 
       # - name: Upload artifacts
       #   uses: actions/upload-artifact@v4
