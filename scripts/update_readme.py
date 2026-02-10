@@ -22,6 +22,7 @@ CONTEXT = {
     "registry": env("REGISTRY"),
     "core_version": env("CORE_VERSION"),
     "fips_version": env("FIPS_VERSION"),
+    "code_repo_name": env("CODE_REPO_NAME"),
     "generation_date": env(
         "GENERATION_DATE",
         datetime.utcnow().strftime("%Y-%m-%d"),

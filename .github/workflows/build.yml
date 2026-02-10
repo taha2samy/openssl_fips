@@ -102,6 +102,7 @@ jobs:
           echo "PROJECT_NAME=Wolfi OpenSSL FIPS Images" >> $GITHUB_ENV
           echo "OWNER=${{ github.repository_owner }}" >> $GITHUB_ENV
           echo "REPO_NAME=${{ env.repo_of_registry }}" >> $GITHUB_ENV
+          echo "CODE_REPO_NAME=${{ github.event.repository.name }}" >> $GITHUB_ENV
           echo "REPO_URL=https://github.com/${{ github.repository }}" >> $GITHUB_ENV
           echo "REGISTRY=${{ env.REGISTRY }}" >> $GITHUB_ENV
           echo "GENERATION_DATE=$(date -u +%Y-%m-%d)" >> $GITHUB_ENV
