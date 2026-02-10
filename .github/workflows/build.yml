@@ -45,7 +45,10 @@ jobs:
 
           
       - name: my_digits
-        run: echo hiiiii ${{ steps.bake.outputs.digest }}
+        run: |
+          echo hiiiii ${{ steps.bake.outputs.digest }}
+          echo "DIGEST=$(echo '${{ steps.bake.outputs.metadata }}' | jq -r '.. | .digest? // empty' | head -n 1)"
+
 
       # - name: Attest Build Provenance
       #   uses: actions/attest-build-provenance@v2
