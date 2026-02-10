@@ -46,8 +46,8 @@ jobs:
           
       - name: my_digits
         run: |
-          echo hiiiii ${{ steps.bake.outputs.digest }}
-          echo "DIGEST=$(echo '${{ steps.bake.outputs.metadata }}' | jq -r '.. | .digest? // empty' | head -n 1)"
+          INDEX_DIGEST=$(echo "$METADATA" | jq -r '.standard."containerimage.descriptor"."digest"')
+          echo "ROOT INDEX DIGEST = $INDEX_DIGEST"
 
 
       # - name: Attest Build Provenance
