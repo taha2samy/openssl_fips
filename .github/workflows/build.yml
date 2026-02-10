@@ -43,18 +43,22 @@ jobs:
           targets: default
           source: .
 
-      - name: Attest Build Provenance
-        uses: actions/attest-build-provenance@v2
-        with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          subject-digest: ${{ steps.bake.outputs.digest }}
-          push-to-registry: true
+          
+      - name: my_digits
+        run: echo hiiiii ${{ steps.bake.outputs.digest }}
 
-      - name: Save bake metadata to file
-        run: echo '${{ steps.bake.outputs.metadata }}' > bake-metadata.json
+      # - name: Attest Build Provenance
+      #   uses: actions/attest-build-provenance@v2
+      #   with:
+      #     subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      #     subject-digest: ${{ steps.bake.outputs.digest }}
+      #     push-to-registry: true
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifacts
-          path: bake-metadata.json
+      # - name: Save bake metadata to file
+      #   run: echo '${{ steps.bake.outputs.metadata }}' > bake-metadata.json
+
+      # - name: Upload artifacts
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: build-artifacts
+      #     path: bake-metadata.json
