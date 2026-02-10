@@ -51,22 +51,19 @@ jobs:
         run: |
           DISTROLESS_DIGEST=$(jq -r '.distroless."containerimage.descriptor".digest' bake-metadata.json)
           STANDARD_DIGEST=$(jq -r '.standard."containerimage.descriptor".digest' bake-metadata.json)
-          echo "Distroless root index: $DISTROLESS_DIGEST"
-          echo "Standard root index: $STANDARD_DIGEST"
-      
-          # Set as GitHub Actions outputs if needed
-          echo "::set-output name=distroless_digest::$DISTROLESS_DIGEST"
-          echo "::set-output name=standard_digest::$STANDARD_DIGEST"
+ 
 
-      # - name: Attest Build Provenance
-      #   uses: actions/attest-build-provenance@v2
-      #   with:
-      #     subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-      #     subject-digest: ${{ steps.bake.outputs.digest }}
-      #     push-to-registry: true
+      - name: Attest Build Provenance for DistRoless
+        uses: actions/attest-build-provenance@v2
+        
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-digest: $DISTROLESS_DIGEST 
+          push-to-registry: true
+      - name: Attest Build Provenance for Base
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-digest: $STANDARD_DIGEST 
+          push-to-registry: true
 
-      # - name: Upload artifacts
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: build-artifacts
-      #     path: bake-metadata.json
