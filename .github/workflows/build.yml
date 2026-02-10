@@ -44,10 +44,16 @@ jobs:
           source: .
 
           
-      - name: my_digits
+      - name: Extract digests
         run: |
-          cat bake-metadata.json 
-          
+          DISTROLESS_DIGEST=$(jq -r '.distroless."containerimage.descriptor".digest' bake-metadata.json)
+          STANDARD_DIGEST=$(jq -r '.standard."containerimage.descriptor".digest' bake-metadata.json)
+          echo "Distroless root index: $DISTROLESS_DIGEST"
+          echo "Standard root index: $STANDARD_DIGEST"
+      
+          # Set as GitHub Actions outputs if needed
+          echo "::set-output name=distroless_digest::$DISTROLESS_DIGEST"
+          echo "::set-output name=standard_digest::$STANDARD_DIGEST"
 
       # - name: Attest Build Provenance
       #   uses: actions/attest-build-provenance@v2
