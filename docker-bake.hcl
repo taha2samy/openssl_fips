@@ -6,10 +6,6 @@ variable "CORE_VERSION" {
   default = "3.5.5"
 }
 
-variable "CORE_SHA256" {
-  default = ""
-}
-
 variable "REGISTRY" {
   default = "ghcr.io"
 }
@@ -19,39 +15,60 @@ variable "REPO" {
 }
 
 group "default" {
-  targets = ["standard", "distroless"]
+  targets = ["base", "distroless"]
 }
 
 target "common" {
   context    = "."
   dockerfile = "Dockerfile"
   platforms  = ["linux/amd64", "linux/arm64"]
+
   args = {
-    FIPS_VERSION = "${FIPS_VERSION}"
-    CORE_VERSION = "${CORE_VERSION}"
-    BASE_IMAGE   = "${BASE_IMAGE}"
-    STATIC_IMAGE = "${STATIC_IMAGE}"
+    FIPS_VERSION = FIPS_VERSION
+    CORE_VERSION = CORE_VERSION
   }
 }
 
-target "standard" {
-  inherits   = ["common"]
-  target     = "openssl-standard"
-  tags       = ["${REGISTRY}/${REPO}-base:latest", "${REGISTRY}/${REPO}:${CORE_VERSION}"]
-  cache-from = ["type=registry,ref=${REGISTRY}/${REPO}-base:cache"]
-  cache-to   = ["type=gha,mode=max,ref=${REGISTRY}/${REPO}-distroless:cache"]
+### ---------- BASE ----------
+target "base" {
+  inherits = ["common"]
+  target   = "openssl-standard"
+
+  tags = [
+    "${REGISTRY}/${REPO}:latest"
+  ]
+
+  cache-from = [
+    "type=registry,ref=${REGISTRY}/${REPO}:cache-base"
+  ]
+
+  cache-to = [
+    "type=registry,ref=${REGISTRY}/${REPO}:cache-base,mode=max"
+  ]
+
   attest = [
     "type=provenance,mode=max",
     "type=sbom,format=cyclonedx-json"
   ]
 }
 
+### ---------- DISTROLESS ----------
 target "distroless" {
-  inherits   = ["common"]
-  target     = "openssl-distroless"
-  tags       = ["${REGISTRY}/${REPO}-distroless:latest", "${REGISTRY}/${REPO}:${CORE_VERSION}-distroless"]
-  cache-from = ["type=registry,ref=${REGISTRY}/${REPO}-distroless:cache"]
-  cache-to   = ["type=gha,mode=max,ref=${REGISTRY}/${REPO}-distroless:cache"]
+  inherits = ["common"]
+  target   = "openssl-distroless"
+
+  tags = [
+    "${REGISTRY}/${REPO}-distroless:latest"
+  ]
+
+  cache-from = [
+    "type=registry,ref=${REGISTRY}/${REPO}:cache-distroless"
+  ]
+
+  cache-to = [
+    "type=registry,ref=${REGISTRY}/${REPO}:cache-distroless,mode=max"
+  ]
+
   attest = [
     "type=provenance,mode=max",
     "type=sbom,format=cyclonedx-json"
