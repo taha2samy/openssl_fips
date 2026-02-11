@@ -910,10 +910,43 @@ docker run --rm ghcr.io/taha2samy/wolfi-openssl-fips:latest speed rsa2048
 
 **Typical Results:**
 
+---
+
+# OpenSSL Benchmark
+
+## Command
+```bash
+docker run --rm ghcr.io/taha2samy/wolfi-openssl-fips:latest speed rsa2048
+```
+
+| Operation | Time (s/op) | Ops/s |
+|-----------|------------|-------|
+| Private Sign | 0.000018 | 54155.2 |
+| Public Verify | 0.000020 | 50598.5 |
+| Public Encrypt | 0.000660 | 1514.5 |
+| Private Decrypt | 1520.600000 | 0.0 |
+| Keygen | 0.051276 | 19.5 |
+| Encaps | 0.000020 | 49135.6 |
+| Decaps | 0.000658 | 1520.1 |
+| Keygen | 0.053871 | 18.6 |
+| Encaps | 0.000658 | 1518.9 |
+| Decaps | 0.000019 | 53974.1 |
 
 
+---
+
+# OpenSSL Benchmark
+
+## Command
+```bash
+docker run --rm ubuntu:22.04 bash -c apt update && apt install -y openssl && openssl speed rsa2048
+```
+
+| Operation | Time (s/op) | Ops/s |
+|-----------|------------|-------|
 
 
+---
 
 ### Image Size Metrics
 
