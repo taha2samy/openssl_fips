@@ -53,9 +53,7 @@
 - [✅ FIPS Compliance Verification](#-fips-compliance-verification)
 - [🔐 Supply Chain Security](#-supply-chain-security)
 - [🛠️ Advanced Configuration](#️-advanced-configuration)
-- [📊 Performance & Benchmarks](#-performance--benchmarks)
 - [🔧 Troubleshooting](#-troubleshooting)
-- [📚 Documentation](#-documentation)
 - [🤝 Contributing](#-contributing)
 - [📄 License](#-license)
 - [🙏 Acknowledgments](#-acknowledgments)
@@ -551,8 +549,9 @@ docker run --rm ghcr.io/taha2samy/wolfi-openssl-fips:latest \
 #### Test 6: Configuration Audit
 
 ```bash
-docker run --rm ghcr.io/taha2samy/wolfi-openssl-fips:latest sh -c \
-  "cat /usr/local/ssl/openssl.cnf | grep -A5 'fips='"
+docker run --entrypoint sh \
+ ghcr.io/taha2samy/wolfi-openssl-fips:latest \
+  =c "grep -v '^#' /usr/local/ssl/openssl.cnf" > l.txt'"
 ```
 
 **✅ Expected Configuration:**
@@ -635,7 +634,7 @@ sudo mv cosign-linux-amd64 /usr/local/bin/cosign
 
 ```bash
 cosign verify \
-  --certificate-identity-regexp "^https://github.com/taha2samy/wolfi-openssl-fips/.*" \
+  --certificate-identity-regexp "^https://github.com/taha2samy/openssl_fips/.*" \
   --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
   ghcr.io/taha2samy/wolfi-openssl-fips:3.4.0
 ```
@@ -672,7 +671,7 @@ Verify the **build process integrity** and **build environment**:
 ```bash
 cosign verify-attestation \
   --type slsaprovenance \
-  --certificate-identity-regexp "^https://github.com/taha2samy/wolfi-openssl-fips/.*" \
+  --certificate-identity-regexp "^https://github.com/taha2samy/openssl_fips/.*" \
   --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
   ghcr.io/taha2samy/wolfi-openssl-fips:3.4.0 | jq -r '.payload' | base64 -d | jq
 ```
@@ -1226,7 +1225,6 @@ This project builds upon the excellent work of:
 </div>
 
 
----
 
 <div align="center">
 
@@ -1244,6 +1242,5 @@ This project builds upon the excellent work of:
 
 **Made with ❤️ by the security community**
 
-*This README was automatically generated using Jinja2 templating*
 
 </div>
