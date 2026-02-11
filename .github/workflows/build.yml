@@ -115,7 +115,7 @@ jobs:
         run: |
           mkdir -p "$OUT_DIR"
           scripts/table_benchmark.sh \
-            docker run --rm ubuntu:22.04 bash -c "apt update && apt install -y openssl && openssl speed rsa2048"
+            docker run --rm -i ubuntu:22.04 bash -c "apt update -y && DEBIAN_FRONTEND=noninteractive apt install -y openssl && openssl speed rsa2048"
 
       - name: Set README environment variables
         run: |

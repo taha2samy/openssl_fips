@@ -907,16 +907,17 @@ Benchmark FIPS vs non-FIPS performance:
 # FIPS-enabled (this image)
 docker run --rm {{ registry }}/{{ owner }}/{{ repo_name }}:latest speed rsa2048
 
+```
 
 **Typical Results:**
 
+**FIPS-enabled (this image)**
+{{fips_md}}
+
 ---
+**FIPS-Disabled (Ubuntu)**
 
-{{ fips_md_path }}
-
----
-
-{{ ubuntu_md_path }}
+{{ ubuntu_md}}
 
 ---
 
