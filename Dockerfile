@@ -39,7 +39,8 @@ RUN /usr/local/bin/openssl fipsinstall \
     -module /usr/local/lib/ossl-modules/fips.so && \
     sed -i 's|# \.include fipsmodule.cnf|.include /usr/local/ssl/fipsmodule.cnf|' /usr/local/ssl/openssl.cnf && \
     sed -i 's|# fips = fips_sect|fips = fips_sect|' /usr/local/ssl/openssl.cnf && \
-    sed -i 's|# activate = 1|activate = 1|' /usr/local/ssl/openssl.cnf
+    sed -i 's|# activate = 1|activate = 1|' /usr/local/ssl/openssl.cnf && \
+    sed -i 's|default = default_sect|# default = default_sect|' /usr/local/ssl/openssl.cnf
 
 FROM ${BASE_IMAGE} AS helper
 RUN --mount=type=cache,target=/var/cache/apk \
