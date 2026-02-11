@@ -2,18 +2,18 @@
 set -e
 
 CMD="$*"
-LOG=benchmark.log
-MD=benchmark.md
+OUT_DIR="${OUT_DIR:-.}"
+
+LOG="$OUT_DIR/benchmark.log"
+MD="$OUT_DIR/benchmark.md"
 
 if [ -z "$CMD" ]; then
   echo "Usage: ./bench.sh <command>"
   exit 1
 fi
 
-# شغّل الأمر وسجّل اللوج
 eval "$CMD" | tee "$LOG" >/dev/null
 
-# طلّع Markdown
 awk -v cmd="$CMD" '
 BEGIN {
     print "# OpenSSL Benchmark";

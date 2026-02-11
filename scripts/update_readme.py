@@ -28,8 +28,8 @@ CONTEXT = {
     "core_version": env("CORE_VERSION"),
     "fips_version": env("FIPS_VERSION"),
     "code_repo_name": env("CODE_REPO_NAME"),
-    "fips_md_path": env("FIPS_MD_PATH"),
-    "ubuntu_md_path": env("UBUNTU_MD_PATH"),
+    "fips_md_path": fips_table,
+    "ubuntu_md_path": ubuntu_table,
     "generation_date": env(
         "GENERATION_DATE",
         datetime.utcnow().strftime("%Y-%m-%d"),
