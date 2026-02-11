@@ -96,6 +96,11 @@ jobs:
               for k, v in env_vars.items():
                   env_file.write(f"{k}={v}\n")
           EOF
+
+          
+      - name: Make script executable
+        run: chmod +x scripts/table_benchmark.sh
+
       - name: Run FIPS benchmark
         env:
           OUT_DIR: Throughput_Comparison_fips
