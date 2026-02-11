@@ -907,11 +907,11 @@ Benchmark FIPS vs non-FIPS performance:
 # FIPS-enabled (this image)
 docker run --rm ghcr.io/taha2samy/wolfi-openssl-fips:latest speed rsa2048
 
+```
 
 **Typical Results:**
 
----
-
+**FIPS-enabled (this image)**
 # OpenSSL Benchmark
 
 ## Command
@@ -921,25 +921,26 @@ docker run --rm ghcr.io/taha2samy/wolfi-openssl-fips:latest speed rsa2048
 
 | Operation | Time (s/op) | Ops/s |
 |-----------|------------|-------|
-| Private Sign | 0.000018 | 54155.2 |
-| Public Verify | 0.000020 | 50598.5 |
-| Public Encrypt | 0.000660 | 1514.5 |
-| Private Decrypt | 1520.600000 | 0.0 |
-| Keygen | 0.051276 | 19.5 |
-| Encaps | 0.000020 | 49135.6 |
-| Decaps | 0.000658 | 1520.1 |
-| Keygen | 0.053871 | 18.6 |
-| Encaps | 0.000658 | 1518.9 |
-| Decaps | 0.000019 | 53974.1 |
+| Private Sign | 0.000019 | 53780.2 |
+| Public Verify | 0.000020 | 50291.9 |
+| Public Encrypt | 0.000662 | 1509.8 |
+| Private Decrypt | 1517.400000 | 0.0 |
+| Keygen | 0.051768 | 19.3 |
+| Encaps | 0.000020 | 49297.6 |
+| Decaps | 0.000659 | 1518.5 |
+| Keygen | 0.053978 | 18.5 |
+| Encaps | 0.000658 | 1519.2 |
+| Decaps | 0.000019 | 53954.8 |
 
 
 ---
+**FIPS-Disabled (Ubuntu)**
 
 # OpenSSL Benchmark
 
 ## Command
 ```bash
-docker run --rm ubuntu:22.04 bash -c apt update && apt install -y openssl && openssl speed rsa2048
+docker run --rm -i ubuntu:22.04 bash -c apt update -y && DEBIAN_FRONTEND=noninteractive apt install -y openssl && openssl speed rsa2048
 ```
 
 | Operation | Time (s/op) | Ops/s |
