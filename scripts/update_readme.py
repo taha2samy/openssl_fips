@@ -12,6 +12,11 @@ def env(name: str, default: str | None = None) -> str:
     if value is None:
         raise RuntimeError(f"Missing required environment variable: {name}")
     return value
+with open(os.environ["FIPS_MD_PATH"]) as f:
+    fips_table = f.read()
+
+with open(os.environ["UBUNTU_MD_PATH"]) as f:
+    ubuntu_table = f.read()
 
 
 CONTEXT = {

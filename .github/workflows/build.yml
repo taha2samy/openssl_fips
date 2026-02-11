@@ -97,7 +97,7 @@ jobs:
                   env_file.write(f"{k}={v}\n")
           EOF
 
-          
+
       - name: Make script executable
         run: chmod +x scripts/table_benchmark.sh
 
@@ -129,8 +129,8 @@ jobs:
           echo "BUILD_DATE=$(date -u +%Y%m%d)" >> $GITHUB_ENV
           echo "full_image_tag=${{ env.REGISTRY }}/${{env.OWNER}}/${{ env.IMAGE_NAME }}:full-${{ env.FIPS_VERSION }}-${{ env.CORE_VERSION }}" >> $GITHUB_ENV
           echo "distroless_image=${{ env.REGISTRY }}/${{env.OWNER}}/${{ env.IMAGE_NAME }}:distroless-${{ env.FIPS_VERSION }}-${{ env.CORE_VERSION }}" >> $GITHUB_ENV
-          echo "FIPS_MD_PATH=$(cat Throughput_Comparison_fips/benchmark.md)" >> $GITHUB_ENV
-          echo "UBUNTU_MD_PATH=$(cat Throughput_Comparison_ubuntu/benchmark.md)" >> $GITHUB_ENV
+          echo "FIPS_MD_PATH=Throughput_Comparison_fips/benchmark.md" >> $GITHUB_ENV
+          echo "UBUNTU_MD_PATH=Throughput_Comparison_ubuntu/benchmark.md" >> $GITHUB_ENV
 
 
 
