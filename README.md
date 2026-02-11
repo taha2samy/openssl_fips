@@ -921,16 +921,16 @@ docker run --rm ghcr.io/taha2samy/wolfi-openssl-fips:latest speed rsa2048
 
 | Operation | Time (s/op) | Ops/s |
 |-----------|------------|-------|
-| Private Sign | 0.000019 | 53780.2 |
-| Public Verify | 0.000020 | 50291.9 |
-| Public Encrypt | 0.000662 | 1509.8 |
-| Private Decrypt | 1517.400000 | 0.0 |
-| Keygen | 0.051768 | 19.3 |
-| Encaps | 0.000020 | 49297.6 |
-| Decaps | 0.000659 | 1518.5 |
-| Keygen | 0.053978 | 18.5 |
-| Encaps | 0.000658 | 1519.2 |
-| Decaps | 0.000019 | 53954.8 |
+| Private Sign | 0.000019 | 53918.4 |
+| Public Verify | 0.000020 | 50433.1 |
+| Public Encrypt | 0.000661 | 1512.0 |
+| Private Decrypt | 1518.600000 | 0.0 |
+| Keygen | 0.051071 | 19.6 |
+| Encaps | 0.000020 | 48844.6 |
+| Decaps | 0.000658 | 1519.2 |
+| Keygen | 0.050050 | 20.0 |
+| Encaps | 0.000659 | 1518.5 |
+| Decaps | 0.000019 | 53989.8 |
 
 
 ---
@@ -940,7 +940,7 @@ docker run --rm ghcr.io/taha2samy/wolfi-openssl-fips:latest speed rsa2048
 
 ## Command
 ```bash
-docker run --rm -i ubuntu:22.04 bash -c apt update -y && DEBIAN_FRONTEND=noninteractive apt install -y openssl && openssl speed rsa2048
+docker run --rm -i debian:bookworm-slim sh -c apt update -y && DEBIAN_FRONTEND=noninteractive apt install -y openssl && openssl speed rsa2048
 ```
 
 | Operation | Time (s/op) | Ops/s |
