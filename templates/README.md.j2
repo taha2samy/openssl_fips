@@ -907,19 +907,13 @@ Benchmark FIPS vs non-FIPS performance:
 # FIPS-enabled (this image)
 docker run --rm {{ registry }}/{{ owner }}/{{ repo_name }}:latest speed rsa2048
 
-# Compare with standard OpenSSL
-docker run --rm alpine/openssl speed rsa2048
-```
 
 **Typical Results:**
-```
-Algorithm        | FIPS Mode    | Non-FIPS    | Overhead
----------------------------------------------------------
-RSA 2048 sign    | 580 sign/s   | 620 sign/s  | ~6.5%
-RSA 2048 verify  | 18500 ver/s  | 19000 ver/s | ~2.7%
-AES-256-GCM      | 1.2 GB/s     | 1.25 GB/s   | ~4.0%
-SHA-256          | 850 MB/s     | 870 MB/s    | ~2.3%
-```
+
+{{ fips_md_path }}
+
+{{ ubuntu_md_path }}
+
 
 ### Image Size Metrics
 
