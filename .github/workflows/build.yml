@@ -116,6 +116,7 @@ jobs:
           mkdir -p "$OUT_DIR"
           scripts/table_benchmark.sh \
             docker run --rm -i debian:bookworm-slim sh -c "apt update -y && DEBIAN_FRONTEND=noninteractive apt install -y openssl && openssl speed rsa2048"
+
           
       - name: Set README environment variables
         run: |
