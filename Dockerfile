@@ -9,6 +9,7 @@ ARG STATIC_IMAGE=cgr.dev/chainguard/static:latest
 # Stage 1: Build FIPS Provider (OpenSSL 3.1)
 # -----------------------------------------------------------------------------
 FROM ${BASE_IMAGE} AS fips-builder
+RUN apk add --no-cache tzdata
 ARG FIPS_VERSION
 RUN --mount=type=cache,target=/var/cache/apk \
     apk add build-base perl linux-headers wget ca-certificates
