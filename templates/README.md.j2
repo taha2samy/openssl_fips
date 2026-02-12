@@ -1147,19 +1147,6 @@ Have an idea? [Submit a feature request]({{ repo_url }}/issues/new?template=feat
 - **Testing**: Add tests for new features
 - **Documentation**: Update README and docs/ as needed
 
-### 🧪 Local Testing
-
-```bash
-# Clone repository
-git clone {{ repo_url }}.git
-cd {{ code_repo_name }}
-
-# Build locally
-docker build -t openssl-fips:test .
-
-# Run tests
-docker run --rm openssl-fips:test list -providers
-```
 
 ---
 
@@ -1217,12 +1204,13 @@ This project builds upon the excellent work of:
 
 <div align="center">
 
-![GitHub Stars](https://img.shields.io/github/stars/{{ owner }}/{{ code_repo_name }}?style=social)
-![GitHub Forks](https://img.shields.io/github/forks/{{ owner }}/{{ code_repo_name }}?style=social)
-![GitHub Issues](https://img.shields.io/github/issues/{{ owner }}/{{ code_repo_name }})
-![GitHub PRs](https://img.shields.io/github/issues-pr/{{ owner }}/{{ code_repo_name }})
+[![GitHub Stars](https://img.shields.io/github/stars/{{ owner }}/{{ code_repo_name }})](https://github.com/{{ owner }}/{{ code_repo_name }}/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/{{ owner }}/{{ code_repo_name }})](https://github.com/{{ owner }}/{{ code_repo_name }}/network/members)
+[![GitHub Issues](https://img.shields.io/github/issues/{{ owner }}/{{ code_repo_name }})](https://github.com/{{ owner }}/{{ code_repo_name }}/issues)
+[![GitHub PRs](https://img.shields.io/github/issues-pr/{{ owner }}/{{ code_repo_name }})](https://github.com/{{ owner }}/{{ code_repo_name }}/pulls)
 
 </div>
+
 
 
 
