@@ -10,7 +10,30 @@
 
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/taha2samy/wolfi-openssl-fips/main/.github/assets/logo.svg" alt="Wolfi OpenSSL FIPS Images Logo" width="200"/>
+
+<div align="center">
+
+<!-- SLSA Logo -->
+<a href="https://slsa.dev/">
+  <img src="https://slsa.dev/images/logo.svg" alt="SLSA" height="40" style="margin: 0 20px;"/>
+</a>
+
+<!-- Wolfi OS Logo -->
+<a href="https://wolfi.dev/">
+  <img src="https://raw.githubusercontent.com/wolfi-dev/.github/main/profile/wolfi-logo-dark-mode.svg#gh-dark-mode-only" alt="Wolfi OS" height="40" style="margin: 0 20px;"/>
+</a>
+
+<!-- OpenSSL Logo -->
+<a href="https://www.openssl.org/">
+  <img src="https://openssl-library.org/images/openssl_logo_library.svg" alt="OpenSSL" height="40" style="margin: 0 20px;"/>
+</a>
+
+<!-- FIPS -->
+<a href="https://www.safelogic.com/fips-140-3">
+  <img src="https://github.com/user-attachments/assets/d5a55d34-5ece-4bdc-9630-035a4e8ba849" alt="FIPS" height="50" style="margin: 0 20px;"/>
+</a>
+
+</div>
 
 # 🛡️ Wolfi OpenSSL FIPS Images
 
