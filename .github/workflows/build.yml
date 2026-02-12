@@ -48,22 +48,42 @@ jobs:
       - name: Save bake metadata to file
         run: echo '${{ steps.bake.outputs.metadata }}' > bake-metadata.json
   
-      - name: Extract digests
+      - name: Extract digests and sizes
         id: extract_digests
+        shell: /usr/bin/bash -e {0}
+        env:
+          REGISTRY: ${{ env.REGISTRY }}
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
         run: |
           DISTROLESS_DIGEST=$(jq -r '.distroless."containerimage.digest"' bake-metadata.json)
-          STANDARD_DIGEST=$(jq -r '.standard."containerimage.digest"' bake-metadata.json)          
+          STANDARD_DIGEST=$(jq -r '.standard."containerimage.digest"' bake-metadata.json)
+
           echo "distroless_digest=$DISTROLESS_DIGEST" >> $GITHUB_OUTPUT
           echo "standard_digest=$STANDARD_DIGEST" >> $GITHUB_OUTPUT
-          # Get sizes in bytes
-          DISTROLESS_SIZE=$(docker manifest inspect ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${DISTROLESS_DIGEST} | jq '[.layers[].size] | add')
-          STANDARD_SIZE=$(docker manifest inspect ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${STANDARD_DIGEST} | jq '[.layers[].size] | add')
 
-          DISTROLESS_HUMAN=$(numfmt --to=iec-i --suffix=B $DISTROLESS_SIZE)
-          STANDARD_HUMAN=$(numfmt --to=iec-i --suffix=B $STANDARD_SIZE)
+          get_image_size() {
+            local DIGEST=$1
+            local MANIFEST
+            MANIFEST=$(docker manifest inspect "$REGISTRY/$IMAGE_NAME@$DIGEST") || { echo 0; return; }
+            if [ "$(echo "$MANIFEST" | jq '.layers')" = "null" ]; then
+              echo 0
+            else
+              echo "$MANIFEST" | jq '[.layers[].size] | add'
+            fi
+          }
+
+          DISTROLESS_SIZE=$(get_image_size "$DISTROLESS_DIGEST")
+          STANDARD_SIZE=$(get_image_size "$STANDARD_DIGEST")
+
+          DISTROLESS_HUMAN=$(numfmt --to=iec-i --suffix=B "$DISTROLESS_SIZE")
+          STANDARD_HUMAN=$(numfmt --to=iec-i --suffix=B "$STANDARD_SIZE")
 
           echo "DISTROLESS_SIZE=$DISTROLESS_HUMAN" >> $GITHUB_ENV
           echo "STANDARD_SIZE=$STANDARD_HUMAN" >> $GITHUB_ENV
+
+          echo "Distroless image size: $DISTROLESS_HUMAN"
+          echo "Standard image size: $STANDARD_HUMAN"
+
 
       - name: Attest Distroless
         uses: actions/attest-build-provenance@v3
