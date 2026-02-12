@@ -55,6 +55,15 @@ jobs:
           STANDARD_DIGEST=$(jq -r '.standard."containerimage.digest"' bake-metadata.json)          
           echo "distroless_digest=$DISTROLESS_DIGEST" >> $GITHUB_OUTPUT
           echo "standard_digest=$STANDARD_DIGEST" >> $GITHUB_OUTPUT
+          # Get sizes in bytes
+          DISTROLESS_SIZE=$(docker manifest inspect ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${DISTROLESS_DIGEST} | jq '[.layers[].size] | add')
+          STANDARD_SIZE=$(docker manifest inspect ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${STANDARD_DIGEST} | jq '[.layers[].size] | add')
+
+          DISTROLESS_HUMAN=$(numfmt --to=iec-i --suffix=B $DISTROLESS_SIZE)
+          STANDARD_HUMAN=$(numfmt --to=iec-i --suffix=B $STANDARD_SIZE)
+
+          echo "DISTROLESS_SIZE=$DISTROLESS_HUMAN" >> $GITHUB_ENV
+          echo "STANDARD_SIZE=$STANDARD_HUMAN" >> $GITHUB_ENV
 
       - name: Attest Distroless
         uses: actions/attest-build-provenance@v3

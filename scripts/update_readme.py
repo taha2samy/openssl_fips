@@ -30,6 +30,8 @@ CONTEXT = {
     "code_repo_name": env("CODE_REPO_NAME"),
     "fips_md": fips_table,
     "ubuntu_md": ubuntu_table,
+    "distroless_size": env("DISTROLESS_SIZE"),
+    "standard_size": env("STANDARD_SIZE"),
     "generation_date": env(
         "GENERATION_DATE",
         datetime.utcnow().strftime("%Y-%m-%d"),

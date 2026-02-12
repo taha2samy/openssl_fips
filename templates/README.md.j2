@@ -88,7 +88,7 @@ Unlike standard OpenSSL images, this project provides:
 | **Supply Chain** | ❌ Unverified | ✅ **SLSA L3 + Cosign Signed** |
 | **SBOM** | ❌ Not Provided | ✅ **Attached CycloneDX SBOM** |
 | **Distroless** | ❌ Shell/Package Mgr | ✅ **Static Binary Only** |
-| **Image Size** | 40-100MB+ | ✅ **12-25MB** |
+| **Image Size** | 40-100MB+ | ✅ **distroless: {{ distroless_size }} | standard: {{ standard_size }}** |
 | **Provenance** | ❌ Unknown Origin | ✅ **Cryptographically Attested** |
 
 ---
@@ -926,11 +926,11 @@ docker run --rm {{ registry }}/{{ owner }}/{{ repo_name }}:latest speed rsa2048
 ```bash
 # Standard image
 docker images {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }} --format "{{ "{{" }}.Size{{ "}}" }}"
-# Output: ~25MB
+# Output: ~{{ standard_size }}
 
 # Distroless image
 docker images {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}-distroless --format "{{ "{{" }}.Size{{ "}}" }}"
-# Output: ~12MB
+# Output: ~{{ distroless_size }}
 
 # Layer breakdown
 docker history {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }} --no-trunc
