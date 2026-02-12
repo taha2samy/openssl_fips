@@ -3,7 +3,7 @@ variable "FIPS_VERSION" {
 }
 
 variable "CORE_VERSION" {
-  default = "3.4.0" 
+  default = "3.5.5" 
 }
 
 

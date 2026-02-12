@@ -1,9 +1,9 @@
 # syntax=docker/dockerfile:1
 
-ARG FIPS_VERSION=3.1.2
-ARG CORE_VERSION=3.4.0
-ARG BASE_IMAGE=cgr.dev/chainguard/wolfi-base:latest
-ARG STATIC_IMAGE=cgr.dev/chainguard/static:latest
+ARG FIPS_VERSION
+ARG CORE_VERSION
+ARG BASE_IMAGE
+ARG STATIC_IMAGE
 
 # -----------------------------------------------------------------------------
 # Stage 1: Build FIPS Provider (OpenSSL 3.1)
