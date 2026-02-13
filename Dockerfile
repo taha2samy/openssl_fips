@@ -67,7 +67,7 @@ RUN /usr/local/bin/openssl fipsinstall \
     -out /usr/local/ssl/fipsmodule.cnf \
     -module /usr/local/lib/ossl-modules/fips.so -security_checks 
 COPY conf/openssl.cnf /usr/local/ssl/openssl.cnf
-
+COPY conf/fipsmodule.cnf /usr/local/ssl/fipsmodule.cnf
 FROM ${BASE_IMAGE} AS helper
 ARG LIBSTDC_PLUS_PLUS_VER
 ARG ZLIB_VER
