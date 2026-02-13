@@ -1,0 +1,46 @@
+[33m0% [Working][0m[33m0% [Connecting to deb.debian.org][0m[33m0% [Connecting to deb.debian.org (199.232.82.132)][0m                                                  Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
+[33m                                                  0% [1 InRelease 13.5 kB/151 kB 9%][0m[33m                                  0% [Working][0m            Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]
+[33m0% [2 InRelease 4128 B/55.4 kB 7%][0m[33m                                  0% [Working][0m            Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [48.0 kB]
+[33m0% [3 InRelease 0 B/48.0 kB 0%][0m[33m                               0% [Working][0m[33m0% [Working][0m            Get:4 http://deb.debian.org/debian bookworm/main amd64 Packages [8792 kB]
+[33m0% [4 Packages 4830 B/8792 kB 0%][0m[33m0% [4 Packages 398 kB/8792 kB 5%][0m[33m21% [4 Packages 614 kB/8792 kB 7%][0m[33m26% [4 Packages 1262 kB/8792 kB 14%][0m[33m34% [4 Packages 2126 kB/8792 kB 24%][0m[33m44% [4 Packages 3336 kB/8792 kB 38%][0m[33m57% [4 Packages 4827 kB/8792 kB 55%][0m[33m69% [4 Packages 6224 kB/8792 kB 71%][0m[33m79% [4 Packages 7445 kB/8792 kB 85%][0m[33m                                    91% [Working][0m[33m91% [4 Packages store 0 B] [Waiting for headers][0m                                                Get:5 http://deb.debian.org/debian bookworm-updates/main amd64 Packages [6924 B]
+[33m91% [4 Packages store 0 B] [5 Packages 6924 B/6924 B 100%]         1497 kB/s 0s[0m                                                                               Get:6 http://deb.debian.org/debian-security bookworm-security/main amd64 Packages [297 kB]
+[33m91% [4 Packages store 0 B] [6 Packages 0 B/297 kB 0%]              1497 kB/s 0s[0m[33m93% [4 Packages store 0 B]                                         1497 kB/s 0s[0m[33m93% [4 Packages store 0 B]                                         1497 kB/s 0s[0m[33m93% [4 Packages store 0 B]                                         1497 kB/s 0s[0m[33m93% [4 Packages store 0 B]                                         1497 kB/s 0s[0m[33m93% [4 Packages store 0 B]                                         1497 kB/s 0s[0m[33m93% [4 Packages store 0 B]                                         1497 kB/s 0s[0m[33m93% [4 Packages store 0 B]                                         1497 kB/s 0s[0m[33m93% [4 Packages store 0 B]                                         1497 kB/s 0s[0m[33m96% [Working]                                                      1497 kB/s 0s[0m[33m96% [5 Packages store 0 B]                                         1497 kB/s 0s[0m[33m98% [Working]                                                      1497 kB/s 0s[0m[33m98% [6 Packages store 0 B]                                         1497 kB/s 0s[0m[33m100% [Working]                                                     1497 kB/s 0s[0m                                                                               Fetched 9350 kB in 10s (908 kB/s)
+Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 37%Reading package lists... 78%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done
+Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done
+Reading state information... 0% Reading state information... 1%Reading state information... Done
+All packages are up to date.
+Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 47%Reading package lists... 89%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done
+Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... 91%Building dependency tree... Done
+Reading state information... 0% Reading state information... 1%Reading state information... Done
+The following additional packages will be installed:
+  libssl3
+Suggested packages:
+  ca-certificates
+The following NEW packages will be installed:
+  libssl3 openssl
+0 upgraded, 2 newly installed, 0 to remove and 0 not upgraded.
+Need to get 3462 kB of archives.
+After this operation, 8532 kB of additional disk space will be used.
+[33m0% [Working][0m            Get:1 http://deb.debian.org/debian-security bookworm-security/main amd64 libssl3 amd64 3.0.18-1~deb12u2 [2030 kB]
+[33m0% [1 libssl3 13.7 kB/2030 kB 1%][0m[33m20% [1 libssl3 886 kB/2030 kB 44%][0m[33m                                  57% [Working][0m             Get:2 http://deb.debian.org/debian-security bookworm-security/main amd64 openssl amd64 3.0.18-1~deb12u2 [1433 kB]
+[33m57% [2 openssl 0 B/1433 kB 0%][0m[33m                              100% [Working][0m              Fetched 3462 kB in 2s (2026 kB/s)
+debconf: delaying package configuration, since apt-utils is not installed
+Selecting previously unselected package libssl3:amd64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 6096 files and directories currently installed.)
+Preparing to unpack .../libssl3_3.0.18-1~deb12u2_amd64.deb ...
+Unpacking libssl3:amd64 (3.0.18-1~deb12u2) ...
+Selecting previously unselected package openssl.
+Preparing to unpack .../openssl_3.0.18-1~deb12u2_amd64.deb ...
+Unpacking openssl (3.0.18-1~deb12u2) ...
+Setting up libssl3:amd64 (3.0.18-1~deb12u2) ...
+Setting up openssl (3.0.18-1~deb12u2) ...
+Processing triggers for libc-bin (2.36-9+deb12u13) ...
+Doing 2048 bits private rsa's for 10s: 4095 2048 bits private RSA's in 10.00s
+Doing 2048 bits public rsa's for 10s: 118128 2048 bits public RSA's in 9.99s
+version: 3.0.18
+built on: Sat Jan 24 15:01:59 2026 UTC
+options: bn(64,64)
+compiler: gcc -fPIC -pthread -m64 -Wa,--noexecstack -Wall -fzero-call-used-regs=used-gpr -DOPENSSL_TLS_SECURITY_LEVEL=2 -Wa,--noexecstack -g -O2 -ffile-prefix-map=/build/reproducible-path/openssl-3.0.18=. -fstack-protector-strong -Wformat -Werror=format-security -DOPENSSL_USE_NODELETE -DL_ENDIAN -DOPENSSL_PIC -DOPENSSL_BUILDING_OPENSSL -DNDEBUG -Wdate-time -D_FORTIFY_SOURCE=2
+CPUINFO: OPENSSL_ia32cap=0xfffab2234f8bffff:0x4009c67ab
+                  sign    verify    sign/s verify/s
+rsa 2048 bits 0.002442s 0.000085s    409.5  11824.6

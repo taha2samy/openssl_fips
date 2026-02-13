@@ -128,14 +128,14 @@ jobs:
 
 
       - name: Make script executable
-        run: chmod +x scripts/table_benchmark.sh
+        run: chmod +x scripts/benchmark.py
 
       - name: Run FIPS benchmark
         env:
           OUT_DIR: Throughput_Comparison_fips
         run: |
           mkdir -p "$OUT_DIR"
-          scripts/table_benchmark.sh \
+          scripts/benchmark.py \
             docker run --rm ghcr.io/taha2samy/wolfi-openssl-fips:latest speed rsa2048
 
       - name: Run Ubuntu (non-FIPS) benchmark
@@ -143,7 +143,7 @@ jobs:
           OUT_DIR: Throughput_Comparison_ubuntu
         run: |
           mkdir -p "$OUT_DIR"
-          scripts/table_benchmark.sh \
+          scripts/benchmark.py \
             docker run --rm -i debian:bookworm-slim sh -c "apt update -y && DEBIAN_FRONTEND=noninteractive apt install -y openssl && openssl speed rsa2048"
 
           
