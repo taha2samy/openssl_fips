@@ -98,12 +98,21 @@ ARG TZDATA_VER
 ARG ZLIB_VER
 RUN --mount=type=cache,target=/var/cache/apk \
     apk add --no-cache libgcc=${LIBSTDC_PLUS_PLUS_VER} tzdata=${TZDATA_VER} zlib=${ZLIB_VER}
+
 COPY --from=helper /etc/passwd /etc/group /etc/
-COPY --from=fips-integrator /usr/local /usr/local
+COPY --from=fips-integrator /usr/local/bin/openssl /usr/local/bin/openssl
+COPY --from=fips-integrator /usr/local/lib/libcrypto.so.3 /usr/local/lib/
+COPY --from=fips-integrator /usr/local/lib/libssl.so.3 /usr/local/lib/
+
+RUN ln -s /usr/local/lib/libcrypto.so.3 /usr/local/lib/libcrypto.so && \
+    ln -s /usr/local/lib/libssl.so.3 /usr/local/lib/libssl.so
+COPY --from=fips-integrator /usr/local/lib/ossl-modules/fips.so /usr/local/lib/ossl-modules/
+COPY --from=fips-integrator /usr/local/lib/ossl-modules/legacy.so /usr/local/lib/ossl-modules/
+COPY --from=fips-integrator /usr/local/ssl /usr/local/ssl
+
 ENV PATH="/usr/local/bin:${PATH}" \
     LD_LIBRARY_PATH="/usr/local/lib:/usr/local/lib64" \
     SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
-RUN  tree / -L 2 -I "locale|locales|zoneinfo|timezone"
 USER openssl
 WORKDIR /home/openssl
 HEALTHCHECK --interval=30s --timeout=3s --start-period=2s --retries=3 \
@@ -137,7 +146,16 @@ COPY --from=helper /usr/lib/libdl.so* /usr/lib/
 COPY --from=helper /usr/lib/librt.so* /usr/lib/
 COPY --from=helper /lib/ld-linux-* /lib/
 
-COPY --from=fips-integrator /usr/local /usr/local
+COPY --from=helper /etc/passwd /etc/group /etc/
+COPY --from=fips-integrator /usr/local/bin/openssl /usr/local/bin/openssl
+COPY --from=fips-integrator /usr/local/lib/libcrypto.so.3 /usr/local/lib/
+COPY --from=fips-integrator /usr/local/lib/libssl.so.3 /usr/local/lib/
+
+RUN ln -s /usr/local/lib/libcrypto.so.3 /usr/local/lib/libcrypto.so && \
+    ln -s /usr/local/lib/libssl.so.3 /usr/local/lib/libssl.so
+COPY --from=fips-integrator /usr/local/lib/ossl-modules/fips.so /usr/local/lib/ossl-modules/
+COPY --from=fips-integrator /usr/local/lib/ossl-modules/legacy.so /usr/local/lib/ossl-modules/
+COPY --from=fips-integrator /usr/local/ssl /usr/local/ssl
 
 ENV PATH="/usr/local/bin:${PATH}" \
     LD_LIBRARY_PATH="/usr/local/lib:/usr/local/lib64:/lib:/usr/lib" \
@@ -150,3 +168,5 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=2s --retries=3 \
     CMD ["/usr/local/bin/openssl", "sha256", "/dev/null"]
 
 ENTRYPOINT ["/usr/local/bin/openssl"]
+
+
