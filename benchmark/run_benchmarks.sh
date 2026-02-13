@@ -35,7 +35,7 @@ EOF
 NPROC=$(nproc)
 
 
-TEST_TIME=20
+TEST_TIME=3
 
 echo "🚀 Running Benchmarks..."
 
