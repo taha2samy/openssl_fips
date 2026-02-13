@@ -82,6 +82,7 @@ RUN --mount=type=cache,target=/var/cache/apk \
 RUN addgroup -g 1000 openssl && adduser -u 1000 -G openssl -D -s /bin/bash openssl
 RUN mkdir -p /etc && touch /etc/nsswitch.conf
 RUN cp /usr/share/zoneinfo/UTC /etc/localtime && echo "UTC" > /etc/timezone
+RUN mkdir -p /etc && touch /etc/nsswitch.conf
 
 
 FROM ${BASE_IMAGE} AS openssl-standard
