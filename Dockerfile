@@ -8,8 +8,8 @@ ARG BUILD_BASE_VER
 ARG PERL_VER
 ARG LINUX_HEADERS_VER
 ARG WGET_VER
-ARG CA_CERTS_VER
-ARG LIBSTDC++_VER
+ARG CA_CERTIFICATES_VER
+ARG LIBSTDC_PLUS_PLUS_VER
 ARG ZLIB_VER
 ARG TZDATA_VER
 ARG POSIX_LIBC_UTILS_VER
@@ -21,7 +21,8 @@ RUN --mount=type=cache,target=/var/cache/apk \
     perl=${PERL_VER} \
     linux-headers=${LINUX_HEADERS_VER} \
     wget=${WGET_VER} \
-    ca-certificates=${CA_CERTS_VER}
+    ca-certificates=${CA_CERTIFICATES_VER}
+
 WORKDIR /src
 RUN wget -q https://www.openssl.org/source/old/3.1/openssl-${FIPS_VERSION}.tar.gz || \
     wget -q https://www.openssl.org/source/openssl-${FIPS_VERSION}.tar.gz && \
@@ -38,7 +39,7 @@ RUN --mount=type=cache,target=/var/cache/apk \
     perl=${PERL_VER} \
     linux-headers=${LINUX_HEADERS_VER} \
     wget=${WGET_VER} \
-    ca-certificates=${CA_CERTS_VER}
+    ca-certificates=${CA_CERTIFICATES_VER}
 WORKDIR /src
 RUN wget -q https://www.openssl.org/source/openssl-${CORE_VERSION}.tar.gz || \
     wget -q https://www.openssl.org/source/old/3.4/openssl-${CORE_VERSION}.tar.gz && \
@@ -63,14 +64,14 @@ RUN /usr/local/bin/openssl fipsinstall \
 
 FROM ${BASE_IMAGE} AS helper
 RUN --mount=type=cache,target=/var/cache/apk \
-    apk add --no-cache libstdc++=${LIBSTDC++_VER} zlib=${ZLIB_VER} tzdata=${TZDATA_VER} posix-libc-utils=${POSIX_LIBC_UTILS_VER}
+    apk add --no-cache libstdc++=${LIBSTDC_PLUS_PLUS_VER} zlib=${ZLIB_VER} tzdata=${TZDATA_VER} posix-libc-utils=${POSIX_LIBC_UTILS_VER}
 RUN addgroup -g 1000 openssl && adduser -u 1000 -G openssl -D -s /bin/bash openssl
 RUN mkdir -p /etc && touch /etc/nsswitch.conf
 RUN cp /usr/share/zoneinfo/UTC /etc/localtime && echo "UTC" > /etc/timezone
 
 FROM ${BASE_IMAGE} AS openssl-standard
 RUN --mount=type=cache,target=/var/cache/apk \
-    apk add --no-cache libgcc=${LIBSTDC++_VER} tzdata=${TZDATA_VER} zlib=${ZLIB_VER}
+    apk add --no-cache libgcc=${LIBSTDC_PLUS_PLUS_VER} tzdata=${TZDATA_VER} zlib=${ZLIB_VER}
 COPY --from=helper /etc/passwd /etc/group /etc/
 COPY --from=fips-integrator /usr/local /usr/local
 ENV PATH="/usr/local/bin:${PATH}" \

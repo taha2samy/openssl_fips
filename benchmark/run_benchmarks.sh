@@ -33,6 +33,8 @@ ENTRYPOINT ["openssl"]
 EOF
 
 NPROC=$(nproc)
+
+
 TEST_TIME=20
 
 echo "🚀 Running Benchmarks..."
