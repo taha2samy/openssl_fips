@@ -54,7 +54,7 @@ tsa_policy3 = 1.2.3.4.5.7
 providers = provider_sect
 alg_section = algorithm_sect
 [algorithm_sect]
-default_properties = fips=yes
+default_properties = fips=yes,fips.security_check=1
 
 # List of providers to load
 [provider_sect]
@@ -73,7 +73,7 @@ base = base_sect
 # OpenSSL may not work correctly which could lead to significant system
 # problems including inability to remotely access the system.
 [default_sect]
-activate = 1
+# activate = 1
 
 
 ####################################################################

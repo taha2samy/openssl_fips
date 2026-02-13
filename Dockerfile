@@ -121,6 +121,7 @@ COPY --from=fips-integrator /usr/local/ssl /usr/local/ssl
 ENV PATH="/usr/local/bin:${PATH}" \
     LD_LIBRARY_PATH="/usr/local/lib:/usr/local/lib64" \
     SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
+    OPENSSL_CONF=/usr/local/ssl/openssl.cnf \
     TZ=UTC
 
 USER openssl
@@ -165,6 +166,7 @@ COPY --from=openssl-standard /usr/lib/libnss_files.so* /usr/lib/
 ENV PATH="/usr/local/bin:${PATH}" \
     LD_LIBRARY_PATH="/usr/local/lib:/lib:/usr/lib" \
     SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
+    OPENSSL_CONF=/usr/local/ssl/openssl.cnf \
     LANG=C.UTF-8 \
     TZ=UTC
 
