@@ -926,21 +926,8 @@ verify_fips_openssl("{{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version 
 
 Benchmark FIPS vs non-FIPS performance:
 
-```bash
-# FIPS-enabled (this image)
-docker run --rm {{ registry }}/{{ owner }}/{{ repo_name }}:latest speed rsa2048
+{{table_of_comparison}}
 
-```
-
-**Typical Results:**
-
-**FIPS-enabled (this image)**
-{{fips_md}}
-
----
-**FIPS-Disabled (Ubuntu)**
-
-{{ ubuntu_md}}
 
 ---
 

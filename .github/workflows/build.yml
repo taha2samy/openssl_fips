@@ -127,26 +127,13 @@ jobs:
           EOF
 
 
-      - name: Make script executable
-        run: chmod +x scripts/benchmark.py
-
-      - name: Run FIPS benchmark
-        env:
-          OUT_DIR: Throughput_Comparison_fips
+      - name: Benchmark
         run: |
-          mkdir -p "$OUT_DIR"
-          scripts/benchmark.py \
-            docker run --rm ghcr.io/taha2samy/wolfi-openssl-fips:latest speed rsa2048
+          chmod +x benchmark/run_benchmark.sh
+          chmod +x benchmark/generate_report.py
+          ./benchmark/run_benchmark.sh
+          ./benchmark/generate_report.py
 
-      - name: Run Ubuntu (non-FIPS) benchmark
-        env:
-          OUT_DIR: Throughput_Comparison_ubuntu
-        run: |
-          mkdir -p "$OUT_DIR"
-          scripts/benchmark.py \
-            docker run --rm -i debian:bookworm-slim sh -c "apt update -y && DEBIAN_FRONTEND=noninteractive apt install -y openssl && openssl speed rsa2048"
-
-          
       - name: Set README environment variables
         run: |
           echo "PROJECT_NAME=Wolfi OpenSSL FIPS Images" >> $GITHUB_ENV
@@ -159,8 +146,6 @@ jobs:
           echo "BUILD_DATE=$(date -u +%Y%m%d)" >> $GITHUB_ENV
           echo "full_image_tag=${{ env.REGISTRY }}/${{env.OWNER}}/${{ env.IMAGE_NAME }}:full-${{ env.FIPS_VERSION }}-${{ env.CORE_VERSION }}" >> $GITHUB_ENV
           echo "distroless_image=${{ env.REGISTRY }}/${{env.OWNER}}/${{ env.IMAGE_NAME }}:distroless-${{ env.FIPS_VERSION }}-${{ env.CORE_VERSION }}" >> $GITHUB_ENV
-          echo "FIPS_MD_PATH=Throughput_Comparison_fips/benchmark.md" >> $GITHUB_ENV
-          echo "UBUNTU_MD_PATH=Throughput_Comparison_ubuntu/benchmark.md" >> $GITHUB_ENV
 
 
 

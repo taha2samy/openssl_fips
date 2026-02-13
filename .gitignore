@@ -1,2 +1,1 @@
-bench_results/
-be
+benchmark/bench_results/*.log
