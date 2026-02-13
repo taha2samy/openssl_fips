@@ -124,18 +124,15 @@ ARG CORE_VERSION
 ARG FIPS_VERSION
 
 LABEL org.opencontainers.image.title="Wolfi OpenSSL FIPS (Distroless)" \
-    org.opencontainers.image.description="FIPS 140-3 compliant OpenSSL container (distroless)" \
-    org.opencontainers.image.vendor="taha2samy" \
-    org.opencontainers.image.core-version="${CORE_VERSION}" \
-    org.opencontainers.image.fips-version="${FIPS_VERSION}" \
-    org.opencontainers.image.licenses="Apache-2.0" \
-    org.opencontainers.image.source="https://github.com/taha2samy/openssl_fips" 
+    org.opencontainers.image.vendor="taha2samy"
+
 COPY --from=helper /etc/passwd /etc/group /etc/
 COPY --from=helper /etc/nsswitch.conf /etc/nsswitch.conf
+COPY --from=helper /etc/ssl/certs /etc/ssl/certs
 COPY --from=helper /usr/share/zoneinfo /usr/share/zoneinfo
 COPY --from=helper /etc/localtime /etc/localtime
 COPY --from=helper /etc/timezone /etc/timezone
-COPY --from=helper /etc/ssl/certs /etc/ssl/certs
+
 COPY --from=helper /usr/lib/libstdc++.so* /usr/lib/
 COPY --from=helper /usr/lib/libgcc_s.so* /usr/lib/
 COPY --from=helper /usr/lib/libz.so* /usr/lib/
@@ -146,27 +143,22 @@ COPY --from=helper /usr/lib/libdl.so* /usr/lib/
 COPY --from=helper /usr/lib/librt.so* /usr/lib/
 COPY --from=helper /lib/ld-linux-* /lib/
 
-COPY --from=helper /etc/passwd /etc/group /etc/
-COPY --from=fips-integrator /usr/local/bin/openssl /usr/local/bin/openssl
-COPY --from=fips-integrator /usr/local/lib/libcrypto.so.3 /usr/local/lib/
-COPY --from=fips-integrator /usr/local/lib/libssl.so.3 /usr/local/lib/
-
-RUN ln -s /usr/local/lib/libcrypto.so.3 /usr/local/lib/libcrypto.so && \
-    ln -s /usr/local/lib/libssl.so.3 /usr/local/lib/libssl.so
-COPY --from=fips-integrator /usr/local/lib/ossl-modules/fips.so /usr/local/lib/ossl-modules/
-COPY --from=fips-integrator /usr/local/lib/ossl-modules/legacy.so /usr/local/lib/ossl-modules/
-COPY --from=fips-integrator /usr/local/ssl /usr/local/ssl
+COPY --from=openssl-standard /usr/local/bin/openssl /usr/local/bin/openssl
+COPY --from=openssl-standard /usr/local/lib/libcrypto.so* /usr/local/lib/
+COPY --from=openssl-standard /usr/local/lib/libssl.so* /usr/local/lib/
+COPY --from=openssl-standard /usr/local/lib/ossl-modules /usr/local/lib/ossl-modules
+COPY --from=openssl-standard /usr/local/ssl /usr/local/ssl
 
 ENV PATH="/usr/local/bin:${PATH}" \
     LD_LIBRARY_PATH="/usr/local/lib:/usr/local/lib64:/lib:/usr/lib" \
+    SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
     LANG=C.UTF-8 \
     TZ=UTC
 
 USER openssl
 WORKDIR /home/openssl
+
 HEALTHCHECK --interval=30s --timeout=3s --start-period=2s --retries=3 \
     CMD ["/usr/local/bin/openssl", "sha256", "/dev/null"]
 
 ENTRYPOINT ["/usr/local/bin/openssl"]
-
-
