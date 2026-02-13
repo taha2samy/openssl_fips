@@ -22,6 +22,7 @@ RUN --mount=type=cache,target=/var/cache/apk \
     linux-headers=${LINUX_HEADERS_VER} \
     wget=${WGET_VER} \
     ca-certificates=${CA_CERTIFICATES_VER}
+
 WORKDIR /src
 RUN wget -q https://www.openssl.org/source/old/3.1/openssl-${FIPS_VERSION}.tar.gz || \
     wget -q https://www.openssl.org/source/openssl-${FIPS_VERSION}.tar.gz && \
