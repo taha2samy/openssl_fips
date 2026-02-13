@@ -159,6 +159,8 @@ COPY --from=openssl-standard /usr/local/lib/libssl.so* /usr/local/lib/
 COPY --from=openssl-standard /usr/local/lib/ossl-modules /usr/local/lib/ossl-modules
 COPY --from=openssl-standard /usr/local/ssl /usr/local/ssl
 COPY --from=helper /etc/nsswitch.conf /etc/nsswitch.conf
+COPY --from=openssl-standard /usr/lib/libnss_dns.so* /usr/lib/
+COPY --from=openssl-standard /usr/lib/libnss_files.so* /usr/lib/
 
 ENV PATH="/usr/local/bin:${PATH}" \
     LD_LIBRARY_PATH="/usr/local/lib:/lib:/usr/lib" \
