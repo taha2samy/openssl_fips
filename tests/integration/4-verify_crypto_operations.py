@@ -35,8 +35,13 @@ def test_08_rsa_key_generation(image_tag: str):
     category = "Asymmetric Key Generation (RSA)"
     
     # Generate a FIPS-compliant 2048-bit RSA key.
-    code, stdout, stderr = run_container_command(image_tag, ["genpkey", "-algorithm", "RSA", "-pkeyopt", "rsa_keygen_bits:2048"])
-
+    code, stdout, stderr = run_container_command(image_tag, [
+            "genpkey", 
+            "-provider", "fips", 
+            "-provider", "base", 
+            "-algorithm", "RSA", 
+            "-pkeyopt", "rsa_keygen_bits:2048"
+        ])
     if code == 0 and stdout.startswith("-----BEGIN PRIVATE KEY-----"):
         log_success(
             8, category,
