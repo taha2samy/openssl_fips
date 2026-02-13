@@ -35,10 +35,28 @@ target "common" {
   platforms  = ["linux/amd64", "linux/arm64"]
   output = ["type=registry"]
   args = {
-    FIPS_VERSION = FIPS_VERSION
-    CORE_VERSION = CORE_VERSION
-    BASE_IMAGE   = BASE_IMAGE
-    STATIC_IMAGE = STATIC_IMAGE
+    FIPS_VERSION = "${FIPS_VERSION}"
+    CORE_VERSION = "${CORE_VERSION}"
+        # --- Base Images ---
+    BASE_IMAGE   = "${BASE_IMAGE}"
+    STATIC_IMAGE = "${STATIC_IMAGE}"
+    FIPS_VERSION = "${FIPS_VERSION}"
+    CORE_VERSION = "${CORE_VERSION}"
+
+    # --- Build Stage Packages (fips-builder & core-builder) ---
+    BUILD_BASE_VER    = "${BUILD_BASE_VER}"
+    PERL_VER          = "${PERL_VER}"
+    LINUX_HEADERS_VER = "${LINUX_HEADERS_VER}"
+    WGET_VER          = "${WGET_VER}"
+    CA_CERTS_VER      = "${CA_CERTS_VER}"
+
+    # --- Runtime & Helper Packages (helper & openssl-standard) ---
+    LIBSTDC_PLUS_PLUS_VER = "${LIBSTDC_PLUS_PLUS_VER}"
+    ZLIB_VER              = "${ZLIB_VER}"
+    TZDATA_VER            = "${TZDATA_VER}"
+    POSIX_LIBC_UTILS_VER  = "${POSIX_LIBC_UTILS_VER}"
+    
+
   }
 }
 

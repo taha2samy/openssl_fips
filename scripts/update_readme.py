@@ -12,11 +12,9 @@ def env(name: str, default: str | None = None) -> str:
     if value is None:
         raise RuntimeError(f"Missing required environment variable: {name}")
     return value
-with open(os.environ["FIPS_MD_PATH"]) as f:
-    fips_table = f.read()
+with open("Comparison_Report.md") as f:
+    table_of_comparison  = f.read()
 
-with open(os.environ["UBUNTU_MD_PATH"]) as f:
-    ubuntu_table = f.read()
 
 
 CONTEXT = {
@@ -28,8 +26,7 @@ CONTEXT = {
     "core_version": env("CORE_VERSION"),
     "fips_version": env("FIPS_VERSION"),
     "code_repo_name": env("CODE_REPO_NAME"),
-    "fips_md": fips_table,
-    "ubuntu_md": ubuntu_table,
+    "table_of_comparison": table_of_comparison,
     "distroless_size": env("DISTROLESS_SIZE"),
     "standard_size": env("STANDARD_SIZE"),
     "generation_date": env(

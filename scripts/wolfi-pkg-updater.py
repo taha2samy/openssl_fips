@@ -1,0 +1,144 @@
+#!/usr/bin/env python3
+
+import subprocess
+import sys
+from datetime import datetime
+
+PACKAGES_TO_CHECK = [
+    "build-base",
+    "perl",
+    "linux-headers",
+    "wget",
+    "ca-certificates",
+    "libstdc++",
+    "zlib",
+    "tzdata",
+    "posix-libc-utils"
+]
+
+IMAGES_TO_CHECK = {
+    "BASE_IMAGE": "cgr.dev/chainguard/wolfi-base:latest",
+    "STATIC_IMAGE": "cgr.dev/chainguard/static:latest"
+}
+
+OUTPUT_HCL_FILE = "versions.hcl"
+
+
+def run_command(command_list):
+    return subprocess.run(command_list, capture_output=True, text=True, check=True)
+
+
+def pull_image(image_tag):
+    print(f"🔄 Pulling image: {image_tag}...")
+    try:
+        run_command(["docker", "pull", image_tag])
+        print(f"✅ Pull successful: {image_tag}")
+    except subprocess.CalledProcessError as e:
+        print(f"❌ Error pulling {image_tag}: {e.stderr}", file=sys.stderr)
+        sys.exit(1)
+
+
+def get_image_digest(image_tag):
+    print(f"🔍 Getting digest for: {image_tag}...")
+    try:
+        result = run_command([
+            "docker", "inspect",
+            "--format={{index .RepoDigests 0}}",
+            image_tag
+        ])
+        return result.stdout.strip()
+    except Exception as e:
+        print(f"❌ Error getting digest for {image_tag}: {e}", file=sys.stderr)
+        return None
+
+
+def get_latest_package_version(base_image, package_name):
+    command = f"apk update > /dev/null && apk search -x {package_name}"
+    try:
+        result = subprocess.run(
+            ["docker", "run", "--rm", base_image, "sh", "-c", command],
+            capture_output=True,
+            text=True,
+            check=True,
+            timeout=60
+        )
+
+        full_package_string = result.stdout.strip()
+
+        if not full_package_string:
+            return None
+
+        prefix = f"{package_name}-"
+
+        if full_package_string.startswith(prefix):
+            return full_package_string[len(prefix):]
+
+        return None
+
+    except Exception:
+        return None
+
+
+def generate_hcl_file(package_versions: dict, image_digests: dict):
+    print(f"📝 Generating HCL file: {OUTPUT_HCL_FILE}...")
+
+    header = f"""# This file is auto-generated. DO NOT EDIT MANUALLY.
+"""
+
+    content = header
+
+    content += "\n# --- Base Images (Pinned by Digest) ---\n"
+
+    for var_name, digest in image_digests.items():
+        content += f'variable "{var_name}" {{\n  default = "{digest}"\n}}\n'
+
+    content += "\n# --- Package Versions ---\n"
+
+    for package, version in package_versions.items():
+        clean_name = package.upper().replace("-", "_").replace("+", "_PLUS")
+        variable_name = f"{clean_name}_VER"
+
+        content += f'variable "{variable_name}" {{\n  default = "{version}"\n}}\n'
+
+    with open(OUTPUT_HCL_FILE, "w") as f:
+        f.write(content.strip() + "\n")
+
+    print(f"✅ Successfully wrote to {OUTPUT_HCL_FILE}")
+
+
+def main():
+    print("🐺 Starting Wolfi & Image Digest Checker...")
+
+    image_digests = {}
+
+    for var_name, tag in IMAGES_TO_CHECK.items():
+        pull_image(tag)
+
+        digest = get_image_digest(tag)
+
+        if digest:
+            image_digests[var_name] = digest
+        else:
+            sys.exit(1)
+
+    base_image_with_digest = image_digests["BASE_IMAGE"]
+
+    package_versions = {}
+
+    for pkg in PACKAGES_TO_CHECK:
+        print(f"🔍 Checking package: {pkg}...")
+
+        version = get_latest_package_version(base_image_with_digest, pkg)
+
+        if version:
+            print(f"  -> {version}")
+            package_versions[pkg] = version
+        else:
+            print(f"🛑 Error checking package {pkg}")
+            sys.exit(1)
+
+    generate_hcl_file(package_versions, image_digests)
+
+
+if __name__ == "__main__":
+    main()

@@ -2,12 +2,17 @@
 version: '3'
 
 tasks:
-  fips-check:
+  update-versions:
     cmds:
-      - docker pull ghcr.io/taha2samy/wolfi_os-base:latest
-      - docker run --rm ghcr.io/taha2samy/wolfi_os-base:latest version -a
-      - docker run --rm ghcr.io/taha2samy/wolfi_os-base:latest list -providers
-      - docker run --rm ghcr.io/taha2samy/wolfi_os-base:latest dgst -sha256 /etc/ssl/certs/ca-certificates.crt
-      - docker run --rm ghcr.io/taha2samy/wolfi_os-base:latest dgst -md5 /etc/ssl/certs/ca-certificates.crt || echo "Weak algorithm check failed as expected"
-      - docker run --rm ghcr.io/taha2samy/wolfi_os-base:latest dgst -sha1 /etc/ssl/certs/ca-certificates.crt || echo "Weak algorithm check failed as expected"
-      - docker run --rm ghcr.io/taha2samy/wolfi_os-base:latest enc -des-cbc -pass pass:test -in /etc/ssl/certs/ca-certificates.crt || echo "Weak cipher check failed as expected"
+      - cmd: chmod +x scripts/wolfi-pkg-updater.py
+      - cmd: scripts/wolfi-pkg-updater.py
+  benchmark:
+    dir: benchmark
+    cmds:
+      - cmd: chmod +x run_benchmarks.sh
+      - cmd: ./run_benchmarks.sh
+  generate-report:
+    dir: benchmark
+    cmds:
+      - cmd: chmod +x generate_report.py
+      - cmd: ./generate_report.py
