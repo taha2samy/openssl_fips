@@ -127,12 +127,15 @@ jobs:
           EOF
 
 
-      - name: Benchmark
+      - name: install python dependencies
         run: |
-          chmod +x benchmark/run_benchmark.sh
-          chmod +x benchmark/generate_report.py
-          ./benchmark/run_benchmark.sh
-          ./benchmark/generate_report.py
+          pip install jinja2 python-hcl2
+          curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash
+          apt install task
+      - name: run benchmark
+        run: |
+          task benchmark
+          task generate-report
 
       - name: Set README environment variables
         run: |
@@ -149,8 +152,7 @@ jobs:
 
 
 
-      - name: Install jinja2
-        run: pip install jinja2
+
 
       - name: Generate README.md
         run: python scripts/update_readme.py
