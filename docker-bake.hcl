@@ -48,7 +48,7 @@ target "common" {
     PERL_VER          = "${PERL_VER}"
     LINUX_HEADERS_VER = "${LINUX_HEADERS_VER}"
     WGET_VER          = "${WGET_VER}"
-    CA_CERTS_VER      = "${CA_CERTS_VER}"
+    CA_CERTS_VER      = "${CA_CERTIFICATES_VER}"
 
     # --- Runtime & Helper Packages (helper & openssl-standard) ---
     LIBSTDC_PLUS_PLUS_VER = "${LIBSTDC_PLUS_PLUS_VER}"
