@@ -103,6 +103,7 @@ COPY --from=fips-integrator /usr/local /usr/local
 ENV PATH="/usr/local/bin:${PATH}" \
     LD_LIBRARY_PATH="/usr/local/lib:/usr/local/lib64" \
     SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+RUN  tree / -L 2 -I "locale|locales|zoneinfo|timezone"
 USER openssl
 WORKDIR /home/openssl
 HEALTHCHECK --interval=30s --timeout=3s --start-period=2s --retries=3 \
