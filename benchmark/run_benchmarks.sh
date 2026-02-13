@@ -35,13 +35,25 @@ EOF
 NPROC=$(nproc)
 
 
-TEST_TIME=20
+TEST_TIME=2
 
 echo "🚀 Running Benchmarks..."
 
-docker run --rm fips-bench speed -multi $NPROC -seconds $TEST_TIME -evp aes-256-gcm sha256 sha512 ed25519 rsa2048 > "$RESULT_DIR/fips.log" 2>&1
-docker run --rm debian-bench speed -multi $NPROC -seconds $TEST_TIME -evp aes-256-gcm sha256 sha512 ed25519 rsa2048 > "$RESULT_DIR/debian.log" 2>&1
-docker run --rm alpine-bench speed -multi $NPROC -seconds $TEST_TIME -evp aes-256-gcm sha256 sha512 ed25519 rsa2048 > "$RESULT_DIR/alpine.log" 2>&1
-docker run --rm ubuntu-bench speed -multi $NPROC -seconds $TEST_TIME -evp aes-256-gcm sha256 sha512 ed25519 rsa2048 > "$RESULT_DIR/ubuntu.log" 2>&1
+docker run --rm --entrypoint sh fips-bench -c \
+"openssl version && echo && openssl speed -multi $NPROC -seconds $TEST_TIME -evp aes-256-gcm sha256 sha512 ed25519 rsa2048" \
+> "$RESULT_DIR/fips.log" 2>&1
+echo "FIPS done"
+docker run --rm --entrypoint sh debian-bench -c \
+"openssl version && echo && openssl speed -multi $NPROC -seconds $TEST_TIME -evp aes-256-gcm sha256 sha512 ed25519 rsa2048" \
+> "$RESULT_DIR/debian.log" 2>&1
+echo "debian done"
+docker run --rm --entrypoint sh alpine-bench -c \
+"openssl version && echo && openssl speed -multi $NPROC -seconds $TEST_TIME -evp aes-256-gcm sha256 sha512 ed25519 rsa2048" \
+> "$RESULT_DIR/alpine.log" 2>&1
+echo "alpine done"
+docker run --rm --entrypoint sh ubuntu-bench -c \
+"openssl version && echo && openssl speed -multi $NPROC -seconds $TEST_TIME -evp aes-256-gcm sha256 sha512 ed25519 rsa2048" \
+> "$RESULT_DIR/ubuntu.log" 2>&1
+echo "ubuntu done"
 
 echo "✅ All logs generated in $RESULT_DIR"

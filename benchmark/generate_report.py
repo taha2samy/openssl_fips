@@ -11,6 +11,8 @@ def parse_file(filepath):
     if not os.path.exists(filepath): return None
     with open(filepath, "r") as f:
         lines = f.readlines()
+        version = re.search(r"\d+\.\d+\.\d+", lines[0]).group(0)
+        data["version"] = version
         for line in lines:
             line = line.strip()
             if "rsa" in line and "2048" in line and "bits" in line:
@@ -45,6 +47,7 @@ results = {name: parse_file(os.path.join(LOG_DIR, file)) for name, file in syste
 results = {k: v for k, v in results.items() if v}
 
 metrics = [
+    ("OpenSSL Version", "version"),
     ("RSA 2048 Sign", "rsa_sign"),
     ("RSA 2048 Verify", "rsa_verify"),
     ("Ed25519 Sign", "ed25519_sign"),
@@ -64,12 +67,16 @@ report = [
 ]
 
 for label, key in metrics:
-    unit = "ops/s" if "Sign" in label or "Verify" in label else "kB/s"
+    unit = "ops/s" if "Sign" in label or "Verify" in label else "kB/s" if "Version" not in label else ""
     row = f"| {label} | {unit} | "
     vals = []
     for sys in results:
         v = results[sys].get(key, 0.0)
-        vals.append(f"{v:,.1f}")
+        if key == "version":
+            vals.append(v)
+
+        else:
+            vals.append(f"{v:,.1f}")
     row += " | ".join(vals) + " |"
     report.append(row)
 
