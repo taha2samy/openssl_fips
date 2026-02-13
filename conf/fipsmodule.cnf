@@ -30,4 +30,3 @@ x963kdf-key-check = 0
 x942kdf-key-check = 0
 pbkdf2-lower-bound-check = 1
 ecdh-cofactor-check = 0
-module-mac = E7:3B:C0:44:37:86:29:61:C9:6D:D6:52:FA:80:9E:89:28:72:18:64:C4:76:E6:37:5A:6A:50:53:1A:D5:C7:55
