@@ -129,13 +129,13 @@ jobs:
 
       - name: install python dependencies
         run: |
-          pip install jinja2 python-hcl2
-          curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash
-          apt install task
+          sudo pip install jinja2 python-hcl2
+          sudo curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash
+          sudo apt install task
       - name: run benchmark
         run: |
-          task benchmark
-          task generate-report
+          sudo task benchmark
+          sudo task generate-report
 
       - name: Set README environment variables
         run: |
