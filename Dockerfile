@@ -84,6 +84,15 @@ RUN mkdir -p /etc && touch /etc/nsswitch.conf
 RUN cp /usr/share/zoneinfo/UTC /etc/localtime && echo "UTC" > /etc/timezone
 
 FROM ${BASE_IMAGE} AS openssl-standard
+ARG CORE_VERSION
+ARG FIPS_VERSION
+LABEL org.opencontainers.image.title="Wolfi OpenSSL FIPS (Standard)" \
+    org.opencontainers.image.description="FIPS 140-3 compliant OpenSSL container (standard)" \
+    org.opencontainers.image.vendor="taha2samy" \
+    org.opencontainers.image.core-version="${CORE_VERSION}" \
+    org.opencontainers.image.fips-version="${FIPS_VERSION}" \
+    org.opencontainers.image.licenses="Apache-2.0" \
+    org.opencontainers.image.source="https://github.com/taha2samy/openssl_fips" 
 ARG LIBSTDC_PLUS_PLUS_VER
 ARG TZDATA_VER
 ARG ZLIB_VER
@@ -96,9 +105,21 @@ ENV PATH="/usr/local/bin:${PATH}" \
     SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 USER openssl
 WORKDIR /home/openssl
+HEALTHCHECK --interval=30s --timeout=3s --start-period=2s --retries=3 \
+    CMD /usr/local/bin/openssl list -providers | grep -q fips || exit 1
 ENTRYPOINT ["/usr/local/bin/openssl"]
 
 FROM ${STATIC_IMAGE} AS openssl-distroless
+ARG CORE_VERSION
+ARG FIPS_VERSION
+
+LABEL org.opencontainers.image.title="Wolfi OpenSSL FIPS (Distroless)" \
+    org.opencontainers.image.description="FIPS 140-3 compliant OpenSSL container (distroless)" \
+    org.opencontainers.image.vendor="taha2samy" \
+    org.opencontainers.image.core-version="${CORE_VERSION}" \
+    org.opencontainers.image.fips-version="${FIPS_VERSION}" \
+    org.opencontainers.image.licenses="Apache-2.0" \
+    org.opencontainers.image.source="https://github.com/taha2samy/openssl_fips" 
 COPY --from=helper /etc/passwd /etc/group /etc/
 COPY --from=helper /etc/nsswitch.conf /etc/nsswitch.conf
 COPY --from=helper /usr/share/zoneinfo /usr/share/zoneinfo
@@ -124,4 +145,7 @@ ENV PATH="/usr/local/bin:${PATH}" \
 
 USER openssl
 WORKDIR /home/openssl
+HEALTHCHECK --interval=30s --timeout=3s --start-period=2s --retries=3 \
+    CMD ["/usr/local/bin/openssl", "sha256", "/dev/null"]
+
 ENTRYPOINT ["/usr/local/bin/openssl"]
