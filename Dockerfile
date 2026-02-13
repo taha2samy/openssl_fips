@@ -126,22 +126,15 @@ ARG FIPS_VERSION
 LABEL org.opencontainers.image.title="Wolfi OpenSSL FIPS (Distroless)" \
     org.opencontainers.image.vendor="taha2samy"
 
-COPY --from=helper /etc/passwd /etc/group /etc/
-COPY --from=helper /etc/nsswitch.conf /etc/nsswitch.conf
-COPY --from=helper /etc/ssl/certs /etc/ssl/certs
-COPY --from=helper /usr/share/zoneinfo /usr/share/zoneinfo
-COPY --from=helper /etc/localtime /etc/localtime
-COPY --from=helper /etc/timezone /etc/timezone
+COPY --from=openssl-standard /etc/passwd /etc/group /etc/
+COPY --from=openssl-standard /etc/ssl/certs /etc/ssl/certs
+COPY --from=openssl-standard /etc/localtime /etc/localtime
+COPY --from=openssl-standard /etc/timezone /etc/timezone
 
-COPY --from=helper /usr/lib/libstdc++.so* /usr/lib/
-COPY --from=helper /usr/lib/libgcc_s.so* /usr/lib/
-COPY --from=helper /usr/lib/libz.so* /usr/lib/
-COPY --from=helper /usr/lib/libc.so* /usr/lib/
-COPY --from=helper /usr/lib/libpthread.so* /usr/lib/
-COPY --from=helper /usr/lib/libm.so* /usr/lib/
-COPY --from=helper /usr/lib/libdl.so* /usr/lib/
-COPY --from=helper /usr/lib/librt.so* /usr/lib/
-COPY --from=helper /lib/ld-linux-* /lib/
+COPY --from=openssl-standard /usr/lib/libgcc_s.so* /usr/lib/
+COPY --from=openssl-standard /usr/lib/libz.so* /usr/lib/
+COPY --from=openssl-standard /lib/ld-linux-* /lib/
+COPY --from=openssl-standard /lib/libc.so* /lib/
 
 COPY --from=openssl-standard /usr/local/bin/openssl /usr/local/bin/openssl
 COPY --from=openssl-standard /usr/local/lib/libcrypto.so* /usr/local/lib/
@@ -150,7 +143,7 @@ COPY --from=openssl-standard /usr/local/lib/ossl-modules /usr/local/lib/ossl-mod
 COPY --from=openssl-standard /usr/local/ssl /usr/local/ssl
 
 ENV PATH="/usr/local/bin:${PATH}" \
-    LD_LIBRARY_PATH="/usr/local/lib:/usr/local/lib64:/lib:/usr/lib" \
+    LD_LIBRARY_PATH="/usr/local/lib:/lib:/usr/lib" \
     SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
     LANG=C.UTF-8 \
     TZ=UTC
