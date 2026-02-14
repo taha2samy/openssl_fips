@@ -54,7 +54,7 @@ tsa_policy3 = 1.2.3.4.5.7
 providers = provider_sect
 alg_section = algorithm_sect
 [algorithm_sect]
-default_properties = fips=yes,security-checks=1
+default_properties = fips=yes
 
 # List of providers to load
 [provider_sect]
