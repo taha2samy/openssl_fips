@@ -54,7 +54,7 @@ tsa_policy3 = 1.2.3.4.5.7
 providers = provider_sect
 alg_section = algorithm_sect
 [algorithm_sect]
-default_properties = fips=yes
+default_properties = fips=yes,security-checks=1
 
 # List of providers to load
 [provider_sect]
@@ -396,7 +396,3 @@ oldcert = $insta::certout # insta.cert.pem
 [base_sect]
 activate = 1
 
-[fips_sect]
-activate = 1
-install-status = INSTALL_SELF_TEST_KATS_RUN
-security-checks = 1
