@@ -61,7 +61,7 @@ RUN wget -q https://www.openssl.org/source/openssl-${CORE_VERSION}.tar.gz || \
 
 FROM core-builder AS fips-integrator
 ARG FIPS_VERSION
-
+RUN ldconfig
 COPY --from=fips-builder /src/openssl-${FIPS_VERSION}/providers/fips.so /usr/local/lib/ossl-modules/fips.so
 RUN /usr/local/bin/openssl fipsinstall \
     -module /usr/local/lib/ossl-modules/fips.so \
