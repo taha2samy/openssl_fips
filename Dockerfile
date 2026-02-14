@@ -71,7 +71,7 @@ RUN /usr/local/bin/openssl fipsinstall \
     -tdes_encrypt_disabled
 
 COPY conf/openssl.cnf /usr/local/ssl/openssl.cnf
-# RUN cat /usr/local/ssl/fipsmodule.cnf
+RUN cat /usr/local/ssl/fipsmodule.cnf
 # RUN sed -i 's/hmac-key-check = 0/hmac-key-check = 1/g' /usr/local/ssl/fipsmodule.cnf
 # RUN sed -i 's/tdes-encrypt-disabled = 0/tdes-encrypt-disabled = 1/g' /usr/local/ssl/fipsmodule.cnf
 # RUN sed -i 's/security-checks = 0/security-checks = 1/g' /usr/local/ssl/fipsmodule.cnf
