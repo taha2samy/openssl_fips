@@ -68,11 +68,11 @@ RUN /usr/local/bin/openssl fipsinstall \
     -out /usr/local/ssl/fipsmodule.cnf \
     -self_test_onload
 COPY conf/openssl.cnf /usr/local/ssl/openssl.cnf
-COPY conf/fipsmodule.cnf /usr/local/ssl/fipsmodule.cnf
+# COPY conf/fipsmodule.cnf /usr/local/ssl/fipsmodule.cnf
 
-RUN echo "" >> /usr/local/ssl/fipsmodule.cnf && \
-    /usr/local/bin/openssl fipsinstall \
-    -module /usr/local/lib/ossl-modules/fips.so | grep "module-mac" >> /usr/local/ssl/fipsmodule.cnf && cat /usr/local/ssl/fipsmodule.cnf
+# RUN echo "" >> /usr/local/ssl/fipsmodule.cnf && \
+#     /usr/local/bin/openssl fipsinstall \
+#     -module /usr/local/lib/ossl-modules/fips.so | grep "module-mac" >> /usr/local/ssl/fipsmodule.cnf && cat /usr/local/ssl/fipsmodule.cnf
 
 FROM ${BASE_IMAGE} AS helper
 ARG LIBSTDC_PLUS_PLUS_VER
@@ -124,7 +124,9 @@ ENV PATH="/usr/local/bin:${PATH}" \
     LD_LIBRARY_PATH="/usr/local/lib:/usr/local/lib64" \
     SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
     OPENSSL_CONF=/usr/local/ssl/openssl.cnf \
+    OPENSSL_MODULES=/usr/local/lib/ossl-modules \
     TZ=UTC
+
 
 USER openssl
 WORKDIR /home/openssl
@@ -169,6 +171,7 @@ ENV PATH="/usr/local/bin:${PATH}" \
     LD_LIBRARY_PATH="/usr/local/lib:/lib:/usr/lib" \
     SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
     OPENSSL_CONF=/usr/local/ssl/openssl.cnf \
+    OPENSSL_MODULES=/usr/local/lib/ossl-modules \
     LANG=C.UTF-8 \
     TZ=UTC
 
