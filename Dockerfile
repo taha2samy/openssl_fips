@@ -64,10 +64,12 @@ ARG FIPS_VERSION
 
 COPY --from=fips-builder /src/openssl-${FIPS_VERSION}/providers/fips.so /usr/local/lib/ossl-modules/fips.so
 RUN /usr/local/bin/openssl fipsinstall \
+    -module /usr/local/lib/ossl-modules/fips.so \
     -out /usr/local/ssl/fipsmodule.cnf \
-    -module /usr/local/lib/ossl-modules/fips.so 
+    -self_test_onload
 COPY conf/openssl.cnf /usr/local/ssl/openssl.cnf
 COPY conf/fipsmodule.cnf /usr/local/ssl/fipsmodule.cnf
+
 RUN echo "" >> /usr/local/ssl/fipsmodule.cnf && \
     /usr/local/bin/openssl fipsinstall \
     -module /usr/local/lib/ossl-modules/fips.so | grep "module-mac" >> /usr/local/ssl/fipsmodule.cnf && cat /usr/local/ssl/fipsmodule.cnf

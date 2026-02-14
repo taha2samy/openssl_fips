@@ -16,3 +16,21 @@ tasks:
     cmds:
       - cmd: chmod +x generate_report.py
       - cmd: ./generate_report.py
+
+
+
+  tests-distroless:
+    cmds:
+      - cmd: python3 tests/integration/1-verify_fips_integrity.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
+      - cmd: python3 tests/integration/2-verify_algorithms.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
+      - cmd: python3 tests/integration/3-verify_network_dns.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
+      - cmd: python3 tests/integration/4-verify_crypto_operations.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
+      - cmd: python3 tests/integration/5-verify_tls_features.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
+      - cmd: python3 tests/integration/6-verify_advanced_crypto.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroles
+      - cmd: python3 tests/integration/7-verify_hardening_paths.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
+      - cmd: python3 tests/integration/8-verify_entropy_distroless.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
+      - cmd: python3 tests/integration/9-verify_fips_policy_metadata.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
+      - cmd: python3 tests/integration/10-verify_compliance_boundaries.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
+      - cmd: python3 tests/integration/11-verify_fips_140_3_core.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
+      - cmd: python3 tests/integration/12-verify_fips_compliance_depth.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
+      
