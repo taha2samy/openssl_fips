@@ -68,7 +68,10 @@ RUN /usr/local/bin/openssl fipsinstall \
     -out /usr/local/ssl/fipsmodule.cnf \
     -self_test_onload
 COPY conf/openssl.cnf /usr/local/ssl/openssl.cnf
-RUN sed -i 's/activate = 1/activate = 1\nsecurity-checks = 1/g' /usr/local/ssl/fipsmodule.cnf
+RUN cat /usr/local/ssl/fipsmodule.cnf
+RUN sed -i '/\[fips_sect\]/a security-checks = 1' /usr/local/ssl/fipsmodule.cnf
+RUN cat /usr/local/ssl/fipsmodule.cnf
+
 
 FROM ${BASE_IMAGE} AS helper
 ARG LIBSTDC_PLUS_PLUS_VER
