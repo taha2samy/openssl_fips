@@ -395,3 +395,8 @@ oldcert = $insta::certout # insta.cert.pem
 
 [base_sect]
 activate = 1
+
+[fips_sect]
+activate = 1
+install-status = INSTALL_SELF_TEST_KATS_RUN
+security-checks = 1
