@@ -68,8 +68,7 @@ RUN /usr/local/bin/openssl fipsinstall \
     -out /usr/local/ssl/fipsmodule.cnf \
     -self_test_onload \
     -hmac_key_check \
-    -tdes_encrypt_disabled \
-    -security_checks
+    -tdes_encrypt_disabled
 
 COPY conf/openssl.cnf /usr/local/ssl/openssl.cnf
 # RUN cat /usr/local/ssl/fipsmodule.cnf
