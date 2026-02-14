@@ -1,26 +1,20 @@
-# 1. لازم دول يكونوا في أول الملف خالص (القسم الافتراضي)
 config_diagnostics = 1
 openssl_conf = openssl_init
-
-# تعريف الـ OIDs (اختياري)
-[ new_oids ]
 
 [openssl_init]
 providers = provider_sect
 alg_section = algorithm_sect
 
 [algorithm_sect]
-# الإجبار من الـ Query باستخدام الأندرسكور لضمان عدم حدوث Syntax Error
-default_properties = "fips=yes,fips.security_checks=1"
+default_properties = fips=yes
 
 [provider_sect]
 fips = fips_sect
 base = base_sect
 
 [fips_sect]
-# 2. بننادي الملف المولد هنا جوه قسمه الصحيح
 .include /usr/local/ssl/fipsmodule.cnf
-# 3. بنجبر الإعدادات الصارمة "بعد" الـ include
+
 activate = 1
 security-checks = 1
 hmac-key-check = 1
