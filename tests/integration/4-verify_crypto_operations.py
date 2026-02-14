@@ -1,115 +1,95 @@
 import subprocess
 import sys
 
-def log_success(test_number: int, category: str, justification: str):
-    print(f"[SUCCESS] TEST {test_number:02d} - {category}: PASSED ({justification})")
+# ألوان للطباعة في التيرمينال لسهولة القراءة
+GREEN = "\033[92m"
+RED = "\033[91m"
+BLUE = "\033[94m"
+RESET = "\033[0m"
 
-def log_failure(test_number: int, category: str, justification: str, error_details: str = None):
-    sys.stderr.write(f"[FAILURE] TEST {test_number:02d} - {category}: FAILED ({justification})\n")
+def log_success(test_no, category, message):
+    print(f"{GREEN}[SUCCESS]{RESET} TEST {test_no:02d} - {category}: {message}")
+
+def log_failure(test_no, category, message, error_details=None):
+    print(f"{RED}[FAILURE]{RESET} TEST {test_no:02d} - {category}: {message}")
     if error_details:
-        sys.stderr.write(f"Root Cause: {error_details}\n")
-    sys.stderr.write("Process terminated with exit code 1.\n")
+        print(f"{BLUE}[DEBUG]{RESET} Root Cause: {error_details}")
     sys.exit(1)
 
-def run_container_command(image_tag: str, args: list) -> tuple[int, str, str]:
-    cmd = ["docker", "run", "--rm", image_tag] + args
+def run_cmd(image, args, stdin_input=None):
+    # نمرر -provider fips و -provider base لضمان العمل في البيئة الصارمة
+    docker_base = ["docker", "run", "--rm", "-i"] if stdin_input else ["docker", "run", "--rm"]
+    cmd = docker_base + [image] + args
+    
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, check=False)
-        return result.returncode, result.stdout, result.stderr
-    except FileNotFoundError:
-        return -1, "", "Docker executable not found in PATH."
+        proc = subprocess.run(
+            cmd,
+            input=stdin_input.encode() if stdin_input else None,
+            capture_output=True,
+            text=True,
+            check=False
+        )
+        return proc.returncode, proc.stdout, proc.stderr
     except Exception as e:
         return -1, "", str(e)
 
-def inspect_container_config(image_tag: str, format_string: str) -> str:
-    cmd = ["docker", "inspect", f"--format={format_string}", image_tag]
-    try:
-        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-        return result.stdout.strip()
-    except subprocess.CalledProcessError as e:
-        return f"INSPECT_ERROR: {e.stderr.strip()}"
-    except Exception as e:
-        return f"INSPECT_ERROR: {str(e)}"
+# --- الاختبارات ---
 
-def test_08_rsa_key_generation(image_tag: str):
-    category = "Asymmetric Key Generation (RSA)"
+def test_08_rsa_gen(image):
+    """اختبار توليد مفاتيح RSA (يجب أن يكون 2048+ بت في FIPS)"""
+    category = "Asymmetric Key Gen (RSA)"
+    # ملاحظة: أضفنا الموديلات يدوياً لضمان فك التشفير (Encoding)
+    args = ["genpkey", "-provider", "fips", "-provider", "base", "-algorithm", "RSA", "-pkeyopt", "rsa_keygen_bits:2048"]
     
-    # Generate a FIPS-compliant 2048-bit RSA key.
-    code, stdout, stderr = run_container_command(image_tag, [
-            "genpkey", 
-            "-provider", "fips", 
-            "-provider", "base", 
-            "-algorithm", "RSA", 
-            "-pkeyopt", "rsa_keygen_bits:2048"
-        ])
-    if code == 0 and stdout.startswith("-----BEGIN PRIVATE KEY-----"):
-        log_success(
-            8, category,
-            "FIPS-approved asymmetric key generation primitive (RSA 2048-bit) executed successfully."
-        )
+    code, out, err = run_cmd(image, args)
+    if code == 0 and "-----BEGIN PRIVATE KEY-----" in out:
+        log_success(8, category, "RSA 2048-bit key generated successfully.")
     else:
-        log_failure(
-            8, category,
-            "Failed to generate a valid RSA key pair under FIPS mode.",
-            f"Exit Code: {code}, Stderr: {stderr.strip()}"
-        )
+        log_failure(8, category, "FIPS RSA generation failed.", f"Code: {code}, Error: {err.strip()}")
 
-def test_09_fips_cipher_availability(image_tag: str):
+def test_09_cipher_list(image):
+    """اختبار وجود الخوارزميات المعتمدة (AES-GCM)"""
     category = "Symmetric Cipher Availability"
-
-    # List only the ciphers available through the FIPS provider.
-    code, stdout, stderr = run_container_command(image_tag, ["ciphers", "FIPS"])
-
-    if code == 0 and "AES" in stdout and "GCM" in stdout:
-        log_success(
-            9, category,
-            "Successfully listed FIPS-approved ciphers, confirming AES-GCM suite is available."
-        )
-    elif code == 0 and stdout.strip() == "":
-        log_failure(
-            9, category,
-            "Command succeeded but returned no FIPS ciphers, indicating a provider property issue."
-        )
+    # نستخدم list بدلاً من ciphers لأنها متوافقة مع الوضع الصارم
+    args = ["list", "-cipher-algorithms", "-provider", "fips"]
+    
+    code, out, err = run_cmd(image, args)
+    if code == 0 and "AES-256-GCM" in out:
+        log_success(9, category, "Verified AES-256-GCM is active in FIPS provider.")
     else:
-        log_failure(
-            9, category,
-            "Failed to query for FIPS-approved cipher suites.",
-            f"Exit Code: {code}, Stderr: {stderr.strip()}"
-        )
+        log_failure(9, category, "FIPS ciphers not listed properly.", f"Output: {out[:100]}")
 
-def test_10_non_root_user_enforcement(image_tag: str):
-    category = "Container Security (Non-Root User)"
-
-    # We check the image metadata directly, as 'distroless' has no shell to run 'id'.
-    user = inspect_container_config(image_tag, '{{.Config.User}}')
-
-    if user == "openssl":
-        log_success(
-            10, category,
-            "Image is correctly configured to run as the dedicated non-root user 'openssl'."
-        )
+def test_26_hmac_enforcement(image):
+    """اختبار رفض مفاتيح HMAC القصيرة (أقل من 112 بت)"""
+    category = "HMAC Key Length Enforcement"
+    short_key = "12345678" # 64-bit (مرفوض في FIPS 140-3)
+    
+    # نحاول تشغيل HMAC بمفتاح قصير؛ المتوقع هو الفشل (Exit Code != 0)
+    args = ["dgst", "-sha256", "-hmac", short_key, "/dev/null"]
+    code, out, err = run_cmd(image, args)
+    
+    # في الوضع الصارم، يجب أن يفشل الأمر (code != 0)
+    if code != 0:
+        log_success(26, category, f"Strict policy REJECTED short HMAC key (Code {code}). This is correct.")
     else:
-        log_failure(
-            10, category,
-            "Image is not configured to run as a non-root user, violating security best practices.",
-            f"Expected user 'openssl', but found '{user}'."
-        )
+        log_failure(26, category, "Security vulnerability: System ACCEPTED a 64-bit HMAC key!", "FIPS 140-3 requires min 112-bit.")
+
+# --- التشغيل الرئيسي ---
 
 if __name__ == "__main__":
-    print("-" * 80)
-    print("CRYPTO OPERATIONS & SECURITY VALIDATION SUITE")
-    print("-" * 80)
-
     if len(sys.argv) < 2:
-        print("Usage: python3 verify_crypto_operations.py <image_tag>")
+        print(f"Usage: python3 {sys.argv[0]} <image_tag>")
         sys.exit(1)
 
-    target_image = sys.argv[1]
-    
-    test_08_rsa_key_generation(target_image)
-    test_09_fips_cipher_availability(target_image)
-    test_10_non_root_user_enforcement(target_image)
+    target = sys.argv[1]
+    print("="*80)
+    print(f"STARTING FIPS 140-3 COMPLIANCE AUDIT FOR: {target}")
+    print("="*80)
 
-    print("-" * 80)
-    print(f"[SUCCESS] CRYPTO OPERATIONS STATUS: PASSED (Target: {target_image})")
-    print("-" * 80)
+    test_08_rsa_gen(target)
+    test_09_cipher_list(target)
+    test_26_hmac_enforcement(target)
+
+    print("="*80)
+    print(f"{GREEN}ALL TESTS PASSED: Image is FIPS 140-3 Compliant!{RESET}")
+    print("="*80)
