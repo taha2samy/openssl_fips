@@ -396,3 +396,10 @@ oldcert = $insta::certout # insta.cert.pem
 [base_sect]
 activate = 1
 
+
+[fips_sect]
+.include /usr/local/ssl/fipsmodule.cnf
+activate = 1
+security-checks = 1
+hmac-key-check = 1
+tdes-encrypt-disabled = 1
