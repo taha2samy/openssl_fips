@@ -68,11 +68,10 @@ RUN /usr/local/bin/openssl fipsinstall \
     -out /usr/local/ssl/fipsmodule.cnf \
     -self_test_onload
 COPY conf/openssl.cnf /usr/local/ssl/openssl.cnf
-# COPY conf/fipsmodule.cnf /usr/local/ssl/fipsmodule.cnf
-
-# RUN echo "" >> /usr/local/ssl/fipsmodule.cnf && \
-#     /usr/local/bin/openssl fipsinstall \
-#     -module /usr/local/lib/ossl-modules/fips.so | grep "module-mac" >> /usr/local/ssl/fipsmodule.cnf && cat /usr/local/ssl/fipsmodule.cnf
+COPY conf/fipsmodule.cnf /usr/local/ssl/fipsmodule.cnf
+RUN echo "" >> /usr/local/ssl/fipsmodule.cnf && \
+    /usr/local/bin/openssl fipsinstall \
+    -module /usr/local/lib/ossl-modules/fips.so | grep "module-mac" >> /usr/local/ssl/fipsmodule.cnf && cat /usr/local/ssl/fipsmodule.cnf
 
 FROM ${BASE_IMAGE} AS helper
 ARG LIBSTDC_PLUS_PLUS_VER
