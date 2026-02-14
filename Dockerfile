@@ -66,7 +66,11 @@ COPY --from=fips-builder /src/openssl-${FIPS_VERSION}/providers/fips.so /usr/loc
 RUN /usr/local/bin/openssl fipsinstall \
     -module /usr/local/lib/ossl-modules/fips.so \
     -out /usr/local/ssl/fipsmodule.cnf \
-    -self_test_onload
+    -self_test_onload \
+    -hmac_key_check \
+    -tdes_encrypt_disabled \
+    -security_checks
+
 COPY conf/openssl.cnf /usr/local/ssl/openssl.cnf
 # RUN cat /usr/local/ssl/fipsmodule.cnf
 # RUN sed -i 's/hmac-key-check = 0/hmac-key-check = 1/g' /usr/local/ssl/fipsmodule.cnf
