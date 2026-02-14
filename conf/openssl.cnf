@@ -1,10 +1,16 @@
+# 1. لازم دول يكونوا في أول الملف خالص (القسم الافتراضي)
+config_diagnostics = 1
+openssl_conf = openssl_init
+
+# تعريف الـ OIDs (اختياري)
+[ new_oids ]
+
 [openssl_init]
 providers = provider_sect
 alg_section = algorithm_sect
 
 [algorithm_sect]
-# الحل السحري: استخدام الأندرسكور _ وعلامات التنصيص كما في التوثيق
-# ده هيمنع خطأ الـ trailing characters وهيجبر الـ HMAC يرفض المفتاح القصير
+# الإجبار من الـ Query باستخدام الأندرسكور لضمان عدم حدوث Syntax Error
 default_properties = "fips=yes,fips.security_checks=1"
 
 [provider_sect]
@@ -12,11 +18,9 @@ fips = fips_sect
 base = base_sect
 
 [fips_sect]
-# 1. بننادي الملف المولد اللي فيه الـ MAC (البصمة)
+# 2. بننادي الملف المولد هنا جوه قسمه الصحيح
 .include /usr/local/ssl/fipsmodule.cnf
-
-# 2. بنفعل الـ Indicators اللي التوثيق قال عليها
-# جوه الـ Config بنستخدم الناقص - عادي زي ما التوثيق كاتب في مثال fips_sect
+# 3. بنجبر الإعدادات الصارمة "بعد" الـ include
 activate = 1
 security-checks = 1
 hmac-key-check = 1
