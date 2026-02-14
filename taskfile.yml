@@ -26,7 +26,7 @@ tasks:
       - cmd: python3 tests/integration/3-verify_network_dns.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
       - cmd: python3 tests/integration/4-verify_crypto_operations.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
       - cmd: python3 tests/integration/5-verify_tls_features.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
-      - cmd: python3 tests/integration/6-verify_advanced_crypto.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroles
+      - cmd: python3 tests/integration/6-verify_advanced_crypto.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
       - cmd: python3 tests/integration/7-verify_hardening_paths.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
       - cmd: python3 tests/integration/8-verify_entropy_distroless.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
       - cmd: python3 tests/integration/9-verify_fips_policy_metadata.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
