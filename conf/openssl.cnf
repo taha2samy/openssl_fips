@@ -398,3 +398,5 @@ activate = 1
 [fips_sect]
 activate = 1
 module = /usr/local/lib/ossl-modules/fips.so
+conditional-errors = 1
+security-checks = 1
