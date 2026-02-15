@@ -43,8 +43,10 @@ jobs:
             versions.hcl
           targets: default
           source: .
-          sbom: generator=docker/buildkit-syft-scanner,format=cyclonedx-json
-          provenance: mode=max
+          set: |
+            *.attest=type=sbom,generator=docker/buildkit-syft-scanner,format=cyclonedx-json
+            *.attest=type=provenance,mode=max
+
 
 
           
