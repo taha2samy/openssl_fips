@@ -1,36 +1,59 @@
-
 version: '3'
+
+vars:
+  DEFAULT_IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless"
+  RESULTS_ROOT: "allure-results"
+  REPORT_DIR: "allure-report"
 
 tasks:
   update-versions:
     cmds:
-      - cmd: chmod +x scripts/wolfi-pkg-updater.py
-      - cmd: scripts/wolfi-pkg-updater.py
+      - chmod +x scripts/wolfi-pkg-updater.py
+      - scripts/wolfi-pkg-updater.py
+
   benchmark:
     dir: benchmark
     cmds:
-      - cmd: chmod +x run_benchmarks.sh
-      - cmd: ./run_benchmarks.sh
+      - chmod +x run_benchmarks.sh
+      - ./run_benchmarks.sh
+
   generate-report:
     dir: benchmark
     cmds:
-      - cmd: chmod +x generate_report.py
-      - cmd: ./generate_report.py
+      - chmod +x generate_report.py
+      - ./generate_report.py
 
-
-
-  tests-distroless:
+  run-audit:
+    vars:
+      IMG_SAFE: '{{.IMAGE | default .DEFAULT_IMAGE}}'
+      SAFE_NAME: '{{.IMG_SAFE | replace "/" "_" | replace ":" "_"}}'
     cmds:
-      - cmd: python3 tests/integration/1-verify_fips_integrity.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
-      - cmd: python3 tests/integration/2-verify_algorithms.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
-      - cmd: python3 tests/integration/3-verify_network_dns.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
-      - cmd: python3 tests/integration/4-verify_crypto_operations.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
-      - cmd: python3 tests/integration/5-verify_tls_features.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
-      - cmd: python3 tests/integration/6-verify_advanced_crypto.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
-      - cmd: python3 tests/integration/7-verify_hardening_paths.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
-      - cmd: python3 tests/integration/8-verify_entropy_distroless.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
-      - cmd: python3 tests/integration/9-verify_fips_policy_metadata.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
-      - cmd: python3 tests/integration/10-verify_compliance_boundaries.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
-      - cmd: python3 tests/integration/11-verify_fips_140_3_core.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
-      - cmd: python3 tests/integration/12-verify_fips_compliance_depth.py ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
-      
+      - pipenv run pytest new_test/tests/ --alluredir={{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}} --image={{.IMG_SAFE}} || true
+      - echo "Image={{.IMG_SAFE}}" > {{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}}/environment.properties
+
+  audit:
+    vars:
+      IMG: '{{.IMAGE | default .DEFAULT_IMAGE}}'
+    cmds:
+      - task: clean-audit
+      - task: run-audit
+        vars:
+          IMAGE: "{{.IMG}}"
+      - npx allure generate --name "FIPS 140-3 Compliance Suite" --output {{.REPORT_DIR}} {{.RESULTS_ROOT}}/*
+      - npx allure open {{.REPORT_DIR}}
+
+  audit-multi:
+    cmds:
+      - task: clean-audit
+      - task: run-audit
+        vars:
+          IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless"
+      - task: run-audit
+        vars:
+          IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:latest"
+      - npx allure generate --name "FIPS Multi-Image Comparison" --output {{.REPORT_DIR}} {{.RESULTS_ROOT}}/*
+      - npx allure open {{.REPORT_DIR}}
+
+  clean-audit:
+    cmds:
+      - rm -rf {{.RESULTS_ROOT}} {{.REPORT_DIR}}
