@@ -50,18 +50,19 @@ jobs:
         run: |
           echo "standard=$(jq -r '.standard."containerimage.digest"' bake-metadata.json)" >> $GITHUB_OUTPUT
           echo "distroless=$(jq -r '.distroless."containerimage.digest"' bake-metadata.json)" >> $GITHUB_OUTPUT
-
+          echo $(jq -r '.standard."containerimage.digest"' bake-metadata.json)
+          echo $(jq -r '.distroless."containerimage.digest"' bake-metadata.json)
       - name: Attest Standard (Root Index)
         uses: actions/attest-build-provenance@v3
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ env.REPO_NAME }}
+          subject-name: ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ env.repo_of_registry }}
           subject-digest: ${{ steps.digests.outputs.standard }}
           push-to-registry: true
 
       - name: Attest Distroless (Root Index)
         uses: actions/attest-build-provenance@v3
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ env.REPO_NAME }}
+          subject-name: ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ env.repo_of_registry }}
           subject-digest: ${{ steps.digests.outputs.distroless }}
           push-to-registry: true
 
