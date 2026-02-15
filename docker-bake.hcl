@@ -34,6 +34,8 @@ target "common" {
   dockerfile = "Dockerfile"
   platforms  = ["linux/amd64", "linux/arm64"]
   output = ["type=registry"]
+  sbom       = "generator=docker/buildkit-syft-scanner,format=cyclonedx-json"
+
   args = {
     FIPS_VERSION = "${FIPS_VERSION}"
     CORE_VERSION = "${CORE_VERSION}"
@@ -72,7 +74,6 @@ target "standard" {
 
   cache-from = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-standard"]
   cache-to   = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-standard,mode=max"]
-  sbom       = "generator=docker/buildkit-syft-scanner,format=cyclonedx-json"
 
 
 }
@@ -89,7 +90,6 @@ target "distroless" {
 
   cache-from = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-distroless"]
   cache-to   = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-distroless,mode=max"]
-  sbom       = "generator=docker/buildkit-syft-scanner,format=cyclonedx-json"
 
 
 }
