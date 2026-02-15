@@ -57,18 +57,19 @@ jobs:
           echo "distroless=$(jq -r '.distroless."containerimage.digest"' bake-metadata.json)" >> $GITHUB_OUTPUT
           echo $(jq -r '.standard."containerimage.digest"' bake-metadata.json)
           echo $(jq -r '.distroless."containerimage.digest"' bake-metadata.json)
-      - name: Attest Standard (Root Index)
+
+      - name: Attest Standard
         uses: actions/attest-build-provenance@v3
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ env.repo_of_registry }}
-          subject-digest: ${{ steps.digests.outputs.standard }}
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.extract_digests.outputs.standard }}
           push-to-registry: true
 
-      - name: Attest Distroless (Root Index)
+      - name: Attest Distroless
         uses: actions/attest-build-provenance@v3
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ env.repo_of_registry }}
-          subject-digest: ${{ steps.digests.outputs.distroless }}
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.extract_digests.outputs.distroless }}
           push-to-registry: true
 
       # - name: Read variables from docker-bake.hcl
