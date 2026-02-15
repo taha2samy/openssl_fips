@@ -4,10 +4,10 @@
     "python.testing.nosetestsEnabled": false,
     "testing.displayedTestNames": "short",
     "python.testing.pytestArgs": [
-        "new_test/tests", // المكان اللي فيه التستات الجديدة
+        "new_test/tests",
         "-c",
-        "new_test/pytest.ini", // عشان يقرأ الكونفيج بتاعك صح
-        "--rootdir=new_test" // عشان يفهم إن ده الـ Root ويدور على conftest.py هناك
+        "new_test/pytest.ini",
+        "--rootdir=new_test"
     ],
     "python.envFile": "${workspaceFolder}/.env"
 }
