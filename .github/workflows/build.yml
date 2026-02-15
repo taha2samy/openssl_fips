@@ -44,9 +44,6 @@ jobs:
           targets: default
           source: .
 
-          
-      - name: Save bake metadata to file
-        run: echo '${{ steps.bake.outputs.metadata }}' > bake-metadata.json
   
       - name: Extract Root Digests
         id: digests
