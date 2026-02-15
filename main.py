@@ -1,120 +1,119 @@
 import subprocess
 import json
-import gzip
-import io
+import os
 import base64
 
 IMAGE_REF = "ghcr.io/taha2samy/wolfi-openssl-fips:latest"
 REPO = IMAGE_REF.split(':')[0]
+OUTPUT_DIR = "./extracted_metadata"
 
-def run_command(command, is_binary=False):
+if not os.path.exists(OUTPUT_DIR): os.makedirs(OUTPUT_DIR)
+
+def run_cmd(command, is_binary=False):
     try:
-        if is_binary:
-            result = subprocess.run(command, capture_output=True, check=True)
-            return result.stdout
-        else:
-            result = subprocess.run(command, capture_output=True, text=True, check=True)
-            return result.stdout.strip()
-    except Exception as e:
-        return None
+        res = subprocess.run(command, capture_output=True, check=True)
+        return res.stdout if is_binary else res.stdout.decode('utf-8').strip()
+    except: return None
 
-def parse_attestation_content(raw_data):
-    """محاولة قراءة البيانات سواء كانت مضغوطة أو نص صريح"""
-    content = None
-    # 1. جرب فك الضغط لو بدأ بـ علامة gzip (1f 8b)
-    if raw_data.startswith(b'\x1f\x8b'):
-        try:
-            with gzip.GzipFile(fileobj=io.BytesIO(raw_data)) as f:
-                content = f.read().decode('utf-8')
-        except: pass
-    
-    # 2. لو لسه مفيش محتوى، جرب تقرأه كـ نص عادي (بما إنه بدأ بـ {)
-    if not content:
-        try:
-            content = raw_data.decode('utf-8')
-        except:
-            return None, "Binary Data (Unknown)"
-
-    # 3. تحليل الـ JSON
+def identify_content(raw_data):
     try:
-        data = json.loads(content)
-        
-        # ملاحظة مهمة: الـ Attestations غالباً بتكون DSSE Envelope
-        # يعني البيانات الحقيقية جوه حقل اسمه payload وتكون base64 encoded
-        p_type = "Unknown"
-        if "payload" in data:
-            # لو هو DSSE envelope
-            p_type = data.get("payloadType", "Unknown")
-            # نحاول نفك الـ payload عشان نعرف الـ predicateType الحقيقي
+        data = json.loads(raw_data.decode('utf-8'))
+        p_type = data.get("predicateType")
+        if not p_type and "payload" in data:
             try:
-                decoded_payload = json.loads(base64.b64decode(data["payload"]).decode('utf-8'))
-                p_type = decoded_payload.get("predicateType", p_type)
+                p_load = json.loads(base64.b64decode(data["payload"]).decode('utf-8'))
+                p_type = p_load.get("predicateType")
             except: pass
-        else:
-            # لو هو In-toto statement مباشر
-            p_type = data.get("predicateType", "Unknown")
-            
-        return data, p_type
-    except:
-        return None, "Not a valid JSON"
+        
+        if p_type:
+            if "spdx" in p_type or "sbom" in p_type or "cyclonedx" in p_type: return "SBOM", p_type, data
+            if "provenance" in p_type: return "PROVENANCE", p_type, data
+        
+        # فحص الكلمات المفتاحية لو النوع مش صريح
+        str_body = str(data).lower()
+        if "spdx" in str_body or "cyclonedx" in str_body: return "SBOM", "detected_via_body", data
+        if "provenance" in str_body: return "PROVENANCE", "detected_via_body", data
+        
+        return "UNKNOWN", "unknown", data
+    except: return "BINARY", "binary", None
 
-def start_analysis():
-    print(f"🔍 Analyzing Image: {IMAGE_REF}")
-    manifest_raw = run_command(["crane", "manifest", IMAGE_REF])
+def main():
+    print(f"\n" + "="*60)
+    print(f"🔍 STEP 1: Fetching Root Index for {IMAGE_REF}")
+    manifest_raw = run_cmd(["crane", "manifest", IMAGE_REF])
     if not manifest_raw: return
-    
-    index = json.loads(manifest_raw)
-    manifests = index.get('manifests', [])
 
-    images = [m for m in manifests if 'platform' in m and 'attestation' not in m.get('annotations', {}).get('vnd.docker.reference.type', '')]
-    attestations = [m for m in manifests if m not in images]
+    index = json.loads(manifest_raw)
+    print(f"✅ Root Index Loaded. Found {len(index.get('manifests', []))} total manifests in Index.")
+
+    # فصل الصور عن الملحقات
+    images = [m for m in index['manifests'] if 'platform' in m and m['platform'].get('architecture') != 'unknown']
+    attestations = [m for m in index['manifests'] if m not in images]
+
+    print(f"👉 Detected Architectures: {[m['platform']['architecture'] for m in images]}")
+    print(f"👉 Detected Internal Attestation Manifests: {len(attestations)}")
+
+    tree_map = {"platforms": []}
 
     for img in images:
-        arch = img.get('platform', {}).get('architecture')
-        img_sha = img.get('digest')
-        
-        print(f"\n🏗️  Architecture: {arch.upper()}")
-        print(f"  🔹 Image SHA: {img_sha}")
+        arch = img['platform']['architecture']
+        img_sha = img['digest']
+        print(f"\n" + "-"*60)
+        print(f"🏗️  ANALYZING ARCHITECTURE: [{arch.upper()}]")
+        print(f"   Image Digest: {img_sha}")
 
-        linked = [a for a in attestations if a.get('annotations', {}).get('vnd.docker.reference.digest') == img_sha]
+        arch_node = {"architecture": arch, "image_digest": img_sha, "files": []}
 
-        for attr in linked:
-            attr_sha = attr.get('digest')
-            print(f"  🎁 Attestation Bundle: {attr_sha}")
-            
-            attr_manifest_raw = run_command(["crane", "manifest", f"{REPO}@{attr_sha}"])
-            if not attr_manifest_raw: continue
-            
-            attr_manifest = json.loads(attr_manifest_raw)
-            for i, layer in enumerate(attr_manifest.get('layers', [])):
-                l_sha = layer.get('digest')
-                # تحميل الـ Blob
-                raw_blob = run_command(["crane", "blob", f"{REPO}@{l_sha}"], is_binary=True)
+        # 1. البحث عن الروابط الداخلية (Bake)
+        print(f"   🔎 Looking for Internal Bake Metadata (via Annotations)...")
+        for m in attestations:
+            ref_digest = m.get('annotations', {}).get('vnd.docker.reference.digest')
+            if ref_digest == img_sha:
+                meta_sha = m['digest']
+                print(f"   📍 Found Linked Bake Manifest: {meta_sha[:15]}...")
                 
-                # --- Debugging Print ---
-                prefix = raw_blob[:60]
-                print(f"     📂 Layer {i+1} ({l_sha[:12]})")
-                print(f"        [DEBUG] First 60 bytes: {prefix}")
+                # فتح الـ Manifest بتاع الـ Attestation
+                meta_manifest = json.loads(run_cmd(["crane", "manifest", f"{REPO}@{meta_sha}"]))
+                layers = meta_manifest.get('layers', [])
+                print(f"      📦 This manifest has {len(layers)} Layers (Blobs).")
                 
-                data, p_type = parse_attestation_content(raw_blob)
-                
-                # تمييز النوع
-                label = "📦 Unknown"
-                filename = f"unknown_{arch}_{l_sha[:8]}.json"
-                
-                if "spdx" in p_type or "cyclonedx" in p_type:
-                    label = "📄 SBOM"
-                    filename = f"sbom_{arch}.json"
-                elif "provenance" in p_type:
-                    label = "🛡️ SLSA"
-                    filename = f"provenance_{arch}.json"
-                
-                print(f"        [TYPE]  Identified as: {p_type}")
-                print(f"        [FILE]  Saved to: {filename}")
-                
-                with open(filename, "w") as f:
-                    json.dump(data, f, indent=2)
-        print("-" * 60)
+                for i, layer in enumerate(layers):
+                    l_sha = layer['digest']
+                    print(f"      🔹 Layer {i+1}: Downloading Blob {l_sha[:15]}...")
+                    
+                    raw_blob = run_cmd(["crane", "blob", f"{REPO}@{l_sha}"], is_binary=True)
+                    label, p_type, content = identify_content(raw_blob)
+                    
+                    fname = f"{arch}_bake_{label.lower()}_{l_sha[7:15]}.json"
+                    with open(os.path.join(OUTPUT_DIR, fname), "w") as f: json.dump(content, f, indent=2)
+                    
+                    print(f"         ✨ IDENTIFIED AS: {label} ({p_type})")
+                    print(f"         💾 SAVED TO: {fname}")
+                    arch_node["files"].append({"type": label, "source": "bake", "sha": l_sha, "file": fname})
 
-if __name__ == "__main__":
-    start_analysis()
+        # 2. البحث عن الروابط الخارجية (GitHub Referrers)
+        print(f"   🔎 Looking for External Referrers (via Registry API)...")
+        referrers_raw = run_cmd(["crane", "referrers", f"{REPO}@{img_sha}"])
+        if referrers_raw:
+            refs = json.loads(referrers_raw).get('manifests', [])
+            print(f"      📍 Found {len(refs)} external referrers.")
+            for r in refs:
+                r_sha = r['digest']
+                print(f"      🔹 Downloading Referrer Blob {r_sha[:15]}...")
+                raw_blob = run_cmd(["crane", "blob", f"{REPO}@{r_sha}"], is_binary=True)
+                label, p_type, content = identify_content(raw_blob)
+                
+                fname = f"{arch}_github_{label.lower()}_{r_sha[7:15]}.json"
+                with open(os.path.join(OUTPUT_DIR, fname), "w") as f: json.dump(content, f, indent=2)
+                
+                print(f"         ✨ IDENTIFIED AS: {label} ({p_type})")
+                print(f"         💾 SAVED TO: {fname}")
+                arch_node["files"].append({"type": label, "source": "github", "sha": r_sha, "file": fname})
+
+        tree_map["platforms"].append(arch_node)
+
+    with open("supply_chain_map.json", "w") as f: json.dump(tree_map, f, indent=2)
+    print("\n" + "="*60)
+    print("🚀 FINISHED: Map saved to supply_chain_map.json")
+
+if __name__ == "__main__": main()
