@@ -5,3 +5,5 @@ allure-report/*
 __pycache__/
 new_test/.pytest_cache/
 tests/
+reports/*
+!new_test/tests
