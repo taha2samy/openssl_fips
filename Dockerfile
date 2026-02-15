@@ -63,7 +63,6 @@ FROM core-builder AS fips-integrator
 ARG FIPS_VERSION
 RUN ldconfig
 COPY --from=fips-builder /src/openssl-${FIPS_VERSION}/providers/fips.so /usr/local/lib/ossl-modules/fips.so
-RUN /usr/local/bin/openssl fipsinstall -help && exit 1
 
 
 RUN /usr/local/bin/openssl fipsinstall \
