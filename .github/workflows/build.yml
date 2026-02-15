@@ -99,34 +99,29 @@ jobs:
           subject-digest: ${{ steps.extract_digests.outputs.standard_digest }}
           push-to-registry: true
 
-      - name: Read variables from docker-bake.hcl
-        run: |
-          pip install python-hcl2
-          python << 'EOF'
-          import hcl2
-          import os
+      # - name: Read variables from docker-bake.hcl
+      #   run: |
+      #     pip install python-hcl2
+      #     python << 'EOF'
+      #     import hcl2
+      #     import os
+      #     with open("docker-bake.hcl", "r") as f:
+      #         data = hcl2.load(f)
+      #     env_vars = {
+      #         "FIPS_VERSION": "unknown",
+      #         "CORE_VERSION": "unknown",
+      #         "REGISTRY": "unknown",
+      #         "OWNER": "unknown",
+      #         "REPO_NAME": "unknown"
+      #     }
+      #     for var in data.get("variable", []):
+      #         for k, v in var.items():
+      #             env_vars[k] = v.get("default", env_vars[k])
 
-          with open("docker-bake.hcl", "r") as f:
-              data = hcl2.load(f)
-
-          env_vars = {
-              "FIPS_VERSION": "unknown",
-              "CORE_VERSION": "unknown",
-              "REGISTRY": "unknown",
-              "OWNER": "unknown",
-              "REPO_NAME": "unknown"
-          }
-
-          for var in data.get("variable", []):
-              for k, v in var.items():
-                  env_vars[k] = v.get("default", env_vars[k])
-
-          with open(os.environ["GITHUB_ENV"], "a") as env_file:
-              for k, v in env_vars.items():
-                  env_file.write(f"{k}={v}\n")
-          EOF
-
-
+      #     with open(os.environ["GITHUB_ENV"], "a") as env_file:
+      #         for k, v in env_vars.items():
+      #             env_file.write(f"{k}={v}\n")
+      #     EOF
       # - name: install python dependencies
       #   run: |
       #     sudo pip install jinja2 python-hcl2

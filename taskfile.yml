@@ -4,56 +4,69 @@ vars:
   DEFAULT_IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless"
   RESULTS_ROOT: "allure-results"
   REPORT_DIR: "allure-report"
+  repo_of_registry: "wolfi-openssl-fips"
+  owner: "taha2samy"
+  registry: "ghcr.io"
+  repo_of_code: "openssl_fips"
+  repo_url: "https://github.com/{{.owner}}/{{.repo_of_code}}"
+  
 
 tasks:
-  update-versions:
+  echo-all-vars:
     cmds:
-      - chmod +x scripts/wolfi-pkg-updater.py
-      - scripts/wolfi-pkg-updater.py
+      - cmd: 'echo repo_of_registry: {{.repo_of_registry}}'
+      - cmd: 'echo owner: {{.owner}}'
+      - cmd: 'echo registry: {{.registry}}'
+      - cmd: 'echo repo_of_code: {{.repo_of_code}}'
+      - cmd: 'echo repo_url: {{.repo_url}}'
+  
+  #   cmds:
+  #     - chmod +x scripts/wolfi-pkg-updater.py
+  #     - scripts/wolfi-pkg-updater.py
 
-  benchmark:
-    dir: benchmark
-    cmds:
-      - chmod +x run_benchmarks.sh
-      - ./run_benchmarks.sh
+  # benchmark:
+  #   dir: benchmark
+  #   cmds:
+  #     - chmod +x run_benchmarks.sh
+  #     - ./run_benchmarks.sh
 
-  generate-report:
-    dir: benchmark
-    cmds:
-      - chmod +x generate_report.py
-      - ./generate_report.py
+  # generate-report:
+  #   dir: benchmark
+  #   cmds:
+  #     - chmod +x generate_report.py
+  #     - ./generate_report.py
 
-  run-audit:
-    vars:
-      IMG_SAFE: '{{.IMAGE | default .DEFAULT_IMAGE}}'
-      SAFE_NAME: '{{.IMG_SAFE | replace "/" "_" | replace ":" "_"}}'
-    cmds:
-      - pipenv run pytest new_test/tests/ --alluredir={{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}} --image={{.IMG_SAFE}} || true
-      - echo "Image={{.IMG_SAFE}}" > {{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}}/environment.properties
+  # run-audit:
+  #   vars:
+  #     IMG_SAFE: '{{.IMAGE | default .DEFAULT_IMAGE}}'
+  #     SAFE_NAME: '{{.IMG_SAFE | replace "/" "_" | replace ":" "_"}}'
+  #   cmds:
+  #     - pipenv run pytest new_test/tests/ --alluredir={{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}} --image={{.IMG_SAFE}} || true
+  #     - echo "Image={{.IMG_SAFE}}" > {{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}}/environment.properties
 
-  audit:
-    vars:
-      IMG: '{{.IMAGE | default .DEFAULT_IMAGE}}'
-    cmds:
-      - task: clean-audit
-      - task: run-audit
-        vars:
-          IMAGE: "{{.IMG}}"
-      - npx allure generate --name "FIPS 140-3 Compliance Suite" --output {{.REPORT_DIR}} {{.RESULTS_ROOT}}/*
-      - npx allure open {{.REPORT_DIR}}
+  # audit:
+  #   vars:
+  #     IMG: '{{.IMAGE | default .DEFAULT_IMAGE}}'
+  #   cmds:
+  #     - task: clean-audit
+  #     - task: run-audit
+  #       vars:
+  #         IMAGE: "{{.IMG}}"
+  #     - npx allure generate --name "FIPS 140-3 Compliance Suite" --output {{.REPORT_DIR}} {{.RESULTS_ROOT}}/*
+  #     - npx allure open {{.REPORT_DIR}}
 
-  audit-multi:
-    cmds:
-      - task: clean-audit
-      - task: run-audit
-        vars:
-          IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless"
-      - task: run-audit
-        vars:
-          IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:latest"
-      - npx allure generate --name "FIPS Multi-Image Comparison" --output {{.REPORT_DIR}} {{.RESULTS_ROOT}}/*
-      - npx allure open {{.REPORT_DIR}}
+  # audit-multi:
+  #   cmds:
+  #     - task: clean-audit
+  #     - task: run-audit
+  #       vars:
+  #         IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless"
+  #     - task: run-audit
+  #       vars:
+  #         IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:latest"
+  #     - npx allure generate --name "FIPS Multi-Image Comparison" --output {{.REPORT_DIR}} {{.RESULTS_ROOT}}/*
+  #     - npx allure open {{.REPORT_DIR}}
 
-  clean-audit:
-    cmds:
-      - rm -rf {{.RESULTS_ROOT}} {{.REPORT_DIR}}
+  # clean-audit:
+  #   cmds:
+  #     - rm -rf {{.RESULTS_ROOT}} {{.REPORT_DIR}}
