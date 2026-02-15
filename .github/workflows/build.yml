@@ -48,7 +48,8 @@ jobs:
           metadata='${{ steps.bake.outputs.metadata }}'
           echo "standard_digest=$(echo $metadata | jq -r '.standard."containerimage.digest"')" >> $GITHUB_OUTPUT
           echo "distroless_digest=$(echo $metadata | jq -r '.distroless."containerimage.digest"')" >> $GITHUB_OUTPUT
-
+          echo "standard_digest=$(echo $metadata | jq -r '.standard."containerimage.digest"')"
+          echo "distroless_digest=$(echo $metadata | jq -r '.distroless."containerimage.digest"')"
   attest:
     needs: build
     runs-on: ubuntu-latest
