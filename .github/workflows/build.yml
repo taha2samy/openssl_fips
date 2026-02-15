@@ -12,12 +12,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
       packages: write
-      id-token: write     
-      attestations: write  
-      actions: write 
-
+    outputs:
+      standard_digest: ${{ steps.extract_digests.outputs.standard_digest }}
+      distroless_digest: ${{ steps.extract_digests.outputs.distroless_digest }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -28,10 +27,9 @@ jobs:
       - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
 
       - name: Build and push
         uses: docker/bake-action@v6
@@ -43,38 +41,54 @@ jobs:
             versions.hcl
           targets: default
           source: .
-          set: |
-            *.attest=type=sbom,generator=docker/buildkit-syft-scanner,format=cyclonedx-json
-            *.attest=type=provenance,mode=max
 
-
-
-          
-      - name: Save bake metadata to file
-        run: echo '${{ steps.bake.outputs.metadata }}' > bake-metadata.json
-      - name: Extract digests and sizes
+      - name: Extract digests
         id: extract_digests
-        shell: bash
         run: |
-          DISTROLESS=$(jq -r '.distroless."containerimage.digest"' bake-metadata.json)
-          STANDARD=$(jq -r '.standard."containerimage.digest"' bake-metadata.json)
+          metadata='${{ steps.bake.outputs.metadata }}'
+          echo "standard_digest=$(echo $metadata | jq -r '.standard."containerimage.digest"')" >> $GITHUB_OUTPUT
+          echo "distroless_digest=$(echo $metadata | jq -r '.distroless."containerimage.digest"')" >> $GITHUB_OUTPUT
 
-          echo "distroless_digest=$DISTROLESS" >> $GITHUB_OUTPUT
-          echo "standard_digest=$STANDARD" >> $GITHUB_OUTPUT
-          
-          echo "Distroless: $DISTROLESS"
-          echo "Standard: $STANDARD"
+  attest:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      attestations: write
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        target_name: [standard, distroless]
 
-      - name: Attest Distroless
+    steps:
+      - name: Set Digest for current target
+        id: set_digest
+        run: |
+          if [[ "${{ matrix.target_name }}" == "standard" ]]; then
+            echo "digest=${{ needs.build.outputs.standard_digest }}" >> $GITHUB_OUTPUT
+          else
+            echo "digest=${{ needs.build.outputs.distroless_digest }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Attest Provenance
         uses: actions/attest-build-provenance@v2
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          subject-digest: ${{ steps.extract_digests.outputs.distroless_digest }}
+          subject-name: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips
+          subject-digest: ${{ steps.set_digest.outputs.digest }}
           push-to-registry: true
 
-      - name: Attest Standard
-        uses: actions/attest-build-provenance@v2
+      - name: Generate SBOM (CycloneDX)
+        uses: anchore/sbom-action@v0.22.2
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          subject-digest: ${{ steps.extract_digests.outputs.standard_digest }}
+          image: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips@${{ steps.set_digest.outputs.digest }}
+          format: cyclonedx-json
+          output-file: ${{ matrix.target_name }}.cyclonedx.json
+
+      - name: Attest SBOM
+        uses: actions/attest-sbom@v3
+        with:
+          subject-name: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips
+          subject-digest: ${{ steps.set_digest.outputs.digest }}
+          sbom-path: ${{ matrix.target_name }}.cyclonedx.json
           push-to-registry: true
