@@ -34,8 +34,10 @@ target "common" {
   dockerfile = "Dockerfile"
   platforms  = ["linux/amd64", "linux/arm64"]
   output = ["type=registry"]
-  sbom       = "generator=docker/buildkit-syft-scanner,format=cyclonedx-json"
-
+  attest = [
+  "type=sbom,generator=docker/buildkit-syft-scanner:v1.10.0,format=cyclonedx-json",
+    "type=provenance,mode=max"
+  ]
   args = {
     FIPS_VERSION = "${FIPS_VERSION}"
     CORE_VERSION = "${CORE_VERSION}"
@@ -71,10 +73,7 @@ target "standard" {
     tag("${CORE_VERSION}"),
     tag("latest")
   )
-  attest = [
-    "type=sbom,generator=docker/buildkit-syft-scanner,format=cyclonedx-json",
-    "type=provenance,mode=max"
-  ]
+
 
   cache-from = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-standard"]
   cache-to   = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-standard,mode=max"]
@@ -91,10 +90,7 @@ target "distroless" {
     tag("${CORE_VERSION}-distroless"),
     tag("distroless")
   )
-  attest = [
-    "type=sbom,generator=docker/buildkit-syft-scanner,format=cyclonedx-json",
-    "type=provenance,mode=max"
-  ]
+
 
   cache-from = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-distroless"]
   cache-to   = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-distroless,mode=max"]
