@@ -48,55 +48,24 @@ jobs:
       - name: Save bake metadata to file
         run: echo '${{ steps.bake.outputs.metadata }}' > bake-metadata.json
   
-      - name: Extract digests and sizes
-        id: extract_digests
-        shell: /usr/bin/bash -e {0}
-        env:
-          REGISTRY: ${{ env.REGISTRY }}
-          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+      - name: Extract Root Digests
+        id: digests
         run: |
-          DISTROLESS_DIGEST=$(jq -r '.distroless."containerimage.digest"' bake-metadata.json)
-          STANDARD_DIGEST=$(jq -r '.standard."containerimage.digest"' bake-metadata.json)
+          echo "standard=$(jq -r '.standard."containerimage.digest"' bake-metadata.json)" >> $GITHUB_OUTPUT
+          echo "distroless=$(jq -r '.distroless."containerimage.digest"' bake-metadata.json)" >> $GITHUB_OUTPUT
 
-          echo "distroless_digest=$DISTROLESS_DIGEST" >> $GITHUB_OUTPUT
-          echo "standard_digest=$STANDARD_DIGEST" >> $GITHUB_OUTPUT
-
-          get_image_size() {
-            local DIGEST=$1
-            local MANIFEST
-            MANIFEST=$(docker manifest inspect "$REGISTRY/$IMAGE_NAME@$DIGEST") || { echo 0; return; }
-            if [ "$(echo "$MANIFEST" | jq '.layers')" = "null" ]; then
-              echo 0
-            else
-              echo "$MANIFEST" | jq '[.layers[].size] | add'
-            fi
-          }
-
-          DISTROLESS_SIZE=$(get_image_size "$DISTROLESS_DIGEST")
-          STANDARD_SIZE=$(get_image_size "$STANDARD_DIGEST")
-
-          DISTROLESS_HUMAN=$(numfmt --to=iec-i --suffix=B "$DISTROLESS_SIZE")
-          STANDARD_HUMAN=$(numfmt --to=iec-i --suffix=B "$STANDARD_SIZE")
-
-          echo "DISTROLESS_SIZE=$DISTROLESS_HUMAN" >> $GITHUB_ENV
-          echo "STANDARD_SIZE=$STANDARD_HUMAN" >> $GITHUB_ENV
-
-          echo "Distroless image size: $DISTROLESS_HUMAN"
-          echo "Standard image size: $STANDARD_HUMAN"
-
-
-      - name: Attest Distroless
+      - name: Attest Standard (Root Index)
         uses: actions/attest-build-provenance@v3
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          subject-digest: ${{ steps.extract_digests.outputs.distroless_digest }}
+          subject-name: ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ env.REPO_NAME }}
+          subject-digest: ${{ steps.digests.outputs.standard }}
           push-to-registry: true
 
-      - name: Attest Standard
+      - name: Attest Distroless (Root Index)
         uses: actions/attest-build-provenance@v3
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          subject-digest: ${{ steps.extract_digests.outputs.standard_digest }}
+          subject-name: ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ env.REPO_NAME }}
+          subject-digest: ${{ steps.digests.outputs.distroless }}
           push-to-registry: true
 
       # - name: Read variables from docker-bake.hcl
