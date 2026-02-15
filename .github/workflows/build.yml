@@ -45,7 +45,7 @@ jobs:
           source: .
 
 
-          
+
       - name: Save bake metadata to file
         run: echo '${{ steps.bake.outputs.metadata }}' > bake-metadata.json
 
