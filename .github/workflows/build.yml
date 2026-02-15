@@ -63,12 +63,12 @@ jobs:
         uses: actions/attest-build-provenance@v3
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          subject-digest: ${{ steps.extract_digests.outputs.distroless_digest }}
+          subject-digest: ${{ steps.extract_digests.outputs.DISTROLESS_DIGEST }}
           push-to-registry: true
 
       - name: Attest Standard
         uses: actions/attest-build-provenance@v3
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          subject-digest: ${{ steps.extract_digests.outputs.standard_digest }}
+          subject-digest: ${{ steps.extract_digests.outputs.STANDARD_DIGEST }}
           push-to-registry: true
