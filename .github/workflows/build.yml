@@ -44,91 +44,31 @@ jobs:
           targets: default
           source: .
 
-
-
+          
       - name: Save bake metadata to file
         run: echo '${{ steps.bake.outputs.metadata }}' > bake-metadata.json
-
   
-      - name: Extract Root Digests
-        id: digests
+      - name: Extract digests and sizes
+        id: extract_digests
+        shell: /usr/bin/bash -e {0}
+        env:
+          REGISTRY: ${{ env.REGISTRY }}
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
         run: |
-          echo "standard=$(jq -r '.standard."containerimage.digest"' bake-metadata.json)" >> $GITHUB_OUTPUT
-          echo "distroless=$(jq -r '.distroless."containerimage.digest"' bake-metadata.json)" >> $GITHUB_OUTPUT
-          echo $(jq -r '.standard."containerimage.digest"' bake-metadata.json)
-          echo $(jq -r '.distroless."containerimage.digest"' bake-metadata.json)
+          DISTROLESS_DIGEST=$(jq -r '.distroless."containerimage.digest"' bake-metadata.json)
+          STANDARD_DIGEST=$(jq -r '.standard."containerimage.digest"' bake-metadata.json)
 
-      - name: Attest Standard
-        uses: actions/attest-build-provenance@v3
-        with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          subject-digest: ${{ steps.extract_digests.outputs.standard }}
-          push-to-registry: true
 
       - name: Attest Distroless
         uses: actions/attest-build-provenance@v3
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          subject-digest: ${{ steps.extract_digests.outputs.distroless }}
+          subject-digest: ${{ steps.extract_digests.outputs.distroless_digest }}
           push-to-registry: true
 
-      # - name: Read variables from docker-bake.hcl
-      #   run: |
-      #     pip install python-hcl2
-      #     python << 'EOF'
-      #     import hcl2
-      #     import os
-      #     with open("docker-bake.hcl", "r") as f:
-      #         data = hcl2.load(f)
-      #     env_vars = {
-      #         "FIPS_VERSION": "unknown",
-      #         "CORE_VERSION": "unknown",
-      #         "REGISTRY": "unknown",
-      #         "OWNER": "unknown",
-      #         "REPO_NAME": "unknown"
-      #     }
-      #     for var in data.get("variable", []):
-      #         for k, v in var.items():
-      #             env_vars[k] = v.get("default", env_vars[k])
-
-      #     with open(os.environ["GITHUB_ENV"], "a") as env_file:
-      #         for k, v in env_vars.items():
-      #             env_file.write(f"{k}={v}\n")
-      #     EOF
-      # - name: install python dependencies
-      #   run: |
-      #     sudo pip install jinja2 python-hcl2
-      #     sudo curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash
-      #     sudo apt install task
-      # - name: run benchmark
-      #   run: |
-      #     sudo task benchmark
-      #     sudo task generate-report
-
-      # - name: Set README environment variables
-      #   run: |
-      #     echo "PROJECT_NAME=Wolfi OpenSSL FIPS Images" >> $GITHUB_ENV
-      #     echo "OWNER=${{ github.repository_owner }}" >> $GITHUB_ENV
-      #     echo "REPO_NAME=${{ env.repo_of_registry }}" >> $GITHUB_ENV
-      #     echo "CODE_REPO_NAME=${{ github.event.repository.name }}" >> $GITHUB_ENV
-      #     echo "REPO_URL=https://github.com/${{ github.repository }}" >> $GITHUB_ENV
-      #     echo "REGISTRY=${{ env.REGISTRY }}" >> $GITHUB_ENV
-      #     echo "GENERATION_DATE=$(date -u +%Y-%m-%d)" >> $GITHUB_ENV
-      #     echo "BUILD_DATE=$(date -u +%Y%m%d)" >> $GITHUB_ENV
-      #     echo "full_image_tag=${{ env.REGISTRY }}/${{env.OWNER}}/${{ env.IMAGE_NAME }}:full-${{ env.FIPS_VERSION }}-${{ env.CORE_VERSION }}" >> $GITHUB_ENV
-      #     echo "distroless_image=${{ env.REGISTRY }}/${{env.OWNER}}/${{ env.IMAGE_NAME }}:distroless-${{ env.FIPS_VERSION }}-${{ env.CORE_VERSION }}" >> $GITHUB_ENV
-
-
-
-
-
-      # - name: Generate README.md
-      #   run: python scripts/update_readme.py
-
-      # - name: Commit README.md
-      #   run: |
-      #     git config user.name "github-actions[bot]"
-      #     git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      #     git add README.md
-      #     git commit -m "docs: auto-generate README" || echo "No changes to commit"
-      #     git push
+      - name: Attest Standard
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.extract_digests.outputs.standard_digest }}
+          push-to-registry: true
