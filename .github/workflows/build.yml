@@ -47,28 +47,29 @@ jobs:
           
       - name: Save bake metadata to file
         run: echo '${{ steps.bake.outputs.metadata }}' > bake-metadata.json
-  
       - name: Extract digests and sizes
         id: extract_digests
-        shell: /usr/bin/bash -e {0}
-        env:
-          REGISTRY: ${{ env.REGISTRY }}
-          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+        shell: bash
         run: |
-          DISTROLESS_DIGEST=$(jq -r '.distroless."containerimage.digest"' bake-metadata.json)
-          STANDARD_DIGEST=$(jq -r '.standard."containerimage.digest"' bake-metadata.json)
+          DISTROLESS=$(jq -r '.distroless."containerimage.digest"' bake-metadata.json)
+          STANDARD=$(jq -r '.standard."containerimage.digest"' bake-metadata.json)
 
+          echo "distroless_digest=$DISTROLESS" >> $GITHUB_OUTPUT
+          echo "standard_digest=$STANDARD" >> $GITHUB_OUTPUT
+          
+          echo "Distroless: $DISTROLESS"
+          echo "Standard: $STANDARD"
 
       - name: Attest Distroless
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest-build-provenance@v2
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          subject-digest: ${{ steps.extract_digests.outputs.DISTROLESS_DIGEST }}
+          subject-digest: ${{ steps.extract_digests.outputs.distroless_digest }}
           push-to-registry: true
 
       - name: Attest Standard
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest-build-provenance@v2
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          subject-digest: ${{ steps.extract_digests.outputs.STANDARD_DIGEST }}
+          subject-digest: ${{ steps.extract_digests.outputs.standard_digest }}
           push-to-registry: true
