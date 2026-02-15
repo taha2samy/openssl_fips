@@ -169,3 +169,68 @@ class TestModernMACs:
             allure.dynamic.parameter("Algorithm", "KMAC-128")
             allure.dynamic.parameter("Standard", "NIST SP 800-185")
             allure.dynamic.parameter("Outcome", "Policy Enforced")
+
+
+
+
+    @allure.story("NIST SP 800-108 KDF Enforcement")
+    @allure.title("Verify SP 800-108 Counter Mode KDF Integrity")
+    @allure.description("""
+        Validates KBKDF in Counter Mode. 
+        Note: KBKDF requires an explicit MAC algorithm (HMAC or CMAC).
+        This test uses HMAC-SHA256 as the underlying PRF.
+    """)
+    @allure.severity(allure.severity_level.CRITICAL)
+    @allure.tag("kdf", "kbkdf", "counter-mode", "debug")
+    def test_sp800_108_counter_kdf(self, run_docker, image_tag):
+        # Step 1: Debug - Check kdf help if needed
+        with allure.step("Debugging: Checking KDF tool help"):
+            help_res = run_docker(image_tag, ["kdf", "-help"])
+            allure.attach(help_res.stderr, name="KDF Help Output")
+
+        with allure.step("Executing KBKDF Counter Mode (HMAC-SHA256)"):
+            # Correct parameters: must specify mac:HMAC and digest:SHA256
+            result = run_docker(image_tag, [
+                "kdf", 
+                "-propquery", "fips=yes",
+                "-kdfopt", "mac:HMAC",
+                "-kdfopt", "digest:SHA256", 
+                "-kdfopt", "hexkey:0102030405060708090A0B0C0D0E0F10", 
+                "-kdfopt", "mode:COUNTER",
+                "-keylen", "16", 
+                "KBKDF"
+            ])
+            
+            allure.attach(result.stdout, name="Derived Key Raw")
+            allure.attach(result.stderr, name="Stderr Log")
+
+        with allure.step("Verifying successful execution"):
+            assert result.returncode == 0, f"KBKDF Counter Mode failed. Stderr: {result.stderr}"
+            assert len(result.stdout) > 0
+
+    @allure.story("NIST SP 800-108 KDF Enforcement")
+    @allure.title("Verify SP 800-108 Feedback Mode KDF Integrity")
+    @allure.description("""
+        Validates KBKDF in Feedback Mode using HMAC-SHA256 as the PRF.
+    """)
+    @allure.severity(allure.severity_level.CRITICAL)
+    @allure.tag("kdf", "kbkdf", "feedback-mode")
+    def test_sp800_108_feedback_kdf(self, run_docker, image_tag):
+        with allure.step("Executing KBKDF Feedback Mode (HMAC-SHA256)"):
+            result = run_docker(image_tag, [
+                "kdf", 
+                "-propquery", "fips=yes",
+                "-kdfopt", "mac:HMAC",
+                "-kdfopt", "digest:SHA256", 
+                "-kdfopt", "hexkey:0102030405060708090A0B0C0D0E0F10", 
+                "-kdfopt", "mode:FEEDBACK",
+                "-keylen", "16", 
+                "KBKDF"
+            ])
+            
+            allure.attach(result.stdout, name="Derived Key Raw")
+            allure.attach(result.stderr, name="Stderr Log")
+
+        with allure.step("Verifying successful execution"):
+            assert result.returncode == 0, f"KBKDF Feedback Mode failed. Stderr: {result.stderr}"
+            assert len(result.stdout) > 0

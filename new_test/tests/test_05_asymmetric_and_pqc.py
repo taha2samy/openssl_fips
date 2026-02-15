@@ -7,6 +7,39 @@ import subprocess
 @allure.feature("Asymmetric Cryptography")
 class TestRSAOperations:
 
+    @allure.story("RSA Policy Enforcement")
+    @allure.title("Verify Support for Large RSA Modulus (4096-bit)")
+    @allure.description("""
+        Validates that the FIPS provider supports RSA modulus sizes beyond the 2048-bit minimum.
+        According to Security Policy Page 36 (Section 2.7.g), the module supports modulus 
+        lengths up to 16384 bits. This test performs a functional generation of a 4096-bit 
+        RSA key to confirm support for large moduli while maintaining efficient test execution time.
+    """)
+    @allure.severity(allure.severity_level.NORMAL)
+    @allure.tag("rsa", "large-modulus", "key-gen", "page-36")
+    def test_rsa_large_modulus_support(self, run_docker, image_tag):
+        # 4096 is used as a representative 'Large' modulus to avoid extreme generation times
+        target_bits = "4096"
+        
+        with allure.step(f"Generating a {target_bits}-bit RSA private key using FIPS provider"):
+            result = run_docker(image_tag, [
+                "genpkey", 
+                "-propquery", "fips=yes", 
+                "-algorithm", "RSA", 
+                "-pkeyopt", f"rsa_keygen_bits:{target_bits}"
+            ])
+            
+            allure.attach(result.stdout, name="Generated Private Key")
+            allure.attach(result.stderr, name="Genpkey Stderr")
+
+        with allure.step(f"Verifying {target_bits}-bit key generation success"):
+            assert result.returncode == 0, f"FIPS provider failed to generate a {target_bits}-bit RSA key."
+            assert "BEGIN PRIVATE KEY" in result.stdout, "Output did not contain a valid private key."
+
+        with allure.step("Recording RSA modulus compliance"):
+            allure.dynamic.parameter("Tested Modulus", f"{target_bits} bits")
+            allure.dynamic.parameter("Policy Limit", "Up to 16384 bits")
+            allure.dynamic.parameter("Status", "Operational")
     @allure.story("RSA Key Generation")
     @allure.title("Verify RSA 2048-bit Compliance")
     @allure.description("""
@@ -147,6 +180,65 @@ class TestRSAOperations:
 
 @allure.feature("Asymmetric Cryptography")
 class TestECCAndSignatures:
+
+
+    @allure.story("Asymmetric Cryptography Boundary")
+    @allure.title("Verify Rejection of Non-Approved Curves (Ed25519/X25519/Ed448)")
+    @allure.description("""
+        Validates the isolation of non-approved asymmetric algorithms.
+        Includes a detailed debug phase to list all algorithms claiming FIPS compliance.
+    """)
+    @allure.severity(allure.severity_level.CRITICAL)
+    @allure.tag("rejection", "ed25519", "x25519", "debug")
+    def test_strict_block_legacy_curves_and_algos(self, run_docker, image_tag):
+        # DEBUG PHASE: List what the FIPS provider actually thinks it supports
+        with allure.step("DEBUG: Querying FIPS provider capability list"):
+            kex_list = run_docker(image_tag, ["list", "-key-exchange-algorithms", "-propquery", "fips=yes"])
+            sig_list = run_docker(image_tag, ["list", "-signature-algorithms", "-propquery", "fips=yes"])
+            
+            print("\n" + "="*60)
+            print(f"[DEBUG] FIPS KEY-EXCHANGE ALGORITHMS:\n{kex_list.stdout}")
+            print("-" * 60)
+            print(f"[DEBUG] FIPS SIGNATURE ALGORITHMS:\n{sig_list.stdout}")
+            print("="*60 + "\n")
+            
+            allure.attach(kex_list.stdout, name="FIPS Key Exchange List")
+            allure.attach(sig_list.stdout, name="FIPS Signature List")
+
+        # EXECUTION PHASE
+        forbidden_algos = ["Ed25519", "X25519", "Ed448"]
+        failed_blocks = []
+
+        for algo in forbidden_algos:
+            with allure.step(f"Attempting to invoke forbidden algorithm: {algo}"):
+                result = run_docker(image_tag, [
+                    "genpkey", 
+                    "-algorithm", algo, 
+                    "-propquery", "fips=yes"
+                ])
+                
+                # Check stdout for clues on which provider was used
+                allure.attach(result.stdout, name=f"{algo} Stdout")
+                allure.attach(result.stderr, name=f"{algo} Stderr")
+
+                if result.returncode == 0:
+                    print(f"[CRITICAL DEBUG] Algorithm {algo} was PERMITTED. ReturnCode: 0")
+                    failed_blocks.append(algo)
+                else:
+                    print(f"[INFO DEBUG] Algorithm {algo} was correctly rejected.")
+
+        with allure.step("Verifying all non-approved algorithms were blocked"):
+            assert not failed_blocks, \
+                f"Security Policy Violation: The following algorithms were PERMITTED in FIPS mode: {failed_blocks}. Check Debug Logs."
+
+        with allure.step("Recording policy enforcement status"):
+            allure.dynamic.parameter("Isolation Status", "Failure Detected" if failed_blocks else "Success")
+
+
+
+
+
+
 
     @allure.story("Elliptic Curve Cryptography (ECC)")
     @allure.title("Verify ECDSA P-384 Functional Integrity")

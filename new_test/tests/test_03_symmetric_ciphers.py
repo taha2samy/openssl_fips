@@ -157,8 +157,35 @@ class TestAESEncryption:
             allure.dynamic.parameter("Operation Mode", "Known Answer Test (KAT)")
             allure.dynamic.parameter("Stdin Piping", "Enabled (Distroless Mode)")
 
+    @allure.story("Non-Approved but Allowed Services")
+    @allure.title("Verify AES Key Unwrapping (AES-WRAP) Availability")
+    @allure.description("""
+        Validates the availability of AES Key Wrap (WRAP) and Key Wrap with Padding (WRAP-PAD).
+        As per Security Policy Table 7 (Page 17) and Table 9 (Page 28), these 
+        algorithms are mandated for key unwrapping services. 
+        Note: OpenSSL 3.x identifies these internally as 'AES-WRAP' rather than 'AES-KW'.
+    """)
+    @allure.severity(allure.severity_level.NORMAL)
+    @allure.tag("encryption", "aes-wrap", "key-unwrapping", "page-17")
+    def test_aes_key_unwrapping_allowed(self, run_docker, image_tag):
+        with allure.step("Querying FIPS provider for approved wrap algorithms"):
+            result = run_docker(image_tag, ["list", "-cipher-algorithms", "-propquery", "fips=yes"])
+            allure.attach(result.stdout, name="FIPS Cipher List Output")
 
+        with allure.step("Verifying availability of WRAP and WRAP-PAD variants"):
+            output = result.stdout.upper()
+            
+            # Based on provider debug output, OpenSSL uses -WRAP and -WRAP-PAD naming
+            approved_identifiers = ["AES-128-WRAP", "AES-256-WRAP", "WRAP-PAD"]
+            
+            found_identifiers = [ident for ident in approved_identifiers if ident in output]
+            allure.attach(", ".join(found_identifiers), name="Identified Wrap Protocols")
+            
+            assert len(found_identifiers) > 0, "Compliance Failure: AES Key Wrap (WRAP/KW) algorithms not found in FIPS provider."
 
+        with allure.step("Recording key transport service status"):
+            allure.dynamic.parameter("Service Category", "Key Transport (Unwrapping)")
+            allure.dynamic.parameter("Status", "Operational")
 
 @allure.feature("Symmetric Encryption & FIPS Policy")
 class TestLegacyCipherPolicies:

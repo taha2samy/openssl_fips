@@ -1,6 +1,9 @@
 import pytest
 import allure
 import re
+import subprocess
+import tempfile
+import os
 @allure.feature("FIPS 140-3 Core Policy & Integrity")
 class TestCorePolicyAndIntegrity:
     """
@@ -14,58 +17,72 @@ class TestCorePolicyAndIntegrity:
     """
 
 
+
+
     @allure.story("Mandatory Approved Mode Conditions")
-    @allure.title("Verify FIPS Config Parameter Indicators")
+    @allure.title("Verify FIPS Config File Indicators (fipsmodule.cnf)")
     @allure.description("""
-        Detailed inspection of mandatory FIPS 140-3 indicators as specified in 
-        the Security Policy (Page 10). This test scans the provider metadata 
-        to ensure all required parameters are present.
+        Validates that the mandatory FIPS 140-3 indicators are correctly written 
+        into the fipsmodule.cnf file. This ensures the module was installed 
+        with the correct security flags as per Security Policy Page 10.
     """)
     @allure.severity(allure.severity_level.BLOCKER)
-    @allure.tag("config", "indicators", "compliance")
-    def test_fips_config_parameter_indicators(self, run_docker, image_tag):
-        with allure.step("Fetching verbose provider configuration"):
-            result = run_docker(image_tag, ["list", "-providers", "-verbose"])
-            full_output = result.stdout.lower()
-            allure.attach(result.stdout, name="Full Verbose Output")
-            assert result.returncode == 0
+    @allure.tag("config", "fipsmodule.cnf", "audit")
+    def test_fips_config_file_indicators(self, image_tag):
+        container_config_path = "/usr/local/ssl/fipsmodule.cnf"
+        
+        with tempfile.TemporaryDirectory(dir=".") as tmpdir:
+            host_path = os.path.abspath(os.path.join(tmpdir, "fips_check.cnf"))
+            
+            with allure.step("Extracting fipsmodule.cnf from container via volume mount"):
+                copy_cmd = [
+                    "docker", "run", "--rm",
+                    "-v", f"{os.path.abspath(tmpdir)}:/mnt_out",
+                    "--entrypoint", "cp", 
+                    image_tag,
+                    container_config_path, "/mnt_out/fips_check.cnf"
+                ]
+                
+                subprocess.run(["docker", "create", "--name", "fips_temp", image_tag], check=True)
+                subprocess.run(["docker", "cp", f"fips_temp:{container_config_path}", host_path], check=True)
+                subprocess.run(["docker", "rm", "fips_temp"], check=True)
 
-        with allure.step("Verifying indicator presence in provider metadata"):
-            mandatory_indicators = [
-                "security-checks",
-                "conditional-errors",
-                "drbg-no-trunc-md",
-                "tls1-prf-ems-check"
-            ]
+            with open(host_path, "r") as f:
+                config_content = f.read()
+                allure.attach(config_content, name="fipsmodule.cnf Content")
+
+        with allure.step("Auditing mandatory indicators in the config file"):
+            # المؤشرات المطلوبة في صفحة 10
+            required_settings = {
+                "security-checks": "1",
+                "conditional-errors": "1",
+                "drbg-no-trunc-md": "1",
+                "tls1-prf-ems-check": "1"
+            }
 
             print("\n" + "="*50)
-            print("FIPS INDICATOR AUDIT (Metadata Scan):")
+            print("fipsmodule.cnf AUDIT RESULTS:")
             print("="*50)
 
-            results = {}
-            missing = []
-
-            for indicator in mandatory_indicators:
-                found = indicator in full_output
-                status = "PRESENT" if found else "MISSING"
-                results[indicator] = status
-                
-                print(f"Indicator: {indicator:<20} | Status: {status}")
-                allure.dynamic.parameter(f"Indicator: {indicator}", status)
-                
-                if not found:
-                    missing.append(indicator)
-
+            missing_or_wrong = []
+            for key, val in required_settings.items():
+                expected_line = f"{key} = {val}"
+                if expected_line in config_content:
+                    print(f"Indicator: {key:<20} | Status: FOUND (Value 1)")
+                    allure.dynamic.parameter(f"Config: {key}", "Verified (1)")
+                else:
+                    print(f"Indicator: {key:<20} | Status: MISSING OR WRONG")
+                    missing_or_wrong.append(key)
+            
             print("="*50 + "\n")
 
-            if missing:
-                pytest.fail(
-                    f"Compliance Failure: Mandatory FIPS indicators {missing} are not exported "
-                    f"by the provider. Ensure they are correctly defined in fipsmodule.cnf."
-                )
+            if missing_or_wrong:
+                pytest.fail(f"Compliance Failure: Mandatory settings {missing_or_wrong} are not correctly set in fipsmodule.cnf. See PDF Page 10.")
 
-        with allure.step("Approved mode indicators confirmed"):
-            allure.dynamic.parameter("Audit Result", "All Mandatory Parameters Present")
+        with allure.step("FIPS configuration file is compliant"):
+            allure.dynamic.parameter("Result", "All Indicators Present in File")
+
+
 
 
 
