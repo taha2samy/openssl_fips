@@ -16,8 +16,16 @@ def image_tag(request):
 
 @pytest.fixture(scope="session")
 def run_docker():
-    if not shutil.which("docker"):
-        pytest.fail("Docker executable not found in PATH.")
+    docker_bin = shutil.which("docker")
+    
+    if not docker_bin:
+        standard_paths = ["/usr/bin/docker", "/usr/local/bin/docker"]
+        for path in standard_paths:
+            if shutil.os.path.exists(path):
+                docker_bin = path
+                break
+    if not docker_bin:
+        pytest.fail("Docker executable not found in PATH or standard locations.")
 
     def _executor(image: str, args: list):
         cmd = ["docker", "run", "--rm", image] + args
