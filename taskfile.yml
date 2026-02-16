@@ -1,5 +1,10 @@
 version: '3'
 
+includes:
+  infra: ./tasks/Taskfile.infra.yml
+  audit: ./tasks/Taskfile.audit.yml
+  report: ./tasks/Taskfile.report.yml
+
 vars:
   DEFAULT_IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless"
   RESULTS_ROOT: "allure-results"
@@ -9,64 +14,50 @@ vars:
   registry: "ghcr.io"
   repo_of_code: "openssl_fips"
   repo_url: "https://github.com/{{.owner}}/{{.repo_of_code}}"
-  
 
 tasks:
   echo-all-vars:
+    desc: Display all project-related global variables
     cmds:
-      - cmd: 'echo repo_of_registry: {{.repo_of_registry}}'
-      - cmd: 'echo owner: {{.owner}}'
-      - cmd: 'echo registry: {{.registry}}'
-      - cmd: 'echo repo_of_code: {{.repo_of_code}}'
-      - cmd: 'echo repo_url: {{.repo_url}}'
-  
-  #   cmds:
-  #     - chmod +x scripts/wolfi-pkg-updater.py
-  #     - scripts/wolfi-pkg-updater.py
+      - echo "repo_of_registry {{.repo_of_registry}}"
+      - echo "owner            {{.owner}}"
+      - echo "registry         {{.registry}}"
+      - echo "repo_of_code     {{.repo_of_code}}"
+      - echo "repo_url         {{.repo_url}}"
 
-  # benchmark:
-  #   dir: benchmark
-  #   cmds:
-  #     - chmod +x run_benchmarks.sh
-  #     - ./run_benchmarks.sh
+  setup:
+    desc: Prepare the infrastructure by building all Docker bridge images
+    cmds:
+      - task: infra:build-all
 
-  # generate-report:
-  #   dir: benchmark
-  #   cmds:
-  #     - chmod +x generate_report.py
-  #     - ./generate_report.py
+  run-v2:
+    desc: Execute full audit pipeline and serve via Allure 2
+    cmds:
+      - task: audit:run
+      - task: report:v2:serve
 
-  # run-audit:
-  #   vars:
-  #     IMG_SAFE: '{{.IMAGE | default .DEFAULT_IMAGE}}'
-  #     SAFE_NAME: '{{.IMG_SAFE | replace "/" "_" | replace ":" "_"}}'
-  #   cmds:
-  #     - pipenv run pytest new_test/tests/ --alluredir={{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}} --image={{.IMG_SAFE}} || true
-  #     - echo "Image={{.IMG_SAFE}}" > {{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}}/environment.properties
+  run-v3:
+    desc: Execute full audit pipeline and serve via Allure 3
+    cmds:
+      - task: audit:run
+      - task: report:v3:serve
 
-  # audit:
-  #   vars:
-  #     IMG: '{{.IMAGE | default .DEFAULT_IMAGE}}'
-  #   cmds:
-  #     - task: clean-audit
-  #     - task: run-audit
-  #       vars:
-  #         IMAGE: "{{.IMG}}"
-  #     - npx allure generate --name "FIPS 140-3 Compliance Suite" --output {{.REPORT_DIR}} {{.RESULTS_ROOT}}/*
-  #     - npx allure open {{.REPORT_DIR}}
+  clean-all:
+    desc: Cleanup all images, test results, and generated reports
+    cmds:
+      - task: audit:clean
+      - task: report:clean
+      - task: infra:clean
 
-  # audit-multi:
-  #   cmds:
-  #     - task: clean-audit
-  #     - task: run-audit
-  #       vars:
-  #         IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless"
-  #     - task: run-audit
-  #       vars:
-  #         IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:latest"
-  #     - npx allure generate --name "FIPS Multi-Image Comparison" --output {{.REPORT_DIR}} {{.RESULTS_ROOT}}/*
-  #     - npx allure open {{.REPORT_DIR}}
+  update-pkgs:
+    desc: Run the python package updater script
+    cmds:
+      - chmod +x scripts/wolfi-pkg-updater.py
+      - python3 scripts/wolfi-pkg-updater.py
 
-  # clean-audit:
-  #   cmds:
-  #     - rm -rf {{.RESULTS_ROOT}} {{.REPORT_DIR}}
+  benchmark:
+    desc: Run performance benchmarks
+    dir: benchmark
+    cmds:
+      - chmod +x run_benchmarks.sh
+      - ./run_benchmarks.sh

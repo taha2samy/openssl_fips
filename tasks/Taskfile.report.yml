@@ -1,0 +1,31 @@
+version: '3'
+
+vars:
+  RESULTS_DIR: "allure-results"
+  REPORT_DIR: "allure-report"
+
+tasks:
+  v2:gen:
+    desc: Generate static HTML report using Allure 2 bridge
+    cmds:
+      - docker run --rm -v {{.USER_WORKING_DIR}}:/app allure2-bridge generate {{.RESULTS_DIR}} -o {{.REPORT_DIR}} --clean
+
+  v2:serve:
+    desc: Serve Allure 2 report on http://localhost:8080
+    cmds:
+      - docker run --rm -it -v {{.USER_WORKING_DIR}}:/app -p 8080:8080 allure2-bridge serve {{.RESULTS_DIR}} --port 8080
+
+  v3:gen:
+    desc: Generate static HTML report using Allure 3 bridge
+    cmds:
+      - docker run --rm -v {{.USER_WORKING_DIR}}:/app allure3-bridge generate {{.RESULTS_DIR}} -o {{.REPORT_DIR}} --clean
+
+  v3:serve:
+    desc: Serve Allure 3 report on http://localhost:8081
+    cmds:
+      - docker run --rm -it -v {{.USER_WORKING_DIR}}:/app -p 8081:8081 allure3-bridge serve {{.RESULTS_DIR}} --port 8081
+
+  clean:
+    desc: Remove the generated allure-report directory
+    cmds:
+      - rm -rf {{.REPORT_DIR}}
