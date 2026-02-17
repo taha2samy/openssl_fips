@@ -3,10 +3,9 @@ Comparison_Report.md
 allure-results/*
 allure-report/*
 __pycache__/
-new_test/.pytest_cache/
-tests/
+
+tests/.pytest_cache/
 reports/*
-!new_test/tests
 extracted_metadata/*
 supply_chain_map.json
 main.py

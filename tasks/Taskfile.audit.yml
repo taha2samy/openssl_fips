@@ -12,7 +12,7 @@ tasks:
       SAFE_NAME: '{{.IMG_SAFE | replace "/" "_" | replace ":" "_" | replace "." "_"}}'
     cmds:
       - mkdir -p reports
-      - pipenv run pytest new_test/tests/ --alluredir="{{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}}" --image="{{.IMG_SAFE}}" || true
+      - pipenv run pytest tests/tests/ --alluredir="{{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}}" --image="{{.IMG_SAFE}}" || true
       - echo "Image={{.IMG_SAFE}}" > "{{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}}/environment.properties"
 
   multi:

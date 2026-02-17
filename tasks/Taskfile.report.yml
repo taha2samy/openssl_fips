@@ -18,13 +18,12 @@ tasks:
   v3:gen:
     desc: Generate static HTML report using Allure 3 bridge
     cmds:
-      - docker run --rm -v "{{.USER_WORKING_DIR}}:/app" allure3-bridge sh -c "allure generate --clean {{.RESULTS_DIR}}/audit_* -o {{.REPORT_DIR}}"
+      - docker run --rm -v "{{.USER_WORKING_DIR}}:/app" allure3-bridge sh -c "allure generate '{{.RESULTS_DIR}}/audit_*' -o '{{.REPORT_DIR}}'"
 
   v3:serve:
     desc: Serve Allure 3 report on http://localhost:8081
     cmds:
-      - docker run --rm -it -v "{{.USER_WORKING_DIR}}:/app" -p 8081:8081 allure3-bridge sh -c "allure serve {{.RESULTS_DIR}}/audit_* --port 8081"
-
+      - docker run --rm -it -v "{{.USER_WORKING_DIR}}:/app" -p 8081:8081 allure3-bridge sh -c 'allure open --port 8081 "allure-results/audit_*"'
   clean:
     desc: Remove the generated allure-report directory
     cmds:
