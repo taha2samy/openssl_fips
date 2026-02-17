@@ -61,3 +61,9 @@ tasks:
     cmds:
       - chmod +x run_benchmarks.sh
       - ./run_benchmarks.sh
+  docs:generate:
+      desc: Parses test results and build configs to generate full documentation
+      cmds:
+        - pipenv run python scripts/generate_docs_tests.py
+      deps:
+        - task: audit:multi
