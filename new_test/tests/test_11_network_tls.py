@@ -37,7 +37,7 @@ class TestNetworkAndTLS:
             connection_success = any(x in combined_output for x in ["CONNECTION ESTABLISHED", "VERIFICATION: OK"])
             
             if not connection_success:
-                allure.dynamic.status_details(message="Network Failure: Unable to establish raw TCP connection to 1.1.1.1")
+                allure.dynamic.description(message="Network Failure: Unable to establish raw TCP connection to 1.1.1.1")
                 pytest.fail(f"TCP connectivity test failed with exit code {result.returncode}. Output: {result.stderr}")
 
         with allure.step("Recording network operational metrics"):
@@ -199,7 +199,6 @@ class TestNetworkAndTLS:
                 allure.attach(final_check.stdout, name="Module Status Output")
                 allure.attach(final_check.stderr, name="Integrity Error Logs")
 
-                # The expected behavior: fips provider must NOT be active
                 is_fips_active = "fips" in final_check.stdout and "status: active" in final_check.stdout
                 
                 if is_fips_active:

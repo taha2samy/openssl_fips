@@ -6,25 +6,16 @@ vars:
 
 tasks:
   run:
-    desc: Execute pytest audit inside the bridge container
+    desc: Run pytest locally on the host
     vars:
       IMG_SAFE: '{{.IMAGE | default .DEFAULT_IMAGE}}'
       SAFE_NAME: '{{.IMG_SAFE | replace "/" "_" | replace ":" "_" | replace "." "_"}}'
     cmds:
       - mkdir -p reports
-      - |
-        docker run --rm \
-          -v /var/run/docker.sock:/var/run/docker.sock \
-          -v "{{.USER_WORKING_DIR}}:/app" \
-          allure3-bridge \
-          pytest new_test/tests/ \
-          --alluredir="{{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}}" \
-          --image="{{.IMG_SAFE}}" || true
-      - mkdir -p "{{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}}"
+      - pipenv run pytest new_test/tests/ --alluredir="{{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}}" --image="{{.IMG_SAFE}}" || true
       - echo "Image={{.IMG_SAFE}}" > "{{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}}/environment.properties"
 
   multi:
-    desc: Run audit comparison for multiple target images
     cmds:
       - task: run
         vars: { IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless" }
@@ -32,7 +23,7 @@ tasks:
         vars: { IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:latest" }
 
   clean:
-    desc: Remove all collected allure results and reports
     cmds:
       - rm -rf "{{.RESULTS_ROOT}}"
       - rm -rf reports
+      - rm -rf allure-report

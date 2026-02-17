@@ -8,22 +8,22 @@ tasks:
   v2:gen:
     desc: Generate static HTML report using Allure 2 bridge
     cmds:
-      - docker run --rm -v "{{.USER_WORKING_DIR}}:/app" allure2-bridge allure generate --clean {{.RESULTS_DIR}}/audit_* -o {{.REPORT_DIR}}
+      - docker run --rm -v "{{.USER_WORKING_DIR}}:/app" allure2-bridge sh -c "allure generate --clean {{.RESULTS_DIR}}/audit_* -o {{.REPORT_DIR}}"
 
   v2:serve:
     desc: Serve Allure 2 report on http://localhost:8080
     cmds:
-      - docker run --rm -it -v "{{.USER_WORKING_DIR}}:/app" -p 8080:8080 allure2-bridge allure serve {{.RESULTS_DIR}}/audit_* --port 8080
+      - docker run --rm -it -v "{{.USER_WORKING_DIR}}:/app" -p 8080:8080 allure2-bridge sh -c "allure serve {{.RESULTS_DIR}}/audit_* --port 8080"
 
   v3:gen:
     desc: Generate static HTML report using Allure 3 bridge
     cmds:
-      - docker run --rm -v "{{.USER_WORKING_DIR}}:/app" allure3-bridge allure generate --clean {{.RESULTS_DIR}}/audit_* -o {{.REPORT_DIR}}
+      - docker run --rm -v "{{.USER_WORKING_DIR}}:/app" allure3-bridge sh -c "allure generate --clean {{.RESULTS_DIR}}/audit_* -o {{.REPORT_DIR}}"
 
   v3:serve:
     desc: Serve Allure 3 report on http://localhost:8081
     cmds:
-      - docker run --rm -it -v "{{.USER_WORKING_DIR}}:/app" -p 8081:8081 allure3-bridge allure serve {{.RESULTS_DIR}}/audit_* --port 8081
+      - docker run --rm -it -v "{{.USER_WORKING_DIR}}:/app" -p 8081:8081 allure3-bridge sh -c "allure serve {{.RESULTS_DIR}}/audit_* --port 8081"
 
   clean:
     desc: Remove the generated allure-report directory

@@ -19,7 +19,6 @@ def identify_and_save(raw_data, tag_name):
         content = data
         p_type = data.get("predicateType", "unknown")
         
-        # فك الغلاف (Payload)
         if "payload" in data:
             try:
                 p_load = json.loads(base64.b64decode(data["payload"]).decode('utf-8'))
@@ -50,7 +49,6 @@ def audit():
     print(f"📊 Found {len(tags)} total tags. Scanning for metadata...")
 
     for tag in tags:
-        # إحنا بندور على التاقات اللي شكلها شهادات (بتبدأ بـ sha256- وتخلص بـ .att أو .sig)
         if tag.startswith("sha256-") and (tag.endswith(".att") or tag.endswith(".sig")):
             print(f"🔎 Inspecting Tag: {tag[:30]}...")
             
