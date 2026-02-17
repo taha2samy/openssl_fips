@@ -50,52 +50,95 @@ jobs:
           echo "distroless_digest=$(echo $metadata | jq -r '.distroless."containerimage.digest"')" >> $GITHUB_OUTPUT
           echo "standard_digest=$(echo $metadata | jq -r '.standard."containerimage.digest"')"
           echo "distroless_digest=$(echo $metadata | jq -r '.distroless."containerimage.digest"')"
+
   attest:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      attestations: write
-      packages: write
-    strategy:
-      fail-fast: false
-      matrix:
-        target_name: [standard, distroless]
+      needs: build
+      runs-on: ubuntu-latest
+      permissions:
+        id-token: write
+        attestations: write
+        packages: write
+      strategy:
+        fail-fast: false
+        matrix:
+          target_name: [standard, distroless]
+      steps:
+        - name: Log in to GHCR
+          uses: docker/login-action@v3
+          with:
+            registry: ${{ env.REGISTRY }}
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
 
-    steps:
-      - name: Log in to GHCR
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Set Digest for current target
-        id: set_digest
-        run: |
-          if [[ "${{ matrix.target_name }}" == "standard" ]]; then
-            echo "digest=${{ needs.build.outputs.standard_digest }}" >> $GITHUB_OUTPUT
-          else
-            echo "digest=${{ needs.build.outputs.distroless_digest }}" >> $GITHUB_OUTPUT
-          fi
+        - name: Set Digest
+          id: set_digest
+          run: |
+            if [[ "${{ matrix.target_name }}" == "standard" ]]; then
+              echo "digest=${{ needs.build.outputs.standard_digest }}" >> $GITHUB_OUTPUT
+            else
+              echo "digest=${{ needs.build.outputs.distroless_digest }}" >> $GITHUB_OUTPUT
+            fi
 
-      - name: Attest Provenance
-        uses: actions/attest-build-provenance@v3
-        with:
-          subject-name: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips
-          subject-digest: ${{ steps.set_digest.outputs.digest }}
-          push-to-registry: true
+        - name: Attest Provenance
+          uses: actions/attest-build-provenance@v3
+          with:
+            subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+            subject-digest: ${{ steps.set_digest.outputs.digest }}
+            push-to-registry: true
 
-      - name: Generate SBOM (CycloneDX)
-        uses: anchore/sbom-action@v0.22.2
-        with:
-          image: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips@${{ steps.set_digest.outputs.digest }}
-          format: cyclonedx-json
-          output-file: ${{ matrix.target_name }}.cyclonedx.json
+        - name: Generate SBOM
+          uses: anchore/sbom-action@v0.22.2
+          with:
+            image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.set_digest.outputs.digest }}
+            format: cyclonedx-json
+            output-file: ${{ matrix.target_name }}.cyclonedx.json
 
-      - name: Attest SBOM
-        uses: actions/attest-sbom@v3
-        with:
-          subject-name: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips
-          subject-digest: ${{ steps.set_digest.outputs.digest }}
-          sbom-path: ${{ matrix.target_name }}.cyclonedx.json
-          push-to-registry: true
+        - name: Attest SBOM
+          uses: actions/attest-sbom@v3
+          id: attest_sbom
+          with:
+            subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+            subject-digest: ${{ steps.set_digest.outputs.digest }}
+            sbom-path: ${{ matrix.target_name }}.cyclonedx.json
+            push-to-registry: true
+
+        - name: Save URL to file
+          run: |
+            echo "${{ steps.attest_sbom.outputs.attestation-url }}" > ${{ matrix.target_name }}_url.txt
+
+        - name: Upload URL Artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: ${{ matrix.target_name }}-attestation-url
+            path: ${{ matrix.target_name }}_url.txt
+
+  update_readme:
+      needs: [build, attest]
+      runs-on: ubuntu-latest
+      permissions:
+        contents: write
+        actions: write 
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Download all URLs
+          uses: actions/download-artifact@v4
+          with:
+            path: urls
+
+        - name: Use and Display Data
+          run: |
+            echo "Standard URL: $(cat urls/standard-attestation-url/standard_url.txt)"
+            echo "Distroless URL: $(cat urls/distroless-attestation-url/distroless_url.txt)"
+        - name: print digits
+          run: |
+            echo "${{ needs.build.outputs.standard_digest }}"
+            echo "${{ needs.build.outputs.distroless_digest }}"
+        - name: Cleanup Artifacts
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            gh api repos/${{ github.repository }}/actions/artifacts \
+              --query "artifacts[?name=='standard-attestation-url' || name=='distroless-attestation-url'].id" \
+              --jq '.[]' | xargs -I {} gh api -X DELETE repos/${{ github.repository }}/actions/artifacts/{}
