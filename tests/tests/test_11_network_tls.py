@@ -373,7 +373,6 @@ class TestAdvancedFIPSNetworkCompliance:
 
     @allure.story("Secure Session Resumption (TLS 1.3)")
     @allure.title("Verify Secure TLS 1.3 Session Resumption with PSK")
-
     @allure.description(inspect.cleandoc("""
         Detailed Validation of the Container's TCP/IP Stack:
         1. Attempts to establish a raw socket connection.
@@ -391,7 +390,7 @@ class TestAdvancedFIPSNetworkCompliance:
 
             with allure.step("Establishing initial TLS 1.3 connection and saving session ticket"):
                 initial_cmd = [
-                    "docker", "run", "--rm",
+                    "docker", "run", "--user", "0", "--rm",
                     "-v", f"{host_dir_abs}:{container_mount_dir}",
                     image_tag, "s_client", "-connect", target_host,
                     "-sess_out", container_session_path, "-ign_eof"
@@ -401,7 +400,7 @@ class TestAdvancedFIPSNetworkCompliance:
 
             with allure.step("Attempting to reconnect and resume the session using the saved ticket"):
                 resume_cmd = [
-                    "docker", "run", "--rm",
+                    "docker", "run", "--user", "0", "--rm",
                     "-v", f"{host_dir_abs}:{container_mount_dir}",
                     image_tag, "s_client", "-connect", target_host,
                     "-sess_in", container_session_path, "-ign_eof"
@@ -418,5 +417,4 @@ class TestAdvancedFIPSNetworkCompliance:
         with allure.step("TLS 1.3 stateful resumption mechanism confirmed"):
             allure.dynamic.parameter("Mechanism", "PSK-based Session Resumption")
             allure.dynamic.parameter("Protocol", "TLS 1.3")
-            
 
