@@ -28,8 +28,8 @@ This repository maintains a production-hardened, **FIPS 140-3 compliant** OpenSS
 | **Base OS** | Wolfi | Zero-CVE baseline |
 | **Integrity** | SLSA L3 | Cryptographically attested build |
 
----
 
+----
 ## 02. Architectural Integrity
 The build pipeline enforces a strict cryptographic boundary, ensuring that the FIPS module is correctly installed, initialized, and protected.
 
@@ -90,17 +90,57 @@ We provide two specialized variants optimized for security and operational flexi
 | **Distroless** | `3.5.5-distroless` | Static | No shell/manager (Hardened) |
 
 ### Supply Chain Provenance (Latest Build)
-- **Image Digest (Distroless):** `sha256:6d1703b4ab5eeaec79b6dc2582a7fd17bb46c74eecfb1512f626bb81d760fe36`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19245978)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19245986)
+- **Image Digest (Distroless):** `sha256:245d088944dbd6a19dac2df6fbe3ab9156c3f29f23825491f80409d1511adf94`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19246827)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19246844)
 
 
-- **Image Digest (standard):** `sha256:6b833d2f1d77e472ec384b2afdc9ca52b10006baddecd774255ef2929ca7c60e`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19245977)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19245987)
+- **Image Digest (standard):** `sha256:7d96b92c210537ab48741a0164ba4dd61b743171deb2b034740cd85a612cd8c8`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19246822)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19246834)
 
 ---
 
+### 🧱 03. Build Provenance & Metadata
+To ensure complete reproducibility and supply chain traceability (SLSA L3), strictly defined metadata is captured during the CI execution. This context binds the generated artifacts to their specific source code state and build environment.
+
+| Context Dimension | Metadata Key | Value (Dynamic Scope) |
+| :--- | :--- | :--- |
+| **🔐 Source Identity** | `Repository` | `taha2samy/openssl_fips` |
+| | `Ref / Branch` | `feat/readme` |
+| | `Commit SHA` | `f063ab86072675e31abe7b61371ebe55eebf1317` |
+| | `Trigger Actor` | `taha2samy` |
+| **⚙️ Execution Context** | `Workflow` | `Build` |
+| | `Run ID` | [`22158758357`](https://github.com/taha2samy/openssl_fips/actions/runs/22158758357) |
+| | `Run Number` | `#184` |
+| | `Event Type` | `workflow_dispatch` |
+| **🖥️ Build Environment** | `Runner OS` | `Linux` |
+| | `CI Managed` | `true` |
+| | `Workspace` | `/home/runner/work/openssl_fips/openssl_fips` |
+
+> **Audit Note:** The `Commit SHA` represents the immutable state of the code at the time of build. The `Run ID` links directly to the tamper-evident build logs in GitHub Actions.
+
+
+### 🧱 04. Build Provenance & Metadata
+To ensure complete reproducibility and supply chain traceability (SLSA L3), strictly defined metadata is captured during the CI execution. This context binds the generated artifacts to their specific source code state and build environment.
+
+| Context Dimension | Metadata Key | Value (Dynamic Scope) |
+| :--- | :--- | :--- |
+| **🔐 Source Identity** | `Repository` | `taha2samy/openssl_fips` |
+| | `Ref / Branch` | `feat/readme` |
+| | `Commit SHA` | `f063ab86072675e31abe7b61371ebe55eebf1317` |
+| | `Trigger Actor` | `taha2samy` |
+| **⚙️ Execution Context** | `Workflow` | `Build` |
+| | `Run ID` | [`22158758357`](https://github.com/taha2samy/openssl_fips/actions/runs/22158758357) |
+| | `Run Number` | `#184` |
+| | `Event Type` | `workflow_dispatch` |
+| **🖥️ Build Environment** | `Runner OS` | `Linux` |
+| | `CI Managed` | `true` |
+| | `Workspace` | `/home/runner/work/openssl_fips/openssl_fips` |
+
+> **Audit Note:** The `Commit SHA` represents the immutable state of the code at the time of build. The `Run ID` links directly to the tamper-evident build logs in GitHub Actions.
+
+---
 ## 04. Automated Compliance Audit
 Every build undergoes a 200+ point automated security audit via Pytest and OpenSSL FIPS verification protocols.
 
@@ -122,7 +162,7 @@ High-level results from our cryptographic benchmark, identifying the top-perform
 
 | Primitive | Top Performer | Advantage |
 | :--- | :---: | :---: |
-| `SHA256` | **FIPS** | `+0.6%` |
+| `SHA256` | **UBUNTU** | `+1.1%` |
 
 > **Key Insight:** The **Wolfi-FIPS** environment demonstrates negligible performance overhead, proving that modern compliance does not impose a significant 'security tax'.
 
@@ -153,19 +193,6 @@ cosign verify \
 - [**Troubleshooting**](docs/08-troubleshooting.md)
 
 ---
-
-> **Pipeline ID:** `$22158448098` | **Attempt:** `#$` | **Status:** `In-Progress`
-
-|             Category |     Runtime Property |                                             Contextual Value |
-| -------------------: | -------------------: | -----------------------------------------------------------: |
-|          **🏗️ Build** |    **Workflow File** |                                     `$` |
-|                      |           **Job ID** |                                          `$` |
-|         **🌿 Source** | **Ref (Branch/Tag)** |                                     `$` |
-|                      |       **Commit SHA** | [`$`](![img](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)taha2samy/openssl_fips/commit/$) |
-|       **👤 Identity** |            **Actor** |                                       `@$taha2samy` |
-|                      |       **Event Type** |                                   `$workflow_dispatch` |
-| **🖥️ Infrastructure** |        **Runner OS** |                                           `$Linux` |
-|                      |     **Architecture** |                                         `$` |
 
 
 
