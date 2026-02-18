@@ -6,8 +6,9 @@
 
 ### 🟢 Service Integrity Dashboard
 ![Passed](https://img.shields.io/badge/passed-80-brightgreen)
-![Failed](https://img.shields.io/badge/failed--red)
-
+![Failed](https://img.shields.io/badge/failed-12-red)
+![Broken](https://img.shields.io/badge/broken-0-orange)
+![Total](https://img.shields.io/badge/total-92-blue)    
 [![Build Status](https://github.com/taha2samy/openssl_fips/actions/workflows/build.yml/badge.svg)](https://github.com/taha2samy/openssl_fips/actions)
 [![Compliance: FIPS 140-3](https://img.shields.io/badge/Compliance-FIPS_140--3-brightgreen?style=flat-square)](https://csrc.nist.gov/)
 [![Audit Pass Rate](https://img.shields.io/badge/Audit-%25_Passed-orange?style=flat-square)](docs/TEST_RESULTS.md)
@@ -89,14 +90,14 @@ We provide two specialized variants optimized for security and operational flexi
 | **Distroless** | `3.5.5-distroless` | Static | No shell/manager (Hardened) |
 
 ### Supply Chain Provenance (Latest Build)
-- **Image Digest (Distroless):** `sha256:60b62a906ed9b44414bf6f98fdd4a15e276cf9641880c0dfc0f772bb2854f7da`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19178597)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19178601)
+- **Image Digest (Distroless):** `sha256:28f28ff9da6427bce8973f9ad15668f32b0379f00a6dc8ba0f216ab1d858f542`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19179011)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19179019)
 
 
-- **Image Digest (standard):** `sha256:741d752758cc90436a6092c28b54c37fad851be400af2c85fa50fd779a19a401`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19178598)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19178605)
+- **Image Digest (standard):** `sha256:41d6ba29b83442edf1c20aad6d38f8c7eac2129cfdcb3a0de7ee1d72b95ebbda`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19179010)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19179016)
 
 ---
 
