@@ -90,14 +90,14 @@ We provide two specialized variants optimized for security and operational flexi
 | **Distroless** | `3.5.5-distroless` | Static | No shell/manager (Hardened) |
 
 ### Supply Chain Provenance (Latest Build)
-- **Image Digest (Distroless):** `sha256:e46cf8e56e344e0efc005fbc253f4dfd81deef5b799f37deaa620343a654969d`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19239901)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19239918)
+- **Image Digest (Distroless):** `sha256:9e5eec112f9d26583ad140923896600cd1c1a215800181c18f001c23e480f596`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19242640)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19242659)
 
 
-- **Image Digest (standard):** `sha256:2341445fffe88a666ffd94da6a7a982aa2625d7a4c7eee90cbf576afa860dd5c`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19239910)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19239928)
+- **Image Digest (standard):** `sha256:4a19f3f7c9bebf351d1f464ba8d1095b2231969d096de66f6c5e372b4bb80f42`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19242643)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19242661)
 
 ---
 
