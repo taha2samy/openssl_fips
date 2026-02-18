@@ -385,6 +385,7 @@ class TestAdvancedFIPSNetworkCompliance:
         
         with tempfile.TemporaryDirectory(dir=".") as tmpdir:
             host_dir_abs = os.path.abspath(tmpdir)
+            os.chmod(host_dir_abs, 0o777)
             container_mount_dir = "/mnt/session_data"
             container_session_path = os.path.join(container_mount_dir, "tls_session.pem")
 
@@ -417,4 +418,3 @@ class TestAdvancedFIPSNetworkCompliance:
         with allure.step("TLS 1.3 stateful resumption mechanism confirmed"):
             allure.dynamic.parameter("Mechanism", "PSK-based Session Resumption")
             allure.dynamic.parameter("Protocol", "TLS 1.3")
-
