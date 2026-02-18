@@ -119,8 +119,9 @@ To ensure complete reproducibility and supply chain traceability (SLSA L3), stri
 | | `CI Managed` | `{{ metadata_of_workflow.is_ci }}` |
 | | `Workspace` | `{{ metadata_of_workflow.workspace }}` |
 
-> **Audit Note:** The `Commit SHA` represents the immutable state of the code at the time of build. The `Run ID` links directly to the tamper-evident build logs in GitHub Actions.
-
+> [!IMPORTANT]
+> The `Commit SHA` represents the immutable state of the code at the time of build. The `Run ID` links directly to the tamper-evident build logs in GitHub Actions.
+>
 ---
 ## 05. Automated Compliance Audit
 Every build undergoes a 200+ point automated security audit via Pytest and OpenSSL FIPS verification protocols.
