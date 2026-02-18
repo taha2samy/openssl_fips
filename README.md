@@ -5,17 +5,10 @@
 ---
 
 ### 🟢 Service Integrity Dashboard
-<<<<<<< HEAD
-![Passed](https://img.shields.io/badge/passed-219-brightgreen)
-![Failed](https://img.shields.io/badge/failed-15-red)
-![Broken](https://img.shields.io/badge/broken-0-orange)
-![Total](https://img.shields.io/badge/total-234-blue)    
-=======
 ![Passed](https://img.shields.io/badge/passed-80-brightgreen)
 ![Failed](https://img.shields.io/badge/failed-12-red)
 ![Broken](https://img.shields.io/badge/broken-0-orange)
 ![Total](https://img.shields.io/badge/total-92-blue)    
->>>>>>> 177c7a68f84c1a43e567ae3b708ac55e3cb058c8
 [![Build Status](https://github.com/taha2samy/openssl_fips/actions/workflows/build.yml/badge.svg)](https://github.com/taha2samy/openssl_fips/actions)
 [![Compliance: FIPS 140-3](https://img.shields.io/badge/Compliance-FIPS_140--3-brightgreen?style=flat-square)](https://csrc.nist.gov/)
 [![Audit Pass Rate](https://img.shields.io/badge/Audit-%25_Passed-orange?style=flat-square)](docs/TEST_RESULTS.md)
@@ -97,25 +90,14 @@ We provide two specialized variants optimized for security and operational flexi
 | **Distroless** | `3.5.5-distroless` | Static | No shell/manager (Hardened) |
 
 ### Supply Chain Provenance (Latest Build)
-<<<<<<< HEAD
-- **Image Digest (Distroless):** `sha256:a94973bc4706fece0e22b13ba9f0b1d891a5c002b2b8585b8942b2c8a6c5c755`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19160268)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19160278)
+- **Image Digest (Distroless):** `sha256:f604f135fd038b9578d0712581cfbb05d2f0bebf27639c25b901e517d620623b`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19211454)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19211478)
 
 
-- **Image Digest (standard):** `sha256:e20d22c01bceaa8bcb821c5b84548bab43f30777cff23368f1ccd110c248426c`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19160257)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19160271)
-=======
-- **Image Digest (Distroless):** `sha256:28f28ff9da6427bce8973f9ad15668f32b0379f00a6dc8ba0f216ab1d858f542`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19179011)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19179019)
-
-
-- **Image Digest (standard):** `sha256:41d6ba29b83442edf1c20aad6d38f8c7eac2129cfdcb3a0de7ee1d72b95ebbda`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19179010)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19179016)
->>>>>>> 177c7a68f84c1a43e567ae3b708ac55e3cb058c8
+- **Image Digest (standard):** `sha256:e3cb8d646162af794139be653171b566aae3038a13f3a86bc49043c34df0921f`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19211423)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19211438)
 
 ---
 
@@ -124,8 +106,8 @@ Every build undergoes a 200+ point automated security audit via Pytest and OpenS
 
 ### Latest Test Suite Metrics
 - **Compliance Status:** ❌ FAILED
-- **Total Test Vectors:** 234
-- **Successful Assertions:** 219
+- **Total Test Vectors:** 92
+- **Successful Assertions:** 80
 - **Critical Rejections (e.g. MD5/SHA1):** Verified 100%
 
 > For a full breakdown of algorithm blocking and KAT (Known Answer Tests), see [**Detailed Audit Logs**](docs/TEST_RESULTS.md).
@@ -140,7 +122,7 @@ High-level results from our cryptographic benchmark, identifying the top-perform
 
 | Primitive | Top Performer | Advantage |
 | :--- | :---: | :---: |
-| `SHA256` | **FIPS** | `+2.9%` |
+| `SHA256` | **UBUNTU** | `+0.9%` |
 
 > **Key Insight:** The **Wolfi-FIPS** environment demonstrates negligible performance overhead, proving that modern compliance does not impose a significant 'security tax'.
 
