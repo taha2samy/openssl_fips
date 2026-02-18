@@ -168,7 +168,7 @@ class TestNetworkAndTLS:
             target_path = "/usr/local/ssl/fipsmodule.cnf"
 
             with allure.step("Extracting and decoding FIPS module configuration"):
-                extract_cmd = ["sudo", "docker", "run", "--user", "0", "--rm", image_tag, "base64", "-in", target_path]
+                extract_cmd = ["docker", "run", "--user", "0", "--rm", image_tag, "base64", "-in", target_path]
                 result = subprocess.run(extract_cmd, capture_output=True, text=True)
                 
                 if result.returncode != 0:
@@ -189,8 +189,7 @@ class TestNetworkAndTLS:
                 allure.attach(corrupted_content, name="Corrupted Config Preview", attachment_type=allure.attachment_type.TEXT)
 
             with allure.step("Verifying provider status with corrupted configuration"):
-                test_cmd = [
-                    "sudo", "docker", "run", "--user", "0", "--rm", 
+                test_cmd = ["docker", "run", "--user", "0", "--rm", 
                     "-v", f"{config_path}:{target_path}", 
                     image_tag, "list", "-providers", "-verbose"
                 ]

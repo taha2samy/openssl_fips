@@ -4,10 +4,11 @@
     "python.testing.nosetestsEnabled": false,
     "testing.displayedTestNames": "short",
     "python.testing.pytestArgs": [
-        "new_test/tests",
+        "tests/tests",
         "-c",
-        "new_test/pytest.ini",
-        "--rootdir=new_test"
+        "tests/pytest.ini",
+        "--rootdir=tests",
+        "--image=ghcr.io/taha2samy/wolfi-openssl-fips:latest"
     ],
     "python.envFile": "${workspaceFolder}/.env"
 }
