@@ -7,7 +7,7 @@
 ### 🟢 Service Integrity Dashboard
 [![Build Status](https://github.com/taha2samy/openssl_fips/actions/workflows/build.yml/badge.svg)](https://github.com/taha2samy/openssl_fips/actions)
 [![Compliance: FIPS 140-3](https://img.shields.io/badge/Compliance-FIPS_140--3-brightgreen?style=flat-square)](https://csrc.nist.gov/)
-[![Audit Pass Rate](https://img.shields.io/badge/Audit-93.6%25_Passed-orange?style=flat-square)](docs/TEST_RESULTS.md)
+[![Audit Pass Rate](https://img.shields.io/badge/Audit-87.0%25_Passed-orange?style=flat-square)](docs/TEST_RESULTS.md)
 [![Security: Zero-CVE](https://img.shields.io/badge/Security-Zero_CVE-blue?style=flat-square)](https://github.com/wolfi-dev)
 [![Supply Chain: SLSA L3](https://img.shields.io/badge/SLSA-Level_3-blueviolet?style=flat-square)](https://slsa.dev/)
 
@@ -86,14 +86,14 @@ We provide two specialized variants optimized for security and operational flexi
 | **Distroless** | `3.5.5-distroless` | Static | No shell/manager (Hardened) |
 
 ### Supply Chain Provenance (Latest Build)
-- **Image Digest (Distroless):** `sha256:a94973bc4706fece0e22b13ba9f0b1d891a5c002b2b8585b8942b2c8a6c5c755`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19160268)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19160278)
+- **Image Digest (Distroless):** `sha256:d82068c0666bc813381bdf96e330bb4f73ecab58d5d46e7d786a4f8a8b713351`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19178138)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19178143)
 
 
-- **Image Digest (standard):** `sha256:e20d22c01bceaa8bcb821c5b84548bab43f30777cff23368f1ccd110c248426c`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19160257)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19160271)
+- **Image Digest (standard):** `sha256:751a23eca509a420254ac6f114a7e97f5bd052b8902a647ad0b2a29374fcb0f6`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19178141)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19178150)
 
 ---
 
@@ -102,8 +102,8 @@ Every build undergoes a 200+ point automated security audit via Pytest and OpenS
 
 ### Latest Test Suite Metrics
 - **Compliance Status:** ❌ FAILED
-- **Total Test Vectors:** 234
-- **Successful Assertions:** 219
+- **Total Test Vectors:** 92
+- **Successful Assertions:** 80
 - **Critical Rejections (e.g. MD5/SHA1):** Verified 100%
 
 > For a full breakdown of algorithm blocking and KAT (Known Answer Tests), see [**Detailed Audit Logs**](docs/TEST_RESULTS.md).
