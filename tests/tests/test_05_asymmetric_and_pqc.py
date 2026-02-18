@@ -99,11 +99,6 @@ class TestRSAOperations:
             allure.dynamic.parameter("Result", "Operation Blocked")
 
 
-
-
-
-
-
     @allure.story("RSA Padding Schemes")
     @allure.title("Verify RSA-PSS Signature and Verification Integrity")
     @allure.description("""
@@ -131,7 +126,7 @@ class TestRSAOperations:
                     "docker", "run", "--user", "0", "--rm", "-v", f"{host_dir}:{container_dir}",
                     image_tag, "genpkey", "-algorithm", "RSA", 
                     "-propquery", "fips=yes",
-                    "-pkeyopt", rsa_keygen_bits:2048,
+                    "-pkeyopt", "rsa_keygen_bits:2048",
                     "-out", f"{container_dir}/{key_file}"
                 ]
                 res_gen = subprocess.run(gen_cmd, capture_output=True, text=True)
@@ -175,12 +170,6 @@ class TestRSAOperations:
         with allure.step("RSA-PSS operational compliance confirmed"):
             allure.dynamic.parameter("Security Policy", "FIPS 140-3 Compliant (SHA256 Mandatory)")
             allure.dynamic.parameter("Result", "PSS Verified")
-
-
-
-
-
-
 
 
 
