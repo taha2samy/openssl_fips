@@ -6,8 +6,9 @@
 
 ### 🟢 Service Integrity Dashboard
 ![Passed](https://img.shields.io/badge/passed-{{ test_stats.passed }}-brightgreen)
-![Failed](https://img.shields.io/badge/failed-{{ failed }}-red)
-
+![Failed](https://img.shields.io/badge/failed-{{ test_stats.failed }}-red)
+![Broken](https://img.shields.io/badge/broken-{{ test_stats.broken }}-orange)
+![Total](https://img.shields.io/badge/total-{{ test_stats.total }}-blue)    
 [![Build Status]({{ repo_url }}/actions/workflows/build.yml/badge.svg)]({{ repo_url }}/actions)
 [![Compliance: FIPS 140-3](https://img.shields.io/badge/Compliance-FIPS_140--3-brightgreen?style=flat-square)](https://csrc.nist.gov/)
 [![Audit Pass Rate](https://img.shields.io/badge/Audit-{{ pass_rate }}%25_Passed-{{ 'green' if pass_rate == 100 else 'orange' }}?style=flat-square)](docs/TEST_RESULTS.md)
