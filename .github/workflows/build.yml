@@ -132,13 +132,13 @@ jobs:
     needs: [attest]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - name: Download all metadata artifacts
         uses: actions/download-artifact@v4
         with:
           path: all-metadata 
           pattern: attestation-metadata-* 
           merge-multiple: true 
-      - uses: actions/checkout@v3
 
       - name: Print JSON files and cleanup
         run: |
