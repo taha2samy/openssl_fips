@@ -1,40 +1,35 @@
+
 # Security Policy: Wolfi OpenSSL FIPS
 
-This project is a high-assurance cryptographic foundation. Security is not just a feature; it is the core objective. As a FIPS 140-3 compliant containerized solution, we adhere to a strict disclosure and remediation process.
+This project is a high-assurance, community-driven cryptographic foundation. Our security posture is defined by **Apache 2.0 transparency**, an **Autonomous Security Lifecycle**, and strict **Hermetic Build Integrity**.
 
-## 01. Security Model & Philosophy
-Our security posture is built on three pillars:
-1.  **Minimal Attack Surface:** Built on Wolfi (Distroless-first), removing shell-access and non-essential binaries.
-2.  **Cryptographic Integrity:** Strict enforcement of FIPS 140-3 boundaries; non-compliant algorithms are blocked at the provider level.
-3.  **Supply Chain Transparency:** Every build is signed via Sigstore/Cosign and includes a Level 3 SLSA provenance.
+## 01. Open-Source Transparency (Apache 2.0)
+As a community-focused project licensed under **Apache 2.0**, we believe that security through obscurity is a flaw. 
+*   **Audit-Ready Code:** Every build script, test vector, and configuration is open for public audit.
+*   **Community Trust:** By making our compliance suite public, we allow the community to verify that our FIPS 140-3 boundaries are as robust as we claim.
 
-## 02. Reporting a Vulnerability
-We take every report seriously. If you discover a security vulnerability, please do **not** open a public issue. 
+## 02. The Autonomous Security Lifecycle
+The core of this project is its **Full Automation**. We have eliminated human error from the critical security path:
+*   **Autonomous Ingestion:** Our engine (`wolfi-pkg-updater.py`) automatically tracks upstream Chainguard/Wolfi updates.
+*   **Automated Verification:** No image is released without passing our 200+ point Pytest compliance suite. If a single test fails (e.g., a non-FIPS algorithm is accidentally enabled), the entire pipeline halts.
+*   **Continuous Patching:** The project lives in a state of continuous improvement, where security patches are ingested, tested, and released through a zero-touch automated workflow.
 
-### Reporting Channels:
-*   **GitHub Security Advisory:** Please use the [GitHub Advisories](https://github.com/taha2samy/openssl_fips/security/advisories/new) feature to report privately.
-*   **Encrypted Email:** For highly sensitive disclosures, contact **[Your Email]**.
+## 03. Hermetic Build Philosophy (SLSA L3)
+To ensure absolute supply chain integrity, we implement a **Hermetic Build** model:
+*   **Deterministic Snapshots:** We do not use "latest" tags. All dependencies are pinned via image digests and package versions in `versions.hcl`.
+*   **Self-Contained Logic:** The repository is the **Single Source of Truth**. Any build triggered from a specific commit will yield an identical, byte-for-byte reproducible artifact.
+*   **Cryptographic Attestation:** Every automated release includes a SLSA Level 3 provenance and a signed SBOM (Software Bill of Materials).
 
-## 03. Vulnerability Triage & Response
-Once a report is received, the following timeline is initiated:
-- **Triage (24-48 hours):** Initial assessment and confirmation of the vulnerability.
-- **Remediation (3-7 days):** Development of a fix and internal audit against FIPS 140-3 compliance (to ensure the fix doesn't break the cryptographic boundary).
-- **Disclosure:** Public advisory and updated image release with a new SLSA attestation.
+## 04. Reporting a Vulnerability
+In a community project, security is a shared responsibility. If you find a way to bypass our cryptographic boundaries, please report it via our private channels.
 
-## 04. Scope
-| Component | Status |
-| :--- | :--- |
-| **OpenSSL FIPS Provider** | In Scope |
-| **Container Configuration (`openssl.cnf`)** | In Scope |
-| **Build Pipeline (GitHub Actions)** | In Scope |
-| **Wolfi Base Packages** | Out of Scope (Managed by Chainguard/Wolfi) |
+**How to report:**
+*   **Private Disclosure:** Use [GitHub Security Advisories](https://github.com/taha2samy/openssl_fips/security/advisories/new).
+*   **Response Time:** Initial triage within 48 hours.
 
-## 05. Security Hardening Measures
-*   **Zero-CVE Goal:** We rebuild daily to ingest the latest security patches from Wolfi.
--   **Static Analysis:** Every PR undergoes static analysis (SAST) to prevent insecure configuration drifts.
--   **Integrity Self-Tests:** The image will fail to start if the FIPS `module-mac` or `install-status` is compromised.
-
-## 06. Cryptographic Boundary Notice
-Any vulnerability reported that involves a "bypass" of the FIPS provider (e.g., successfully running MD5 when FIPS mode is active) is treated as a **Critical** severity (P1) and will trigger an immediate emergency release.
+## 05. Runtime Integrity & Enforcement
+*   **FIPS Self-Tests:** The module performs mandatory self-integrity checks (POST/KAT) on startup.
+*   **Tamper Resistance:** The engine detects unauthorized modifications to `fipsmodule.cnf` via MAC verification and will block all cryptographic services if tampering is detected.
 
 ---
+*Powered by Open Source | Secured by Automation | Verified by FIPS 140-3 Compliance Suite.*
