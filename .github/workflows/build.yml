@@ -131,6 +131,8 @@ jobs:
   readme:
     needs: [attest]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
       - name: Download all metadata artifacts
@@ -174,5 +176,18 @@ jobs:
         run: task docs:all-report-benchmark
       - name: Generate Docs
         run: task docs:generate_docs_tests
+      - name: Generate Benchmark Report
+        run: tree
       - name: Generate Readme
         run: task docs:generate_readme
+      - name: Commit generated docs
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add README.md docs/
+
+          # commit only if there are changes
+          git diff --staged --quiet || git commit -m "Auto-update README and docs"
+
+          git push
