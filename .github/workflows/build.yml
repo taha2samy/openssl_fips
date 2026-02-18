@@ -112,6 +112,7 @@ jobs:
             "provenance": {
               "id": "${{ steps.attest_provenance-image.outputs.attestation-id }}",
               "url": "${{ steps.attest_provenance-image.outputs.attestation-url }}"
+              "digest": "${{ steps.set_digest.outputs.digest }}"
             },
             "sbom": {
               "id": "${{ steps.attest_sbom.outputs.attestation-id }}",

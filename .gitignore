@@ -3,7 +3,8 @@ Comparison_Report.md
 allure-results/*
 allure-report/*
 __pycache__/
-
+all-metadata/distroless_attestation_details.json
+all-metadata/standard_attestation_details.json
 tests/.pytest_cache/
 reports/*
 extracted_metadata/*
