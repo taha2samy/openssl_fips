@@ -133,6 +133,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      packages: write
     steps:
       - uses: actions/checkout@v3
       - name: Download all metadata artifacts
@@ -154,10 +155,6 @@ jobs:
             echo -e "\n------------------------------------------"
           done
           
-          echo "Cleaning up files..."
-          rm -rf all-metadata
-          
-          echo "Done. No files re-uploaded."
       - name: install taskfile
         run: |
           sudo curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash
@@ -191,3 +188,22 @@ jobs:
           git diff --staged --quiet || git commit -m "Auto-update README and docs"
 
           git push
+      - name: Cleanup
+        if: always()
+        run: |
+          echo "Cleaning up files..."
+          rm -rf all-metadata
+
+      - name: Delete dangling GHCR images
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PACKAGE="wolfi-openssl-fips"
+
+          gh api /user/packages/container/$PACKAGE/versions \
+            --jq '.[] | select(.metadata.container.tags == null) | .id' |
+          while read version; do
+            echo "Deleting version $version"
+            gh api --method DELETE \
+              /user/packages/container/$PACKAGE/versions/$version
+          done
