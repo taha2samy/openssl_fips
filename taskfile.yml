@@ -55,15 +55,27 @@ tasks:
       - chmod +x scripts/wolfi-pkg-updater.py
       - python3 scripts/wolfi-pkg-updater.py
 
-  benchmark:
+  docs:benchmark:
     desc: Run performance benchmarks
     dir: benchmark
     cmds:
-      - chmod +x run_benchmarks.sh
-      - ./run_benchmarks.sh
+      - chmod +x ./run_benchmark.sh
+      - ./run_benchmark.sh
+  docs:parse-benchmark:
+    desc: Parse benchmark results
+    dir: benchmark
+    cmds:
+      - chmod +x ./parser.py
+      - ./parser.py
+  docs:report-benchmark:
+    desc: Generate performance report
+    cmds:
+      - task: docs:benchmark
+      - task: docs:parse-benchmark
+      - pipenv run python benchmark/generate_report.py
   docs:generate:
       desc: Parses test results and build configs to generate full documentation
       cmds:
-        - pipenv run python scripts/generate_docs_tests.py
-      deps:
         - task: audit:multi
+        - pipenv run python scripts/generate_docs_tests.py
+      
