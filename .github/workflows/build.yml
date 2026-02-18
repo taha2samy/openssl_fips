@@ -170,11 +170,11 @@ jobs:
           pip install pipenv
           pipenv install
       - name: Run Benchmark
-        run: sudo task docs:all-report-benchmark
+        run: task docs:all-report-benchmark
       - name: Generate Docs
-        run: task docs:generate_docs_tests
+        run: sudo task docs:generate_docs_tests
       - name: Generate Readme
-        run: sudo task docs:generate_readme
+        run: task docs:generate_readme
       - name: Commit generated docs
         run: |
           git config --global user.name "github-actions[bot]"
