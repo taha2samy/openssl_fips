@@ -90,14 +90,14 @@ We provide two specialized variants optimized for security and operational flexi
 | **Distroless** | `3.5.5-distroless` | Static | No shell/manager (Hardened) |
 
 ### Supply Chain Provenance (Latest Build)
-- **Image Digest (Distroless):** `sha256:4be452a203d0596814147b168afddce28c808406e75532b7257261e1d92b548a`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19228574)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19228594)
+- **Image Digest (Distroless):** `sha256:f640c1c442434abeb22f1330c9270337a7721f84e6fcc861c5fbe6b90c18956e`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19232748)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19232764)
 
 
-- **Image Digest (standard):** `sha256:5e47fb522b3090ee8f95ae7587e4d1f35cd507d1fd4cee84f4d065d45bf9c21b`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19228564)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19228582)
+- **Image Digest (standard):** `sha256:03c19d081e4db7bab10ba33a612acf9953836afd01b3bb8a40df58baf9f6ec81`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19232749)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19232770)
 
 ---
 
@@ -122,7 +122,7 @@ High-level results from our cryptographic benchmark, identifying the top-perform
 
 | Primitive | Top Performer | Advantage |
 | :--- | :---: | :---: |
-| `SHA256` | **UBUNTU** | `+0.9%` |
+| `SHA256` | **FIPS** | `+0.6%` |
 
 > **Key Insight:** The **Wolfi-FIPS** environment demonstrates negligible performance overhead, proving that modern compliance does not impose a significant 'security tax'.
 
