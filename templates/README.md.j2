@@ -1,20 +1,100 @@
+<div align="center">
 
-# Wolfi OpenSSL FIPS
-> **High-Assurance Cryptographic Foundation for Cloud-Native Workloads**
+# 🛡️ Wolfi OpenSSL FIPS
+**High-Assurance Cryptographic Foundation for Cloud-Native Workloads**
 
 ---
 
-### 🟢 Service Integrity Dashboard
-[![Passed](https://img.shields.io/badge/passed-{{ test_stats.passed }}-brightgreen)](docs/TEST_RESULTS.md)
-[![Failed](https://img.shields.io/badge/failed-{{ test_stats.failed }}-red)](docs/TEST_RESULTS.md)
-[![Broken](https://img.shields.io/badge/broken-{{ test_stats.broken }}-orange)](docs/TEST_RESULTS.md)
-[![Total](https://img.shields.io/badge/total-{{ test_stats.total }}-blue)](docs/TEST_RESULTS.md)
-[![Build Status](https://img.shields.io/badge/build-success-brightgreen.svg)]({{ repo_url }}/actions/actions/runs/{{ metadata_of_workflow.run_id }})
+### 📊 Service Integrity Dashboard
 
-[![Compliance: FIPS 140-3](https://img.shields.io/badge/Compliance-FIPS_140--3-brightgreen?style=flat-square)](https://csrc.nist.gov/)
-[![Audit Pass Rate](https://img.shields.io/badge/Audit-{{ pass_rate }}%25_Passed-{{ 'green' if pass_rate == 100 else 'orange' }}?style=flat-square)](docs/TEST_RESULTS.md)
-[![Security: Zero-CVE](https://img.shields.io/badge/Security-Zero_CVE-blue?style=flat-square)](https://github.com/wolfi-dev)
-[![Supply Chain: SLSA L3](https://img.shields.io/badge/SLSA-Level_3-blueviolet?style=flat-square)](https://slsa.dev/)
+<!-- Row 1: Real-time Test Metrics -->
+<p align="center">
+  <a href="docs/TEST_RESULTS.md">
+    <img src="https://img.shields.io/badge/passed-{{ test_stats.passed }}-brightgreen?style=for-the-badge&logo=checkmarx&logoColor=white" alt="Passed" />
+  </a>
+  <a href="docs/TEST_RESULTS.md">
+    <img src="https://img.shields.io/badge/failed-{{ test_stats.failed }}-red?style=for-the-badge&logo=githubactions&logoColor=white" alt="Failed" />
+  </a>
+  <a href="docs/TEST_RESULTS.md">
+    <img src="https://img.shields.io/badge/broken-{{ test_stats.broken }}-orange?style=for-the-badge" alt="Broken" />
+  </a>
+  <a href="docs/TEST_RESULTS.md">
+    <img src="https://img.shields.io/badge/total-{{ test_stats.total }}-blue?style=for-the-badge" alt="Total" />
+  </a>
+</p>
+
+<!-- Row 2: Build & Compliance -->
+<p align="center">
+  <a href="{{ repo_url }}/actions/runs/{{ metadata_of_workflow.run_id }}">
+    <img src="https://img.shields.io/badge/Build_Status-Success-brightgreen?style=flat-square&logo=github-actions" alt="Build Status" />
+  </a>
+  <a href="https://csrc.nist.gov/">
+    <img src="https://img.shields.io/badge/Compliance-FIPS_140--3-blue?style=flat-square&logo=keybase" alt="Compliance" />
+  </a>
+  <a href="docs/TEST_RESULTS.md">
+    <img src="https://img.shields.io/badge/Audit-{{ pass_rate }}%25_Passed-{{ 'green' if pass_rate == 100 else 'orange' }}?style=flat-square&logo=target" alt="Audit Rate" />
+  </a>
+</p>
+
+<!-- Row 3: Security & Supply Chain -->
+<p align="center">
+  <a href="https://github.com/wolfi-dev">
+    <img src="https://img.shields.io/badge/Security-Zero_CVE-blue?style=flat-square&logo=dependabot" alt="Zero CVE" />
+  </a>
+  <a href="https://slsa.dev/">
+    <img src="https://img.shields.io/badge/Supply_Chain-SLSA_L3-blueviolet?style=flat-square&logo=linuxfoundation" alt="SLSA Level 3" />
+  </a>
+  <img src="https://img.shields.io/badge/License-Apache--2.0-lightgrey?style=flat-square" alt="License" />
+</p>
+
+---
+</div>
+
+
+
+## 01. Specification Overview
+This repository maintains a production-hardened, **FIPS 140-3 compliant** OpenSSL `3.5.5` container image. Architected on **Wolfi OS**, it eliminates legacy overhead and ensures a minimal attack surface for enterprise environments.
+
+### Core Components
+| Component | Version | Specification |
+| :--- | :--- | :--- |
+| **OpenSSL Core** | `3.5.5` | Production-ready engine |
+| **FIPS Provider** | `3.0.8` | NIST Validated module |
+| **Base OS** | Wolfi | Zero-CVE baseline |
+| **Integrity** | SLSA L3 | Cryptographically attested build |
+
+---
+
+## 02. Architectural Integrity
+The build pipeline enforces a strict cryptographic boundary, ensuring that the FIPS module is correctly installed and attested.
+
+```mermaid
+graph TD
+    classDef trusted fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
+    classDef boundary fill:#fff3e0,stroke:#e65100,stroke-width:2px,stroke-dasharray: 5 5;
+
+    subgraph Pipeline ["01. Trusted Ingestion Layer"]
+        A[Wolfi Base Image]:::trusted
+        B[OpenSSL Source]:::trusted
+    end
+
+    subgraph FIPS_Boundary ["02. FIPS 140-3 Boundary"]
+        D[Compilation]
+        E[fipsinstall Protocol]
+        F{Self-Tests}
+        D --> E --> F
+    end
+
+    Pipeline --> FIPS_Boundary
+    F -- Passed --> G[Attested Artifacts]
+
+
+
+
+
+
+
+
 
 ---
 
