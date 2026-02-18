@@ -90,14 +90,14 @@ We provide two specialized variants optimized for security and operational flexi
 | **Distroless** | `3.5.5-distroless` | Static | No shell/manager (Hardened) |
 
 ### Supply Chain Provenance (Latest Build)
-- **Image Digest (Distroless):** `sha256:9e5eec112f9d26583ad140923896600cd1c1a215800181c18f001c23e480f596`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19242640)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19242659)
+- **Image Digest (Distroless):** `sha256:6d1703b4ab5eeaec79b6dc2582a7fd17bb46c74eecfb1512f626bb81d760fe36`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19245978)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19245986)
 
 
-- **Image Digest (standard):** `sha256:4a19f3f7c9bebf351d1f464ba8d1095b2231969d096de66f6c5e372b4bb80f42`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19242643)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19242661)
+- **Image Digest (standard):** `sha256:6b833d2f1d77e472ec384b2afdc9ca52b10006baddecd774255ef2929ca7c60e`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19245977)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19245987)
 
 ---
 
@@ -122,7 +122,7 @@ High-level results from our cryptographic benchmark, identifying the top-perform
 
 | Primitive | Top Performer | Advantage |
 | :--- | :---: | :---: |
-| `SHA256` | **FIPS** | `+1.0%` |
+| `SHA256` | **FIPS** | `+0.6%` |
 
 > **Key Insight:** The **Wolfi-FIPS** environment demonstrates negligible performance overhead, proving that modern compliance does not impose a significant 'security tax'.
 
@@ -151,6 +151,23 @@ cosign verify \
 - [**Supply Chain Verification Guide**](docs/04-supply-chain.md)
 - [**Performance Metrics**](docs/Comparison_Report.md)
 - [**Troubleshooting**](docs/08-troubleshooting.md)
+
+---
+
+> **Pipeline ID:** `$22158448098` | **Attempt:** `#$` | **Status:** `In-Progress`
+
+|             Category |     Runtime Property |                                             Contextual Value |
+| -------------------: | -------------------: | -----------------------------------------------------------: |
+|          **🏗️ Build** |    **Workflow File** |                                     `$` |
+|                      |           **Job ID** |                                          `$` |
+|         **🌿 Source** | **Ref (Branch/Tag)** |                                     `$` |
+|                      |       **Commit SHA** | [`$`](![img](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)taha2samy/openssl_fips/commit/$) |
+|       **👤 Identity** |            **Actor** |                                       `@$taha2samy` |
+|                      |       **Event Type** |                                   `$workflow_dispatch` |
+| **🖥️ Infrastructure** |        **Runner OS** |                                           `$Linux` |
+|                      |     **Architecture** |                                         `$` |
+
+
 
 ---
 **License:** Apache-2.0  

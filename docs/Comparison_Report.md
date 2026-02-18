@@ -1,6 +1,6 @@
 # Cryptographic Performance Infrastructure Audit
 
-> **Report Status:** `FINAL` | **Audit ID:** `20260218-2052`
+> **Report Status:** `FINAL` | **Audit ID:** `20260218-2137`
 
 ## 1. Executive Summary
 Automated performance telemetry analysis across **4** isolated operating environments. This audit evaluates throughput efficiency for **4** core cryptographic primitives under variable block size constraints.
@@ -12,36 +12,36 @@ Automated performance telemetry analysis across **4** isolated operating environ
 | **Evaluated Primitives** | 4 Algorithms |
 | **Block Size Dimensions** | 6 Data points per set |
 | **Hardware Architecture** | x86_64 |
-| **Audit Timestamp** | 2026-02-18 20:52:20 |
+| **Audit Timestamp** | 2026-02-18 21:37:09 |
 
 ## 2. Detailed Throughput Analysis Matrix
 Systematic breakdown of processing velocity (bytes/sec) relative to block-size allocation.
 
 | Environment | Primitive | 16B | 64B | 256B | 1024B | 8192B | 16384B |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **ALPINE** | `AES-256-GCM` | 127.83 MB/s | 468.77 MB/s | **1.56 GB/s** | **3.83 GB/s** | **6.99 GB/s** | **7.44 GB/s** |
-| **DEBIAN** | `AES-256-GCM` | 87.82 MB/s | 331.57 MB/s | **1.16 GB/s** | **3.11 GB/s** | **6.66 GB/s** | **7.22 GB/s** |
-| **FIPS** | `AES-256-GCM` | 179.91 MB/s | 634.28 MB/s | **1.98 GB/s** | **4.47 GB/s** | **7.06 GB/s** | **7.46 GB/s** |
-| **UBUNTU** | `AES-256-GCM` | **1.11 GB/s** | **2.63 GB/s** | **5.25 GB/s** | **6.82 GB/s** | **7.72 GB/s** | **7.79 GB/s** |
-| **ALPINE** | `sha256` | 118.56 MB/s | 443.05 MB/s | **1.47 GB/s** | **3.40 GB/s** | **5.54 GB/s** | **5.84 GB/s** |
-| **DEBIAN** | `sha256` | 239.04 MB/s | 844.37 MB/s | **2.39 GB/s** | **4.36 GB/s** | **5.74 GB/s** | **5.91 GB/s** |
-| **FIPS** | `sha256` | 278.93 MB/s | 948.79 MB/s | **2.58 GB/s** | **4.53 GB/s** | **5.80 GB/s** | **5.98 GB/s** |
-| **UBUNTU** | `sha256` | 226.59 MB/s | 806.84 MB/s | **2.33 GB/s** | **4.35 GB/s** | **5.78 GB/s** | **5.96 GB/s** |
-| **ALPINE** | `sha3-256` | 52.08 MB/s | 216.62 MB/s | 585.11 MB/s | 755.40 MB/s | 870.87 MB/s | 885.61 MB/s |
-| **DEBIAN** | `sha3-256` | 68.91 MB/s | 276.63 MB/s | 666.67 MB/s | 790.45 MB/s | 877.86 MB/s | 887.49 MB/s |
-| **FIPS** | `sha3-256` | 75.02 MB/s | 301.17 MB/s | 688.62 MB/s | 793.73 MB/s | 868.97 MB/s | 882.50 MB/s |
-| **UBUNTU** | `sha3-256` | 65.53 MB/s | 262.43 MB/s | 648.02 MB/s | 782.36 MB/s | 875.95 MB/s | 887.32 MB/s |
-| **ALPINE** | `sha512` | 72.13 MB/s | 298.93 MB/s | 680.06 MB/s | **1.24 GB/s** | **1.62 GB/s** | **1.66 GB/s** |
-| **DEBIAN** | `sha512` | 99.60 MB/s | 404.05 MB/s | 832.95 MB/s | **1.34 GB/s** | **1.64 GB/s** | **1.67 GB/s** |
-| **FIPS** | `sha512` | 108.52 MB/s | 435.11 MB/s | 843.44 MB/s | **1.36 GB/s** | **1.64 GB/s** | **1.67 GB/s** |
-| **UBUNTU** | `sha512` | 95.52 MB/s | 387.00 MB/s | 815.70 MB/s | **1.33 GB/s** | **1.64 GB/s** | **1.67 GB/s** |
+| **ALPINE** | `AES-256-GCM` | 127.68 MB/s | 467.80 MB/s | **1.57 GB/s** | **3.83 GB/s** | **6.92 GB/s** | **7.45 GB/s** |
+| **DEBIAN** | `AES-256-GCM` | 87.90 MB/s | 334.48 MB/s | **1.17 GB/s** | **3.17 GB/s** | **6.64 GB/s** | **7.21 GB/s** |
+| **FIPS** | `AES-256-GCM` | 177.80 MB/s | 627.34 MB/s | **1.98 GB/s** | **4.48 GB/s** | **7.12 GB/s** | **7.46 GB/s** |
+| **UBUNTU** | `AES-256-GCM` | **1.10 GB/s** | **2.64 GB/s** | **5.02 GB/s** | **6.88 GB/s** | **7.72 GB/s** | **7.79 GB/s** |
+| **ALPINE** | `sha256` | 117.89 MB/s | 444.23 MB/s | **1.47 GB/s** | **3.40 GB/s** | **5.54 GB/s** | **5.83 GB/s** |
+| **DEBIAN** | `sha256` | 239.28 MB/s | 841.90 MB/s | **2.40 GB/s** | **4.36 GB/s** | **5.71 GB/s** | **5.91 GB/s** |
+| **FIPS** | `sha256` | 271.37 MB/s | 939.26 MB/s | **2.55 GB/s** | **4.50 GB/s** | **5.77 GB/s** | **5.93 GB/s** |
+| **UBUNTU** | `sha256` | 226.93 MB/s | 805.28 MB/s | **2.33 GB/s** | **4.35 GB/s** | **5.78 GB/s** | **5.90 GB/s** |
+| **ALPINE** | `sha3-256` | 52.61 MB/s | 215.94 MB/s | 584.18 MB/s | 753.98 MB/s | 871.33 MB/s | 885.70 MB/s |
+| **DEBIAN** | `sha3-256` | 69.08 MB/s | 277.42 MB/s | 666.46 MB/s | 790.14 MB/s | 877.61 MB/s | 888.02 MB/s |
+| **FIPS** | `sha3-256` | 75.94 MB/s | 303.71 MB/s | 699.63 MB/s | 801.91 MB/s | 879.28 MB/s | 878.76 MB/s |
+| **UBUNTU** | `sha3-256` | 65.55 MB/s | 262.88 MB/s | 648.53 MB/s | 782.54 MB/s | 876.01 MB/s | 885.75 MB/s |
+| **ALPINE** | `sha512` | 72.12 MB/s | 299.20 MB/s | 680.25 MB/s | **1.23 GB/s** | **1.62 GB/s** | **1.66 GB/s** |
+| **DEBIAN** | `sha512` | 100.53 MB/s | 402.81 MB/s | 832.08 MB/s | **1.34 GB/s** | **1.64 GB/s** | **1.67 GB/s** |
+| **FIPS** | `sha512` | 108.64 MB/s | 436.11 MB/s | 844.61 MB/s | **1.36 GB/s** | **1.64 GB/s** | **1.67 GB/s** |
+| **UBUNTU** | `sha512` | 97.01 MB/s | 389.09 MB/s | 818.02 MB/s | **1.33 GB/s** | **1.64 GB/s** | **1.67 GB/s** |
 
 ### 2.1 Statistical Insights & Key Indicators
 | Indicator | Metric Value | Analysis |
 | :--- | :--- | :--- |
 | AES-256-GCM | 7.4% Delta | OS Optimization Impact: `STABLE` |
-| SHA256 | 2.4% Delta | OS Optimization Impact: `STABLE` |
-| SHA3-256 | 0.6% Delta | OS Optimization Impact: `STABLE` |
+| SHA256 | 1.6% Delta | OS Optimization Impact: `STABLE` |
+| SHA3-256 | 1.0% Delta | OS Optimization Impact: `STABLE` |
 | SHA512 | 0.7% Delta | OS Optimization Impact: `STABLE` |
 
 > **Performance Note:** Results highlighted in **Bold** represent Giga-scale throughput, typically indicating hardware-level acceleration (AES-NI/AVX).
@@ -57,8 +57,8 @@ The following charts analyze the processing ceiling for each cryptographic primi
 xychart-beta
     title "AES-256-GCM Peak Velocity (KB/s)"
     x-axis [DEBIAN, FIPS, ALPINE, UBUNTU]
-    y-axis "Throughput (KB/s)" 0 --> 9739304
-    bar [7217315.84, 7457103.87, 7443816.45, 7791443.97]
+    y-axis "Throughput (KB/s)" 0 --> 9738629
+    bar [7210967.04, 7463206.91, 7449034.75, 7790903.3]
 ```
 
 #### Primitive Capacity: `SHA256`
@@ -66,8 +66,8 @@ xychart-beta
 xychart-beta
     title "SHA256 Peak Velocity (KB/s)"
     x-axis [DEBIAN, FIPS, ALPINE, UBUNTU]
-    y-axis "Throughput (KB/s)" 0 --> 7478108
-    bar [5913600.0, 5982486.53, 5839921.15, 5961670.66]
+    y-axis "Throughput (KB/s)" 0 --> 7413094
+    bar [5914148.86, 5930475.52, 5834383.36, 5897322.5]
 ```
 
 #### Primitive Capacity: `SHA3-256`
@@ -75,8 +75,8 @@ xychart-beta
 xychart-beta
     title "SHA3-256 Peak Velocity (KB/s)"
     x-axis [DEBIAN, FIPS, ALPINE, UBUNTU]
-    y-axis "Throughput (KB/s)" 0 --> 1109360
-    bar [887488.51, 882499.58, 885612.54, 887324.67]
+    y-axis "Throughput (KB/s)" 0 --> 1110026
+    bar [888020.99, 878755.84, 885702.66, 885747.49]
 ```
 
 #### Primitive Capacity: `SHA512`
@@ -84,8 +84,8 @@ xychart-beta
 xychart-beta
     title "SHA512 Peak Velocity (KB/s)"
     x-axis [DEBIAN, FIPS, ALPINE, UBUNTU]
-    y-axis "Throughput (KB/s)" 0 --> 2085447
-    bar [1667170.3, 1668358.14, 1656930.3, 1665015.81]
+    y-axis "Throughput (KB/s)" 0 --> 2083532
+    bar [1666048.0, 1666826.24, 1655930.88, 1666670.59]
 ```
 
 ### 📈 Architectural Scaling & Buffer Efficiency
@@ -96,7 +96,7 @@ xychart-beta
     title "Buffer Efficiency Scaling"
     x-axis [16B, 64B, 256B, 1024B, 8192B, 16384B]
     y-axis "KB/s"
-    line [127832.9, 468768.0, 1563209.34, 3828550.66, 6989996.03, 7443816.45]
+    line [127679.28, 467798.56, 1573528.83, 3826544.64, 6920957.95, 7449034.75]
 ```
 #### Growth Vector: DEBIAN (AES-256-GCM)
 ```mermaid
@@ -104,7 +104,7 @@ xychart-beta
     title "Buffer Efficiency Scaling"
     x-axis [16B, 64B, 256B, 1024B, 8192B, 16384B]
     y-axis "KB/s"
-    line [87821.97, 331574.3, 1156435.2, 3109219.84, 6662397.95, 7217315.84]
+    line [87903.9, 334482.62, 1172751.36, 3166743.04, 6638538.75, 7210967.04]
 ```
 #### Growth Vector: FIPS (AES-256-GCM)
 ```mermaid
@@ -112,7 +112,7 @@ xychart-beta
     title "Buffer Efficiency Scaling"
     x-axis [16B, 64B, 256B, 1024B, 8192B, 16384B]
     y-axis "KB/s"
-    line [179906.46, 634277.79, 1981621.63, 4470268.42, 7055646.72, 7457103.87]
+    line [177801.69, 627336.82, 1978573.18, 4483319.3, 7118364.67, 7463206.91]
 ```
 #### Growth Vector: UBUNTU (AES-256-GCM)
 ```mermaid
@@ -120,7 +120,7 @@ xychart-beta
     title "Buffer Efficiency Scaling"
     x-axis [16B, 64B, 256B, 1024B, 8192B, 16384B]
     y-axis "KB/s"
-    line [1110837.89, 2634584.06, 5248132.74, 6816367.62, 7722467.33, 7791443.97]
+    line [1096901.38, 2635203.71, 5015989.89, 6877597.18, 7719440.38, 7790903.3]
 ```
 
 > **Visual Diagnostics:** Linear growth indicates healthy instruction pipelining. Flat curves suggest I/O saturation or context-switching overhead.
@@ -152,10 +152,10 @@ Comparative analysis identifying the top-performing environment per primitive an
 
 | Primitive | Performance Leader | Advantage (%) | Baseline Average |
 | :--- | :--- | :--- | :--- |
-| AES-256-GCM | 🏆 **UBUNTU** | `+4.2%` | 7,477,420.03 KB/s |
-| SHA256 | 🏆 **FIPS** | `+1.0%` | 5,924,419.58 KB/s |
-| SHA3-256 | 🏆 **DEBIAN** | `+0.2%` | 885,731.32 KB/s |
-| SHA512 | 🏆 **FIPS** | `+0.2%` | 1,664,368.64 KB/s |
+| AES-256-GCM | 🏆 **UBUNTU** | `+4.2%` | 7,478,528.00 KB/s |
+| SHA256 | 🏆 **FIPS** | `+0.6%` | 5,894,082.56 KB/s |
+| SHA3-256 | 🏆 **DEBIAN** | `+0.4%` | 884,556.74 KB/s |
+| SHA512 | 🏆 **FIPS** | `+0.2%` | 1,663,868.93 KB/s |
 
 ### 5.1 Optimization Recommendations
 - **Primary Recommendation:** For high-throughput cryptographic workloads, the **FIPS** stack demonstrates the most efficient instruction-to-cycle ratio.
@@ -166,10 +166,10 @@ A normalized scoring system (0-100) representing the aggregate cryptographic hea
 
 | Environment | Efficiency Score | Architectural Grade | Key Strength |
 | :--- | :---: | :---: | :--- |
-| **UBUNTU** | `99.9/100` | **A+** | High-Concurrency Bulk Processing |
-| **FIPS** | `98.8/100` | **A+** | High-Concurrency Bulk Processing |
-| **ALPINE** | `98.1/100` | **A+** | High-Concurrency Bulk Processing |
-| **DEBIAN** | `97.9/100` | **A+** | High-Concurrency Bulk Processing |
+| **UBUNTU** | `99.8/100` | **A+** | High-Concurrency Bulk Processing |
+| **FIPS** | `98.7/100` | **A+** | High-Concurrency Bulk Processing |
+| **ALPINE** | `98.3/100` | **A+** | High-Concurrency Bulk Processing |
+| **DEBIAN** | `98.1/100` | **A+** | High-Concurrency Bulk Processing |
 
 ### 6.1 Deployment Decision Matrix
 | Use Case | Recommended OS | Rationale |
@@ -184,7 +184,7 @@ xychart-beta
     title "Overall Cryptographic Efficiency Index"
     x-axis [UBUNTU, FIPS, ALPINE, DEBIAN]
     y-axis "Score (0-100)" 0 --> 100
-    bar [99.9, 98.8, 98.1, 97.9]
+    bar [99.8, 98.7, 98.3, 98.1]
 ```
 
 ---
