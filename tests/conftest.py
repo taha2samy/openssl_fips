@@ -35,7 +35,7 @@ def run_docker():
             else:
                 container_cmd.append(arg)
                 i += 1
-        cmd = ["docker", "run", "--user", "root", "--rm"] + docker_options + [image] + container_cmd
+        cmd = ["sudo","docker", "run", "--user", "0", "--rm"] + docker_options + [image] + container_cmd
         
         logger.info(f"Executing: {' '.join(cmd)}")
         
