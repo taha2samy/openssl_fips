@@ -20,7 +20,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/taha2samy/openssl_fips/actions/runs/22161606562">
+  <a href="https://github.com/taha2samy/openssl_fips/actions/runs/22161867461">
     <img src="https://img.shields.io/badge/Build_Status-Success-brightgreen?style=flat-square&logo=github-actions" alt="Build Status" />
   </a>
   <a href="https://csrc.nist.gov/">
@@ -166,14 +166,14 @@ We provide two specialized variants optimized for security and operational flexi
 | **Distroless** | `3.5.5-distroless` | Static | No shell/manager (Hardened) |
 
 ### Supply Chain Provenance (Latest Build)
-- **Image Digest (Distroless):** `sha256:526bd30bc13cd294e8ee6f47558e44f278baa5371b6be16537c69b1f83743abd`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19254111)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19254127)
+- **Image Digest (Distroless):** `sha256:338c7b5932804b351142488f1011395828fc43f53f949a96f56d048c28c6c54c`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19254644)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19254651)
 
 
-- **Image Digest (standard):** `sha256:365c2cbc38a93df196e7a2e342ef5855c7d802bba8b1b2ec335a031b92259814`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19254124)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19254145)
+- **Image Digest (standard):** `sha256:d9ad006ac207e70ea075cbdbdef3fd26bffb0534cce0a3938de7aeec1b938012`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19254646)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19254656)
 
 ---
 
@@ -184,11 +184,11 @@ To ensure complete reproducibility and supply chain traceability (SLSA L3), stri
 | :--- | :--- | :--- |
 | **🔐 Source Identity** | `Repository` | `taha2samy/openssl_fips` |
 | | `Ref / Branch` | `feat/readme` |
-| | `Commit SHA` | `ac025bb71bb35b67f3c8730b18b1974d923d3073` |
+| | `Commit SHA` | `3bb6968d159579bd830281b461a6d726681781aa` |
 | | `Trigger Actor` | `taha2samy` |
 | **⚙️ Execution Context** | `Workflow` | `Build` |
-| | `Run ID` | [`22161606562`](https://github.com/taha2samy/openssl_fips/actions/runs/22161606562) |
-| | `Run Number` | `#187` |
+| | `Run ID` | [`22161867461`](https://github.com/taha2samy/openssl_fips/actions/runs/22161867461) |
+| | `Run Number` | `#188` |
 | | `Event Type` | `workflow_dispatch` |
 | **🖥️ Build Environment** | `Runner OS` | `Linux` |
 | | `CI Managed` | `true` |
@@ -219,7 +219,7 @@ High-level results from our cryptographic benchmark, identifying the top-perform
 
 | Primitive | Top Performer | Advantage |
 | :--- | :---: | :---: |
-| `SHA256` | **UBUNTU** | `+0.9%` |
+| `SHA256` | **UBUNTU** | `+1.4%` |
 
 > **Key Insight:** The **Wolfi-FIPS** environment demonstrates negligible performance overhead, proving that modern compliance does not impose a significant 'security tax'.
 
