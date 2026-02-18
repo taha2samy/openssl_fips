@@ -172,7 +172,7 @@ jobs:
       - name: Run Benchmark
         run: task docs:all-report-benchmark
       - name: Generate Docs
-        run: sudo task docs:generate_docs_tests
+        run: task docs:generate_docs_tests
       - name: Generate Readme
         run: task docs:generate_readme
       - name: Commit generated docs
