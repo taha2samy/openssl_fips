@@ -111,7 +111,7 @@ jobs:
             "target": "${{ matrix.target_name }}",
             "provenance": {
               "id": "${{ steps.attest_provenance-image.outputs.attestation-id }}",
-              "url": "${{ steps.attest_provenance-image.outputs.attestation-url }}"
+              "url": "${{ steps.attest_provenance-image.outputs.attestation-url }}",
               "digest": "${{ steps.set_digest.outputs.digest }}"
             },
             "sbom": {

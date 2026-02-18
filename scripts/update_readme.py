@@ -5,6 +5,12 @@ import hcl2
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
 
+with open("all-metadata/distroless_attestation_details.json", "r") as f:
+    distroless_outputs = json.load(f)
+
+with open("all-metadata/standard_attestation_details.json", "r") as f:
+    standard_outputs = json.load(f)
+
 def env(name: str, default: str | None = None) -> str:
     value = os.getenv(name, default)
     if value is None:
@@ -85,6 +91,12 @@ def main():
         "static_image": static_image,
         "packages": packages,
         "test_stats": test_stats,
+        "distroless_url": distroless_outputs["provenance"]["url"],
+        "standard_url": standard_outputs["provenance"]["url"],
+        "distroless_digest": distroless_outputs["provenance"]["digest"],
+        "standard_digest": standard_outputs["provenance"]["digest"],
+        "distroless_sbom_url": distroless_outputs["sbom"]["url"],
+        "standard_sbom_url": standard_outputs["sbom"]["url"],
         
         "generation_date": env("GENERATION_DATE", datetime.utcnow().strftime("%Y-%m-%d")),
         "build_date": env("BUILD_DATE", datetime.utcnow().strftime("%Y%m%d")),
