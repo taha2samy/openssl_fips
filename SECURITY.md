@@ -28,7 +28,4 @@ Given the automated and transparent nature of this project, we are most interest
 
 Please report any findings privately via [GitHub Security Advisories](https://github.com/taha2samy/openssl_fips/security/advisories/new).
 
----
-*Secured by Hermetic Automation. Verified by SLSA L3 Provenance.*
 
----
