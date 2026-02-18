@@ -1,7 +1,7 @@
 # 🛡️ FIPS Compliance Audit Report
 
-> **Generated on:** 2026-02-18 19:33:17 UTC  
-> **Status:** ![Status](https://img.shields.io/badge/tests-passed%200-brightgreen)
+> **Generated on:** 2026-02-18 19:45:27 UTC  
+> **Status:** ![Status](https://img.shields.io/badge/tests-failed%208-red)
 
 
 ## 📋 Table of Contents
@@ -15,9 +15,9 @@
 
 | Metric | Count | Status |
 | :--- | :---: | :--- |
-| **Total Tests** | `0` | 🔍 Scoped |
-| **Passed** | `0` | ✅ Passing |
-| **Failed** | `0` | ❌ Critical |
+| **Total Tests** | `92` | 🔍 Scoped |
+| **Passed** | `84` | ✅ Passing |
+| **Failed** | `8` | ❌ Critical |
 | **Broken** | `0` | ⚠️ Error |
 
 
@@ -66,6 +66,712 @@ The following key packages were pinned during the build process:
 
 
 
+
+### 📁 tests.test_01_core_policy.TestCorePolicyAndIntegrity#test_default_provider_isolation
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify Default Provider Blocking (Isolation Check)**<br><sub>tests.test_01_core_policy.TestCorePolicyAndIntegrity#test_default_provider_isolation</sub> | `224ms` |
+| ✅ | **Verify Default Provider Blocking (Isolation Check)**<br><sub>tests.test_01_core_policy.TestCorePolicyAndIntegrity#test_default_provider_isolation</sub> | `231ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_01_core_policy.TestCorePolicyAndIntegrity#test_fips_config_file_indicators
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify FIPS Config File Indicators (fipsmodule.cnf)**<br><sub>tests.test_01_core_policy.TestCorePolicyAndIntegrity#test_fips_config_file_indicators</sub> | `2193ms` |
+| ✅ | **Verify FIPS Config File Indicators (fipsmodule.cnf)**<br><sub>tests.test_01_core_policy.TestCorePolicyAndIntegrity#test_fips_config_file_indicators</sub> | `1462ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_01_core_policy.TestCorePolicyAndIntegrity#test_mandatory_fips_property
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify Mandatory FIPS Property Enforcement**<br><sub>tests.test_01_core_policy.TestCorePolicyAndIntegrity#test_mandatory_fips_property</sub> | `227ms` |
+| ✅ | **Verify Mandatory FIPS Property Enforcement**<br><sub>tests.test_01_core_policy.TestCorePolicyAndIntegrity#test_mandatory_fips_property</sub> | `215ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_01_core_policy.TestCorePolicyAndIntegrity#test_operational_state_stability
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify FIPS Module Operational State Persistence**<br><sub>tests.test_01_core_policy.TestCorePolicyAndIntegrity#test_operational_state_stability</sub> | `220ms` |
+| ✅ | **Verify FIPS Module Operational State Persistence**<br><sub>tests.test_01_core_policy.TestCorePolicyAndIntegrity#test_operational_state_stability</sub> | `228ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_01_core_policy.TestCorePolicyAndIntegrity#test_provider_version_metadata
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify FIPS Module Version & Metadata**<br><sub>tests.test_01_core_policy.TestCorePolicyAndIntegrity#test_provider_version_metadata</sub> | `227ms` |
+| ✅ | **Verify FIPS Module Version & Metadata**<br><sub>tests.test_01_core_policy.TestCorePolicyAndIntegrity#test_provider_version_metadata</sub> | `227ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_02_hashing_and_digests.TestMessageDigests#test_md5_execution_rejection
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify MD5 Algorithm Rejection**<br><sub>tests.test_02_hashing_and_digests.TestMessageDigests#test_md5_execution_rejection</sub> | `230ms` |
+| ✅ | **Verify MD5 Algorithm Rejection**<br><sub>tests.test_02_hashing_and_digests.TestMessageDigests#test_md5_execution_rejection</sub> | `223ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_02_hashing_and_digests.TestMessageDigests#test_sha256_availability
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify SHA-256 Algorithm Availability**<br><sub>tests.test_02_hashing_and_digests.TestMessageDigests#test_sha256_availability</sub> | `224ms` |
+| ✅ | **Verify SHA-256 Algorithm Availability**<br><sub>tests.test_02_hashing_and_digests.TestMessageDigests#test_sha256_availability</sub> | `230ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_02_hashing_and_digests.TestMessageDigests#test_sha3_availability
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify SHA-3 Algorithm Availability**<br><sub>tests.test_02_hashing_and_digests.TestMessageDigests#test_sha3_availability</sub> | `230ms` |
+| ✅ | **Verify SHA-3 Algorithm Availability**<br><sub>tests.test_02_hashing_and_digests.TestMessageDigests#test_sha3_availability</sub> | `221ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_02_hashing_and_digests.TestMessageDigests#test_shake_xof_functionality
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify SHAKE XOF Functionality**<br><sub>tests.test_02_hashing_and_digests.TestMessageDigests#test_shake_xof_functionality</sub> | `227ms` |
+| ✅ | **Verify SHAKE XOF Functionality**<br><sub>tests.test_02_hashing_and_digests.TestMessageDigests#test_shake_xof_functionality</sub> | `221ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_03_symmetric_ciphers.TestAESEncryption#test_aes_cbc_known_answer
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify AES-CBC Functional Integrity (KAT)**<br><sub>tests.test_03_symmetric_ciphers.TestAESEncryption#test_aes_cbc_known_answer</sub> | `460ms` |
+| ✅ | **Verify AES-CBC Functional Integrity (KAT)**<br><sub>tests.test_03_symmetric_ciphers.TestAESEncryption#test_aes_cbc_known_answer</sub> | `452ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_03_symmetric_ciphers.TestAESEncryption#test_aes_gcm_tag_length
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify AES-GCM Tag Length Restrictions**<br><sub>tests.test_03_symmetric_ciphers.TestAESEncryption#test_aes_gcm_tag_length</sub> | `228ms` |
+| ✅ | **Verify AES-GCM Tag Length Restrictions**<br><sub>tests.test_03_symmetric_ciphers.TestAESEncryption#test_aes_gcm_tag_length</sub> | `221ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_03_symmetric_ciphers.TestAESEncryption#test_aes_key_unwrapping_allowed
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify AES Key Unwrapping (AES-WRAP) Availability**<br><sub>tests.test_03_symmetric_ciphers.TestAESEncryption#test_aes_key_unwrapping_allowed</sub> | `226ms` |
+| ✅ | **Verify AES Key Unwrapping (AES-WRAP) Availability**<br><sub>tests.test_03_symmetric_ciphers.TestAESEncryption#test_aes_key_unwrapping_allowed</sub> | `213ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_03_symmetric_ciphers.TestAESEncryption#test_aes_xts_duplicate_key_rejection
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify AES-XTS Rejection of Duplicate Keys**<br><sub>tests.test_03_symmetric_ciphers.TestAESEncryption#test_aes_xts_duplicate_key_rejection</sub> | `223ms` |
+| ✅ | **Verify AES-XTS Rejection of Duplicate Keys**<br><sub>tests.test_03_symmetric_ciphers.TestAESEncryption#test_aes_xts_duplicate_key_rejection</sub> | `228ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_03_symmetric_ciphers.TestAESEncryption#test_fips_cipher_list_integrity
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify FIPS-Approved Cipher Algorithms**<br><sub>tests.test_03_symmetric_ciphers.TestAESEncryption#test_fips_cipher_list_integrity</sub> | `227ms` |
+| ✅ | **Verify FIPS-Approved Cipher Algorithms**<br><sub>tests.test_03_symmetric_ciphers.TestAESEncryption#test_fips_cipher_list_integrity</sub> | `225ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_03_symmetric_ciphers.TestLegacyCipherPolicies#test_3des_encryption_rejection
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify 3DES Encryption Rejection**<br><sub>tests.test_03_symmetric_ciphers.TestLegacyCipherPolicies#test_3des_encryption_rejection</sub> | `218ms` |
+| ✅ | **Verify 3DES Encryption Rejection**<br><sub>tests.test_03_symmetric_ciphers.TestLegacyCipherPolicies#test_3des_encryption_rejection</sub> | `215ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_03_symmetric_ciphers.TestLegacyCipherPolicies#test_des_algorithm_absence
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify Absolute Absence of Single DES**<br><sub>tests.test_03_symmetric_ciphers.TestLegacyCipherPolicies#test_des_algorithm_absence</sub> | `229ms` |
+| ✅ | **Verify Absolute Absence of Single DES**<br><sub>tests.test_03_symmetric_ciphers.TestLegacyCipherPolicies#test_des_algorithm_absence</sub> | `222ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_04_mac_integrity.TestHMACBoundaries#test_hmac_112bit_security_boundary
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ❌ | **Verify Precise 112-bit Security Boundary**<br><sub>tests.test_04_mac_integrity.TestHMACBoundaries#test_hmac_112bit_security_boundary</sub> | `223ms` |
+| ❌ | **Verify Precise 112-bit Security Boundary**<br><sub>tests.test_04_mac_integrity.TestHMACBoundaries#test_hmac_112bit_security_boundary</sub> | `228ms` |
+
+
+
+#### 🔻 Failure Analysis for tests.test_04_mac_integrity.TestHMACBoundaries#test_hmac_112bit_security_boundary
+
+
+**🔴 Verify Precise 112-bit Security Boundary**
+>   
+        Validates the exact transition point for HMAC security strength.  
+        Ensures that 104-bit keys are rejected and 112-bit keys are accepted   
+        under strict FIPS property queries.  
+    
+
+**Trace:**
+```text
+tests/tests/test_04_mac_integrity.py:60: in test_hmac_112bit_security_boundary
+    assert result_104.returncode != 0, "Compliance Failure: System accepted 104-bit key under FIPS query."
+E   AssertionError: Compliance Failure: System accepted 104-bit key under FIPS query.
+E   assert 0 != 0
+E    +  where 0 = CleanResult(returncode=0, stdout='AF310B4D5EAE49576A38C421DC3B8483E810491E0988BE623AA25C1CE7A91631\n', stderr='').returncode
+```
+---
+
+**🔴 Verify Precise 112-bit Security Boundary**
+>   
+        Validates the exact transition point for HMAC security strength.  
+        Ensures that 104-bit keys are rejected and 112-bit keys are accepted   
+        under strict FIPS property queries.  
+    
+
+**Trace:**
+```text
+tests/tests/test_04_mac_integrity.py:60: in test_hmac_112bit_security_boundary
+    assert result_104.returncode != 0, "Compliance Failure: System accepted 104-bit key under FIPS query."
+E   AssertionError: Compliance Failure: System accepted 104-bit key under FIPS query.
+E   assert 0 != 0
+E    +  where 0 = CleanResult(returncode=0, stdout='AF310B4D5EAE49576A38C421DC3B8483E810491E0988BE623AA25C1CE7A91631\n', stderr='').returncode
+```
+---
+
+
+
+<br>
+
+### 📁 tests.test_04_mac_integrity.TestHMACBoundaries#test_hmac_sha2_key_length_exhaustive
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ❌ | **Verify Rejection of Weak Keys across SHA-2 Family**<br><sub>tests.test_04_mac_integrity.TestHMACBoundaries#test_hmac_sha2_key_length_exhaustive</sub> | `885ms` |
+| ❌ | **Verify Rejection of Weak Keys across SHA-2 Family**<br><sub>tests.test_04_mac_integrity.TestHMACBoundaries#test_hmac_sha2_key_length_exhaustive</sub> | `905ms` |
+
+
+
+#### 🔻 Failure Analysis for tests.test_04_mac_integrity.TestHMACBoundaries#test_hmac_sha2_key_length_exhaustive
+
+
+**🔴 Verify Rejection of Weak Keys across SHA-2 Family**
+>   
+        Performs an exhaustive sweep across the SHA-2 digest family.  
+        Forces the use of the FIPS provider via property query.  
+        Validates that a sub-standard 8-bit key is rejected to meet FIPS 140-3 standards.  
+    
+
+**Trace:**
+```text
+tests/tests/test_04_mac_integrity.py:39: in test_hmac_sha2_key_length_exhaustive
+    assert not failed_variants, f"Compliance Failure: FIPS provider allowed weak 8-bit key for: {failed_variants}"
+E   AssertionError: Compliance Failure: FIPS provider allowed weak 8-bit key for: ['SHA224', 'SHA256', 'SHA384', 'SHA512']
+E   assert not ['SHA224', 'SHA256', 'SHA384', 'SHA512']
+```
+---
+
+**🔴 Verify Rejection of Weak Keys across SHA-2 Family**
+>   
+        Performs an exhaustive sweep across the SHA-2 digest family.  
+        Forces the use of the FIPS provider via property query.  
+        Validates that a sub-standard 8-bit key is rejected to meet FIPS 140-3 standards.  
+    
+
+**Trace:**
+```text
+tests/tests/test_04_mac_integrity.py:39: in test_hmac_sha2_key_length_exhaustive
+    assert not failed_variants, f"Compliance Failure: FIPS provider allowed weak 8-bit key for: {failed_variants}"
+E   AssertionError: Compliance Failure: FIPS provider allowed weak 8-bit key for: ['SHA224', 'SHA256', 'SHA384', 'SHA512']
+E   assert not ['SHA224', 'SHA256', 'SHA384', 'SHA512']
+```
+---
+
+
+
+<br>
+
+### 📁 tests.test_04_mac_integrity.TestModernMACs#test_cmac_aes_key_policy
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify CMAC-AES Key Strength Enforcement**<br><sub>tests.test_04_mac_integrity.TestModernMACs#test_cmac_aes_key_policy</sub> | `214ms` |
+| ✅ | **Verify CMAC-AES Key Strength Enforcement**<br><sub>tests.test_04_mac_integrity.TestModernMACs#test_cmac_aes_key_policy</sub> | `218ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_04_mac_integrity.TestModernMACs#test_kmac_sha3_strength
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify KMAC-SHA3 Security Strength**<br><sub>tests.test_04_mac_integrity.TestModernMACs#test_kmac_sha3_strength</sub> | `225ms` |
+| ✅ | **Verify KMAC-SHA3 Security Strength**<br><sub>tests.test_04_mac_integrity.TestModernMACs#test_kmac_sha3_strength</sub> | `219ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_04_mac_integrity.TestModernMACs#test_sp800_108_counter_kdf
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify SP 800-108 Counter Mode KDF Integrity**<br><sub>tests.test_04_mac_integrity.TestModernMACs#test_sp800_108_counter_kdf</sub> | `450ms` |
+| ✅ | **Verify SP 800-108 Counter Mode KDF Integrity**<br><sub>tests.test_04_mac_integrity.TestModernMACs#test_sp800_108_counter_kdf</sub> | `451ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_04_mac_integrity.TestModernMACs#test_sp800_108_feedback_kdf
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify SP 800-108 Feedback Mode KDF Integrity**<br><sub>tests.test_04_mac_integrity.TestModernMACs#test_sp800_108_feedback_kdf</sub> | `223ms` |
+| ✅ | **Verify SP 800-108 Feedback Mode KDF Integrity**<br><sub>tests.test_04_mac_integrity.TestModernMACs#test_sp800_108_feedback_kdf</sub> | `227ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_05_asymmetric_and_pqc.TestECCAndSignatures#test_ecdh_key_derivation_raw
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ❌ | **Verify ECDH Raw Key Derivation (NIST P-384)**<br><sub>tests.test_05_asymmetric_and_pqc.TestECCAndSignatures#test_ecdh_key_derivation_raw</sub> | `667ms` |
+| ❌ | **Verify ECDH Raw Key Derivation (NIST P-384)**<br><sub>tests.test_05_asymmetric_and_pqc.TestECCAndSignatures#test_ecdh_key_derivation_raw</sub> | `681ms` |
+
+
+
+#### 🔻 Failure Analysis for tests.test_05_asymmetric_and_pqc.TestECCAndSignatures#test_ecdh_key_derivation_raw
+
+
+**🔴 Verify ECDH Raw Key Derivation (NIST P-384)**
+>   
+        Validates the Elliptic Curve Diffie-Hellman (ECDH) key agreement protocol.  
+        The test performs a full key exchange simulation:  
+        1. Generates two independent EC keys (Alice and Bob) using the P-384 curve.  
+        2. Extracts the public peer key.  
+        3. Derives a shared secret (Z-value) using Alice's private key and Bob's public key.  
+        Ensures the derivation is performed exclusively within the FIPS cryptographic boundary.  
+    
+
+**Trace:**
+```text
+tests/tests/test_05_asymmetric_and_pqc.py:344: in test_ecdh_key_derivation_raw
+    assert res_pub.returncode == 0, f"Public key extraction failed: {res_pub.stderr}"
+E   AssertionError: Public key extraction failed: Could not open file or uri for loading private key of key from /mnt/ecdh/bob_priv.pem: Permission denied
+E     
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['docker', 'run', '--rm', '-v', '/home/runner/work/openssl_fips/openssl_fips/tmp4_6l3pzo:/mnt/ecdh', 'ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless', 'pkey', '-in', '/mnt/ecdh/bob_priv.pem', '-pubout', '-out', '/mnt/ecdh/bob_pub.pem'], returncode=1, stdout='', stderr='Could not open file or uri for loading private key of key from /mnt/ecdh/bob_priv.pem: Permission denied\n').returncode
+```
+---
+
+**🔴 Verify ECDH Raw Key Derivation (NIST P-384)**
+>   
+        Validates the Elliptic Curve Diffie-Hellman (ECDH) key agreement protocol.  
+        The test performs a full key exchange simulation:  
+        1. Generates two independent EC keys (Alice and Bob) using the P-384 curve.  
+        2. Extracts the public peer key.  
+        3. Derives a shared secret (Z-value) using Alice's private key and Bob's public key.  
+        Ensures the derivation is performed exclusively within the FIPS cryptographic boundary.  
+    
+
+**Trace:**
+```text
+tests/tests/test_05_asymmetric_and_pqc.py:344: in test_ecdh_key_derivation_raw
+    assert res_pub.returncode == 0, f"Public key extraction failed: {res_pub.stderr}"
+E   AssertionError: Public key extraction failed: Could not open file or uri for loading private key of key from /mnt/ecdh/bob_priv.pem: Permission denied
+E     
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['docker', 'run', '--rm', '-v', '/home/runner/work/openssl_fips/openssl_fips/tmpspzo9c6x:/mnt/ecdh', 'ghcr.io/taha2samy/wolfi-openssl-fips:latest', 'pkey', '-in', '/mnt/ecdh/bob_priv.pem', '-pubout', '-out', '/mnt/ecdh/bob_pub.pem'], returncode=1, stdout='', stderr='Could not open file or uri for loading private key of key from /mnt/ecdh/bob_priv.pem: Permission denied\n').returncode
+```
+---
+
+
+
+<br>
+
+### 📁 tests.test_05_asymmetric_and_pqc.TestECCAndSignatures#test_ecdsa_p384_signing_flow
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify ECDSA P-384 Functional Integrity**<br><sub>tests.test_05_asymmetric_and_pqc.TestECCAndSignatures#test_ecdsa_p384_signing_flow</sub> | `468ms` |
+| ✅ | **Verify ECDSA P-384 Functional Integrity**<br><sub>tests.test_05_asymmetric_and_pqc.TestECCAndSignatures#test_ecdsa_p384_signing_flow</sub> | `458ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_05_asymmetric_and_pqc.TestECCAndSignatures#test_md5_signature_verification_rejection
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify Rejection of MD5 for Digital Signatures**<br><sub>tests.test_05_asymmetric_and_pqc.TestECCAndSignatures#test_md5_signature_verification_rejection</sub> | `211ms` |
+| ✅ | **Verify Rejection of MD5 for Digital Signatures**<br><sub>tests.test_05_asymmetric_and_pqc.TestECCAndSignatures#test_md5_signature_verification_rejection</sub> | `231ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_05_asymmetric_and_pqc.TestECCAndSignatures#test_strict_block_legacy_curves_and_algos
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ❌ | **Verify Rejection of Non-Approved Curves (Ed25519/X25519/Ed448)**<br><sub>tests.test_05_asymmetric_and_pqc.TestECCAndSignatures#test_strict_block_legacy_curves_and_algos</sub> | `1114ms` |
+| ❌ | **Verify Rejection of Non-Approved Curves (Ed25519/X25519/Ed448)**<br><sub>tests.test_05_asymmetric_and_pqc.TestECCAndSignatures#test_strict_block_legacy_curves_and_algos</sub> | `1124ms` |
+
+
+
+#### 🔻 Failure Analysis for tests.test_05_asymmetric_and_pqc.TestECCAndSignatures#test_strict_block_legacy_curves_and_algos
+
+
+**🔴 Verify Rejection of Non-Approved Curves (Ed25519/X25519/Ed448)**
+>   
+        Validates the isolation of non-approved asymmetric algorithms.  
+        Includes a detailed debug phase to list all algorithms claiming FIPS compliance.  
+    
+
+**Trace:**
+```text
+tests/tests/test_05_asymmetric_and_pqc.py:227: in test_strict_block_legacy_curves_and_algos
+    assert not failed_blocks, \
+E   AssertionError: Security Policy Violation: The following algorithms were PERMITTED in FIPS mode: ['X25519']. Check Debug Logs.
+E   assert not ['X25519']
+```
+---
+
+**🔴 Verify Rejection of Non-Approved Curves (Ed25519/X25519/Ed448)**
+>   
+        Validates the isolation of non-approved asymmetric algorithms.  
+        Includes a detailed debug phase to list all algorithms claiming FIPS compliance.  
+    
+
+**Trace:**
+```text
+tests/tests/test_05_asymmetric_and_pqc.py:227: in test_strict_block_legacy_curves_and_algos
+    assert not failed_blocks, \
+E   AssertionError: Security Policy Violation: The following algorithms were PERMITTED in FIPS mode: ['X25519']. Check Debug Logs.
+E   assert not ['X25519']
+```
+---
+
+
+
+<br>
+
+### 📁 tests.test_05_asymmetric_and_pqc.TestPostQuantumIsolation#test_ml_kem_isolation_in_fips
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify Isolation of ML-KEM (Kyber) from FIPS Boundary**<br><sub>tests.test_05_asymmetric_and_pqc.TestPostQuantumIsolation#test_ml_kem_isolation_in_fips</sub> | `220ms` |
+| ✅ | **Verify Isolation of ML-KEM (Kyber) from FIPS Boundary**<br><sub>tests.test_05_asymmetric_and_pqc.TestPostQuantumIsolation#test_ml_kem_isolation_in_fips</sub> | `227ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_05_asymmetric_and_pqc.TestRSAOperations#test_rsa_keygen_2048_compliance
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify RSA 2048-bit Compliance**<br><sub>tests.test_05_asymmetric_and_pqc.TestRSAOperations#test_rsa_keygen_2048_compliance</sub> | `336ms` |
+| ✅ | **Verify RSA 2048-bit Compliance**<br><sub>tests.test_05_asymmetric_and_pqc.TestRSAOperations#test_rsa_keygen_2048_compliance</sub> | `261ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_05_asymmetric_and_pqc.TestRSAOperations#test_rsa_keygen_weak_rejection
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify Rejection of Weak RSA 1024-bit Keys**<br><sub>tests.test_05_asymmetric_and_pqc.TestRSAOperations#test_rsa_keygen_weak_rejection</sub> | `221ms` |
+| ✅ | **Verify Rejection of Weak RSA 1024-bit Keys**<br><sub>tests.test_05_asymmetric_and_pqc.TestRSAOperations#test_rsa_keygen_weak_rejection</sub> | `219ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_05_asymmetric_and_pqc.TestRSAOperations#test_rsa_large_modulus_support
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify Support for Large RSA Modulus (4096-bit)**<br><sub>tests.test_05_asymmetric_and_pqc.TestRSAOperations#test_rsa_large_modulus_support</sub> | `835ms` |
+| ✅ | **Verify Support for Large RSA Modulus (4096-bit)**<br><sub>tests.test_05_asymmetric_and_pqc.TestRSAOperations#test_rsa_large_modulus_support</sub> | `405ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_05_asymmetric_and_pqc.TestRSAOperations#test_rsa_pss_padding_signature
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify RSA-PSS Signature and Verification Integrity**<br><sub>tests.test_05_asymmetric_and_pqc.TestRSAOperations#test_rsa_pss_padding_signature</sub> | `753ms` |
+| ✅ | **Verify RSA-PSS Signature and Verification Integrity**<br><sub>tests.test_05_asymmetric_and_pqc.TestRSAOperations#test_rsa_pss_padding_signature</sub> | `760ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_06_architecture_compliance.TestSystemIntegrity#test_container_user_security
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify Non-Root User Execution Enforcement**<br><sub>tests.test_06_architecture_compliance.TestSystemIntegrity#test_container_user_security</sub> | `51ms` |
+| ✅ | **Verify Non-Root User Execution Enforcement**<br><sub>tests.test_06_architecture_compliance.TestSystemIntegrity#test_container_user_security</sub> | `57ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_06_architecture_compliance.TestSystemIntegrity#test_drbg_functionality
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify FIPS DRBG Functional Integrity**<br><sub>tests.test_06_architecture_compliance.TestSystemIntegrity#test_drbg_functionality</sub> | `221ms` |
+| ✅ | **Verify FIPS DRBG Functional Integrity**<br><sub>tests.test_06_architecture_compliance.TestSystemIntegrity#test_drbg_functionality</sub> | `220ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_06_architecture_compliance.TestSystemIntegrity#test_entropy_source_validation
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify Entropy Source Authority & FIPS Provider Priority**<br><sub>tests.test_06_architecture_compliance.TestSystemIntegrity#test_entropy_source_validation</sub> | `227ms` |
+| ✅ | **Verify Entropy Source Authority & FIPS Provider Priority**<br><sub>tests.test_06_architecture_compliance.TestSystemIntegrity#test_entropy_source_validation</sub> | `233ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_06_architecture_compliance.TestSystemIntegrity#test_legacy_engines_absence
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify Absence of Legacy Cryptographic Engines**<br><sub>tests.test_06_architecture_compliance.TestSystemIntegrity#test_legacy_engines_absence</sub> | `216ms` |
+| ✅ | **Verify Absence of Legacy Cryptographic Engines**<br><sub>tests.test_06_architecture_compliance.TestSystemIntegrity#test_legacy_engines_absence</sub> | `228ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_06_architecture_compliance.TestSystemIntegrity#test_pbkdf2_derivation
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify PBKDF2 Derivation with FIPS Approved Digest**<br><sub>tests.test_06_architecture_compliance.TestSystemIntegrity#test_pbkdf2_derivation</sub> | `220ms` |
+| ✅ | **Verify PBKDF2 Derivation with FIPS Approved Digest**<br><sub>tests.test_06_architecture_compliance.TestSystemIntegrity#test_pbkdf2_derivation</sub> | `222ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_11_network_tls.TestAdvancedFIPSNetworkCompliance#test_fips_approved_key_exchange_negotiation
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify Exclusive Use of FIPS-Approved Elliptic Curves for Key Exchange**<br><sub>tests.test_11_network_tls.TestAdvancedFIPSNetworkCompliance#test_fips_approved_key_exchange_negotiation</sub> | `15289ms` |
+| ✅ | **Verify Exclusive Use of FIPS-Approved Elliptic Curves for Key Exchange**<br><sub>tests.test_11_network_tls.TestAdvancedFIPSNetworkCompliance#test_fips_approved_key_exchange_negotiation</sub> | `15295ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_11_network_tls.TestAdvancedFIPSNetworkCompliance#test_rejection_of_sha1_certificate_signature
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify Rejection of Certificates with Non-Approved Signature Hashes (SHA-1)**<br><sub>tests.test_11_network_tls.TestAdvancedFIPSNetworkCompliance#test_rejection_of_sha1_certificate_signature</sub> | `365ms` |
+| ✅ | **Verify Rejection of Certificates with Non-Approved Signature Hashes (SHA-1)**<br><sub>tests.test_11_network_tls.TestAdvancedFIPSNetworkCompliance#test_rejection_of_sha1_certificate_signature</sub> | `367ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_11_network_tls.TestAdvancedFIPSNetworkCompliance#test_secure_tls13_session_resumption
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify Secure TLS 1.3 Session Resumption with PSK**<br><sub>tests.test_11_network_tls.TestAdvancedFIPSNetworkCompliance#test_secure_tls13_session_resumption</sub> | `30565ms` |
+| ✅ | **Verify Secure TLS 1.3 Session Resumption with PSK**<br><sub>tests.test_11_network_tls.TestAdvancedFIPSNetworkCompliance#test_secure_tls13_session_resumption</sub> | `30584ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_11_network_tls.TestNetworkAndTLS#test_certificate_parsing
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify X.509 Certificate Parsing & Structural Integrity**<br><sub>tests.test_11_network_tls.TestNetworkAndTLS#test_certificate_parsing</sub> | `227ms` |
+| ✅ | **Verify X.509 Certificate Parsing & Structural Integrity**<br><sub>tests.test_11_network_tls.TestNetworkAndTLS#test_certificate_parsing</sub> | `272ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_11_network_tls.TestNetworkAndTLS#test_cipher_suite_enforcement
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify Mandatory FIPS-Approved Cipher Suite Enforcement**<br><sub>tests.test_11_network_tls.TestNetworkAndTLS#test_cipher_suite_enforcement</sub> | `284ms` |
+| ✅ | **Verify Mandatory FIPS-Approved Cipher Suite Enforcement**<br><sub>tests.test_11_network_tls.TestNetworkAndTLS#test_cipher_suite_enforcement</sub> | `273ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_11_network_tls.TestNetworkAndTLS#test_dns_resolution
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify DNS Resolution and Libc Integration**<br><sub>tests.test_11_network_tls.TestNetworkAndTLS#test_dns_resolution</sub> | `283ms` |
+| ✅ | **Verify DNS Resolution and Libc Integration**<br><sub>tests.test_11_network_tls.TestNetworkAndTLS#test_dns_resolution</sub> | `292ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_11_network_tls.TestNetworkAndTLS#test_integrity_check_tampering
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify FIPS Provider Rejection on Configuration Tampering**<br><sub>tests.test_11_network_tls.TestNetworkAndTLS#test_integrity_check_tampering</sub> | `429ms` |
+| ✅ | **Verify FIPS Provider Rejection on Configuration Tampering**<br><sub>tests.test_11_network_tls.TestNetworkAndTLS#test_integrity_check_tampering</sub> | `426ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_11_network_tls.TestNetworkAndTLS#test_non_fips_cipher_rejection_over_network
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify Rejection of Non-FIPS Ciphers in TLS Handshake**<br><sub>tests.test_11_network_tls.TestNetworkAndTLS#test_non_fips_cipher_rejection_over_network</sub> | `232ms` |
+| ✅ | **Verify Rejection of Non-FIPS Ciphers in TLS Handshake**<br><sub>tests.test_11_network_tls.TestNetworkAndTLS#test_non_fips_cipher_rejection_over_network</sub> | `230ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_11_network_tls.TestNetworkAndTLS#test_tcp_connectivity
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify Raw TCP/IP Socket Connectivity**<br><sub>tests.test_11_network_tls.TestNetworkAndTLS#test_tcp_connectivity</sub> | `295ms` |
+| ✅ | **Verify Raw TCP/IP Socket Connectivity**<br><sub>tests.test_11_network_tls.TestNetworkAndTLS#test_tcp_connectivity</sub> | `311ms` |
+
+
+
+
+<br>
+
+### 📁 tests.test_11_network_tls.TestNetworkAndTLS#test_tls_legacy_protocol_blocking
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+| ✅ | **Verify Blocking of Insecure TLS 1.0/1.1 Protocols**<br><sub>tests.test_11_network_tls.TestNetworkAndTLS#test_tls_legacy_protocol_blocking</sub> | `267ms` |
+| ✅ | **Verify Blocking of Insecure TLS 1.0/1.1 Protocols**<br><sub>tests.test_11_network_tls.TestNetworkAndTLS#test_tls_legacy_protocol_blocking</sub> | `266ms` |
+
+
+
+
+<br>
 
 
 
