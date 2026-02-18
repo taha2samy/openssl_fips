@@ -5,9 +5,12 @@
 ---
 
 ### 🟢 Service Integrity Dashboard
+![Passed](https://img.shields.io/badge/passed-80-brightgreen)
+![Failed](https://img.shields.io/badge/failed--red)
+
 [![Build Status](https://github.com/taha2samy/openssl_fips/actions/workflows/build.yml/badge.svg)](https://github.com/taha2samy/openssl_fips/actions)
 [![Compliance: FIPS 140-3](https://img.shields.io/badge/Compliance-FIPS_140--3-brightgreen?style=flat-square)](https://csrc.nist.gov/)
-[![Audit Pass Rate](https://img.shields.io/badge/Audit-87.0%25_Passed-orange?style=flat-square)](docs/TEST_RESULTS.md)
+[![Audit Pass Rate](https://img.shields.io/badge/Audit-%25_Passed-orange?style=flat-square)](docs/TEST_RESULTS.md)
 [![Security: Zero-CVE](https://img.shields.io/badge/Security-Zero_CVE-blue?style=flat-square)](https://github.com/wolfi-dev)
 [![Supply Chain: SLSA L3](https://img.shields.io/badge/SLSA-Level_3-blueviolet?style=flat-square)](https://slsa.dev/)
 
@@ -86,14 +89,14 @@ We provide two specialized variants optimized for security and operational flexi
 | **Distroless** | `3.5.5-distroless` | Static | No shell/manager (Hardened) |
 
 ### Supply Chain Provenance (Latest Build)
-- **Image Digest (Distroless):** `sha256:d82068c0666bc813381bdf96e330bb4f73ecab58d5d46e7d786a4f8a8b713351`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19178138)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19178143)
+- **Image Digest (Distroless):** `sha256:60b62a906ed9b44414bf6f98fdd4a15e276cf9641880c0dfc0f772bb2854f7da`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19178597)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19178601)
 
 
-- **Image Digest (standard):** `sha256:751a23eca509a420254ac6f114a7e97f5bd052b8902a647ad0b2a29374fcb0f6`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19178141)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19178150)
+- **Image Digest (standard):** `sha256:741d752758cc90436a6092c28b54c37fad851be400af2c85fa50fd779a19a401`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19178598)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19178605)
 
 ---
 
