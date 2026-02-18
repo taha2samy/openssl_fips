@@ -144,6 +144,23 @@ cosign verify \
 - [**Troubleshooting**](docs/08-troubleshooting.md)
 
 ---
+
+> **Pipeline ID:** `${{ github.run_id }}` | **Attempt:** `#${{ metadata_of_workflow.run_attempt }}` | **Status:** `In-Progress`
+
+|             Category |     Runtime Property |                                             Contextual Value |
+| -------------------: | -------------------: | -----------------------------------------------------------: |
+|          **🏗️ Build** |    **Workflow File** |                                     `${{ metadata_of_workflow.workflow }}` |
+|                      |           **Job ID** |                                          `${{ metadata_of_workflow.job }}` |
+|         **🌿 Source** | **Ref (Branch/Tag)** |                                     `${{ metadata_of_workflow.ref_name }}` |
+|                      |       **Commit SHA** | [`${{ metadata_of_workflow.sha }}`](![img](data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==){{ github.repository }}/commit/${{ metadata_of_workflow.sha }}) |
+|       **👤 Identity** |            **Actor** |                                       `@${{ metadata_of_workflow.actor }}` |
+|                      |       **Event Type** |                                   `${{ metadata_of_workflow.event_name }}` |
+| **🖥️ Infrastructure** |        **Runner OS** |                                           `${{ metadata_of_workflow.os }}` |
+|                      |     **Architecture** |                                         `${{ metadata_of_workflow.arch }}` |
+
+
+
+---
 **License:** Apache-2.0  
 **Security Policy:** See [SECURITY.md](SECURITY.md) for vulnerability disclosure.
 

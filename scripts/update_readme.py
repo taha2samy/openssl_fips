@@ -5,6 +5,36 @@ import hcl2
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
 
+
+def get_github_metadata():
+    metadata = {
+        "repository": os.getenv("GITHUB_REPOSITORY", "manual-repo-name"),
+        "branch": os.getenv("GITHUB_REF_NAME", "manual-branch"),
+        "commit_sha": os.getenv("GITHUB_SHA", "manual-sha-000000"),
+        
+        "run_id": os.getenv("GITHUB_RUN_ID", "manual-run-id"),
+        "run_number": os.getenv("GITHUB_RUN_NUMBER", "0"),
+        "actor": os.getenv("GITHUB_ACTOR", "manual-user"),
+        "workflow_name": os.getenv("GITHUB_WORKFLOW", "manual-workflow"),
+        
+        "os": os.getenv("RUNNER_OS", "manual-os"),
+        "workspace": os.getenv("GITHUB_WORKSPACE", "/manual/path"),
+        
+        "event_name": os.getenv("GITHUB_EVENT_NAME", "manual-event"),
+        "is_ci": os.getenv("CI", "false")
+    }
+    
+    return metadata
+
+
+
+
+
+
+
+
+
+
 with open("all-metadata/distroless_attestation_details.json", "r") as f:
     distroless_outputs = json.load(f)
 
@@ -83,7 +113,7 @@ def main():
         "code_repo_name": env("CODE_REPO_NAME", "openssl_fips"),
         "registry": registry,
         "summary_performance_results": summary_performance_results,
-        
+        "metadata_of_workflow": get_github_metadata(),
         "core_version": core_version,
         "fips_version": fips_version,
         
