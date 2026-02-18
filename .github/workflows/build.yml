@@ -171,8 +171,8 @@ jobs:
           pip install pipenv
           pipenv install
       - name: Run Benchmark
-        run: taskfile docs:all-report-benchmark
+        run: task docs:all-report-benchmark
       - name: Generate Docs
-        run: taskfile docs:generate_docs_tests
+        run: task docs:generate_docs_tests
       - name: Generate Readme
-        run: taskfile docs:generate_readme
+        run: task docs:generate_readme
