@@ -167,9 +167,9 @@ jobs:
           python-version: '3.13'
       - name: Install pipenv
         run: |
-          sudo python -m pip install --upgrade pip
-          sudo pip install pipenv
-          sudo pipenv install
+          python -m pip install --upgrade pip
+          pip install pipenv
+          pipenv install
       - name: Run Benchmark
         run: sudo taskfile docs:all-report-benchmark
       - name: Generate Docs
