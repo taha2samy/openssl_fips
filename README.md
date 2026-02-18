@@ -5,10 +5,10 @@
 ---
 
 ### 🟢 Service Integrity Dashboard
-![Passed](https://img.shields.io/badge/passed-82-brightgreen)
-![Failed](https://img.shields.io/badge/failed-10-red)
+![Passed](https://img.shields.io/badge/passed-0-brightgreen)
+![Failed](https://img.shields.io/badge/failed-0-red)
 ![Broken](https://img.shields.io/badge/broken-0-orange)
-![Total](https://img.shields.io/badge/total-92-blue)    
+![Total](https://img.shields.io/badge/total-0-blue)    
 [![Build Status](https://github.com/taha2samy/openssl_fips/actions/workflows/build.yml/badge.svg)](https://github.com/taha2samy/openssl_fips/actions)
 [![Compliance: FIPS 140-3](https://img.shields.io/badge/Compliance-FIPS_140--3-brightgreen?style=flat-square)](https://csrc.nist.gov/)
 [![Audit Pass Rate](https://img.shields.io/badge/Audit-%25_Passed-orange?style=flat-square)](docs/TEST_RESULTS.md)
@@ -90,14 +90,14 @@ We provide two specialized variants optimized for security and operational flexi
 | **Distroless** | `3.5.5-distroless` | Static | No shell/manager (Hardened) |
 
 ### Supply Chain Provenance (Latest Build)
-- **Image Digest (Distroless):** `sha256:b99b75cab83b5ee80ecd6ec004208ae90f4ffdd68876af35dc199f39ba995132`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19235838)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19235871)
+- **Image Digest (Distroless):** `sha256:1ab3ec323165fdc57664cbf3010bb3cd3094c8edd0f5066db77048c268d96b43`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19236564)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19236576)
 
 
-- **Image Digest (standard):** `sha256:fb892c7396af13eec6b4ce651e670e0b944a35473ee1f101f9ef8e68678dae2f`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19235829)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19235856)
+- **Image Digest (standard):** `sha256:cff341d243b8cadadd87faca31fb6e71d8ae30c342acee5e5c278a22fddc102f`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19236560)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19236575)
 
 ---
 
@@ -105,9 +105,9 @@ We provide two specialized variants optimized for security and operational flexi
 Every build undergoes a 200+ point automated security audit via Pytest and OpenSSL FIPS verification protocols.
 
 ### Latest Test Suite Metrics
-- **Compliance Status:** ❌ FAILED
-- **Total Test Vectors:** 92
-- **Successful Assertions:** 82
+- **Compliance Status:** ✅ PASSED
+- **Total Test Vectors:** 0
+- **Successful Assertions:** 0
 - **Critical Rejections (e.g. MD5/SHA1):** Verified 100%
 
 > For a full breakdown of algorithm blocking and KAT (Known Answer Tests), see [**Detailed Audit Logs**](docs/TEST_RESULTS.md).
@@ -122,7 +122,7 @@ High-level results from our cryptographic benchmark, identifying the top-perform
 
 | Primitive | Top Performer | Advantage |
 | :--- | :---: | :---: |
-| `SHA256` | **FIPS** | `+0.5%` |
+| `SHA256` | **UBUNTU** | `+1.3%` |
 
 > **Key Insight:** The **Wolfi-FIPS** environment demonstrates negligible performance overhead, proving that modern compliance does not impose a significant 'security tax'.
 
