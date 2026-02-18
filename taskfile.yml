@@ -67,15 +67,18 @@ tasks:
     cmds:
       - chmod +x ./parser.py
       - ./parser.py
-  docs:report-benchmark:
+  docs:all-report-benchmark:
     desc: Generate performance report
     cmds:
       - task: docs:benchmark
       - task: docs:parse-benchmark
       - pipenv run python benchmark/generate_report.py
-  docs:generate:
+  docs:generate_docs_tests:
       desc: Parses test results and build configs to generate full documentation
       cmds:
         - task: audit:multi
         - pipenv run python scripts/generate_docs_tests.py
-      
+  docs:generate_readme:
+      desc: Generates the README.md file
+      cmds:
+        - pipenv run python scripts/update_readme.py

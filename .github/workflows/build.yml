@@ -138,6 +138,7 @@ jobs:
           path: all-metadata 
           pattern: attestation-metadata-* 
           merge-multiple: true 
+      - uses: actions/checkout@v3
 
       - name: Print JSON files and cleanup
         run: |
@@ -155,3 +156,23 @@ jobs:
           rm -rf all-metadata
           
           echo "Done. No files re-uploaded."
+      - name: install taskfile
+        run: |
+          curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash
+          apt install task
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+      - name: Install pipenv
+        run: |
+          python -m pip install --upgrade pip
+          pip install pipenv
+          pipenv install
+      - name: Run Benchmark
+        run: taskfile docs:all-report-benchmark
+      - name: Generate Docs
+        run: taskfile docs:generate_docs_tests
+      - name: Generate Readme
+        run: taskfile docs:generate_readme

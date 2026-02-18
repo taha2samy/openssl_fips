@@ -1,5 +1,4 @@
 benchmark/bench_results/*.log
-Comparison_Report.md
 allure-results/*
 allure-report/*
 __pycache__/
