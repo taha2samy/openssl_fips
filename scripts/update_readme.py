@@ -11,6 +11,9 @@ with open("all-metadata/distroless_attestation_details.json", "r") as f:
 with open("all-metadata/standard_attestation_details.json", "r") as f:
     standard_outputs = json.load(f)
 
+with open("reports/benchmark_summary.md", "r") as f:
+    summary_performance_results = f.read()
+
 def env(name: str, default: str | None = None) -> str:
     value = os.getenv(name, default)
     if value is None:
@@ -79,6 +82,7 @@ def main():
         "repo_url": repo_url,
         "code_repo_name": env("CODE_REPO_NAME", "openssl_fips"),
         "registry": registry,
+        "summary_performance_results": summary_performance_results,
         
         "core_version": core_version,
         "fips_version": fips_version,

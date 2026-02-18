@@ -34,7 +34,10 @@ target "common" {
   dockerfile = "Dockerfile"
   platforms  = ["linux/amd64", "linux/arm64"]
   output = ["type=registry"]
-  attest = ["type=sbom,generator=docker/buildkit-syft-scanner,format=cyclonedx-json"]
+  attest = [
+    "type=sbom,generator=docker/buildkit-syft-scanner,format=cyclonedx-json",
+    "type=provenance,mode=max"
+  ]
   args = {
     FIPS_VERSION = "${FIPS_VERSION}"
     CORE_VERSION = "${CORE_VERSION}"
