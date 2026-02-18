@@ -115,6 +115,7 @@ class TestRSAOperations:
     def test_rsa_pss_padding_signature(self, image_tag):
         with tempfile.TemporaryDirectory(dir=".") as tmpdir:
             host_dir = os.path.abspath(tmpdir)
+            os.chmod(host_dir, 0o777)
             container_dir = "/mnt/crypto"
             
             key_file = "key.pem"
@@ -127,19 +128,18 @@ class TestRSAOperations:
 
             with allure.step("Step 1: RSA 2048-bit Key Generation"):
                 gen_cmd = [
-                    "docker", "run", "--rm", "-v", f"{host_dir}:{container_dir}",
+                    "docker", "run", "--user", "0", "--rm", "-v", f"{host_dir}:{container_dir}",
                     image_tag, "genpkey", "-algorithm", "RSA", 
                     "-propquery", "fips=yes",
-                    "-pkeyopt", "rsa_keygen_bits:2048",
+                    "-pkeyopt", rsa_keygen_bits:2048,
                     "-out", f"{container_dir}/{key_file}"
                 ]
                 res_gen = subprocess.run(gen_cmd, capture_output=True, text=True)
                 assert res_gen.returncode == 0
 
             with allure.step("Step 2: PSS Signature Creation (Explicit SHA256)"):
-                # Fixed: Use -digest sha256 directly to override SHA1 default initialization
                 sign_cmd = [
-                    "docker", "run", "--rm", "-v", f"{host_dir}:{container_dir}",
+                    "docker", "run", "--user", "0", "--rm", "-v", f"{host_dir}:{container_dir}",
                     image_tag, "pkeyutl", "-sign", 
                     "-propquery", "fips=yes",
                     "-inkey", f"{container_dir}/{key_file}",
@@ -156,7 +156,7 @@ class TestRSAOperations:
 
             with allure.step("Step 3: PSS Signature Verification"):
                 verify_cmd = [
-                    "docker", "run", "--rm", "-v", f"{host_dir}:{container_dir}",
+                    "docker", "run", "--user", "0", "--rm", "-v", f"{host_dir}:{container_dir}",
                     image_tag, "pkeyutl", "-verify", 
                     "-propquery", "fips=yes",
                     "-inkey", f"{container_dir}/{key_file}",
@@ -175,6 +175,13 @@ class TestRSAOperations:
         with allure.step("RSA-PSS operational compliance confirmed"):
             allure.dynamic.parameter("Security Policy", "FIPS 140-3 Compliant (SHA256 Mandatory)")
             allure.dynamic.parameter("Result", "PSS Verified")
+
+
+
+
+
+
+
 
 
 
