@@ -42,53 +42,6 @@
   <img src="https://img.shields.io/badge/License-Apache--2.0-lightgrey?style=flat-square" alt="License" />
 </p>
 
----
-</div>
-
-
-
-## 01. Specification Overview
-This repository maintains a production-hardened, **FIPS 140-3 compliant** OpenSSL `3.5.5` container image. Architected on **Wolfi OS**, it eliminates legacy overhead and ensures a minimal attack surface for enterprise environments.
-
-### Core Components
-| Component | Version | Specification |
-| :--- | :--- | :--- |
-| **OpenSSL Core** | `3.5.5` | Production-ready engine |
-| **FIPS Provider** | `3.0.8` | NIST Validated module |
-| **Base OS** | Wolfi | Zero-CVE baseline |
-| **Integrity** | SLSA L3 | Cryptographically attested build |
-
----
-
-## 02. Architectural Integrity
-The build pipeline enforces a strict cryptographic boundary, ensuring that the FIPS module is correctly installed and attested.
-
-```mermaid
-graph TD
-    classDef trusted fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
-    classDef boundary fill:#fff3e0,stroke:#e65100,stroke-width:2px,stroke-dasharray: 5 5;
-
-    subgraph Pipeline ["01. Trusted Ingestion Layer"]
-        A[Wolfi Base Image]:::trusted
-        B[OpenSSL Source]:::trusted
-    end
-
-    subgraph FIPS_Boundary ["02. FIPS 140-3 Boundary"]
-        D[Compilation]
-        E[fipsinstall Protocol]
-        F{Self-Tests}
-        D --> E --> F
-    end
-
-    Pipeline --> FIPS_Boundary
-    F -- Passed --> G[Attested Artifacts]
-
-
-
-
-
-
-
 
 
 ---
@@ -234,9 +187,6 @@ cosign verify \
 ---
 
 ## 08. Documentation Index
-- [**Architecture & Security Boundary**](docs/architecture.md)
-- [**FIPS Compliance Manual**](docs/fips-compliance.md)
-- [**Supply Chain Verification Guide**](docs/supply-chain.md)
 - [**Performance Metrics**](docs/Comparison_Report.md)
 - [**Tasks Guide & Operations Manual**](docs/OPERATIONS.md)
 
