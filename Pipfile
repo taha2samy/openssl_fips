@@ -8,6 +8,7 @@ pytest-html = "*"
 pytest = "*"
 allure-pytest = "*"
 python-hcl2 = "*"
+jinja2 = "*"
 
 [dev-packages]
 
