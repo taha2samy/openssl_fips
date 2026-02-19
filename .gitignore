@@ -1,1 +1,11 @@
 benchmark/bench_results/*.log
+allure-results/*
+allure-report/*
+__pycache__/
+all-metadata/distroless_attestation_details.json
+all-metadata/standard_attestation_details.json
+tests/.pytest_cache/
+reports/*
+extracted_metadata/*
+supply_chain_map.json
+benchmark/bench_results/results.csv

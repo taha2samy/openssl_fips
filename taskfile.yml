@@ -1,18 +1,84 @@
-
 version: '3'
 
+includes:
+  infra: ./tasks/Taskfile.infra.yml
+  audit: ./tasks/Taskfile.audit.yml
+  report: ./tasks/Taskfile.report.yml
+
+vars:
+  DEFAULT_IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless"
+  RESULTS_ROOT: "allure-results"
+  REPORT_DIR: "allure-report"
+  repo_of_registry: "wolfi-openssl-fips"
+  owner: "taha2samy"
+  registry: "ghcr.io"
+  repo_of_code: "openssl_fips"
+  repo_url: "https://github.com/{{.owner}}/{{.repo_of_code}}"
+
 tasks:
-  update-versions:
+  echo-all-vars:
+    desc: Display all project-related global variables
     cmds:
-      - cmd: chmod +x scripts/wolfi-pkg-updater.py
-      - cmd: scripts/wolfi-pkg-updater.py
-  benchmark:
+      - echo "repo_of_registry {{.repo_of_registry}}"
+      - echo "owner            {{.owner}}"
+      - echo "registry         {{.registry}}"
+      - echo "repo_of_code     {{.repo_of_code}}"
+      - echo "repo_url         {{.repo_url}}"
+
+  setup:
+    desc: Prepare the infrastructure by building all Docker bridge images
+    cmds:
+      - task: infra:build-all
+
+  run-v2:
+    desc: Execute full audit pipeline and serve via Allure 2
+    cmds:
+      - task: audit:run
+      - task: report:v2:serve
+
+  run-v3:
+    desc: Execute full audit pipeline and serve via Allure 3
+    cmds:
+      - task: audit:run
+      - task: report:v3:serve
+
+  clean-all:
+    desc: Cleanup all images, test results, and generated reports
+    cmds:
+      - task: audit:clean
+      - task: report:clean
+      - task: infra:clean
+
+  update-pkgs:
+    desc: Run the python package updater script
+    cmds:
+      - chmod +x scripts/wolfi-pkg-updater.py
+      - python3 scripts/wolfi-pkg-updater.py
+
+  docs:benchmark:
+    desc: Run performance benchmarks
     dir: benchmark
     cmds:
-      - cmd: chmod +x run_benchmarks.sh
-      - cmd: ./run_benchmarks.sh
-  generate-report:
+      - chmod +x ./run_benchmark.sh
+      - ./run_benchmark.sh
+  docs:parse-benchmark:
+    desc: Parse benchmark results
     dir: benchmark
     cmds:
-      - cmd: chmod +x generate_report.py
-      - cmd: ./generate_report.py
+      - chmod +x ./parser.py
+      - ./parser.py
+  docs:all-report-benchmark:
+    desc: Generate performance report
+    cmds:
+      - task: docs:benchmark
+      - task: docs:parse-benchmark
+      - pipenv run python benchmark/generate_report.py
+  docs:generate_docs_tests:
+      desc: Parses test results and build configs to generate full documentation
+      cmds:
+        - task: audit:multi
+        - pipenv run python scripts/generate_docs_tests.py
+  docs:generate_readme:
+      desc: Generates the README.md file
+      cmds:
+        - pipenv run python scripts/update_readme.py

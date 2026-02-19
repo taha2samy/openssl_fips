@@ -1,0 +1,23 @@
+version: '3'
+
+tasks:
+  build-v2:
+    desc: Build the Docker image for Allure 2 bridge
+    cmds:
+      - docker build -t allure2-bridge -f infra/allure2/Dockerfile .
+
+  build-v3:
+    desc: Build the Docker image for Allure 3 bridge
+    cmds:
+      - docker build -t allure3-bridge -f infra/allure3/Dockerfile .
+
+  build-all:
+    desc: Build both Allure 2 and Allure 3 bridge images
+    deps:
+      - build-v2
+      - build-v3
+
+  clean:
+    desc: Remove Allure bridge images from local docker storage
+    cmds:
+      - docker rmi allure2-bridge allure3-bridge --force || true

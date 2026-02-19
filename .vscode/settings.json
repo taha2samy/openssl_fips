@@ -1,0 +1,14 @@
+{
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "testing.displayedTestNames": "short",
+    "python.testing.pytestArgs": [
+        "tests/tests",
+        "-c",
+        "tests/pytest.ini",
+        "--rootdir=tests",
+        "--image=ghcr.io/taha2samy/wolfi-openssl-fips:latest"
+    ],
+    "python.envFile": "${workspaceFolder}/.env"
+}
