@@ -123,11 +123,19 @@ We provide two specialized variants optimized for security and operational flexi
 - **Attestation:** [View SLSA Provenance]({{ distroless_url }})
 - **SBOM:** [Download CycloneDX]({{ distroless_sbom_url }})
 
+for pull image 
+
+```bash
+docker pull  {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}-distroless@distroless_digest
+```
 
 - **Image Digest (standard):** `{{ standard_digest }}`
 - **Attestation:** [View SLSA Provenance]({{ standard_url }})
 - **SBOM:** [Download CycloneDX]({{ standard_sbom_url }})
 
+```bash
+docker pull  {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}@standard_digest
+```
 ---
 
 ## 04. Build Provenance & Metadata
