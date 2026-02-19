@@ -21,13 +21,13 @@ ARG TZDATA_VER
 ARG POSIX_LIBC_UTILS_VER
 
 # dev tools
-ARG PKG_CONF
-ARG PCRE_DEV
-ARG ZLIB_DEV
-ARG BASH
-ARG CURL
-ARG JQ
-ARG UNZIP
+ARG PKG_CONF_VER
+ARG PCRE_DEV_VER
+ARG ZLIB_DEV_VER
+ARG BASH_VER
+ARG CURL_VER
+ARG JQ_VER
+ARG UNZIP_VER
 
 FROM ${BASE_IMAGE} AS fips-builder
 ARG BUILD_BASE_VER
@@ -227,21 +227,25 @@ FROM ${BASE_IMAGE} AS openssl-dev
 ARG BUILD_BASE_VER
 ARG POSIX_LIBC_UTILS_VER
 ARG BUILD_BASE_VER
-ARG PKG_CONF
-ARG PCRE_DEV
-ARG ZLIB_DEV
+ARG PKG_CONF_VER
+ARG PCRE_DEV_VER
+ARG ZLIB_DEV_VER
 ARG POSIX_LIBC_UTILS_VER
-ARG BASH
-ARG CURL
-ARG JQ
-ARG UNZIPRUN --mount=type=cache,target=/var/cache/apk \
+ARG BASH_VER
+ARG CURL_VER
+ARG JQ_VER
+ARG UNZIP_VER
+RUN --mount=type=cache,target=/var/cache/apk \
     apk add --no-cache \
     build-base=${BUILD_BASE_VER} \
-    pkgconf=${PKG_CONF} \
-    pcre-dev=${PRCE_DEV} \
-    zlib-dev=${ZLIB-DEV} \
+    pkgconf=${PKG_CONF_VER} \
+    pcre-dev=${PCRE_DEV_VER} \
+    zlib-dev=${ZLIB_DEV_VER} \
     posix-libc-utils=${POSIX_LIBC_UTILS_VER} \
-    bash=${BASH} curl=${CURL} jq=${JQ} unzip=${UNZIP} 
+    bash=${BASH_VER} \
+    curl=${CURL_VER} \
+    jq=${JQ_VER} \
+    unzip=${UNZIP_VER} 
 
 COPY --from=fips-integrator /usr/local /usr/local
 
