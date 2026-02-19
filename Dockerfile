@@ -258,5 +258,12 @@ ENV PATH="/usr/local/bin:${PATH}" \
     LD_LIBRARY_PATH="/usr/local/lib:/usr/local/lib64" \
     PKG_CONFIG_PATH="/usr/local/lib/pkgconfig" \
     OPENSSL_CONF=/usr/local/ssl/openssl.cnf
+LABEL org.opencontainers.image.title="Wolfi OpenSSL FIPS (development)" \
+    org.opencontainers.image.description="FIPS 140-3 compliant OpenSSL container (development)" \
+    org.opencontainers.image.vendor="taha2samy" \
+    org.opencontainers.image.core-version="${CORE_VERSION}" \
+    org.opencontainers.image.fips-version="${FIPS_VERSION}" \
+    org.opencontainers.image.licenses="Apache-2.0" \
+    org.opencontainers.image.source="https://github.com/taha2samy/openssl_fips" 
 
 WORKDIR /src
