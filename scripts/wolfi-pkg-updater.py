@@ -5,15 +5,27 @@ import sys
 from datetime import datetime
 
 PACKAGES_TO_CHECK = [
+    # build / core
     "build-base",
     "perl",
     "linux-headers",
     "wget",
     "ca-certificates",
+    
+    # runtime
     "libstdc++",
     "zlib",
     "tzdata",
-    "posix-libc-utils"
+    "posix-libc-utils",
+    
+    # dev tools
+    "pkgconf",
+    "pcre-dev",
+    "zlib-dev",
+    "bash",
+    "curl",
+    "jq",
+    "unzip"
 ]
 
 IMAGES_TO_CHECK = {
