@@ -20,7 +20,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/taha2samy/openssl_fips/actions/runs/22161867461">
+  <a href="https://github.com/taha2samy/openssl_fips/actions/runs/22163091694">
     <img src="https://img.shields.io/badge/Build_Status-Success-brightgreen?style=flat-square&logo=github-actions" alt="Build Status" />
   </a>
   <a href="https://csrc.nist.gov/">
@@ -41,53 +41,6 @@
   </a>
   <img src="https://img.shields.io/badge/License-Apache--2.0-lightgrey?style=flat-square" alt="License" />
 </p>
-
----
-</div>
-
-
-
-## 01. Specification Overview
-This repository maintains a production-hardened, **FIPS 140-3 compliant** OpenSSL `3.5.5` container image. Architected on **Wolfi OS**, it eliminates legacy overhead and ensures a minimal attack surface for enterprise environments.
-
-### Core Components
-| Component | Version | Specification |
-| :--- | :--- | :--- |
-| **OpenSSL Core** | `3.5.5` | Production-ready engine |
-| **FIPS Provider** | `3.0.8` | NIST Validated module |
-| **Base OS** | Wolfi | Zero-CVE baseline |
-| **Integrity** | SLSA L3 | Cryptographically attested build |
-
----
-
-## 02. Architectural Integrity
-The build pipeline enforces a strict cryptographic boundary, ensuring that the FIPS module is correctly installed and attested.
-
-```mermaid
-graph TD
-    classDef trusted fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
-    classDef boundary fill:#fff3e0,stroke:#e65100,stroke-width:2px,stroke-dasharray: 5 5;
-
-    subgraph Pipeline ["01. Trusted Ingestion Layer"]
-        A[Wolfi Base Image]:::trusted
-        B[OpenSSL Source]:::trusted
-    end
-
-    subgraph FIPS_Boundary ["02. FIPS 140-3 Boundary"]
-        D[Compilation]
-        E[fipsinstall Protocol]
-        F{Self-Tests}
-        D --> E --> F
-    end
-
-    Pipeline --> FIPS_Boundary
-    F -- Passed --> G[Attested Artifacts]
-
-
-
-
-
-
 
 
 
@@ -166,15 +119,22 @@ We provide two specialized variants optimized for security and operational flexi
 | **Distroless** | `3.5.5-distroless` | Static | No shell/manager (Hardened) |
 
 ### Supply Chain Provenance (Latest Build)
-- **Image Digest (Distroless):** `sha256:338c7b5932804b351142488f1011395828fc43f53f949a96f56d048c28c6c54c`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19254644)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19254651)
+- **Image Digest (Distroless):** `sha256:73f63af21ee07a0b0d8c5ebc007f161666604d4b4b4c9ce815e796ac768619ac`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19256919)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19256924)
 
 
-- **Image Digest (standard):** `sha256:d9ad006ac207e70ea075cbdbdef3fd26bffb0534cce0a3938de7aeec1b938012`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19254646)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19254656)
+```bash
+docker pull  ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless@distroless_digest
+```
 
+- **Image Digest (standard):** `sha256:9426ac8de44dde4aa82d87cbc0673414b50f3d7a43e8916ba275ae0bc90a1ddf`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19256922)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19256925)
+
+```bash
+docker pull  ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5@standard_digest
+```
 ---
 
 ## 04. Build Provenance & Metadata
@@ -184,11 +144,11 @@ To ensure complete reproducibility and supply chain traceability (SLSA L3), stri
 | :--- | :--- | :--- |
 | **🔐 Source Identity** | `Repository` | `taha2samy/openssl_fips` |
 | | `Ref / Branch` | `feat/readme` |
-| | `Commit SHA` | `3bb6968d159579bd830281b461a6d726681781aa` |
+| | `Commit SHA` | `9fcfea63d84f8030c99b058c9a4eaa8952efe37c` |
 | | `Trigger Actor` | `taha2samy` |
 | **⚙️ Execution Context** | `Workflow` | `Build` |
-| | `Run ID` | [`22161867461`](https://github.com/taha2samy/openssl_fips/actions/runs/22161867461) |
-| | `Run Number` | `#188` |
+| | `Run ID` | [`22163091694`](https://github.com/taha2samy/openssl_fips/actions/runs/22163091694) |
+| | `Run Number` | `#189` |
 | | `Event Type` | `workflow_dispatch` |
 | **🖥️ Build Environment** | `Runner OS` | `Linux` |
 | | `CI Managed` | `true` |
@@ -219,7 +179,7 @@ High-level results from our cryptographic benchmark, identifying the top-perform
 
 | Primitive | Top Performer | Advantage |
 | :--- | :---: | :---: |
-| `SHA256` | **UBUNTU** | `+1.4%` |
+| `SHA256` | **FIPS** | `+0.9%` |
 
 > **Key Insight:** The **Wolfi-FIPS** environment demonstrates negligible performance overhead, proving that modern compliance does not impose a significant 'security tax'.
 
@@ -243,9 +203,6 @@ cosign verify \
 ---
 
 ## 08. Documentation Index
-- [**Architecture & Security Boundary**](docs/architecture.md)
-- [**FIPS Compliance Manual**](docs/fips-compliance.md)
-- [**Supply Chain Verification Guide**](docs/supply-chain.md)
 - [**Performance Metrics**](docs/Comparison_Report.md)
 - [**Tasks Guide & Operations Manual**](docs/OPERATIONS.md)
 
