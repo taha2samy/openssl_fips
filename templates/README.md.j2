@@ -42,7 +42,7 @@
   <img src="https://img.shields.io/badge/License-Apache--2.0-lightgrey?style=flat-square" alt="License" />
 </p>
 
-
+</div>
 
 ---
 
@@ -125,7 +125,7 @@ We provide two specialized variants optimized for security and operational flexi
 
 
 ```bash
-docker pull  {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}-distroless@distroless_digest
+docker pull  {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}-distroless@{{distroless_digest}}
 ```
 
 - **Image Digest (standard):** `{{ standard_digest }}`
@@ -133,7 +133,7 @@ docker pull  {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}-distr
 - **SBOM:** [Download CycloneDX]({{ standard_sbom_url }})
 
 ```bash
-docker pull  {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}@standard_digest
+docker pull  {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}@{{standard_digest}}
 ```
 ---
 
