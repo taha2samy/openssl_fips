@@ -21,7 +21,7 @@ ARG TZDATA_VER
 ARG POSIX_LIBC_UTILS_VER
 
 # dev tools
-ARG PKG_CONF_VER
+ARG PKGCONF_VER
 ARG PCRE_DEV_VER
 ARG ZLIB_DEV_VER
 ARG BASH_VER
@@ -227,7 +227,7 @@ FROM ${BASE_IMAGE} AS openssl-dev
 ARG BUILD_BASE_VER
 ARG POSIX_LIBC_UTILS_VER
 ARG BUILD_BASE_VER
-ARG PKG_CONF_VER
+ARG PKGCONF_VER
 ARG PCRE_DEV_VER
 ARG ZLIB_DEV_VER
 ARG POSIX_LIBC_UTILS_VER
@@ -238,15 +238,15 @@ ARG UNZIP_VER
 RUN --mount=type=cache,target=/var/cache/apk \
     apk add --no-cache \
     build-base=${BUILD_BASE_VER} \
-    pkgconf=${PKG_CONF_VER} \
+    pkgconf=${PKGCONF_VER} \
     pcre-dev=${PCRE_DEV_VER} \
     zlib-dev=${ZLIB_DEV_VER} \
     posix-libc-utils=${POSIX_LIBC_UTILS_VER} \
     bash=${BASH_VER} \
     curl=${CURL_VER} \
     jq=${JQ_VER} \
-    unzip=${UNZIP_VER} 
-
+    unzip=${UNZIP_VER}
+    
 COPY --from=fips-integrator /usr/local /usr/local
 
 RUN ln -sf /usr/local/lib/libssl.so.3 /usr/local/lib/libssl.so && \
