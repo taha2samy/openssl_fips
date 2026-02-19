@@ -26,7 +26,7 @@ function "tag" {
 }
 
 group "default" {
-  targets = ["standard", "distroless"]
+  targets = ["standard", "distroless", "dev"]
 }
 
 target "common" {
@@ -97,3 +97,23 @@ target "distroless" {
     "type=sbom,format=cyclonedx-json"
   ]
 }
+
+# ---------- DEV IMAGE ----------
+target "dev" {
+  inherits = ["common"]
+  target   = "openssl-dev"
+
+  tags = concat(
+    tag("${CORE_VERSION}-dev"),
+    tag("dev")
+  )
+
+  cache-from = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-dev"]
+  cache-to   = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-dev,mode=max"]
+
+  attest = [
+    "type=provenance,mode=max",
+    "type=sbom,format=cyclonedx-json"
+  ]
+}
+

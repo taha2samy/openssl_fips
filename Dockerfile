@@ -125,3 +125,32 @@ ENV PATH="/usr/local/bin:${PATH}" \
 USER openssl
 WORKDIR /home/openssl
 ENTRYPOINT ["/usr/local/bin/openssl"]
+
+
+
+FROM ${BASE_IMAGE} AS openssl-dev
+ARG BUILD_BASE_VER
+ARG POSIX_LIBC_UTILS_VER
+
+RUN --mount=type=cache,target=/var/cache/apk \
+    apk add --no-cache \
+    build-base=${BUILD_BASE_VER} \
+    pkgconf \
+    pcre-dev \
+    zlib-dev \
+    posix-libc-utils=${POSIX_LIBC_UTILS_VER} \
+    bash curl jq unzip 
+
+COPY --from=fips-integrator /usr/local /usr/local
+
+RUN ln -sf /usr/local/lib/libssl.so.3 /usr/local/lib/libssl.so && \
+    ln -sf /usr/local/lib/libcrypto.so.3 /usr/local/lib/libcrypto.so
+
+ENV PATH="/usr/local/bin:${PATH}" \
+    CPATH="/usr/local/include" \
+    LIBRARY_PATH="/usr/local/lib" \
+    LD_LIBRARY_PATH="/usr/local/lib:/usr/local/lib64" \
+    PKG_CONFIG_PATH="/usr/local/lib/pkgconfig" \
+    OPENSSL_CONF=/usr/local/ssl/openssl.cnf
+
+WORKDIR /src
