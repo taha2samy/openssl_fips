@@ -116,6 +116,7 @@ def main():
         "metadata_of_workflow": get_github_metadata(),
         "core_version": core_version,
         "fips_version": fips_version,
+        "percent_of_success_in_tests": (test_stats['passed'] / test_stats['total'] * 100) if test_stats['total'] > 0 else 0,
         
         "distroless_size": env("DISTROLESS_SIZE", "N/A"),
         "standard_size": env("STANDARD_SIZE", "N/A"),
