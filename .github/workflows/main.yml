@@ -27,7 +27,7 @@ jobs:
           sudo apt install task
       - name: Update Packages
         run: |
-          sudo task update-packages
+          sudo task update-pkgs
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
