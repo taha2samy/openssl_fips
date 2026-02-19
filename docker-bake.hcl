@@ -75,9 +75,8 @@ target "standard" {
   )
 
 
-  cache-from = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-standard"]
-  cache-to   = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-standard,mode=max"]
-
+cache-from = ["type=gha,scope=standard"]
+cache-to   = ["type=gha,scope=standard,mode=max"]
 
 }
 
@@ -92,8 +91,7 @@ target "distroless" {
   )
 
 
-  cache-from = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-distroless"]
-  cache-to   = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-distroless,mode=max"]
-
+cache-from = ["type=gha,scope=distroless"]
+cache-to   = ["type=gha,scope=distroless,mode=max"]
 
 }
