@@ -26,7 +26,7 @@ function "tag" {
 }
 
 group "default" {
-  targets = ["standard", "distroless"]
+  targets = ["standard", "distroless","development"]
 }
 
 target "common" {
@@ -100,4 +100,18 @@ target "distroless" {
 cache-from = ["type=gha,scope=distroless"]
 cache-to   = ["type=gha,scope=distroless,mode=max"]
 
+}
+
+### ---------- DEV IMAGE ----------
+target "development" {
+  inherits = ["common"]
+  target   = "openssl-dev"
+
+  tags = concat(
+    tag("${CORE_VERSION}-dev"),
+    tag("dev")
+  )
+
+  cache-from = ["type=gha,scope=development"]
+  cache-to   = ["type=gha,scope=development,mode=max"]
 }
