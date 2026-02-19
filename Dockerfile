@@ -205,3 +205,38 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=2s --retries=3 \
     CMD ["/usr/local/bin/openssl", "sha256", "/dev/null"]
 
 ENTRYPOINT ["/usr/local/bin/openssl"]
+
+
+FROM ${BASE_IMAGE} AS openssl-dev
+ARG BUILD_BASE_VER
+ARG POSIX_LIBC_UTILS_VER
+ARG BUILD_BASE_VER
+ARG PKG_CONF
+ARG PCRE_DEV
+ARG ZLIB_DEV
+ARG POSIX_LIBC_UTILS_VER
+ARG BASH
+ARG CURL
+ARG JQ
+ARG UNZIPRUN --mount=type=cache,target=/var/cache/apk \
+    apk add --no-cache \
+    build-base=${BUILD_BASE_VER} \
+    pkgconf=${PKG_CONF} \
+    pcre-dev=${PRCE_DEV} \
+    zlib-dev=${ZLIB-DEV} \
+    posix-libc-utils=${POSIX_LIBC_UTILS_VER} \
+    bash=${BASH} curl=${CURL} jq=${JQ} unzip=${UNZIP} 
+
+COPY --from=fips-integrator /usr/local /usr/local
+
+RUN ln -sf /usr/local/lib/libssl.so.3 /usr/local/lib/libssl.so && \
+    ln -sf /usr/local/lib/libcrypto.so.3 /usr/local/lib/libcrypto.so
+
+ENV PATH="/usr/local/bin:${PATH}" \
+    CPATH="/usr/local/include" \
+    LIBRARY_PATH="/usr/local/lib" \
+    LD_LIBRARY_PATH="/usr/local/lib:/usr/local/lib64" \
+    PKG_CONFIG_PATH="/usr/local/lib/pkgconfig" \
+    OPENSSL_CONF=/usr/local/ssl/openssl.cnf
+
+WORKDIR /src
