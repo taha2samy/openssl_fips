@@ -20,7 +20,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/taha2samy/openssl_fips/actions/runs/22163329359">
+  <a href="https://github.com/taha2samy/openssl_fips/actions/runs/22163799918">
     <img src="https://img.shields.io/badge/Build_Status-Success-brightgreen?style=flat-square&logo=github-actions" alt="Build Status" />
   </a>
   <a href="https://csrc.nist.gov/">
@@ -119,21 +119,21 @@ We provide two specialized variants optimized for security and operational flexi
 | **Distroless** | `3.5.5-distroless` | Static | No shell/manager (Hardened) |
 
 ### Supply Chain Provenance (Latest Build)
-- **Image Digest (Distroless):** `sha256:22d16d60a7b1235f8db1bc7cd9c14cf0a656f7fdd0c7c64a3b6b19be5af4b5bf`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19257560)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19257566)
+- **Image Digest (Distroless):** `sha256:614de7b6954f37340c0a642c617f671f1d88dd46685c3d5aa9a6f951735fa627`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19258596)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19258606)
 
 
 ```bash
-docker pull  ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless@sha256:22d16d60a7b1235f8db1bc7cd9c14cf0a656f7fdd0c7c64a3b6b19be5af4b5bf
+docker pull  ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless@sha256:614de7b6954f37340c0a642c617f671f1d88dd46685c3d5aa9a6f951735fa627
 ```
 
-- **Image Digest (standard):** `sha256:1db5ed5527a84d5745638a3ae4c64f781f95a4b7a7ef6647f5f3907814c154c8`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19257561)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19257570)
+- **Image Digest (standard):** `sha256:d2ddfbb12433969138723ae40c7d883d95813ecb719388b41c342ec7d240b66f`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19258597)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19258609)
 
 ```bash
-docker pull  ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5@sha256:1db5ed5527a84d5745638a3ae4c64f781f95a4b7a7ef6647f5f3907814c154c8
+docker pull  ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5@sha256:d2ddfbb12433969138723ae40c7d883d95813ecb719388b41c342ec7d240b66f
 ```
 ---
 
@@ -143,12 +143,12 @@ To ensure complete reproducibility and supply chain traceability (SLSA L3), stri
 | Context Dimension | Metadata Key | Value (Dynamic Scope) |
 | :--- | :--- | :--- |
 | **🔐 Source Identity** | `Repository` | `taha2samy/openssl_fips` |
-| | `Ref / Branch` | `feat/readme` |
-| | `Commit SHA` | `8cd766af2340013480118492d7143e614ab6aa7a` |
+| | `Ref / Branch` | `main` |
+| | `Commit SHA` | `d379fbe8fa49fb4f19b2a796bfdf85f445e53438` |
 | | `Trigger Actor` | `taha2samy` |
 | **⚙️ Execution Context** | `Workflow` | `Build` |
-| | `Run ID` | [`22163329359`](https://github.com/taha2samy/openssl_fips/actions/runs/22163329359) |
-| | `Run Number` | `#190` |
+| | `Run ID` | [`22163799918`](https://github.com/taha2samy/openssl_fips/actions/runs/22163799918) |
+| | `Run Number` | `#191` |
 | | `Event Type` | `workflow_dispatch` |
 | **🖥️ Build Environment** | `Runner OS` | `Linux` |
 | | `CI Managed` | `true` |
@@ -179,7 +179,7 @@ High-level results from our cryptographic benchmark, identifying the top-perform
 
 | Primitive | Top Performer | Advantage |
 | :--- | :---: | :---: |
-| `SHA256` | **UBUNTU** | `+1.2%` |
+| `SHA256` | **UBUNTU** | `+0.9%` |
 
 > **Key Insight:** The **Wolfi-FIPS** environment demonstrates negligible performance overhead, proving that modern compliance does not impose a significant 'security tax'.
 
