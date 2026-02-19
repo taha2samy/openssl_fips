@@ -36,3 +36,24 @@ variable "TZDATA_VER" {
 variable "POSIX_LIBC_UTILS_VER" {
   default = "2.43-r1"
 }
+variable "PKGCONF_VER" {
+  default = "2.5.1-r1"
+}
+variable "PCRE_DEV_VER" {
+  default = "8.45-r7"
+}
+variable "ZLIB_DEV_VER" {
+  default = "1.3.2-r0"
+}
+variable "BASH_VER" {
+  default = "5.3-r5"
+}
+variable "CURL_VER" {
+  default = "8.18.0-r2"
+}
+variable "JQ_VER" {
+  default = "1.8.1-r3"
+}
+variable "UNZIP_VER" {
+  default = "6.0-r5"
+}
