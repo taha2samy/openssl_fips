@@ -33,6 +33,9 @@ jobs:
 
       - name: Build and push
         uses: docker/bake-action@v6
+        env:
+          DOCKER_BUILD_SUMMARY: false
+          DOCKER_BUILD_RECORD_UPLOAD: false
         id: bake
         with:
           push: true
@@ -103,7 +106,7 @@ jobs:
           sbom-path: ${{ matrix.target_name }}.cyclonedx.json
           push-to-registry: true
           show-summary: false
-          
+
       - name: Save URL to file
         run: |
           echo "" detail.json
