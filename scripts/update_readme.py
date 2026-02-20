@@ -40,6 +40,9 @@ with open("all-metadata/distroless_attestation_details.json", "r") as f:
 
 with open("all-metadata/standard_attestation_details.json", "r") as f:
     standard_outputs = json.load(f)
+with open("all-metadata/development_attestation_details.json", "r") as f:
+    development_outputs = json.load(f)
+
 
 with open("reports/benchmark_summary.md", "r") as f:
     summary_performance_results = f.read()
@@ -127,10 +130,15 @@ def main():
         "test_stats": test_stats,
         "distroless_url": distroless_outputs["provenance"]["url"],
         "standard_url": standard_outputs["provenance"]["url"],
+        "development_url": development_outputs["provenance"]["url"],
+        
         "distroless_digest": distroless_outputs["provenance"]["digest"],
         "standard_digest": standard_outputs["provenance"]["digest"],
+        "development_digest":development_outputs["provenance"]["digest"],
+        
         "distroless_sbom_url": distroless_outputs["sbom"]["url"],
         "standard_sbom_url": standard_outputs["sbom"]["url"],
+        "development_sbom_url":development_outputs["sbom"]["url"],
         
         "generation_date": env("GENERATION_DATE", datetime.utcnow().strftime("%Y-%m-%d")),
         "build_date": env("BUILD_DATE", datetime.utcnow().strftime("%Y%m%d")),
