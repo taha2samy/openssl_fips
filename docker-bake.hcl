@@ -33,7 +33,9 @@ target "common" {
   context    = "."
   dockerfile = "Dockerfile"
   platforms  = ["linux/amd64", "linux/arm64"]
-  output = ["type=registry"]
+  output = [
+    "type=registry,compression=zstd,force-compression=true"
+  ]
   attest = [
     "type=sbom,generator=docker/buildkit-syft-scanner,format=cyclonedx-json",
     "type=provenance,mode=max"
