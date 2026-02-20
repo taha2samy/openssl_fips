@@ -80,7 +80,7 @@ jobs:
         run: |
           if [[ "${{ matrix.target_name }}" == "standard" ]]; then
             echo "digest=${{ needs.build.outputs.standard_digest }}" >> $GITHUB_OUTPUT
-          elif [["${{ matrix.target_name }}" == "distroless"]]
+          elif [[ "${{ matrix.target_name }}" == "distroless" ]]; then
             echo "digest=${{ needs.build.outputs.distroless_digest }}" >> $GITHUB_OUTPUT
           else
             echo "digest=${{ needs.build.outputs.development_digest }}" >> $GITHUB_OUTPUT
