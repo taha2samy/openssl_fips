@@ -130,7 +130,7 @@ docker pull  {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}-distr
 - **SBOM:** [Download CycloneDX]({{ standard_sbom_url }})
 
 ```bash
-docker pull  {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}-dev@{{standard_digest}}
+docker pull  {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}@{{standard_digest}}
 ```
 
 - **Image Digest (development):** `{{ development_digest }}`
@@ -138,7 +138,7 @@ docker pull  {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}-dev@{
 - **SBOM:** [Download CycloneDX]({{ development_sbom_url }})
 
 ```bash
-docker pull  {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}@{{development_digest}}
+docker pull  {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}-dev@{{development_digest}}
 ```
 
 ---
