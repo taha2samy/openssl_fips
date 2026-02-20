@@ -17,6 +17,7 @@ jobs:
     outputs:
       standard_digest: ${{ steps.extract_digests.outputs.standard_digest }}
       distroless_digest: ${{ steps.extract_digests.outputs.distroless_digest }}
+      development_digest: ${{ steps.extract_digests.outputs.development_digest }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -51,8 +52,10 @@ jobs:
           metadata='${{ steps.bake.outputs.metadata }}'
           echo "standard_digest=$(echo $metadata | jq -r '.standard."containerimage.digest"')" >> $GITHUB_OUTPUT
           echo "distroless_digest=$(echo $metadata | jq -r '.distroless."containerimage.digest"')" >> $GITHUB_OUTPUT
+          echo "development_digest=$(echo $metadata | jq -r '.development."containerimage.digest"')" >> $GITHUB_OUTPUT
           echo "standard_digest=$(echo $metadata | jq -r '.standard."containerimage.digest"')"
           echo "distroless_digest=$(echo $metadata | jq -r '.distroless."containerimage.digest"')"
+          echo "development_digest=$(echo $metadata | jq -r '.development."containerimage.digest"')"
   attest:
     needs: build
     runs-on: ubuntu-latest
@@ -63,7 +66,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target_name: [standard, distroless]
+        target_name: [standard, distroless,development]
 
     steps:
       - name: Log in to GHCR
@@ -77,8 +80,10 @@ jobs:
         run: |
           if [[ "${{ matrix.target_name }}" == "standard" ]]; then
             echo "digest=${{ needs.build.outputs.standard_digest }}" >> $GITHUB_OUTPUT
-          else
+          elif [["${{ matrix.target_name }}" == "distroless"]]
             echo "digest=${{ needs.build.outputs.distroless_digest }}" >> $GITHUB_OUTPUT
+          else
+            echo "digest=${{ needs.build.outputs.development_digest }}" >> $GITHUB_OUTPUT
           fi
 
       - name: Attest Provenance
