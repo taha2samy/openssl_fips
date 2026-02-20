@@ -20,7 +20,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/taha2samy/openssl_fips/actions/runs/22166195381">
+  <a href="https://github.com/taha2samy/openssl_fips/actions/runs/22208005483">
     <img src="https://img.shields.io/badge/Build_Status-Success-brightgreen?style=flat-square&logo=github-actions" alt="Build Status" />
   </a>
   <a href="https://csrc.nist.gov/">
@@ -116,22 +116,31 @@ We provide two specialized variants optimized for security and operational flexi
 | **Distroless** | `3.5.5-distroless` | Static | No shell/manager (Hardened) |
 
 ### Supply Chain Provenance (Latest Build)
-- **Image Digest (Distroless):** `sha256:f17faefd5f7cf70a1d9ad261a7d0ceedd4c12d2591e97d997da1b4619e4aa394`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19269646)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19269656)
+- **Image Digest (Distroless):** `sha256:28db5abbdea109fa4d2326f22a0615a6563d0b9859525db3401ffa4c50b1f9fe`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19364713)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19364722)
 
 
 ```bash
-docker pull  ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless@sha256:f17faefd5f7cf70a1d9ad261a7d0ceedd4c12d2591e97d997da1b4619e4aa394
+docker pull  ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless@sha256:28db5abbdea109fa4d2326f22a0615a6563d0b9859525db3401ffa4c50b1f9fe
 ```
 
-- **Image Digest (standard):** `sha256:7ffb5b0c11dbff85d2503d4486025298f6114a15711e97a8f9eb9331e6b61377`
-- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19269645)
-- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19269654)
+- **Image Digest (standard):** `sha256:a95eeae97b1d872ea9d14ad229755a95ed69f74b3f365cfeaef1294ce12e1dfb`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19364710)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19364718)
 
 ```bash
-docker pull  ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5@sha256:7ffb5b0c11dbff85d2503d4486025298f6114a15711e97a8f9eb9331e6b61377
+docker pull  ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-dev@sha256:a95eeae97b1d872ea9d14ad229755a95ed69f74b3f365cfeaef1294ce12e1dfb
 ```
+
+- **Image Digest (development):** `sha256:6c545a2fc2c168f1f83376cc6f2c1a120d59c9ee9aa86c5c4481dfc5165b73cc`
+- **Attestation:** [View SLSA Provenance](https://github.com/taha2samy/openssl_fips/attestations/19364708)
+- **SBOM:** [Download CycloneDX](https://github.com/taha2samy/openssl_fips/attestations/19364724)
+
+```bash
+docker pull  ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5@sha256:6c545a2fc2c168f1f83376cc6f2c1a120d59c9ee9aa86c5c4481dfc5165b73cc
+```
+
 ---
 
 ## 04. Build Provenance & Metadata
@@ -141,11 +150,11 @@ To ensure complete reproducibility and supply chain traceability (SLSA L3), stri
 | :--- | :--- | :--- |
 | **🔐 Source Identity** | `Repository` | `taha2samy/openssl_fips` |
 | | `Ref / Branch` | `main` |
-| | `Commit SHA` | `6504f5c7ac3b4adb6aaf0a814d52beb93d83cfb0` |
+| | `Commit SHA` | `86ff658f5a11658555e7460235c3e9d9a51e4a7b` |
 | | `Trigger Actor` | `taha2samy` |
 | **⚙️ Execution Context** | `Workflow` | `Build` |
-| | `Run ID` | [`22166195381`](https://github.com/taha2samy/openssl_fips/actions/runs/22166195381) |
-| | `Run Number` | `#192` |
+| | `Run ID` | [`22208005483`](https://github.com/taha2samy/openssl_fips/actions/runs/22208005483) |
+| | `Run Number` | `#196` |
 | | `Event Type` | `workflow_dispatch` |
 | **🖥️ Build Environment** | `Runner OS` | `Linux` |
 | | `CI Managed` | `true` |
@@ -176,7 +185,7 @@ High-level results from our cryptographic benchmark, identifying the top-perform
 
 | Primitive | Top Performer | Advantage |
 | :--- | :---: | :---: |
-| `SHA256` | **FIPS** | `+1.0%` |
+| `SHA256` | **UBUNTU** | `+1.1%` |
 
 > **Key Insight:** The **Wolfi-FIPS** environment demonstrates negligible performance overhead, proving that modern compliance does not impose a significant 'security tax'.
 
