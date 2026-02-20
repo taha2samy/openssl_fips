@@ -130,8 +130,17 @@ docker pull  {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}-distr
 - **SBOM:** [Download CycloneDX]({{ standard_sbom_url }})
 
 ```bash
-docker pull  {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}@{{standard_digest}}
+docker pull  {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}-dev@{{standard_digest}}
 ```
+
+- **Image Digest (development):** `{{ development_digest }}`
+- **Attestation:** [View SLSA Provenance]({{ development_url }})
+- **SBOM:** [Download CycloneDX]({{ development_sbom_url }})
+
+```bash
+docker pull  {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}@{{development_digest}}
+```
+
 ---
 
 ## 04. Build Provenance & Metadata
