@@ -180,17 +180,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install pipenv
           pipenv install
-      - name: Run Benchmark
-        run: task docs:benchmark_generate
-      - name: Generate Docs
-        run: task docs:generate_docs_tests
-      - name: Generate Readme
-        run: task docs:generate_readme
+      - name: Build the MkDocs site
+        run: |
+          pipenv run task docs:benchmark_generate
+          pipenv run task docs:generate_docs_tests
+          pipenv run task docs:build
+
       - name: Commit generated docs
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add README.md docs/
+          git add README.md
 
           # commit only if there are changes
           git diff --staged --quiet || git commit -m "Auto-update README and docs"
@@ -215,12 +215,6 @@ jobs:
             gh api --method DELETE \
               /user/packages/container/$PACKAGE/versions/$version
           done
-      - name: Build the MkDocs site
-        run: |
-          # The macros need the data files, so we need to generate them first
-          pipenv run task docs:benchmark_generate
-          pipenv run task docs:generate_docs_tests
-          pipenv run task docs:build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
