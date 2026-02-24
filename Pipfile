@@ -9,6 +9,9 @@ pytest = "*"
 allure-pytest = "*"
 python-hcl2 = "*"
 jinja2 = "*"
+mkdocs-material = "*"
+mkdocs-macros-plugin = "*"
+mkdocs-charts-plugin = "*"
 
 [dev-packages]
 

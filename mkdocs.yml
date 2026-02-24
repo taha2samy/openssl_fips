@@ -1,0 +1,91 @@
+site_name: Wolfi OpenSSL FIPS
+site_description: High-Assurance Cryptographic Foundation for Cloud-Native Workloads
+site_author: Taha Samy
+repo_name: taha2samy/openssl_fips
+repo_url: https://github.com/taha2samy/openssl_fips
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  icon:
+    logo: material/shield-check
+
+  font:
+    text: Roboto
+    code: Roboto Mono
+
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: blue
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+plugins:
+  - search
+  - charts
+  - macros:
+      module_name: main
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/vega@5
+  - https://cdn.jsdelivr.net/npm/vega-lite@5
+  - https://cdn.jsdelivr.net/npm/vega-embed@6
+
+markdown_extensions:
+  - admonition
+  - md_in_html
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+        - name: vegalite
+          class: vegalite
+          format: !!python/name:mkdocs_charts_plugin.fences.fence_vegalite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - tables
+  - attr_list
+  - def_list
+
+nav:
+  - Home: index.md
+  - Architecture:
+      - System Overview: architecture/index.md
+      - Supply Chain: architecture/supply-chain.md
+  - Compliance & Audit:
+      - FIPS 140-3 Test Results: compliance/fips-audit.md
+      - Security Policy: compliance/security-policy.md
+  - Performance:
+      - Cryptographic Benchmarks: performance/benchmarks.md
+  - Operations Guide:
+      - Taskfile & Workflows: operations/taskfile-guide.md

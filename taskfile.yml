@@ -67,12 +67,6 @@ tasks:
     cmds:
       - chmod +x ./parser.py
       - ./parser.py
-  docs:all-report-benchmark:
-    desc: Generate performance report
-    cmds:
-      - task: docs:benchmark
-      - task: docs:parse-benchmark
-      - pipenv run python benchmark/generate_report.py
   docs:generate_docs_tests:
       desc: Parses test results and build configs to generate full documentation
       cmds:
