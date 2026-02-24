@@ -185,6 +185,12 @@ jobs:
           pipenv run task docs:benchmark_generate
           pipenv run task docs:generate_docs_tests
           pipenv run task docs:build
+          cat docs/assets/data/results.csv
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
 
       - name: Commit generated docs
         run: |
@@ -216,8 +222,3 @@ jobs:
               /user/packages/container/$PACKAGE/versions/$version
           done
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
