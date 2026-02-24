@@ -73,9 +73,9 @@ tasks:
     desc: Generate documentation for benchmarks
     cmds:
       - task: docs:benchmark
-      - cmd: tree
-      - cmd: ls -R
       - task: docs:parse-benchmark
+      - cmd: tree -a
+      - cmd: ls -R
   docs:generate_docs_tests:
       desc: Parses test results and build configs to generate full documentation
       cmds:
