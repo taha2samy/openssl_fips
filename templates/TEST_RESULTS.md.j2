@@ -1,0 +1,92 @@
+# 🛡️ FIPS Compliance Audit Report
+
+> **Generated on:** {{ generated_at }}  
+> **Status:** ![Status]({{ summary.badge_url }})
+
+
+## 📋 Table of Contents
+1. [Executive Summary](#-executive-summary)
+2. [Build Configuration](#-build-configuration)
+3. [Supply Chain & Packages](#-supply-chain--packages)
+4. [Test Results Detail](#-test-results-detail)
+
+
+## 📊 Executive Summary
+
+| Metric | Count | Status |
+| :--- | :---: | :--- |
+| **Total Tests** | `{{ summary.statistic.total }}` | 🔍 Scoped |
+| **Passed** | `{{ summary.statistic.passed }}` | ✅ Passing |
+| **Failed** | `{{ summary.statistic.failed }}` | ❌ Critical |
+| **Broken** | `{{ summary.statistic.broken }}` | ⚠️ Error |
+
+
+## 🏗️ Build Configuration
+
+### Core Artifact Specs
+| Parameter | Configuration |
+| :--- | :--- |
+| **FIPS Module** | `{{ build_info.fips_version }}` |
+| **OpenSSL Core** | `{{ build_info.core_version }}` |
+| **Image Tag** | `{{ build_info.registry }}/{{ build_info.owner }}/{{ build_info.repo_name }}` |
+
+
+### 2. Target Artifacts (Outputs)
+| Variant | Full Image Reference |
+| :--- | :--- |
+| **Standard** | `{{ build_info.registry }}/{{ build_info.owner }}/{{ build_info.repo_name }}:{{ build_info.core_version }}` |
+| **Distroless** | `{{ build_info.registry }}/{{ build_info.owner }}/{{ build_info.repo_name }}:{{ build_info.core_version }}-distroless` |
+
+### 3. Base Image Provenance (Inputs)
+| Used For | Source Image Digest |
+| :--- | :--- |
+| **Standard Build** | `{{ build_info.base_image }}` |
+| **Distroless Build**| `{{ build_info.static_image }}` |
+
+
+
+The following key packages were pinned during the build process:
+
+| Package Name | Version |
+| :--- | :--- |
+{%- for pkg in package_versions %}
+| **{{ pkg.name }}** | `{{ pkg.version }}` |
+{%- endfor %}
+
+
+
+
+
+
+
+
+{% for suite_name, tests in suites.items() %}
+### 📁 {{ suite_name }}
+
+| Status | Test Case | Duration |
+| :---: | :--- | :---: |
+{%- for test in tests %}
+| {{ test.status_icon }} | **{{ test.name }}**<br><sub>{{ test.fullName }}</sub> | `{{ test.duration_ms }}ms` |
+{%- endfor %}
+
+{% set failures = tests | selectattr("status", "in", ["failed", "broken"]) | list %}
+{% if failures | length > 0 %}
+#### 🔻 Failure Analysis for {{ suite_name }}
+
+{% for test in failures %}
+**🔴 {{ test.name }}**
+> {{ test.description | default('No description available.') }}
+
+**Trace:**
+```text
+{{ test.error_trace | default('No trace available.') }}
+```
+---
+{% endfor %}
+{% endif %}
+
+<br>
+{% endfor %}
+
+
+*Automated by scripts/generate_docs_tests.py*

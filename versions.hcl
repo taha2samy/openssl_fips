@@ -2,10 +2,10 @@
 
 # --- Base Images (Pinned by Digest) ---
 variable "BASE_IMAGE" {
-  default = "cgr.dev/chainguard/wolfi-base@sha256:1c56f3ceb1c9929611a1cc7ab7a5fde1ec5df87add282029cd1596b8eae5af67"
+  default = "cgr.dev/chainguard/wolfi-base@sha256:9925d3017788558fa8f27e8bb160b791e56202b60c91fbcc5c867de3175986c8"
 }
 variable "STATIC_IMAGE" {
-  default = "cgr.dev/chainguard/static@sha256:9cef3c6a78264cb7e25923bf1bf7f39476dccbcc993af9f4ffeb191b77a7951e"
+  default = "cgr.dev/chainguard/static@sha256:11ec91f0372630a2ca3764cea6325bebb0189a514084463cbb3724e5bb350d14"
 }
 
 # --- Package Versions ---
@@ -16,7 +16,7 @@ variable "PERL_VER" {
   default = "5.42.0-r2"
 }
 variable "LINUX_HEADERS_VER" {
-  default = "6.19-r0"
+  default = "6.19.3-r0"
 }
 variable "WGET_VER" {
   default = "1.25.0-r7"
@@ -25,14 +25,35 @@ variable "CA_CERTIFICATES_VER" {
   default = "20251003-r3"
 }
 variable "LIBSTDC_PLUS_PLUS_VER" {
-  default = "15.2.0-r8"
+  default = "15.2.0-r9"
 }
 variable "ZLIB_VER" {
-  default = "1.3.1.2-r3"
+  default = "1.3.2-r0"
 }
 variable "TZDATA_VER" {
   default = "2025c-r0"
 }
 variable "POSIX_LIBC_UTILS_VER" {
   default = "2.43-r1"
+}
+variable "PKGCONF_VER" {
+  default = "2.5.1-r1"
+}
+variable "PCRE_DEV_VER" {
+  default = "8.45-r7"
+}
+variable "ZLIB_DEV_VER" {
+  default = "1.3.2-r0"
+}
+variable "BASH_VER" {
+  default = "5.3-r5"
+}
+variable "CURL_VER" {
+  default = "8.18.0-r2"
+}
+variable "JQ_VER" {
+  default = "1.8.1-r3"
+}
+variable "UNZIP_VER" {
+  default = "6.0-r5"
 }

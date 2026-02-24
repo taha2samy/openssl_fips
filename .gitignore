@@ -1,4 +1,4 @@
-benchmark/bench_results/*.logbenchmark/bench_results/*.log
+benchmark/bench_results/*.log
 allure-results/*
 allure-report/*
 __pycache__/
@@ -8,4 +8,4 @@ tests/.pytest_cache/
 reports/*
 extracted_metadata/*
 supply_chain_map.json
-benchmark/bench_results/*
+benchmark/bench_results/results.csv

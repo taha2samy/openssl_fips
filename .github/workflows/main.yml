@@ -1,4 +1,4 @@
-name: Update Base Images
+name: Update Packages & Images
 
 on:
   workflow_dispatch:
@@ -20,10 +20,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Update versions.hcl
+      - name: install python dependencies
         run: |
-          chmod +x get_latest.sh
-          ./get_latest.sh
+          sudo pip install jinja2 python-hcl2
+          sudo curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash
+          sudo apt install task
+      - name: Update Packages
+        run: |
+          sudo task update-pkgs
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
@@ -31,6 +35,6 @@ jobs:
           committer: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
           commit-message: "chore: update base image digests"
           branch: update-base-images
-          title: "🤖 Update Base Image Digests"
+          title: "😸 Update Packages & Images"
           body: "Automated update for images in versions.hcl"
           delete-branch: true

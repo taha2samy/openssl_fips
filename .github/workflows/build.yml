@@ -12,12 +12,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
       packages: write
-      id-token: write     
-      attestations: write  
-      actions: write 
-
+    outputs:
+      standard_digest: ${{ steps.extract_digests.outputs.standard_digest }}
+      distroless_digest: ${{ steps.extract_digests.outputs.distroless_digest }}
+      development_digest: ${{ steps.extract_digests.outputs.development_digest }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -28,13 +28,15 @@ jobs:
       - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-
       - name: Build and push
         uses: docker/bake-action@v6
+        env:
+          DOCKER_BUILD_SUMMARY: false
+          DOCKER_BUILD_RECORD_UPLOAD: false
         id: bake
         with:
           push: true
@@ -44,121 +46,172 @@ jobs:
           targets: default
           source: .
 
-          
-      - name: Save bake metadata to file
-        run: echo '${{ steps.bake.outputs.metadata }}' > bake-metadata.json
-  
-      - name: Extract digests and sizes
+      - name: Extract digests
         id: extract_digests
-        shell: /usr/bin/bash -e {0}
-        env:
-          REGISTRY: ${{ env.REGISTRY }}
-          IMAGE_NAME: ${{ env.IMAGE_NAME }}
         run: |
-          DISTROLESS_DIGEST=$(jq -r '.distroless."containerimage.digest"' bake-metadata.json)
-          STANDARD_DIGEST=$(jq -r '.standard."containerimage.digest"' bake-metadata.json)
+          metadata='${{ steps.bake.outputs.metadata }}'
+          echo "standard_digest=$(echo $metadata | jq -r '.standard."containerimage.digest"')" >> $GITHUB_OUTPUT
+          echo "distroless_digest=$(echo $metadata | jq -r '.distroless."containerimage.digest"')" >> $GITHUB_OUTPUT
+          echo "development_digest=$(echo $metadata | jq -r '.development."containerimage.digest"')" >> $GITHUB_OUTPUT
+          echo "standard_digest=$(echo $metadata | jq -r '.standard."containerimage.digest"')"
+          echo "distroless_digest=$(echo $metadata | jq -r '.distroless."containerimage.digest"')"
+          echo "development_digest=$(echo $metadata | jq -r '.development."containerimage.digest"')"
+  attest:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      attestations: write
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        target_name: [standard, distroless,development]
 
-          echo "distroless_digest=$DISTROLESS_DIGEST" >> $GITHUB_OUTPUT
-          echo "standard_digest=$STANDARD_DIGEST" >> $GITHUB_OUTPUT
-
-          get_image_size() {
-            local DIGEST=$1
-            local MANIFEST
-            MANIFEST=$(docker manifest inspect "$REGISTRY/$IMAGE_NAME@$DIGEST") || { echo 0; return; }
-            if [ "$(echo "$MANIFEST" | jq '.layers')" = "null" ]; then
-              echo 0
-            else
-              echo "$MANIFEST" | jq '[.layers[].size] | add'
-            fi
-          }
-
-          DISTROLESS_SIZE=$(get_image_size "$DISTROLESS_DIGEST")
-          STANDARD_SIZE=$(get_image_size "$STANDARD_DIGEST")
-
-          DISTROLESS_HUMAN=$(numfmt --to=iec-i --suffix=B "$DISTROLESS_SIZE")
-          STANDARD_HUMAN=$(numfmt --to=iec-i --suffix=B "$STANDARD_SIZE")
-
-          echo "DISTROLESS_SIZE=$DISTROLESS_HUMAN" >> $GITHUB_ENV
-          echo "STANDARD_SIZE=$STANDARD_HUMAN" >> $GITHUB_ENV
-
-          echo "Distroless image size: $DISTROLESS_HUMAN"
-          echo "Standard image size: $STANDARD_HUMAN"
-
-
-      - name: Attest Distroless
-        uses: actions/attest-build-provenance@v3
+    steps:
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          subject-digest: ${{ steps.extract_digests.outputs.distroless_digest }}
-          push-to-registry: true
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set Digest for current target
+        id: set_digest
+        run: |
+          if [[ "${{ matrix.target_name }}" == "standard" ]]; then
+            echo "digest=${{ needs.build.outputs.standard_digest }}" >> $GITHUB_OUTPUT
+          elif [[ "${{ matrix.target_name }}" == "distroless" ]]; then
+            echo "digest=${{ needs.build.outputs.distroless_digest }}" >> $GITHUB_OUTPUT
+          else
+            echo "digest=${{ needs.build.outputs.development_digest }}" >> $GITHUB_OUTPUT
+          fi
 
-      - name: Attest Standard
+      - name: Attest Provenance
         uses: actions/attest-build-provenance@v3
+        id: attest_provenance-image
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          subject-digest: ${{ steps.extract_digests.outputs.standard_digest }}
+          subject-name: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips
+          subject-digest: ${{ steps.set_digest.outputs.digest }}
           push-to-registry: true
+          show-summary: false
 
-      - name: Read variables from docker-bake.hcl
+      - name: Generate SBOM (CycloneDX)
+        uses: anchore/sbom-action@v0.22.2
+        with:
+          image: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips@${{ steps.set_digest.outputs.digest }}
+          format: cyclonedx-json
+          output-file: ${{ matrix.target_name }}.cyclonedx.json
+
+      - name: Attest SBOM
+        uses: actions/attest-sbom@v3
+        id: attest_sbom
+        with:
+          subject-name: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips
+          subject-digest: ${{ steps.set_digest.outputs.digest }}
+          sbom-path: ${{ matrix.target_name }}.cyclonedx.json
+          push-to-registry: true
+          show-summary: false
+
+      - name: Save URL to file
         run: |
-          pip install python-hcl2
-          python << 'EOF'
-          import hcl2
-          import os
+          echo "" detail.json
 
-          with open("docker-bake.hcl", "r") as f:
-              data = hcl2.load(f)
-
-          env_vars = {
-              "FIPS_VERSION": "unknown",
-              "CORE_VERSION": "unknown",
-              "REGISTRY": "unknown",
-              "OWNER": "unknown",
-              "REPO_NAME": "unknown"
-          }
-
-          for var in data.get("variable", []):
-              for k, v in var.items():
-                  env_vars[k] = v.get("default", env_vars[k])
-
-          with open(os.environ["GITHUB_ENV"], "a") as env_file:
-              for k, v in env_vars.items():
-                  env_file.write(f"{k}={v}\n")
-          EOF
-
-
-      - name: Benchmark
+      - name: Save Attestation Details to JSON
         run: |
-          chmod +x benchmark/run_benchmark.sh
-          chmod +x benchmark/generate_report.py
-          ./benchmark/run_benchmark.sh
-          ./benchmark/generate_report.py
+          echo '{
+            "target": "${{ matrix.target_name }}",
+            "provenance": {
+              "id": "${{ steps.attest_provenance-image.outputs.attestation-id }}",
+              "url": "${{ steps.attest_provenance-image.outputs.attestation-url }}",
+              "digest": "${{ steps.set_digest.outputs.digest }}"
+            },
+            "sbom": {
+              "id": "${{ steps.attest_sbom.outputs.attestation-id }}",
+              "url": "${{ steps.attest_sbom.outputs.attestation-url }}"
+            }
+          }' > ${{ matrix.target_name }}_attestation_details.json
 
-      - name: Set README environment variables
+      - name: Upload Attestation Metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: attestation-metadata-${{ matrix.target_name }}
+          path: ${{ matrix.target_name }}_attestation_details.json
+          retention-days: 1  
+
+
+  readme:
+    needs: [attest]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download all metadata artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-metadata 
+          pattern: attestation-metadata-* 
+          merge-multiple: true 
+
+      - name: Print JSON files and cleanup
         run: |
-          echo "PROJECT_NAME=Wolfi OpenSSL FIPS Images" >> $GITHUB_ENV
-          echo "OWNER=${{ github.repository_owner }}" >> $GITHUB_ENV
-          echo "REPO_NAME=${{ env.repo_of_registry }}" >> $GITHUB_ENV
-          echo "CODE_REPO_NAME=${{ github.event.repository.name }}" >> $GITHUB_ENV
-          echo "REPO_URL=https://github.com/${{ github.repository }}" >> $GITHUB_ENV
-          echo "REGISTRY=${{ env.REGISTRY }}" >> $GITHUB_ENV
-          echo "GENERATION_DATE=$(date -u +%Y-%m-%d)" >> $GITHUB_ENV
-          echo "BUILD_DATE=$(date -u +%Y%m%d)" >> $GITHUB_ENV
-          echo "full_image_tag=${{ env.REGISTRY }}/${{env.OWNER}}/${{ env.IMAGE_NAME }}:full-${{ env.FIPS_VERSION }}-${{ env.CORE_VERSION }}" >> $GITHUB_ENV
-          echo "distroless_image=${{ env.REGISTRY }}/${{env.OWNER}}/${{ env.IMAGE_NAME }}:distroless-${{ env.FIPS_VERSION }}-${{ env.CORE_VERSION }}" >> $GITHUB_ENV
-
-
-
-      - name: Install jinja2
-        run: pip install jinja2
-
-      - name: Generate README.md
-        run: python scripts/update_readme.py
-
-      - name: Commit README.md
+          echo "=========================================="
+          echo "Displaying Attestation Details:"
+          echo "=========================================="
+          
+          for file in all-metadata/*.json; do
+            echo "File: $file"
+            cat "$file"
+            echo -e "\n------------------------------------------"
+          done
+          
+      - name: install taskfile
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add README.md
-          git commit -m "docs: auto-generate README" || echo "No changes to commit"
+          sudo curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash
+          sudo apt install task
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+      - name: Install pipenv
+        run: |
+          python -m pip install --upgrade pip
+          pip install pipenv
+          pipenv install
+      - name: Run Benchmark
+        run: task docs:all-report-benchmark
+      - name: Generate Docs
+        run: task docs:generate_docs_tests
+      - name: Generate Readme
+        run: task docs:generate_readme
+      - name: Commit generated docs
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md docs/
+
+          # commit only if there are changes
+          git diff --staged --quiet || git commit -m "Auto-update README and docs"
+
           git push
+      - name: Cleanup
+        if: always()
+        run: |
+          echo "Cleaning up files..."
+          rm -rf all-metadata
+
+      - name: Delete dangling GHCR images
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PACKAGE="wolfi-openssl-fips"
+
+          gh api /user/packages/container/$PACKAGE/versions \
+            --jq '.[] | select(.metadata.container.tags == null) | .id' |
+          while read version; do
+            echo "Deleting version $version"
+            gh api --method DELETE \
+              /user/packages/container/$PACKAGE/versions/$version
+          done

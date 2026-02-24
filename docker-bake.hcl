@@ -26,22 +26,27 @@ function "tag" {
 }
 
 group "default" {
-  targets = ["standard", "distroless", "dev"]
+  targets = ["standard", "distroless","development"]
 }
 
 target "common" {
   context    = "."
   dockerfile = "Dockerfile"
   platforms  = ["linux/amd64", "linux/arm64"]
-  output = ["type=registry"]
+  output = [
+    "type=registry,compression=zstd,force-compression=true"
+  ]
+  attest = [
+    "type=sbom,generator=docker/buildkit-syft-scanner,format=cyclonedx-json",
+    "type=provenance,mode=max"
+  ]
   args = {
     FIPS_VERSION = "${FIPS_VERSION}"
     CORE_VERSION = "${CORE_VERSION}"
-        # --- Base Images ---
+
+    # --- Base Images ---
     BASE_IMAGE   = "${BASE_IMAGE}"
     STATIC_IMAGE = "${STATIC_IMAGE}"
-    FIPS_VERSION = "${FIPS_VERSION}"
-    CORE_VERSION = "${CORE_VERSION}"
 
     # --- Build Stage Packages (fips-builder & core-builder) ---
     BUILD_BASE_VER    = "${BUILD_BASE_VER}"
@@ -55,8 +60,15 @@ target "common" {
     ZLIB_VER              = "${ZLIB_VER}"
     TZDATA_VER            = "${TZDATA_VER}"
     POSIX_LIBC_UTILS_VER  = "${POSIX_LIBC_UTILS_VER}"
-    
 
+    # --- Dev Tools (openssl-dev) ---
+    PKGCONF_VER  = "${PKGCONF_VER}"
+    PCRE_DEV_VER = "${PCRE_DEV_VER}"
+    ZLIB_DEV_VER = "${ZLIB_DEV_VER}"
+    BASH_VER     = "${BASH_VER}"
+    CURL_VER     = "${CURL_VER}"
+    JQ_VER       = "${JQ_VER}"
+    UNZIP_VER    = "${UNZIP_VER}"
   }
 }
 
@@ -70,13 +82,10 @@ target "standard" {
     tag("latest")
   )
 
-  cache-from = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-standard"]
-  cache-to   = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-standard,mode=max"]
-  
-  attest = [
-    "type=provenance,mode=max",
-    "type=sbom,format=cyclonedx-json"
-  ]
+
+  cache-from = ["type=gha,scope=standard"]
+  cache-to   = ["type=gha,scope=standard,mode=max"]
+
 }
 
 ### ---------- DISTROLESS IMAGE ----------
@@ -89,17 +98,14 @@ target "distroless" {
     tag("distroless")
   )
 
-  cache-from = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-distroless"]
-  cache-to   = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-distroless,mode=max"]
 
-  attest = [
-    "type=provenance,mode=max",
-    "type=sbom,format=cyclonedx-json"
-  ]
+  cache-from = ["type=gha,scope=distroless"]
+  cache-to   = ["type=gha,scope=distroless,mode=max"]
+
 }
 
-# ---------- DEV IMAGE ----------
-target "dev" {
+### ---------- DEV IMAGE ----------
+target "development" {
   inherits = ["common"]
   target   = "openssl-dev"
 
@@ -108,12 +114,6 @@ target "dev" {
     tag("dev")
   )
 
-  cache-from = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-dev"]
-  cache-to   = ["type=registry,ref=${REGISTRY}/${OWNER}/${REPO_NAME}:build-cache-dev,mode=max"]
-
-  attest = [
-    "type=provenance,mode=max",
-    "type=sbom,format=cyclonedx-json"
-  ]
+  cache-from = ["type=gha,scope=development"]
+  cache-to   = ["type=gha,scope=development,mode=max"]
 }
-
