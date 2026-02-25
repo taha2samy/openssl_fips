@@ -184,8 +184,6 @@ jobs:
         run: task docs:generate_benchmark_data
       - name: Generate docs tests
         run: task docs:generate_docs_tests
-      - name: Build docs
-        run: task docs:build
       - name: Parse benchmark data
         run: task docs:parse_benchmark_data
       - name: Build MkDocs site
