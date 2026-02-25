@@ -1,125 +1,100 @@
 #!/usr/bin/env python3
 import re
 import csv
+import json
 import os
 import glob
 import sys
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(SCRIPT_DIR)
+sys.path.append(ROOT_DIR)
 
-try:
-    from scripts.logger import log
-except ImportError:
-    import logging as log
-    log.basicConfig(level=log.INFO)
+from scripts.logger import log, group_start, group_end, notice
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CSV_PATH_THROUGHPUT =  "./reports/results.csv"
-CSV_PATH_SIGNATURES = "./reports/signatures.csv"
-
-def get_os_version(os_name):
-    if os_name in ["fips", "alpine"]:
-        return "3.5.5"
-    if os_name == "debian":
-        return "3.0.18"
-    if os_name == "ubuntu":
-        return "3.0.13"
-    log.warning(f"Version mapping missing for OS: {os_name}")
-    return "Unknown"
-
-def identify_and_clean_algo(line):
-    line_lower = line.lower()
-    if "rsa" in line_lower: return "rsa2048"
-    if "ecdsa" in line_lower or "nistp256" in line_lower: return "ecdsap256"
-    return line.split()[0].upper().replace(':', '')
-
-def extract_perf_numbers(line):
-    parts = line.split()
-    nums = []
-    for p in parts:
-        clean = p.strip().replace('k', '')
-        if clean.endswith('s') or not re.match(r'^-?\d+(\.\d+)?$', clean):
-            continue
-        val = float(clean)
-        if val in [16.0, 64.0, 256.0, 1024.0, 2048.0, 4096.0, 8192.0, 16384.0, 0.0]:
-            continue
-        nums.append(val)
-    return nums
+LOG_DIR = os.path.join(SCRIPT_DIR, "bench_results")
+REPORTS_DIR = os.path.join(ROOT_DIR, "reports")
+CSV_PATH = os.path.join(ROOT_DIR, "reports","results.csv")
+JSON_PATH = os.path.join(REPORTS_DIR, "benchmark_data.json")
 
 def parse_raw_logs():
-    LOG_DIR = os.path.join(BASE_DIR, "bench_results")
-    throughput_data = []
-    signature_data = []
-    
+    all_data = []
     log_files = glob.glob(os.path.join(LOG_DIR, "*.log"))
+    
+    speed_regex = r'^([a-zA-Z0-9\.-]+)\s+([\d\.]+k)\s+([\d\.]+k)\s+([\d\.]+k)\s+([\d\.]+k)\s+([\d\.]+k)\s+([\d\.]+k)'
+    version_regex = r'^version:\s*([\w\.]+)'
 
     if not log_files:
-        log.error("No log files found.")
-        return
-
-    log.info("Parsing telemetry with fixed version mapping...")
+        log.error(f"No log files found in {LOG_DIR}")
+        return []
 
     for file_path in log_files:
         os_name = os.path.basename(file_path).replace('.log', '')
-        current_version = get_os_version(os_name)
+        current_version = "Unknown"
         
-        try:
-            with open(file_path, 'r', encoding='utf-8') as f:
-                for line in f:
-                    line = line.strip()
-                    if not line or any(x in line.lower() for x in ['built', 'compiler', 'options', 'cpuinfo', 'keygen', 'encaps', 'decaps', 'encrypt', 'decrypt', 'encr', 'decr']):
-                        continue
+        with open(file_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                v_match = re.search(version_regex, line, re.IGNORECASE)
+                if v_match:
+                    current_version = v_match.group(1)
+                    continue
 
-                    if line.startswith(('+', 'Forked', 'Got:', 'version:')):
-                        continue
-
-                    nums = extract_perf_numbers(line)
-                    if not nums: continue
-
-                    algo = identify_and_clean_algo(line)
-
-                    if len(nums) == 6:
-                        throughput_data.append({
-                            "os": os_name,
-                            "version": current_version,
-                            "algorithm": algo,
-                            "16b": nums[0], "64b": nums[1], "256b": nums[2],
-                            "1024b": nums[3], "8192b": nums[4], "16384b": nums[5]
-                        })
-                    
-                    elif len(nums) >= 2:
-                        signature_data.append({
-                            "os": os_name,
-                            "version": current_version,
-                            "algorithm": algo,
-                            "sign_ops": nums[0],
-                            "verify_ops": nums[1]
-                        })
-
-        except Exception as e:
-            log.error(f"Error parsing {os_name}: {str(e)}")
+                match = re.search(speed_regex, line)
+                if match:
+                    all_data.append({
+                        "os": os_name,
+                        "version": current_version,
+                        "algorithm": match.group(1),
+                        "16b": float(match.group(2).replace('k', '')),
+                        "64b": float(match.group(3).replace('k', '')),
+                        "256b": float(match.group(4).replace('k', '')),
+                        "1024b": float(match.group(5).replace('k', '')),
+                        "8192b": float(match.group(6).replace('k', '')),
+                        "16384b": float(match.group(7).replace('k', ''))
+                    })
     
-    os.makedirs(os.path.dirname(CSV_PATH_THROUGHPUT), exist_ok=True)
-
-    if throughput_data:
-        with open(CSV_PATH_THROUGHPUT, 'w', newline='', encoding='utf-8') as f:
-            writer = csv.DictWriter(f, fieldnames=throughput_data[0].keys())
+    if all_data:
+        os.makedirs(os.path.dirname(CSV_PATH), exist_ok=True)
+        keys = all_data[0].keys()
+        with open(CSV_PATH, 'w', newline='', encoding='utf-8') as f:
+            writer = csv.DictWriter(f, fieldnames=keys)
             writer.writeheader()
-            writer.writerows(throughput_data)
+            writer.writerows(all_data)
+        notice(f"CSV data synced to docs")
 
-    if signature_data:
-        unique_sigs = {}
-        for entry in signature_data:
-            key = (entry['os'], entry['algorithm'])
-            if key not in unique_sigs or entry['sign_ops'] > unique_sigs[key]['sign_ops']:
-                unique_sigs[key] = entry
-        
-        with open(CSV_PATH_SIGNATURES, 'w', newline='', encoding='utf-8') as f:
-            writer = csv.DictWriter(f, fieldnames=signature_data[0].keys())
-            writer.writeheader()
-            writer.writerows(unique_sigs.values())
+    return all_data
 
-    log.info("CSVs regenerated successfully with correct versions.")
+def transform_to_json(data):
+    structured = {"metadata": {}, "metrics": {}}
+    for entry in data:
+        algo, os_name, ver = entry['algorithm'], entry['os'], entry['version']
+        if os_name not in structured["metadata"]:
+            structured["metadata"][os_name] = {"openssl_version": ver}
+        if algo not in structured["metrics"]:
+            structured["metrics"][algo] = {}
+        structured["metrics"][algo][os_name] = [
+            entry['16b'], entry['64b'], entry['256b'], 
+            entry['1024b'], entry['8192b'], entry['16384b']
+        ]
+    return structured
 
 if __name__ == "__main__":
-    parse_raw_logs()
+    group_start("Benchmark Telemetry Processor")
+    os.makedirs(REPORTS_DIR, exist_ok=True)
+    
+    extracted = parse_raw_logs()
+    if not extracted:
+        log.error("Parsing failed: Check if benchmark logs exist.")
+        sys.exit(1)
+
+    try:
+        with open(JSON_PATH, 'w', encoding='utf-8') as f:
+            json.dump(transform_to_json(extracted), f, indent=4)
+        notice(f"Benchmark JSON updated successfully")
+    except Exception as e:
+        log.error(f"IO Error: {str(e)}")
+        sys.exit(1)
+        
+    log.info(f"Processed {len(extracted)} metrics across {len(set(d['os'] for d in extracted))} environments.")
+    group_end()

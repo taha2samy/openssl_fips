@@ -66,6 +66,7 @@ tasks:
     desc: Parse benchmark results
     cmds:
       - pipenv run python benchmark/parser.py
+      - pipenv run python benchmark/parser_signatures.py
 
   docs:generate_docs_tests:
       desc: Parses test results and build configs to generate full documentation
