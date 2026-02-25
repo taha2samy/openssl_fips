@@ -150,43 +150,44 @@ Hashing is a critical primitive for digital signatures, data integrity, and key 
 
     ```vegalite
       {
-    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "data": {"values": {{ bench_results_raw | safe }}},
-    "transform": [
-      {
-        "calculate": "datum.algorithm", 
-        "as": "algo"
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {"values": {{ bench_results_raw | safe }}},
+      "transform": [
+        {
+          "calculate": "datum.algorithm", 
+          "as": "algo"
+        },
+        {
+          "filter": "test(/sha512/i, datum.algo)"
+        },
+        {
+          "calculate": "toNumber(datum['16384b'])",
+          "as": "throughput"
+        }
+      ],
+      "mark": {"type": "bar", "tooltip": true, "cornerRadiusEnd": 4},
+      "encoding": {
+        "x": {
+          "field": "os", 
+          "type": "nominal", 
+          "title": "Environment", 
+          "axis": {"labelAngle": 0}
+        },
+        "y": {
+          "field": "throughput", 
+          "type": "quantitative", 
+          "title": "Throughput (KB/s)"
+        },
+        "color": {
+          "field": "os", 
+          "type": "nominal",
+          "legend": null
+        }
       },
-      {
-        "filter": "test(/sha512/i, datum.algo)"
-      },
-      {
-        "calculate": "toNumber(datum['16384b'])",
-        "as": "throughput"
+      "width": "container",
+      "height": 250
       }
-    ],
-    "mark": {"type": "bar", "tooltip": true, "cornerRadiusEnd": 4},
-    "encoding": {
-      "x": {
-        "field": "os", 
-        "type": "nominal", 
-        "title": "Environment", 
-        "axis": {"labelAngle": 0}
-      },
-      "y": {
-        "field": "throughput", 
-        "type": "quantitative", 
-        "title": "Throughput (KB/s)"
-      },
-      "color": {
-        "field": "os", 
-        "type": "nominal",
-        "legend": null
-      }
-    },
-    "width": "container",
-    "height": 250
-  }
+      
     ```
 
 === "SHA3-256 Performance"
@@ -194,44 +195,46 @@ Hashing is a critical primitive for digital signatures, data integrity, and key 
     **The modern NIST standard, resistant to length-extension attacks.**
 
     ```vegalite
-      {
-    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "data": {"values": {{ bench_results_raw | safe }}},
-    "transform": [
-      {
-        "calculate": "datum.algorithm", 
-        "as": "algo"
-      },
-      {
-        "filter": "test(/sha3-256/i, datum.algo)"
-      },
-      {
-        "calculate": "toNumber(datum['16384b'])",
-        "as": "throughput"
+
+          {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "data": {"values": {{ bench_results_raw | safe }}},
+        "transform": [
+          {
+            "calculate": "datum.algorithm", 
+            "as": "algo"
+          },
+          {
+            "filter": "test(/sha3-256/i, datum.algo)"
+          },
+          {
+            "calculate": "toNumber(datum['16384b'])",
+            "as": "throughput"
+          }
+        ],
+        "mark": {"type": "bar", "tooltip": true, "cornerRadiusEnd": 4},
+        "encoding": {
+          "x": {
+            "field": "os", 
+            "type": "nominal", 
+            "title": "Environment", 
+            "axis": {"labelAngle": 0}
+          },
+          "y": {
+            "field": "throughput", 
+            "type": "quantitative", 
+            "title": "Throughput (KB/s)"
+          },
+          "color": {
+            "field": "os", 
+            "type": "nominal",
+            "legend": null
+          }
+        },
+        "width": "container",
+        "height": 250
       }
-    ],
-    "mark": {"type": "bar", "tooltip": true, "cornerRadiusEnd": 4},
-    "encoding": {
-      "x": {
-        "field": "os", 
-        "type": "nominal", 
-        "title": "Environment", 
-        "axis": {"labelAngle": 0}
-      },
-      "y": {
-        "field": "throughput", 
-        "type": "quantitative", 
-        "title": "Throughput (KB/s)"
-      },
-      "color": {
-        "field": "os", 
-        "type": "nominal",
-        "legend": null
-      }
-    },
-    "width": "container",
-    "height": 250
-  }
+
     ```
     
 !!! success "Hashing Performance Verdict"
@@ -247,45 +250,47 @@ This interactive line chart visualizes how throughput scales as the input data s
 
 ```vegalite
 
-{
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "AES-256-GCM Scaling Curve",
-  "data": {"values": {{ bench_results_raw | safe }}},
-  "transform": [
-    {
-      "filter": "test(/AES-256-GCM/i, datum.algorithm)"
+  {
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "description": "AES-256-GCM Scaling Curve",
+    "data": {"values": {{ bench_results_raw | safe }}},
+    "transform": [
+      {
+        "filter": "test(/AES-256-GCM/i, datum.algorithm)"
+      },
+      {
+        "fold": ["16b", "64b", "256b", "1024b", "8192b", "16384b"],
+        "as": ["Buffer Size", "Throughput"]
+      },
+      {
+        "calculate": "toNumber(datum.Throughput)",
+        "as": "Throughput_Num"
+      }
+    ],
+    "mark": {"type": "line", "point": true, "tooltip": true},
+    "encoding": {
+      "x": {
+        "field": "Buffer Size", 
+        "type": "nominal", 
+        "title": "Buffer Size",
+        "sort": ["16b", "64b", "256b", "1024b", "8192b", "16384b"]
+      },
+      "y": {
+        "field": "Throughput_Num", 
+        "type": "quantitative",
+        "title": "Throughput (KB/s)"
+      },
+      "color": {
+        "field": "os", 
+        "type": "nominal", 
+        "title": "Environment"
+      }
     },
-    {
-      "fold": ["16b", "64b", "256b", "1024b", "8192b", "16384b"],
-      "as": ["Buffer Size", "Throughput"]
-    },
-    {
-      "calculate": "toNumber(datum.Throughput)",
-      "as": "Throughput_Num"
-    }
-  ],
-  "mark": {"type": "line", "point": true, "tooltip": true},
-  "encoding": {
-    "x": {
-      "field": "Buffer Size", 
-      "type": "nominal", 
-      "title": "Buffer Size",
-      "sort": ["16b", "64b", "256b", "1024b", "8192b", "16384b"]
-    },
-    "y": {
-      "field": "Throughput_Num", 
-      "type": "quantitative",
-      "title": "Throughput (KB/s)"
-    },
-    "color": {
-      "field": "os", 
-      "type": "nominal", 
-      "title": "Environment"
-    }
-  },
-  "width": "container",
-  "height": 400
-}
+    "width": "container",
+    "height": 400
+  }
+
+
 ```
 
 ---
