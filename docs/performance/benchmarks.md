@@ -43,7 +43,7 @@ AES-256-GCM is the primary cipher for TLS 1.3. This chart visualizes the maximum
 ```vegalite
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "data": {"url": "../../assets/data/results.csv"},
+  "data": {"values": {{ bench_results_raw | safe }}},
   "transform": [
     {
       "calculate": "datum.algorithm", 
@@ -106,15 +106,41 @@ Hashing is a critical primitive for digital signatures, data integrity, and key 
     ```vegalite
     {
       "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-      "data": {"url": "../../assets/data/results.csv"},
-      "transform": [{"filter": "datum.algorithm == 'sha256'"}],
-      "mark": {"type": "bar", "tooltip": true},
+      "data": {"values": {{ bench_results_raw | safe }}},
+      "transform": [
+        {
+          "calculate": "datum.algorithm", 
+          "as": "algo"
+        },
+        {
+          "filter": "test(/sha256/i, datum.algo)"
+        },
+        {
+          "calculate": "toNumber(datum['16384b'])",
+          "as": "throughput"
+        }
+      ],
+      "mark": {"type": "bar", "tooltip": true, "cornerRadiusEnd": 4},
       "encoding": {
-        "x": {"field": "os", "type": "nominal", "title": "Environment", "axis": {"labelAngle": 0}},
-        "y": {"field": "16384b", "type": "quantitative", "title": "Throughput (KB/s)"},
-        "color": {"field": "os", "type": "nominal", "legend": null}
+        "x": {
+          "field": "os", 
+          "type": "nominal", 
+          "title": "Environment", 
+          "axis": {"labelAngle": 0}
+        },
+        "y": {
+          "field": "throughput", 
+          "type": "quantitative", 
+          "title": "Throughput (KB/s)"
+        },
+        "color": {
+          "field": "os", 
+          "type": "nominal",
+          "legend": null
+        }
       },
-      "width": "container"
+      "width": "container",
+      "height": 250
     }
     ```
 
@@ -123,18 +149,44 @@ Hashing is a critical primitive for digital signatures, data integrity, and key 
     **Optimized for 64-bit architectures, showing superior performance.**
 
     ```vegalite
-    {
-      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-      "data": {"url": "../../assets/data/results.csv"},
-      "transform": [{"filter": "datum.algorithm == 'sha512'"}],
-      "mark": {"type": "bar", "tooltip": true},
-      "encoding": {
-        "x": {"field": "os", "type": "nominal", "title": "Environment", "axis": {"labelAngle": 0}},
-        "y": {"field": "16384b", "type": "quantitative", "title": "Throughput (KB/s)"},
-        "color": {"field": "os", "type": "nominal", "legend": null}
+      {
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "data": {"values": {{ bench_results_raw | safe }}},
+    "transform": [
+      {
+        "calculate": "datum.algorithm", 
+        "as": "algo"
       },
-      "width": "container"
-    }
+      {
+        "filter": "test(/sha512/i, datum.algo)"
+      },
+      {
+        "calculate": "toNumber(datum['16384b'])",
+        "as": "throughput"
+      }
+    ],
+    "mark": {"type": "bar", "tooltip": true, "cornerRadiusEnd": 4},
+    "encoding": {
+      "x": {
+        "field": "os", 
+        "type": "nominal", 
+        "title": "Environment", 
+        "axis": {"labelAngle": 0}
+      },
+      "y": {
+        "field": "throughput", 
+        "type": "quantitative", 
+        "title": "Throughput (KB/s)"
+      },
+      "color": {
+        "field": "os", 
+        "type": "nominal",
+        "legend": null
+      }
+    },
+    "width": "container",
+    "height": 250
+  }
     ```
 
 === "SHA3-256 Performance"
@@ -142,18 +194,44 @@ Hashing is a critical primitive for digital signatures, data integrity, and key 
     **The modern NIST standard, resistant to length-extension attacks.**
 
     ```vegalite
-    {
-      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-      "data": {"url": "../../assets/data/results.csv"},
-      "transform": [{"filter": "datum.algorithm == 'sha3-256'"}],
-      "mark": {"type": "bar", "tooltip": true},
-      "encoding": {
-        "x": {"field": "os", "type": "nominal", "title": "Environment", "axis": {"labelAngle": 0}},
-        "y": {"field": "16384b", "type": "quantitative", "title": "Throughput (KB/s)"},
-        "color": {"field": "os", "type": "nominal", "legend": null}
+      {
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "data": {"values": {{ bench_results_raw | safe }}},
+    "transform": [
+      {
+        "calculate": "datum.algorithm", 
+        "as": "algo"
       },
-      "width": "container"
-    }
+      {
+        "filter": "test(/sha3-256/i, datum.algo)"
+      },
+      {
+        "calculate": "toNumber(datum['16384b'])",
+        "as": "throughput"
+      }
+    ],
+    "mark": {"type": "bar", "tooltip": true, "cornerRadiusEnd": 4},
+    "encoding": {
+      "x": {
+        "field": "os", 
+        "type": "nominal", 
+        "title": "Environment", 
+        "axis": {"labelAngle": 0}
+      },
+      "y": {
+        "field": "throughput", 
+        "type": "quantitative", 
+        "title": "Throughput (KB/s)"
+      },
+      "color": {
+        "field": "os", 
+        "type": "nominal",
+        "legend": null
+      }
+    },
+    "width": "container",
+    "height": 250
+  }
     ```
     
 !!! success "Hashing Performance Verdict"
@@ -168,23 +246,42 @@ This interactive line chart visualizes how throughput scales as the input data s
 > **Key:** A steep, linear upward curve indicates healthy CPU pipelining and efficient cache utilization. A flat curve suggests a bottleneck (e.g., I/O, memory bandwidth).
 
 ```vegalite
+
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "AES-256-GCM Scaling",
-  "data": {"url": "../../assets/data/results.csv"},
+  "description": "AES-256-GCM Scaling Curve",
+  "data": {"values": {{ bench_results_raw | safe }}},
   "transform": [
-    {"filter": "datum.algorithm == 'AES-256-GCM'"},
-    {"fold": ["16b", "64b", "256b", "1024b", "8192b", "16384b"], "as": ["Buffer Size", "Throughput (KB/s)"]}
+    {
+      "filter": "test(/AES-256-GCM/i, datum.algorithm)"
+    },
+    {
+      "fold": ["16b", "64b", "256b", "1024b", "8192b", "16384b"],
+      "as": ["Buffer Size", "Throughput"]
+    },
+    {
+      "calculate": "toNumber(datum.Throughput)",
+      "as": "Throughput_Num"
+    }
   ],
   "mark": {"type": "line", "point": true, "tooltip": true},
   "encoding": {
     "x": {
       "field": "Buffer Size", 
       "type": "nominal", 
+      "title": "Buffer Size",
       "sort": ["16b", "64b", "256b", "1024b", "8192b", "16384b"]
     },
-    "y": {"field": "Throughput (KB/s)", "type": "quantitative"},
-    "color": {"field": "os", "type": "nominal", "title": "Operating System"}
+    "y": {
+      "field": "Throughput_Num", 
+      "type": "quantitative",
+      "title": "Throughput (KB/s)"
+    },
+    "color": {
+      "field": "os", 
+      "type": "nominal", 
+      "title": "Environment"
+    }
   },
   "width": "container",
   "height": 400

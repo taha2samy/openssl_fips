@@ -2,13 +2,14 @@ import os
 import json
 import hcl2
 import sys
+import csv
 from datetime import datetime
 
-# Setup path to import from scripts
+# Path setup for internal modules
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(ROOT_DIR)
 
-from scripts.logger import log, group_start, group_end, notice
+from scripts.logger import log, group_start, group_end
 
 def load_json(path: str) -> dict:
     if not os.path.exists(path):
@@ -38,30 +39,42 @@ def load_hcl(path: str) -> dict:
         return {}
 
 def define_env(env):
-    group_start("MkDocs Environment Injection")
+    group_start("MkDocs Data Injection")
     
-    # 1. Load All Data Sources
+    # 1. Embedded CSV Data for Vega-Lite
+    csv_path = os.path.join(ROOT_DIR, "docs/assets/data/results.csv")
+    csv_values = []
+    if os.path.exists(csv_path):
+        try:
+            with open(csv_path, encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                csv_values = list(reader)
+        except Exception as e:
+            log.error(f"Failed to read CSV: {str(e)}")
+    
+    # 2. Configuration & Statistics
     bake_vars = load_hcl(os.path.join(ROOT_DIR, "docker-bake.hcl"))
     version_vars = load_hcl(os.path.join(ROOT_DIR, "versions.hcl"))
     summary = load_json(os.path.join(ROOT_DIR, "reports", "summary.json"))
     raw_benchmarks = load_json(os.path.join(ROOT_DIR, "reports", "benchmark_data.json"))
 
+    # 3. Supply Chain Metadata
     meta_root = os.path.join(ROOT_DIR, "all-metadata")
     distroless_meta = load_json(os.path.join(meta_root, "distroless_attestation_details.json"))
     standard_meta = load_json(os.path.join(meta_root, "standard_attestation_details.json"))
     dev_meta = load_json(os.path.join(meta_root, "development_attestation_details.json"))
 
-    # 2. Process Test Statistics
+    # 4. Processing Test Stats
     stats = summary.get("summary", {}).get(
         "statistic",
         {"passed": 0, "failed": 0, "broken": 0, "total": 0}
     )
 
-    # 3. Benchmark Fallback Logic
+    # 5. Benchmark Fallback (prevents template errors if JSON is missing)
     if not raw_benchmarks or "metrics" not in raw_benchmarks:
-        log.warning("benchmark_data.json is missing or invalid. Using safety fallback.")
+        log.warning("Benchmark JSON missing. Injecting empty fallback structure.")
         benchmarks = {
-            "metadata": {"fips": {"openssl_version": "N/A"}, "ubuntu": {}, "alpine": {}, "debian": {}},
+            "metadata": {"fips": {"openssl_version": "N/A"}},
             "metrics": {
                 "AES-256-GCM": {"fips": [0]*6, "ubuntu": [0]*6, "debian": [0]*6, "alpine": [0]*6},
                 "sha256": {"fips": [0]*6, "ubuntu": [0]*6, "debian": [0]*6, "alpine": [0]*6},
@@ -72,10 +85,10 @@ def define_env(env):
     else:
         benchmarks = raw_benchmarks
 
-    # 4. Global Variables Injection
     owner = bake_vars.get("OWNER", "taha2samy")
     repo = bake_vars.get("REPO_NAME", "wolfi-openssl-fips")
 
+    # 6. Global Variable Injection
     env.variables.update({
         "project_name": os.getenv("PROJECT_NAME", "Wolfi OpenSSL FIPS"),
         "owner": owner,
@@ -89,16 +102,17 @@ def define_env(env):
         "test_stats": stats,
         "test_badge_color": "red" if (stats["failed"] + stats["broken"]) > 0 else "brightgreen",
         "benchmark_data": benchmarks,
+        "bench_results_raw": json.dumps(csv_values) # Embedded for Vega-Lite
     })
 
-    # 5. Packages List
+    # 7. Dependency List
     env.variables["packages"] = [
         {"name": key.replace("_VER", "").replace("_", " ").title(), "version": value}
         for key, value in version_vars.items()
         if key not in {"BASE_IMAGE", "STATIC_IMAGE"}
     ]
 
-    # 6. Attestation Metadata
+    # 8. Provenance & SBOM URLs
     env.variables.update({
         "distroless_digest": distroless_meta.get("provenance", {}).get("digest", "N/A"),
         "distroless_url": distroless_meta.get("provenance", {}).get("url", "#"),
@@ -122,5 +136,5 @@ def define_env(env):
         icons = {"passed": "✅", "failed": "❌", "broken": "💥"}
         return icons.get(status, "❓")
 
-    log.info("Environment variables successfully injected into MkDocs.")
+    log.info("Documentation context successfully injected.")
     group_end()
