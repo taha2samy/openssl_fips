@@ -31,7 +31,7 @@ ENTRYPOINT ["openssl"]
 EOF
 
 NPROC=$(nproc)
-TEST_TIME=3
+TEST_TIME=15
 
 set +e
 
