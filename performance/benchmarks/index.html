@@ -961,17 +961,17 @@
 <li>
 <p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 19h1a1 1 0 0 1 1 1h7v2h-7a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1H2v-2h7a1 1 0 0 1 1-1h1v-2H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-7zM4 3h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1m5 4h1V5H9zm0 8h1v-2H9zM5 5v2h2V5zm0 8v2h2v-2z"/></svg></span> <strong>Peak TLS Throughput</strong>
     ---
-    Achieved a sustained bulk encryption rate of <strong>7211.8 MB/s</strong> (AES-256-GCM @ 16KB payload). This proves the FIPS boundary does not choke high-bandwidth data streams.</p>
+    Achieved a sustained bulk encryption rate of <strong>7130.7 MB/s</strong> (AES-256-GCM @ 16KB payload). This proves the FIPS boundary does not choke high-bandwidth data streams.</p>
 </li>
 <li>
 <p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m5.41 21 .71-4h-4l.35-2h4l1.06-6h-4l.35-2h4l.71-4h2l-.71 4h6l.71-4h2l-.71 4h4l-.35 2h-4l-1.06 6h4l-.35 2h-4l-.71 4h-2l.71-4h-6l-.71 4zM9.53 9l-1.06 6h6l1.06-6z"/></svg></span> <strong>Optimized Hashing Velocity</strong>
     ---
-    Recorded <strong>1606.8 MB/s</strong> peak throughput for SHA-512. The Wolfi-FIPS implementation consistently outperforms unhardened base OS distributions in hashing primitives.</p>
+    Recorded <strong>1607.2 MB/s</strong> peak throughput for SHA-512. The Wolfi-FIPS implementation consistently outperforms unhardened base OS distributions in hashing primitives.</p>
 </li>
 <li>
 <p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 4a8 8 0 0 1 8 8 8 8 0 0 1-8 8 8 8 0 0 1-8-8 8 8 0 0 1 8-8m0 2a6 6 0 0 0-6 6 6 6 0 0 0 6 6 6 6 0 0 0 6-6 6 6 0 0 0-6-6m-1 2h1.5v3.78l2.33 2.33-1.06 1.06L14 12.4zM2 18a1 1 0 0 1-1-1 1 1 0 0 1 1-1h3.83c.31.71.71 1.38 1.17 2zm1-5a1 1 0 0 1-1-1 1 1 0 0 1 1-1h2.05L5 12l.05 1zm1-5a1 1 0 0 1-1-1 1 1 0 0 1 1-1h3c-.46.62-.86 1.29-1.17 2z"/></svg></span> <strong>Instruction Pipelining (Scaling)</strong>
     ---
-    Demonstrates massive hardware acceleration. The engine processes 16KB chunks <strong>41x faster</strong> than 16-byte chunks, proving highly efficient AES-NI/AVX cache utilization.</p>
+    Demonstrates massive hardware acceleration. The engine processes 16KB chunks <strong>40x faster</strong> than 16-byte chunks, proving highly efficient AES-NI/AVX cache utilization.</p>
 </li>
 <li>
 <p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 17H7V7h10m4 4V9h-2V7a2 2 0 0 0-2-2h-2V3h-2v2h-2V3H9v2H7c-1.11 0-2 .89-2 2v2H3v2h2v2H3v2h2v2a2 2 0 0 0 2 2h2v2h2v-2h2v2h2v-2h2a2 2 0 0 0 2-2v-2h2v-2h-2v-2m-6 2h-2v-2h2m2-2H9v6h6z"/></svg></span> <strong>Minimal Runtime Footprint</strong>
@@ -1032,23 +1032,23 @@
 <tbody>
 <tr>
 <td style="text-align: left;"><strong>AES-256-GCM</strong></td>
-<td style="text-align: center;"><code>7384858.62 KB/s</code></td>
-<td style="text-align: center;"><code>7806222.34 KB/s</code></td>
-<td style="text-align: center;"><code>7472627.71 KB/s</code></td>
+<td style="text-align: center;"><code>7301840.9 KB/s</code></td>
+<td style="text-align: center;"><code>7777107.97 KB/s</code></td>
+<td style="text-align: center;"><code>7423377.41 KB/s</code></td>
 <td style="text-align: left;"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M.41 13.41 6 19l1.41-1.42L1.83 12m20.41-6.42L11.66 16.17 7.5 12l-1.43 1.41L11.66 19l12-12M18 7l-1.41-1.42-6.35 6.35 1.42 1.41z"/></svg></span> <strong>Parity</strong></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>SHA-256</strong></td>
-<td style="text-align: center;"><code>5887197.18 KB/s</code></td>
-<td style="text-align: center;"><code>5951733.76 KB/s</code></td>
-<td style="text-align: center;"><code>5843746.82 KB/s</code></td>
+<td style="text-align: center;"><code>5840912.38 KB/s</code></td>
+<td style="text-align: center;"><code>5965070.34 KB/s</code></td>
+<td style="text-align: center;"><code>5846614.02 KB/s</code></td>
 <td style="text-align: left;"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m16 6 2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg></span> <strong>Optimized</strong></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>SHA-512</strong></td>
-<td style="text-align: center;"><code>1645346.82 KB/s</code></td>
-<td style="text-align: center;"><code>1668513.79 KB/s</code></td>
-<td style="text-align: center;"><code>1659617.28 KB/s</code></td>
+<td style="text-align: center;"><code>1645740.03 KB/s</code></td>
+<td style="text-align: center;"><code>1665695.74 KB/s</code></td>
+<td style="text-align: center;"><code>1657667.58 KB/s</code></td>
 <td style="text-align: left;"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14z"/></svg></span> <strong>Superior</strong></td>
 </tr>
 </tbody>
@@ -1174,162 +1174,162 @@
 <tr>
 <td style="text-align: left;"><strong>AES-256-GCM</strong></td>
 <td style="text-align: left;">FIPS (3.5.5)</td>
-<td style="text-align: center;"><code>179451.95</code></td>
-<td style="text-align: center;"><code>638072.51</code></td>
-<td style="text-align: center;"><code>2001935.87</code></td>
-<td style="text-align: center;"><code>4463802.37</code></td>
-<td style="text-align: center;"><code>7119265.79</code></td>
-<td style="text-align: center;"><code>7384858.62</code></td>
+<td style="text-align: center;"><code>179237.66</code></td>
+<td style="text-align: center;"><code>633375.23</code></td>
+<td style="text-align: center;"><code>1994031.87</code></td>
+<td style="text-align: center;"><code>4374310.91</code></td>
+<td style="text-align: center;"><code>7091479.42</code></td>
+<td style="text-align: center;"><code>7301840.9</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Debian (3.0.18)</td>
-<td style="text-align: center;"><code>88395.68</code></td>
-<td style="text-align: center;"><code>333774.53</code></td>
-<td style="text-align: center;"><code>1141569.28</code></td>
-<td style="text-align: center;"><code>3160695.81</code></td>
-<td style="text-align: center;"><code>6682542.08</code></td>
-<td style="text-align: center;"><code>7239417.86</code></td>
+<td style="text-align: center;"><code>88895.73</code></td>
+<td style="text-align: center;"><code>335357.44</code></td>
+<td style="text-align: center;"><code>1172332.54</code></td>
+<td style="text-align: center;"><code>3149518.85</code></td>
+<td style="text-align: center;"><code>6508265.47</code></td>
+<td style="text-align: center;"><code>7072071.68</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Alpine (3.5.5)</td>
-<td style="text-align: center;"><code>128068.9</code></td>
-<td style="text-align: center;"><code>468618.3</code></td>
-<td style="text-align: center;"><code>1577966.85</code></td>
-<td style="text-align: center;"><code>3824587.78</code></td>
-<td style="text-align: center;"><code>7002849.28</code></td>
-<td style="text-align: center;"><code>7472627.71</code></td>
+<td style="text-align: center;"><code>125908.59</code></td>
+<td style="text-align: center;"><code>455888.58</code></td>
+<td style="text-align: center;"><code>1568879.36</code></td>
+<td style="text-align: center;"><code>3808646.14</code></td>
+<td style="text-align: center;"><code>6999818.24</code></td>
+<td style="text-align: center;"><code>7423377.41</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Ubuntu (3.0.13)</td>
-<td style="text-align: center;"><code>1108046.53</code></td>
-<td style="text-align: center;"><code>2645221.38</code></td>
-<td style="text-align: center;"><code>5276020.74</code></td>
-<td style="text-align: center;"><code>6885153.79</code></td>
-<td style="text-align: center;"><code>7730757.63</code></td>
-<td style="text-align: center;"><code>7806222.34</code></td>
+<td style="text-align: center;"><code>1111825.07</code></td>
+<td style="text-align: center;"><code>2638463.74</code></td>
+<td style="text-align: center;"><code>5228665.34</code></td>
+<td style="text-align: center;"><code>6876750.85</code></td>
+<td style="text-align: center;"><code>7723524.1</code></td>
+<td style="text-align: center;"><code>7777107.97</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>SHA-256</strong></td>
 <td style="text-align: left;">FIPS (3.5.5)</td>
-<td style="text-align: center;"><code>273242.03</code></td>
-<td style="text-align: center;"><code>958877.57</code></td>
-<td style="text-align: center;"><code>2603174.4</code></td>
-<td style="text-align: center;"><code>4526997.5</code></td>
-<td style="text-align: center;"><code>5623111.68</code></td>
-<td style="text-align: center;"><code>5887197.18</code></td>
+<td style="text-align: center;"><code>279573.78</code></td>
+<td style="text-align: center;"><code>960782.34</code></td>
+<td style="text-align: center;"><code>2543786.75</code></td>
+<td style="text-align: center;"><code>4516998.14</code></td>
+<td style="text-align: center;"><code>5765709.82</code></td>
+<td style="text-align: center;"><code>5840912.38</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Debian (3.0.18)</td>
-<td style="text-align: center;"><code>234815.36</code></td>
-<td style="text-align: center;"><code>825324.93</code></td>
-<td style="text-align: center;"><code>2368292.35</code></td>
-<td style="text-align: center;"><code>4344788.99</code></td>
-<td style="text-align: center;"><code>5754093.57</code></td>
-<td style="text-align: center;"><code>5923569.66</code></td>
+<td style="text-align: center;"><code>237153.47</code></td>
+<td style="text-align: center;"><code>839789.38</code></td>
+<td style="text-align: center;"><code>2377897.22</code></td>
+<td style="text-align: center;"><code>4346081.28</code></td>
+<td style="text-align: center;"><code>5749383.17</code></td>
+<td style="text-align: center;"><code>5909577.73</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Alpine (3.5.5)</td>
-<td style="text-align: center;"><code>118085.97</code></td>
-<td style="text-align: center;"><code>439770.18</code></td>
-<td style="text-align: center;"><code>1452819.71</code></td>
-<td style="text-align: center;"><code>3404765.18</code></td>
-<td style="text-align: center;"><code>5539840.0</code></td>
-<td style="text-align: center;"><code>5843746.82</code></td>
+<td style="text-align: center;"><code>118667.09</code></td>
+<td style="text-align: center;"><code>446205.76</code></td>
+<td style="text-align: center;"><code>1472944.13</code></td>
+<td style="text-align: center;"><code>3409236.99</code></td>
+<td style="text-align: center;"><code>5538553.86</code></td>
+<td style="text-align: center;"><code>5846614.02</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Ubuntu (3.0.13)</td>
-<td style="text-align: center;"><code>225121.68</code></td>
-<td style="text-align: center;"><code>806287.62</code></td>
-<td style="text-align: center;"><code>2325629.7</code></td>
-<td style="text-align: center;"><code>4350889.98</code></td>
-<td style="text-align: center;"><code>5785067.52</code></td>
-<td style="text-align: center;"><code>5951733.76</code></td>
+<td style="text-align: center;"><code>224921.17</code></td>
+<td style="text-align: center;"><code>802537.41</code></td>
+<td style="text-align: center;"><code>2304345.86</code></td>
+<td style="text-align: center;"><code>4344908.8</code></td>
+<td style="text-align: center;"><code>5746819.07</code></td>
+<td style="text-align: center;"><code>5965070.34</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>SHA-512</strong></td>
 <td style="text-align: left;">FIPS (3.5.5)</td>
-<td style="text-align: center;"><code>107461.23</code></td>
-<td style="text-align: center;"><code>435950.98</code></td>
-<td style="text-align: center;"><code>851458.82</code></td>
-<td style="text-align: center;"><code>1361182.72</code></td>
-<td style="text-align: center;"><code>1638604.8</code></td>
-<td style="text-align: center;"><code>1645346.82</code></td>
+<td style="text-align: center;"><code>108906.51</code></td>
+<td style="text-align: center;"><code>436934.66</code></td>
+<td style="text-align: center;"><code>852903.94</code></td>
+<td style="text-align: center;"><code>1359858.69</code></td>
+<td style="text-align: center;"><code>1634467.84</code></td>
+<td style="text-align: center;"><code>1645740.03</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Debian (3.0.18)</td>
-<td style="text-align: center;"><code>98415.87</code></td>
-<td style="text-align: center;"><code>391684.86</code></td>
-<td style="text-align: center;"><code>823703.04</code></td>
-<td style="text-align: center;"><code>1334820.86</code></td>
-<td style="text-align: center;"><code>1639825.41</code></td>
-<td style="text-align: center;"><code>1668448.26</code></td>
+<td style="text-align: center;"><code>99552.53</code></td>
+<td style="text-align: center;"><code>396849.79</code></td>
+<td style="text-align: center;"><code>827191.81</code></td>
+<td style="text-align: center;"><code>1340487.68</code></td>
+<td style="text-align: center;"><code>1640120.32</code></td>
+<td style="text-align: center;"><code>1667448.83</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Alpine (3.5.5)</td>
-<td style="text-align: center;"><code>72190.93</code></td>
-<td style="text-align: center;"><code>299631.17</code></td>
-<td style="text-align: center;"><code>681254.14</code></td>
-<td style="text-align: center;"><code>1241561.09</code></td>
-<td style="text-align: center;"><code>1623359.49</code></td>
-<td style="text-align: center;"><code>1659617.28</code></td>
+<td style="text-align: center;"><code>72234.9</code></td>
+<td style="text-align: center;"><code>298511.04</code></td>
+<td style="text-align: center;"><code>678863.36</code></td>
+<td style="text-align: center;"><code>1230296.06</code></td>
+<td style="text-align: center;"><code>1621442.56</code></td>
+<td style="text-align: center;"><code>1657667.58</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Ubuntu (3.0.13)</td>
-<td style="text-align: center;"><code>96843.71</code></td>
-<td style="text-align: center;"><code>386845.82</code></td>
-<td style="text-align: center;"><code>816834.05</code></td>
-<td style="text-align: center;"><code>1331145.73</code></td>
-<td style="text-align: center;"><code>1639800.83</code></td>
-<td style="text-align: center;"><code>1668513.79</code></td>
+<td style="text-align: center;"><code>97377.94</code></td>
+<td style="text-align: center;"><code>390017.66</code></td>
+<td style="text-align: center;"><code>818521.6</code></td>
+<td style="text-align: center;"><code>1331326.98</code></td>
+<td style="text-align: center;"><code>1640071.17</code></td>
+<td style="text-align: center;"><code>1665695.74</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>SHA3-256</strong></td>
 <td style="text-align: left;">FIPS (3.5.5)</td>
-<td style="text-align: center;"><code>75972.32</code></td>
-<td style="text-align: center;"><code>304220.42</code></td>
-<td style="text-align: center;"><code>706696.7</code></td>
-<td style="text-align: center;"><code>803620.86</code></td>
-<td style="text-align: center;"><code>875429.89</code></td>
-<td style="text-align: center;"><code>871956.48</code></td>
+<td style="text-align: center;"><code>75635.33</code></td>
+<td style="text-align: center;"><code>303583.94</code></td>
+<td style="text-align: center;"><code>704861.7</code></td>
+<td style="text-align: center;"><code>803346.43</code></td>
+<td style="text-align: center;"><code>878051.33</code></td>
+<td style="text-align: center;"><code>878510.08</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Debian (3.0.18)</td>
-<td style="text-align: center;"><code>69231.41</code></td>
-<td style="text-align: center;"><code>277811.2</code></td>
-<td style="text-align: center;"><code>668634.11</code></td>
-<td style="text-align: center;"><code>790971.39</code></td>
-<td style="text-align: center;"><code>857833.47</code></td>
-<td style="text-align: center;"><code>888946.69</code></td>
+<td style="text-align: center;"><code>69041.86</code></td>
+<td style="text-align: center;"><code>276422.14</code></td>
+<td style="text-align: center;"><code>667361.02</code></td>
+<td style="text-align: center;"><code>787385.34</code></td>
+<td style="text-align: center;"><code>876462.08</code></td>
+<td style="text-align: center;"><code>889257.98</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Alpine (3.5.5)</td>
-<td style="text-align: center;"><code>51896.9</code></td>
-<td style="text-align: center;"><code>213752.32</code></td>
-<td style="text-align: center;"><code>575234.3</code></td>
-<td style="text-align: center;"><code>746164.22</code></td>
-<td style="text-align: center;"><code>862609.41</code></td>
-<td style="text-align: center;"><code>875053.06</code></td>
+<td style="text-align: center;"><code>51602.86</code></td>
+<td style="text-align: center;"><code>216866.43</code></td>
+<td style="text-align: center;"><code>585975.3</code></td>
+<td style="text-align: center;"><code>755156.99</code></td>
+<td style="text-align: center;"><code>872235.01</code></td>
+<td style="text-align: center;"><code>886718.46</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Ubuntu (3.0.13)</td>
-<td style="text-align: center;"><code>64532.9</code></td>
-<td style="text-align: center;"><code>259206.72</code></td>
-<td style="text-align: center;"><code>640581.38</code></td>
-<td style="text-align: center;"><code>774552.58</code></td>
-<td style="text-align: center;"><code>868302.85</code></td>
-<td style="text-align: center;"><code>883048.45</code></td>
+<td style="text-align: center;"><code>65485.01</code></td>
+<td style="text-align: center;"><code>262840.45</code></td>
+<td style="text-align: center;"><code>645142.78</code></td>
+<td style="text-align: center;"><code>784811.01</code></td>
+<td style="text-align: center;"><code>877535.23</code></td>
+<td style="text-align: center;"><code>889241.6</code></td>
 </tr>
 </tbody>
 </table>
