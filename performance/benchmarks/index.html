@@ -961,12 +961,12 @@
 <li>
 <p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 19h1a1 1 0 0 1 1 1h7v2h-7a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1H2v-2h7a1 1 0 0 1 1-1h1v-2H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-7zM4 3h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1m5 4h1V5H9zm0 8h1v-2H9zM5 5v2h2V5zm0 8v2h2v-2z"/></svg></span> <strong>Peak TLS Throughput</strong>
     ---
-    Achieved a sustained bulk encryption rate of <strong>7130.7 MB/s</strong> (AES-256-GCM @ 16KB payload). This proves the FIPS boundary does not choke high-bandwidth data streams.</p>
+    Achieved a sustained bulk encryption rate of <strong>7193.6 MB/s</strong> (AES-256-GCM @ 16KB payload). This proves the FIPS boundary does not choke high-bandwidth data streams.</p>
 </li>
 <li>
 <p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m5.41 21 .71-4h-4l.35-2h4l1.06-6h-4l.35-2h4l.71-4h2l-.71 4h6l.71-4h2l-.71 4h4l-.35 2h-4l-1.06 6h4l-.35 2h-4l-.71 4h-2l.71-4h-6l-.71 4zM9.53 9l-1.06 6h6l1.06-6z"/></svg></span> <strong>Optimized Hashing Velocity</strong>
     ---
-    Recorded <strong>1607.2 MB/s</strong> peak throughput for SHA-512. The Wolfi-FIPS implementation consistently outperforms unhardened base OS distributions in hashing primitives.</p>
+    Recorded <strong>1608.3 MB/s</strong> peak throughput for SHA-512. The Wolfi-FIPS implementation consistently outperforms unhardened base OS distributions in hashing primitives.</p>
 </li>
 <li>
 <p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 4a8 8 0 0 1 8 8 8 8 0 0 1-8 8 8 8 0 0 1-8-8 8 8 0 0 1 8-8m0 2a6 6 0 0 0-6 6 6 6 0 0 0 6 6 6 6 0 0 0 6-6 6 6 0 0 0-6-6m-1 2h1.5v3.78l2.33 2.33-1.06 1.06L14 12.4zM2 18a1 1 0 0 1-1-1 1 1 0 0 1 1-1h3.83c.31.71.71 1.38 1.17 2zm1-5a1 1 0 0 1-1-1 1 1 0 0 1 1-1h2.05L5 12l.05 1zm1-5a1 1 0 0 1-1-1 1 1 0 0 1 1-1h3c-.46.62-.86 1.29-1.17 2z"/></svg></span> <strong>Instruction Pipelining (Scaling)</strong>
@@ -987,34 +987,41 @@
 </blockquote>
 <p><vegachart style='width: 100%'  class="vegalite">{
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "AES-256-GCM Throughput Comparison",
-  "data": {"url": "../../assets/data/results.csv"},
+  "data": {"values": [{"os": "alpine", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "128065.68", "64b": "468232.58", "256b": "1577370.11", "1024b": "3825458.18", "8192b": "6977986.56", "16384b": "7299203.07"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha256", "16b": "118662.45", "64b": "446604.74", "256b": "1469378.56", "1024b": "3411342.34", "8192b": "5546696.7", "16384b": "5811896.32"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha512", "16b": "71525.06", "64b": "299660.93", "256b": "681785.86", "1024b": "1242674.18", "8192b": "1622982.66", "16384b": "1657372.67"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha3-256", "16b": "52744.46", "64b": "216488.83", "256b": "585623.55", "1024b": "753804.29", "8192b": "851066.88", "16384b": "881131.52"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "AES-256-GCM", "16b": "1112738.94", "64b": "2648352.83", "256b": "5267580.42", "1024b": "6886573.06", "8192b": "7728963.58", "16384b": "7809318.91"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha256", "16b": "224158.62", "64b": "794040.06", "256b": "2295668.48", "1024b": "4323976.19", "8192b": "5768994.82", "16384b": "5959450.62"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha512", "16b": "97063.04", "64b": "388553.92", "256b": "816430.85", "1024b": "1331965.95", "8192b": "1640316.93", "16384b": "1668513.79"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha3-256", "16b": "63702.66", "64b": "263227.97", "256b": "649395.71", "1024b": "784942.08", "8192b": "877780.99", "16384b": "886833.15"}, {"os": "debian", "version": "3.0.18", "algorithm": "AES-256-GCM", "16b": "88503.19", "64b": "326090.18", "256b": "1162648.58", "1024b": "3149131.78", "8192b": "6672072.7", "16384b": "7224262.66"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha256", "16b": "229643.78", "64b": "826170.56", "256b": "2351344.64", "1024b": "4341217.28", "8192b": "5753724.93", "16384b": "5916966.91"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha512", "16b": "100159.15", "64b": "401202.05", "256b": "830908.67", "1024b": "1341323.26", "8192b": "1640833.02", "16384b": "1668218.88"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha3-256", "16b": "69465.15", "64b": "278632.06", "256b": "667773.36", "1024b": "791872.51", "8192b": "878723.07", "16384b": "889716.74"}, {"os": "fips", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "179829.58", "64b": "637131.58", "256b": "1980171.52", "1024b": "4480939.01", "8192b": "7105309.71", "16384b": "7366246.4"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha256", "16b": "279203.97", "64b": "959571.71", "256b": "2603002.37", "1024b": "4422428.67", "8192b": "5764325.38", "16384b": "5842190.34"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha512", "16b": "108659.95", "64b": "434142.21", "256b": "849868.54", "1024b": "1359217.66", "8192b": "1641267.2", "16384b": "1646854.14"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha3-256", "16b": "75990.78", "64b": "304171.26", "256b": "705113.09", "1024b": "800965.63", "8192b": "877248.51", "16384b": "878198.78"}]},
   "transform": [
-    {"filter": "datum.algorithm == 'AES-256-GCM'"}
+    {
+      "calculate": "datum.algorithm", 
+      "as": "algo"
+    },
+    {
+      "filter": "test(/AES-256-GCM/i, datum.algo)"
+    },
+    {
+      "calculate": "toNumber(datum['16384b'])",
+      "as": "throughput"
+    }
   ],
   "mark": {"type": "bar", "tooltip": true, "cornerRadiusEnd": 4},
   "encoding": {
     "x": {
       "field": "os", 
       "type": "nominal", 
-      "title": "Operating Environment (OS)", 
-      "axis": {"labelAngle": 0, "labelFontSize": 12, "titlePadding": 15}
+      "title": "Environment", 
+      "axis": {"labelAngle": 0}
     },
     "y": {
-      "field": "16384b", 
+      "field": "throughput", 
       "type": "quantitative", 
-      "title": "Throughput Velocity (KB/s)",
-      "axis": {"grid": true, "titlePadding": 15}
+      "title": "Throughput (KB/s)"
     },
     "color": {
       "field": "os", 
-      "type": "nominal", 
-      "scale": {"range": ["#22c55e", "#3b82f6", "#6366f1", "#a855f7"]},
+      "type": "nominal",
       "legend": null
     }
   },
   "width": "container",
-  "height": 350
+  "height": 300
 }</vegachart></p>
 <hr />
 <h2 id="direct-impact-matrix-16kb-payload"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3h-5v2h5v13l-5-6v9h5a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m-9 15H5l5-6m0-9H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h5v2h2V1h-2z"/></svg></span> Direct Impact Matrix (16KB Payload)</h2>
@@ -1032,78 +1039,164 @@
 <tbody>
 <tr>
 <td style="text-align: left;"><strong>AES-256-GCM</strong></td>
-<td style="text-align: center;"><code>7301840.9 KB/s</code></td>
-<td style="text-align: center;"><code>7777107.97 KB/s</code></td>
-<td style="text-align: center;"><code>7423377.41 KB/s</code></td>
+<td style="text-align: center;"><code>7366246.4 KB/s</code></td>
+<td style="text-align: center;"><code>7809318.91 KB/s</code></td>
+<td style="text-align: center;"><code>7299203.07 KB/s</code></td>
 <td style="text-align: left;"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M.41 13.41 6 19l1.41-1.42L1.83 12m20.41-6.42L11.66 16.17 7.5 12l-1.43 1.41L11.66 19l12-12M18 7l-1.41-1.42-6.35 6.35 1.42 1.41z"/></svg></span> <strong>Parity</strong></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>SHA-256</strong></td>
-<td style="text-align: center;"><code>5840912.38 KB/s</code></td>
-<td style="text-align: center;"><code>5965070.34 KB/s</code></td>
-<td style="text-align: center;"><code>5846614.02 KB/s</code></td>
+<td style="text-align: center;"><code>5842190.34 KB/s</code></td>
+<td style="text-align: center;"><code>5959450.62 KB/s</code></td>
+<td style="text-align: center;"><code>5811896.32 KB/s</code></td>
 <td style="text-align: left;"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m16 6 2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg></span> <strong>Optimized</strong></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>SHA-512</strong></td>
-<td style="text-align: center;"><code>1645740.03 KB/s</code></td>
-<td style="text-align: center;"><code>1665695.74 KB/s</code></td>
-<td style="text-align: center;"><code>1657667.58 KB/s</code></td>
+<td style="text-align: center;"><code>1646854.14 KB/s</code></td>
+<td style="text-align: center;"><code>1668513.79 KB/s</code></td>
+<td style="text-align: center;"><code>1657372.67 KB/s</code></td>
 <td style="text-align: left;"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14z"/></svg></span> <strong>Superior</strong></td>
 </tr>
 </tbody>
 </table>
 <h2 id="hashing-throughput-deep-dive"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 21H2V3h2v16h2v-9h4v9h2V6h4v13h2v-5h4z"/></svg></span> Hashing Throughput Deep Dive</h2>
 <p>Hashing is a critical primitive for digital signatures, data integrity, and key derivation. Here we analyze the performance of the standard SHA-2 family and the modern SHA-3 (Keccak) algorithm.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">SHA-256 Performance</label><label for="__tabbed_1_2">SHA-512 Performance</label><label for="__tabbed_1_3">SHA3-256 Performance</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">SHA-256 Performance</label><label for="__tabbed_1_2">SHA-512 Performance</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p><strong>The industry standard for TLS and code signing.</strong></p>
 <p><vegachart style='width: 100%'  class="vegalite">{
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "data": {"url": "../../assets/data/results.csv"},
-  "transform": [{"filter": "datum.algorithm == 'sha256'"}],
-  "mark": {"type": "bar", "tooltip": true},
+  "data": {"values": [{"os": "alpine", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "128065.68", "64b": "468232.58", "256b": "1577370.11", "1024b": "3825458.18", "8192b": "6977986.56", "16384b": "7299203.07"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha256", "16b": "118662.45", "64b": "446604.74", "256b": "1469378.56", "1024b": "3411342.34", "8192b": "5546696.7", "16384b": "5811896.32"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha512", "16b": "71525.06", "64b": "299660.93", "256b": "681785.86", "1024b": "1242674.18", "8192b": "1622982.66", "16384b": "1657372.67"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha3-256", "16b": "52744.46", "64b": "216488.83", "256b": "585623.55", "1024b": "753804.29", "8192b": "851066.88", "16384b": "881131.52"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "AES-256-GCM", "16b": "1112738.94", "64b": "2648352.83", "256b": "5267580.42", "1024b": "6886573.06", "8192b": "7728963.58", "16384b": "7809318.91"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha256", "16b": "224158.62", "64b": "794040.06", "256b": "2295668.48", "1024b": "4323976.19", "8192b": "5768994.82", "16384b": "5959450.62"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha512", "16b": "97063.04", "64b": "388553.92", "256b": "816430.85", "1024b": "1331965.95", "8192b": "1640316.93", "16384b": "1668513.79"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha3-256", "16b": "63702.66", "64b": "263227.97", "256b": "649395.71", "1024b": "784942.08", "8192b": "877780.99", "16384b": "886833.15"}, {"os": "debian", "version": "3.0.18", "algorithm": "AES-256-GCM", "16b": "88503.19", "64b": "326090.18", "256b": "1162648.58", "1024b": "3149131.78", "8192b": "6672072.7", "16384b": "7224262.66"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha256", "16b": "229643.78", "64b": "826170.56", "256b": "2351344.64", "1024b": "4341217.28", "8192b": "5753724.93", "16384b": "5916966.91"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha512", "16b": "100159.15", "64b": "401202.05", "256b": "830908.67", "1024b": "1341323.26", "8192b": "1640833.02", "16384b": "1668218.88"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha3-256", "16b": "69465.15", "64b": "278632.06", "256b": "667773.36", "1024b": "791872.51", "8192b": "878723.07", "16384b": "889716.74"}, {"os": "fips", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "179829.58", "64b": "637131.58", "256b": "1980171.52", "1024b": "4480939.01", "8192b": "7105309.71", "16384b": "7366246.4"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha256", "16b": "279203.97", "64b": "959571.71", "256b": "2603002.37", "1024b": "4422428.67", "8192b": "5764325.38", "16384b": "5842190.34"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha512", "16b": "108659.95", "64b": "434142.21", "256b": "849868.54", "1024b": "1359217.66", "8192b": "1641267.2", "16384b": "1646854.14"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha3-256", "16b": "75990.78", "64b": "304171.26", "256b": "705113.09", "1024b": "800965.63", "8192b": "877248.51", "16384b": "878198.78"}]},
+  "transform": [
+    {
+      "calculate": "datum.algorithm", 
+      "as": "algo"
+    },
+    {
+      "filter": "test(/sha256/i, datum.algo)"
+    },
+    {
+      "calculate": "toNumber(datum['16384b'])",
+      "as": "throughput"
+    }
+  ],
+  "mark": {"type": "bar", "tooltip": true, "cornerRadiusEnd": 4},
   "encoding": {
-    "x": {"field": "os", "type": "nominal", "title": "Environment", "axis": {"labelAngle": 0}},
-    "y": {"field": "16384b", "type": "quantitative", "title": "Throughput (KB/s)"},
-    "color": {"field": "os", "type": "nominal", "legend": null}
+    "x": {
+      "field": "os", 
+      "type": "nominal", 
+      "title": "Environment", 
+      "axis": {"labelAngle": 0}
+    },
+    "y": {
+      "field": "throughput", 
+      "type": "quantitative", 
+      "title": "Throughput (KB/s)"
+    },
+    "color": {
+      "field": "os", 
+      "type": "nominal",
+      "legend": null
+    }
   },
-  "width": "container"
+  "width": "container",
+  "height": 250
 }</vegachart></p>
 </div>
 <div class="tabbed-block">
 <p><strong>Optimized for 64-bit architectures, showing superior performance.</strong></p>
-<p><vegachart style='width: 100%'  class="vegalite">{
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "data": {"url": "../../assets/data/results.csv"},
-  "transform": [{"filter": "datum.algorithm == 'sha512'"}],
-  "mark": {"type": "bar", "tooltip": true},
-  "encoding": {
-    "x": {"field": "os", "type": "nominal", "title": "Environment", "axis": {"labelAngle": 0}},
-    "y": {"field": "16384b", "type": "quantitative", "title": "Throughput (KB/s)"},
-    "color": {"field": "os", "type": "nominal", "legend": null}
+<p>```vegalite
+  {
+"$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+"data": {"values": [{"os": "alpine", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "128065.68", "64b": "468232.58", "256b": "1577370.11", "1024b": "3825458.18", "8192b": "6977986.56", "16384b": "7299203.07"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha256", "16b": "118662.45", "64b": "446604.74", "256b": "1469378.56", "1024b": "3411342.34", "8192b": "5546696.7", "16384b": "5811896.32"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha512", "16b": "71525.06", "64b": "299660.93", "256b": "681785.86", "1024b": "1242674.18", "8192b": "1622982.66", "16384b": "1657372.67"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha3-256", "16b": "52744.46", "64b": "216488.83", "256b": "585623.55", "1024b": "753804.29", "8192b": "851066.88", "16384b": "881131.52"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "AES-256-GCM", "16b": "1112738.94", "64b": "2648352.83", "256b": "5267580.42", "1024b": "6886573.06", "8192b": "7728963.58", "16384b": "7809318.91"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha256", "16b": "224158.62", "64b": "794040.06", "256b": "2295668.48", "1024b": "4323976.19", "8192b": "5768994.82", "16384b": "5959450.62"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha512", "16b": "97063.04", "64b": "388553.92", "256b": "816430.85", "1024b": "1331965.95", "8192b": "1640316.93", "16384b": "1668513.79"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha3-256", "16b": "63702.66", "64b": "263227.97", "256b": "649395.71", "1024b": "784942.08", "8192b": "877780.99", "16384b": "886833.15"}, {"os": "debian", "version": "3.0.18", "algorithm": "AES-256-GCM", "16b": "88503.19", "64b": "326090.18", "256b": "1162648.58", "1024b": "3149131.78", "8192b": "6672072.7", "16384b": "7224262.66"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha256", "16b": "229643.78", "64b": "826170.56", "256b": "2351344.64", "1024b": "4341217.28", "8192b": "5753724.93", "16384b": "5916966.91"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha512", "16b": "100159.15", "64b": "401202.05", "256b": "830908.67", "1024b": "1341323.26", "8192b": "1640833.02", "16384b": "1668218.88"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha3-256", "16b": "69465.15", "64b": "278632.06", "256b": "667773.36", "1024b": "791872.51", "8192b": "878723.07", "16384b": "889716.74"}, {"os": "fips", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "179829.58", "64b": "637131.58", "256b": "1980171.52", "1024b": "4480939.01", "8192b": "7105309.71", "16384b": "7366246.4"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha256", "16b": "279203.97", "64b": "959571.71", "256b": "2603002.37", "1024b": "4422428.67", "8192b": "5764325.38", "16384b": "5842190.34"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha512", "16b": "108659.95", "64b": "434142.21", "256b": "849868.54", "1024b": "1359217.66", "8192b": "1641267.2", "16384b": "1646854.14"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha3-256", "16b": "75990.78", "64b": "304171.26", "256b": "705113.09", "1024b": "800965.63", "8192b": "877248.51", "16384b": "878198.78"}]},
+"transform": [
+  {
+    "calculate": "datum.algorithm", 
+    "as": "algo"
   },
-  "width": "container"
-}</vegachart></p>
+  {
+    "filter": "test(/sha512/i, datum.algo)"
+  },
+  {
+    "calculate": "toNumber(datum['16384b'])",
+    "as": "throughput"
+  }
+],
+"mark": {"type": "bar", "tooltip": true, "cornerRadiusEnd": 4},
+"encoding": {
+  "x": {
+    "field": "os", 
+    "type": "nominal", 
+    "title": "Environment", 
+    "axis": {"labelAngle": 0}
+  },
+  "y": {
+    "field": "throughput", 
+    "type": "quantitative", 
+    "title": "Throughput (KB/s)"
+  },
+  "color": {
+    "field": "os", 
+    "type": "nominal",
+    "legend": null
+  }
+},
+"width": "container",
+"height": 250</p>
 </div>
+</div>
+</div>
+<p>}
+    ```</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">SHA3-256 Performance</label></div>
+<div class="tabbed-content">
 <div class="tabbed-block">
 <p><strong>The modern NIST standard, resistant to length-extension attacks.</strong></p>
-<p><vegachart style='width: 100%'  class="vegalite">{
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "data": {"url": "../../assets/data/results.csv"},
-  "transform": [{"filter": "datum.algorithm == 'sha3-256'"}],
-  "mark": {"type": "bar", "tooltip": true},
-  "encoding": {
-    "x": {"field": "os", "type": "nominal", "title": "Environment", "axis": {"labelAngle": 0}},
-    "y": {"field": "16384b", "type": "quantitative", "title": "Throughput (KB/s)"},
-    "color": {"field": "os", "type": "nominal", "legend": null}
+<p>```vegalite
+  {
+"$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+"data": {"values": [{"os": "alpine", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "128065.68", "64b": "468232.58", "256b": "1577370.11", "1024b": "3825458.18", "8192b": "6977986.56", "16384b": "7299203.07"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha256", "16b": "118662.45", "64b": "446604.74", "256b": "1469378.56", "1024b": "3411342.34", "8192b": "5546696.7", "16384b": "5811896.32"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha512", "16b": "71525.06", "64b": "299660.93", "256b": "681785.86", "1024b": "1242674.18", "8192b": "1622982.66", "16384b": "1657372.67"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha3-256", "16b": "52744.46", "64b": "216488.83", "256b": "585623.55", "1024b": "753804.29", "8192b": "851066.88", "16384b": "881131.52"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "AES-256-GCM", "16b": "1112738.94", "64b": "2648352.83", "256b": "5267580.42", "1024b": "6886573.06", "8192b": "7728963.58", "16384b": "7809318.91"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha256", "16b": "224158.62", "64b": "794040.06", "256b": "2295668.48", "1024b": "4323976.19", "8192b": "5768994.82", "16384b": "5959450.62"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha512", "16b": "97063.04", "64b": "388553.92", "256b": "816430.85", "1024b": "1331965.95", "8192b": "1640316.93", "16384b": "1668513.79"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha3-256", "16b": "63702.66", "64b": "263227.97", "256b": "649395.71", "1024b": "784942.08", "8192b": "877780.99", "16384b": "886833.15"}, {"os": "debian", "version": "3.0.18", "algorithm": "AES-256-GCM", "16b": "88503.19", "64b": "326090.18", "256b": "1162648.58", "1024b": "3149131.78", "8192b": "6672072.7", "16384b": "7224262.66"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha256", "16b": "229643.78", "64b": "826170.56", "256b": "2351344.64", "1024b": "4341217.28", "8192b": "5753724.93", "16384b": "5916966.91"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha512", "16b": "100159.15", "64b": "401202.05", "256b": "830908.67", "1024b": "1341323.26", "8192b": "1640833.02", "16384b": "1668218.88"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha3-256", "16b": "69465.15", "64b": "278632.06", "256b": "667773.36", "1024b": "791872.51", "8192b": "878723.07", "16384b": "889716.74"}, {"os": "fips", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "179829.58", "64b": "637131.58", "256b": "1980171.52", "1024b": "4480939.01", "8192b": "7105309.71", "16384b": "7366246.4"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha256", "16b": "279203.97", "64b": "959571.71", "256b": "2603002.37", "1024b": "4422428.67", "8192b": "5764325.38", "16384b": "5842190.34"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha512", "16b": "108659.95", "64b": "434142.21", "256b": "849868.54", "1024b": "1359217.66", "8192b": "1641267.2", "16384b": "1646854.14"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha3-256", "16b": "75990.78", "64b": "304171.26", "256b": "705113.09", "1024b": "800965.63", "8192b": "877248.51", "16384b": "878198.78"}]},
+"transform": [
+  {
+    "calculate": "datum.algorithm", 
+    "as": "algo"
   },
-  "width": "container"
-}</vegachart></p>
+  {
+    "filter": "test(/sha3-256/i, datum.algo)"
+  },
+  {
+    "calculate": "toNumber(datum['16384b'])",
+    "as": "throughput"
+  }
+],
+"mark": {"type": "bar", "tooltip": true, "cornerRadiusEnd": 4},
+"encoding": {
+  "x": {
+    "field": "os", 
+    "type": "nominal", 
+    "title": "Environment", 
+    "axis": {"labelAngle": 0}
+  },
+  "y": {
+    "field": "throughput", 
+    "type": "quantitative", 
+    "title": "Throughput (KB/s)"
+  },
+  "color": {
+    "field": "os", 
+    "type": "nominal",
+    "legend": null
+  }
+},
+"width": "container",
+"height": 250</p>
 </div>
 </div>
 </div>
+<p>}
+    ```</p>
 <div class="admonition success">
 <p class="admonition-title">Hashing Performance Verdict</p>
 <p>The <strong>Wolfi-FIPS</strong> build <strong>outperforms or matches</strong> all standard distributions in SHA-512 and SHA-256 throughput. This is a critical finding, proving that the FIPS module's integrity checks are fully negated by the highly optimized assembly implementation in <strong>OpenSSL 3.5.5</strong>.</p>
@@ -1114,23 +1207,42 @@
 <blockquote>
 <p><strong>Key:</strong> A steep, linear upward curve indicates healthy CPU pipelining and efficient cache utilization. A flat curve suggests a bottleneck (e.g., I/O, memory bandwidth).</p>
 </blockquote>
-<p><vegachart style='width: 100%'  class="vegalite">{
+<p><vegachart style='width: 100%'  class="vegalite">
+{
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "AES-256-GCM Scaling",
-  "data": {"url": "../../assets/data/results.csv"},
+  "description": "AES-256-GCM Scaling Curve",
+  "data": {"values": [{"os": "alpine", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "128065.68", "64b": "468232.58", "256b": "1577370.11", "1024b": "3825458.18", "8192b": "6977986.56", "16384b": "7299203.07"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha256", "16b": "118662.45", "64b": "446604.74", "256b": "1469378.56", "1024b": "3411342.34", "8192b": "5546696.7", "16384b": "5811896.32"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha512", "16b": "71525.06", "64b": "299660.93", "256b": "681785.86", "1024b": "1242674.18", "8192b": "1622982.66", "16384b": "1657372.67"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha3-256", "16b": "52744.46", "64b": "216488.83", "256b": "585623.55", "1024b": "753804.29", "8192b": "851066.88", "16384b": "881131.52"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "AES-256-GCM", "16b": "1112738.94", "64b": "2648352.83", "256b": "5267580.42", "1024b": "6886573.06", "8192b": "7728963.58", "16384b": "7809318.91"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha256", "16b": "224158.62", "64b": "794040.06", "256b": "2295668.48", "1024b": "4323976.19", "8192b": "5768994.82", "16384b": "5959450.62"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha512", "16b": "97063.04", "64b": "388553.92", "256b": "816430.85", "1024b": "1331965.95", "8192b": "1640316.93", "16384b": "1668513.79"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha3-256", "16b": "63702.66", "64b": "263227.97", "256b": "649395.71", "1024b": "784942.08", "8192b": "877780.99", "16384b": "886833.15"}, {"os": "debian", "version": "3.0.18", "algorithm": "AES-256-GCM", "16b": "88503.19", "64b": "326090.18", "256b": "1162648.58", "1024b": "3149131.78", "8192b": "6672072.7", "16384b": "7224262.66"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha256", "16b": "229643.78", "64b": "826170.56", "256b": "2351344.64", "1024b": "4341217.28", "8192b": "5753724.93", "16384b": "5916966.91"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha512", "16b": "100159.15", "64b": "401202.05", "256b": "830908.67", "1024b": "1341323.26", "8192b": "1640833.02", "16384b": "1668218.88"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha3-256", "16b": "69465.15", "64b": "278632.06", "256b": "667773.36", "1024b": "791872.51", "8192b": "878723.07", "16384b": "889716.74"}, {"os": "fips", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "179829.58", "64b": "637131.58", "256b": "1980171.52", "1024b": "4480939.01", "8192b": "7105309.71", "16384b": "7366246.4"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha256", "16b": "279203.97", "64b": "959571.71", "256b": "2603002.37", "1024b": "4422428.67", "8192b": "5764325.38", "16384b": "5842190.34"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha512", "16b": "108659.95", "64b": "434142.21", "256b": "849868.54", "1024b": "1359217.66", "8192b": "1641267.2", "16384b": "1646854.14"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha3-256", "16b": "75990.78", "64b": "304171.26", "256b": "705113.09", "1024b": "800965.63", "8192b": "877248.51", "16384b": "878198.78"}]},
   "transform": [
-    {"filter": "datum.algorithm == 'AES-256-GCM'"},
-    {"fold": ["16b", "64b", "256b", "1024b", "8192b", "16384b"], "as": ["Buffer Size", "Throughput (KB/s)"]}
+    {
+      "filter": "test(/AES-256-GCM/i, datum.algorithm)"
+    },
+    {
+      "fold": ["16b", "64b", "256b", "1024b", "8192b", "16384b"],
+      "as": ["Buffer Size", "Throughput"]
+    },
+    {
+      "calculate": "toNumber(datum.Throughput)",
+      "as": "Throughput_Num"
+    }
   ],
   "mark": {"type": "line", "point": true, "tooltip": true},
   "encoding": {
     "x": {
       "field": "Buffer Size", 
       "type": "nominal", 
+      "title": "Buffer Size",
       "sort": ["16b", "64b", "256b", "1024b", "8192b", "16384b"]
     },
-    "y": {"field": "Throughput (KB/s)", "type": "quantitative"},
-    "color": {"field": "os", "type": "nominal", "title": "Operating System"}
+    "y": {
+      "field": "Throughput_Num", 
+      "type": "quantitative",
+      "title": "Throughput (KB/s)"
+    },
+    "color": {
+      "field": "os", 
+      "type": "nominal", 
+      "title": "Environment"
+    }
   },
   "width": "container",
   "height": 400
@@ -1174,162 +1286,162 @@
 <tr>
 <td style="text-align: left;"><strong>AES-256-GCM</strong></td>
 <td style="text-align: left;">FIPS (3.5.5)</td>
-<td style="text-align: center;"><code>179237.66</code></td>
-<td style="text-align: center;"><code>633375.23</code></td>
-<td style="text-align: center;"><code>1994031.87</code></td>
-<td style="text-align: center;"><code>4374310.91</code></td>
-<td style="text-align: center;"><code>7091479.42</code></td>
-<td style="text-align: center;"><code>7301840.9</code></td>
+<td style="text-align: center;"><code>179829.58</code></td>
+<td style="text-align: center;"><code>637131.58</code></td>
+<td style="text-align: center;"><code>1980171.52</code></td>
+<td style="text-align: center;"><code>4480939.01</code></td>
+<td style="text-align: center;"><code>7105309.71</code></td>
+<td style="text-align: center;"><code>7366246.4</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Debian (3.0.18)</td>
-<td style="text-align: center;"><code>88895.73</code></td>
-<td style="text-align: center;"><code>335357.44</code></td>
-<td style="text-align: center;"><code>1172332.54</code></td>
-<td style="text-align: center;"><code>3149518.85</code></td>
-<td style="text-align: center;"><code>6508265.47</code></td>
-<td style="text-align: center;"><code>7072071.68</code></td>
+<td style="text-align: center;"><code>88503.19</code></td>
+<td style="text-align: center;"><code>326090.18</code></td>
+<td style="text-align: center;"><code>1162648.58</code></td>
+<td style="text-align: center;"><code>3149131.78</code></td>
+<td style="text-align: center;"><code>6672072.7</code></td>
+<td style="text-align: center;"><code>7224262.66</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Alpine (3.5.5)</td>
-<td style="text-align: center;"><code>125908.59</code></td>
-<td style="text-align: center;"><code>455888.58</code></td>
-<td style="text-align: center;"><code>1568879.36</code></td>
-<td style="text-align: center;"><code>3808646.14</code></td>
-<td style="text-align: center;"><code>6999818.24</code></td>
-<td style="text-align: center;"><code>7423377.41</code></td>
+<td style="text-align: center;"><code>128065.68</code></td>
+<td style="text-align: center;"><code>468232.58</code></td>
+<td style="text-align: center;"><code>1577370.11</code></td>
+<td style="text-align: center;"><code>3825458.18</code></td>
+<td style="text-align: center;"><code>6977986.56</code></td>
+<td style="text-align: center;"><code>7299203.07</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Ubuntu (3.0.13)</td>
-<td style="text-align: center;"><code>1111825.07</code></td>
-<td style="text-align: center;"><code>2638463.74</code></td>
-<td style="text-align: center;"><code>5228665.34</code></td>
-<td style="text-align: center;"><code>6876750.85</code></td>
-<td style="text-align: center;"><code>7723524.1</code></td>
-<td style="text-align: center;"><code>7777107.97</code></td>
+<td style="text-align: center;"><code>1112738.94</code></td>
+<td style="text-align: center;"><code>2648352.83</code></td>
+<td style="text-align: center;"><code>5267580.42</code></td>
+<td style="text-align: center;"><code>6886573.06</code></td>
+<td style="text-align: center;"><code>7728963.58</code></td>
+<td style="text-align: center;"><code>7809318.91</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>SHA-256</strong></td>
 <td style="text-align: left;">FIPS (3.5.5)</td>
-<td style="text-align: center;"><code>279573.78</code></td>
-<td style="text-align: center;"><code>960782.34</code></td>
-<td style="text-align: center;"><code>2543786.75</code></td>
-<td style="text-align: center;"><code>4516998.14</code></td>
-<td style="text-align: center;"><code>5765709.82</code></td>
-<td style="text-align: center;"><code>5840912.38</code></td>
+<td style="text-align: center;"><code>279203.97</code></td>
+<td style="text-align: center;"><code>959571.71</code></td>
+<td style="text-align: center;"><code>2603002.37</code></td>
+<td style="text-align: center;"><code>4422428.67</code></td>
+<td style="text-align: center;"><code>5764325.38</code></td>
+<td style="text-align: center;"><code>5842190.34</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Debian (3.0.18)</td>
-<td style="text-align: center;"><code>237153.47</code></td>
-<td style="text-align: center;"><code>839789.38</code></td>
-<td style="text-align: center;"><code>2377897.22</code></td>
-<td style="text-align: center;"><code>4346081.28</code></td>
-<td style="text-align: center;"><code>5749383.17</code></td>
-<td style="text-align: center;"><code>5909577.73</code></td>
+<td style="text-align: center;"><code>229643.78</code></td>
+<td style="text-align: center;"><code>826170.56</code></td>
+<td style="text-align: center;"><code>2351344.64</code></td>
+<td style="text-align: center;"><code>4341217.28</code></td>
+<td style="text-align: center;"><code>5753724.93</code></td>
+<td style="text-align: center;"><code>5916966.91</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Alpine (3.5.5)</td>
-<td style="text-align: center;"><code>118667.09</code></td>
-<td style="text-align: center;"><code>446205.76</code></td>
-<td style="text-align: center;"><code>1472944.13</code></td>
-<td style="text-align: center;"><code>3409236.99</code></td>
-<td style="text-align: center;"><code>5538553.86</code></td>
-<td style="text-align: center;"><code>5846614.02</code></td>
+<td style="text-align: center;"><code>118662.45</code></td>
+<td style="text-align: center;"><code>446604.74</code></td>
+<td style="text-align: center;"><code>1469378.56</code></td>
+<td style="text-align: center;"><code>3411342.34</code></td>
+<td style="text-align: center;"><code>5546696.7</code></td>
+<td style="text-align: center;"><code>5811896.32</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Ubuntu (3.0.13)</td>
-<td style="text-align: center;"><code>224921.17</code></td>
-<td style="text-align: center;"><code>802537.41</code></td>
-<td style="text-align: center;"><code>2304345.86</code></td>
-<td style="text-align: center;"><code>4344908.8</code></td>
-<td style="text-align: center;"><code>5746819.07</code></td>
-<td style="text-align: center;"><code>5965070.34</code></td>
+<td style="text-align: center;"><code>224158.62</code></td>
+<td style="text-align: center;"><code>794040.06</code></td>
+<td style="text-align: center;"><code>2295668.48</code></td>
+<td style="text-align: center;"><code>4323976.19</code></td>
+<td style="text-align: center;"><code>5768994.82</code></td>
+<td style="text-align: center;"><code>5959450.62</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>SHA-512</strong></td>
 <td style="text-align: left;">FIPS (3.5.5)</td>
-<td style="text-align: center;"><code>108906.51</code></td>
-<td style="text-align: center;"><code>436934.66</code></td>
-<td style="text-align: center;"><code>852903.94</code></td>
-<td style="text-align: center;"><code>1359858.69</code></td>
-<td style="text-align: center;"><code>1634467.84</code></td>
-<td style="text-align: center;"><code>1645740.03</code></td>
+<td style="text-align: center;"><code>108659.95</code></td>
+<td style="text-align: center;"><code>434142.21</code></td>
+<td style="text-align: center;"><code>849868.54</code></td>
+<td style="text-align: center;"><code>1359217.66</code></td>
+<td style="text-align: center;"><code>1641267.2</code></td>
+<td style="text-align: center;"><code>1646854.14</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Debian (3.0.18)</td>
-<td style="text-align: center;"><code>99552.53</code></td>
-<td style="text-align: center;"><code>396849.79</code></td>
-<td style="text-align: center;"><code>827191.81</code></td>
-<td style="text-align: center;"><code>1340487.68</code></td>
-<td style="text-align: center;"><code>1640120.32</code></td>
-<td style="text-align: center;"><code>1667448.83</code></td>
+<td style="text-align: center;"><code>100159.15</code></td>
+<td style="text-align: center;"><code>401202.05</code></td>
+<td style="text-align: center;"><code>830908.67</code></td>
+<td style="text-align: center;"><code>1341323.26</code></td>
+<td style="text-align: center;"><code>1640833.02</code></td>
+<td style="text-align: center;"><code>1668218.88</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Alpine (3.5.5)</td>
-<td style="text-align: center;"><code>72234.9</code></td>
-<td style="text-align: center;"><code>298511.04</code></td>
-<td style="text-align: center;"><code>678863.36</code></td>
-<td style="text-align: center;"><code>1230296.06</code></td>
-<td style="text-align: center;"><code>1621442.56</code></td>
-<td style="text-align: center;"><code>1657667.58</code></td>
+<td style="text-align: center;"><code>71525.06</code></td>
+<td style="text-align: center;"><code>299660.93</code></td>
+<td style="text-align: center;"><code>681785.86</code></td>
+<td style="text-align: center;"><code>1242674.18</code></td>
+<td style="text-align: center;"><code>1622982.66</code></td>
+<td style="text-align: center;"><code>1657372.67</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Ubuntu (3.0.13)</td>
-<td style="text-align: center;"><code>97377.94</code></td>
-<td style="text-align: center;"><code>390017.66</code></td>
-<td style="text-align: center;"><code>818521.6</code></td>
-<td style="text-align: center;"><code>1331326.98</code></td>
-<td style="text-align: center;"><code>1640071.17</code></td>
-<td style="text-align: center;"><code>1665695.74</code></td>
+<td style="text-align: center;"><code>97063.04</code></td>
+<td style="text-align: center;"><code>388553.92</code></td>
+<td style="text-align: center;"><code>816430.85</code></td>
+<td style="text-align: center;"><code>1331965.95</code></td>
+<td style="text-align: center;"><code>1640316.93</code></td>
+<td style="text-align: center;"><code>1668513.79</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>SHA3-256</strong></td>
 <td style="text-align: left;">FIPS (3.5.5)</td>
-<td style="text-align: center;"><code>75635.33</code></td>
-<td style="text-align: center;"><code>303583.94</code></td>
-<td style="text-align: center;"><code>704861.7</code></td>
-<td style="text-align: center;"><code>803346.43</code></td>
-<td style="text-align: center;"><code>878051.33</code></td>
-<td style="text-align: center;"><code>878510.08</code></td>
+<td style="text-align: center;"><code>75990.78</code></td>
+<td style="text-align: center;"><code>304171.26</code></td>
+<td style="text-align: center;"><code>705113.09</code></td>
+<td style="text-align: center;"><code>800965.63</code></td>
+<td style="text-align: center;"><code>877248.51</code></td>
+<td style="text-align: center;"><code>878198.78</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Debian (3.0.18)</td>
-<td style="text-align: center;"><code>69041.86</code></td>
-<td style="text-align: center;"><code>276422.14</code></td>
-<td style="text-align: center;"><code>667361.02</code></td>
-<td style="text-align: center;"><code>787385.34</code></td>
-<td style="text-align: center;"><code>876462.08</code></td>
-<td style="text-align: center;"><code>889257.98</code></td>
+<td style="text-align: center;"><code>69465.15</code></td>
+<td style="text-align: center;"><code>278632.06</code></td>
+<td style="text-align: center;"><code>667773.36</code></td>
+<td style="text-align: center;"><code>791872.51</code></td>
+<td style="text-align: center;"><code>878723.07</code></td>
+<td style="text-align: center;"><code>889716.74</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Alpine (3.5.5)</td>
-<td style="text-align: center;"><code>51602.86</code></td>
-<td style="text-align: center;"><code>216866.43</code></td>
-<td style="text-align: center;"><code>585975.3</code></td>
-<td style="text-align: center;"><code>755156.99</code></td>
-<td style="text-align: center;"><code>872235.01</code></td>
-<td style="text-align: center;"><code>886718.46</code></td>
+<td style="text-align: center;"><code>52744.46</code></td>
+<td style="text-align: center;"><code>216488.83</code></td>
+<td style="text-align: center;"><code>585623.55</code></td>
+<td style="text-align: center;"><code>753804.29</code></td>
+<td style="text-align: center;"><code>851066.88</code></td>
+<td style="text-align: center;"><code>881131.52</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Ubuntu (3.0.13)</td>
-<td style="text-align: center;"><code>65485.01</code></td>
-<td style="text-align: center;"><code>262840.45</code></td>
-<td style="text-align: center;"><code>645142.78</code></td>
-<td style="text-align: center;"><code>784811.01</code></td>
-<td style="text-align: center;"><code>877535.23</code></td>
-<td style="text-align: center;"><code>889241.6</code></td>
+<td style="text-align: center;"><code>63702.66</code></td>
+<td style="text-align: center;"><code>263227.97</code></td>
+<td style="text-align: center;"><code>649395.71</code></td>
+<td style="text-align: center;"><code>784942.08</code></td>
+<td style="text-align: center;"><code>877780.99</code></td>
+<td style="text-align: center;"><code>886833.15</code></td>
 </tr>
 </tbody>
 </table>
