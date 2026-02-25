@@ -180,12 +180,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install pipenv
           pipenv install
-      - name: Build the MkDocs site
-        run: |
-          pipenv run task docs:benchmark_generate
-          pipenv run task docs:generate_docs_tests
-          pipenv run task docs:build
-          cat docs/assets/data/results.csv
+      - name: Generate benchmark data
+        run: task docs:generate_benchmark_data
+      - name: Generate docs tests
+        run: task docs:generate_docs_tests
+      - name: Build docs
+        run: task docs:build
+      - name: Parse benchmark data
+        run: task docs:parse_benchmark_data
+      - name: Build MkDocs site
+        run: task docs:build-MkDocs-site
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:

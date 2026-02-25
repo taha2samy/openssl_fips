@@ -55,25 +55,18 @@ tasks:
       - chmod +x scripts/wolfi-pkg-updater.py
       - pipenv run python scripts/wolfi-pkg-updater.py
 
-  docs:benchmark:
+  docs:generate_benchmark_data:
     desc: Run performance benchmarks
     dir: benchmark
     cmds:
       - chmod +x ./run_benchmark.sh
       - ./run_benchmark.sh
-    internal: true
-  docs:parse-benchmark:
+
+  docs:parse_benchmark_data:
     desc: Parse benchmark results
     cmds:
-      - chmod +x benchmark/parser.py
       - pipenv run python benchmark/parser.py
-  docs:benchmark_generate:
-    desc: Generate documentation for benchmarks
-    cmds:
-      - task: docs:benchmark
-      - task: docs:parse-benchmark
-      - cmd: tree -a
-      - cmd: ls -R
+
   docs:generate_docs_tests:
       desc: Parses test results and build configs to generate full documentation
       cmds:
@@ -84,7 +77,7 @@ tasks:
       cmds:
         - pipenv run python scripts/update_readme.py
 
-  docs:build:
+  docs:build-MkDocs-site:
     desc: Build the static MkDocs site
     cmds:
       - pipenv run mkdocs build
