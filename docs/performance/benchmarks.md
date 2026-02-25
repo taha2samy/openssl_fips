@@ -43,34 +43,41 @@ AES-256-GCM is the primary cipher for TLS 1.3. This chart visualizes the maximum
 ```vegalite
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "AES-256-GCM Throughput Comparison",
   "data": {"url": "../../assets/data/results.csv"},
   "transform": [
-    {"filter": "datum.algorithm == 'AES-256-GCM'"}
+    {
+      "calculate": "datum.algorithm", 
+      "as": "algo"
+    },
+    {
+      "filter": "test(/AES-256-GCM/i, datum.algo)"
+    },
+    {
+      "calculate": "toNumber(datum['16384b'])",
+      "as": "throughput"
+    }
   ],
   "mark": {"type": "bar", "tooltip": true, "cornerRadiusEnd": 4},
   "encoding": {
     "x": {
       "field": "os", 
       "type": "nominal", 
-      "title": "Operating Environment (OS)", 
-      "axis": {"labelAngle": 0, "labelFontSize": 12, "titlePadding": 15}
+      "title": "Environment", 
+      "axis": {"labelAngle": 0}
     },
     "y": {
-      "field": "16384b", 
+      "field": "throughput", 
       "type": "quantitative", 
-      "title": "Throughput Velocity (KB/s)",
-      "axis": {"grid": true, "titlePadding": 15}
+      "title": "Throughput (KB/s)"
     },
     "color": {
       "field": "os", 
-      "type": "nominal", 
-      "scale": {"range": ["#22c55e", "#3b82f6", "#6366f1", "#a855f7"]},
+      "type": "nominal",
       "legend": null
     }
   },
   "width": "container",
-  "height": 350
+  "height": 300
 }
 ```
 

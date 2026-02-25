@@ -6,14 +6,12 @@ import os
 import glob
 import sys
 
-# التعديل ده بيضمن إن السكريبت يضيف الـ Root لـ sys.path عشان يلاقي scripts.logger
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(SCRIPT_DIR)
 sys.path.append(ROOT_DIR)
 
 from scripts.logger import log, group_start, group_end, notice
 
-# تحديد المسارات بناءً على الـ ROOT_DIR
 LOG_DIR = os.path.join(SCRIPT_DIR, "bench_results")
 REPORTS_DIR = os.path.join(ROOT_DIR, "reports")
 CSV_PATH = os.path.join(ROOT_DIR, "docs", "assets", "data", "results.csv")
