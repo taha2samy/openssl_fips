@@ -839,7 +839,7 @@
 
 <h1 id="macro-rendering-error"><em>Macro Rendering Error</em></h1>
 <p><em>File</em>: <code>performance/benchmarks.md</code></p>
-<p><em>UndefinedError</em>: 'super_collections.SuperDict object' has no attribute 'metrics'</p>
+<p><em>ZeroDivisionError</em>: division by zero</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Traceback (most recent call last):
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  File &quot;/home/runner/.local/share/virtualenvs/openssl_fips-jGxgPdxG/lib/python3.13/site-packages/mkdocs_macros/plugin.py&quot;, line 703, in render
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    return md_template.render(**page_variables)
@@ -849,11 +849,8 @@
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  File &quot;/home/runner/.local/share/virtualenvs/openssl_fips-jGxgPdxG/lib/python3.13/site-packages/jinja2/environment.py&quot;, line 942, in handle_exception
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    raise rewrite_traceback_stack(source=source)
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>  File &quot;&lt;template&gt;&quot;, line 9, in top-level template code
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  File &quot;/home/runner/.local/share/virtualenvs/openssl_fips-jGxgPdxG/lib/python3.13/site-packages/jinja2/environment.py&quot;, line 471, in getitem
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    return obj[argument]
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>           ~~~^^^^^^^^^^
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>jinja2.exceptions.UndefinedError: &#39;super_collections.SuperDict object&#39; has no attribute &#39;metrics&#39;
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>  File &quot;&lt;template&gt;&quot;, line 11, in top-level template code
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>ZeroDivisionError: division by zero
 </code></pre></div>
 
 
