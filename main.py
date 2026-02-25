@@ -1,89 +1,81 @@
 import os
 import json
 import hcl2
+import sys
 from datetime import datetime
 
-def debug_log(msg: str):
-    """Print debug info to the terminal during build."""
-    print(f"[MACROS DEBUG] {msg}")
+# Setup path to import from scripts
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(ROOT_DIR)
+
+from scripts.logger import log, group_start, group_end, notice
 
 def load_json(path: str) -> dict:
-    debug_log(f"Attempting to load JSON from: {path}")
     if not os.path.exists(path):
-        debug_log(f"❌ File NOT FOUND: {path}")
+        log.warning(f"File not found: {path}")
         return {}
     try:
         with open(path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-            debug_log(f"✅ Successfully loaded: {path}")
-            return data
+            return json.load(f)
     except Exception as e:
-        debug_log(f"❌ ERROR parsing {path}: {str(e)}")
+        log.error(f"Failed to parse JSON at {path}: {str(e)}")
         return {}
 
 def load_hcl(path: str) -> dict:
-    debug_log(f"Attempting to load HCL from: {path}")
     if not os.path.exists(path):
-        debug_log(f"❌ File NOT FOUND: {path}")
+        log.warning(f"File not found: {path}")
         return {}
     try:
         with open(path, "r", encoding="utf-8") as f:
             data = hcl2.load(f)
-        result = {
+        return {
             key: value.get("default")
             for variable in data.get("variable", [])
             for key, value in variable.items()
         }
-        debug_log(f"✅ Successfully loaded HCL: {path}")
-        return result
     except Exception as e:
-        debug_log(f"❌ ERROR parsing {path}: {str(e)}")
+        log.error(f"Failed to parse HCL at {path}: {str(e)}")
         return {}
 
 def define_env(env):
-    debug_log("--- Starting Environment Injection ---")
-    base_dir = os.path.dirname(os.path.abspath(__file__))
+    group_start("MkDocs Environment Injection")
+    
+    # 1. Load All Data Sources
+    bake_vars = load_hcl(os.path.join(ROOT_DIR, "docker-bake.hcl"))
+    version_vars = load_hcl(os.path.join(ROOT_DIR, "versions.hcl"))
+    summary = load_json(os.path.join(ROOT_DIR, "reports", "summary.json"))
+    raw_benchmarks = load_json(os.path.join(ROOT_DIR, "reports", "benchmark_data.json"))
 
-    # 1. Load Configs
-    bake_vars = load_hcl(os.path.join(base_dir, "docker-bake.hcl"))
-    version_vars = load_hcl(os.path.join(base_dir, "versions.hcl"))
-
-    # 2. Load JSON Data
-    summary = load_json(os.path.join(base_dir, "reports", "summary.json"))
-    raw_benchmarks = load_json(os.path.join(base_dir, "reports", "benchmark_data.json"))
-
-    # 3. Load Metadata
-    meta_root = os.path.join(base_dir, "all-metadata")
+    meta_root = os.path.join(ROOT_DIR, "all-metadata")
     distroless_meta = load_json(os.path.join(meta_root, "distroless_attestation_details.json"))
     standard_meta = load_json(os.path.join(meta_root, "standard_attestation_details.json"))
     dev_meta = load_json(os.path.join(meta_root, "development_attestation_details.json"))
 
-    # 4. Safe Statistics
+    # 2. Process Test Statistics
     stats = summary.get("summary", {}).get(
         "statistic",
         {"passed": 0, "failed": 0, "broken": 0, "total": 0}
     )
 
-    # 5. SAFE BENCHMARK DATA (CRITICAL FIX)
-    # If the JSON is empty or missing, we provide a valid fallback structure
-    # to prevent Jinja 'UndefinedError' on 'metrics'.
-    benchmarks = raw_benchmarks if raw_benchmarks and "metrics" in raw_benchmarks else {
-        "metadata": {"fips": {"openssl_version": "N/A"}},
-        "metrics": {
-            "AES-256-GCM": {"fips": [0,0,0,0,0,0], "ubuntu": [0,0,0,0,0,0], "debian": [0,0,0,0,0,0], "alpine": [0,0,0,0,0,0]},
-            "sha256": {"fips": [0,0,0,0,0,0], "ubuntu": [0,0,0,0,0,0], "debian": [0,0,0,0,0,0], "alpine": [0,0,0,0,0,0]},
-            "sha512": {"fips": [0,0,0,0,0,0], "ubuntu": [0,0,0,0,0,0], "debian": [0,0,0,0,0,0], "alpine": [0,0,0,0,0,0]},
-            "sha3-256": {"fips": [0,0,0,0,0,0], "ubuntu": [0,0,0,0,0,0], "debian": [0,0,0,0,0,0], "alpine": [0,0,0,0,0,0]}
+    # 3. Benchmark Fallback Logic
+    if not raw_benchmarks or "metrics" not in raw_benchmarks:
+        log.warning("benchmark_data.json is missing or invalid. Using safety fallback.")
+        benchmarks = {
+            "metadata": {"fips": {"openssl_version": "N/A"}, "ubuntu": {}, "alpine": {}, "debian": {}},
+            "metrics": {
+                "AES-256-GCM": {"fips": [0]*6, "ubuntu": [0]*6, "debian": [0]*6, "alpine": [0]*6},
+                "sha256": {"fips": [0]*6, "ubuntu": [0]*6, "debian": [0]*6, "alpine": [0]*6},
+                "sha512": {"fips": [0]*6, "ubuntu": [0]*6, "debian": [0]*6, "alpine": [0]*6},
+                "sha3-256": {"fips": [0]*6, "ubuntu": [0]*6, "debian": [0]*6, "alpine": [0]*6}
+            }
         }
-    }
-    
-    if not raw_benchmarks:
-        debug_log("⚠️ WARNING: injected fallback structure for benchmark_data!")
+    else:
+        benchmarks = raw_benchmarks
 
+    # 4. Global Variables Injection
     owner = bake_vars.get("OWNER", "taha2samy")
     repo = bake_vars.get("REPO_NAME", "wolfi-openssl-fips")
 
-    # 6. Inject Variables
     env.variables.update({
         "project_name": os.getenv("PROJECT_NAME", "Wolfi OpenSSL FIPS"),
         "owner": owner,
@@ -99,12 +91,14 @@ def define_env(env):
         "benchmark_data": benchmarks,
     })
 
+    # 5. Packages List
     env.variables["packages"] = [
         {"name": key.replace("_VER", "").replace("_", " ").title(), "version": value}
         for key, value in version_vars.items()
         if key not in {"BASE_IMAGE", "STATIC_IMAGE"}
     ]
 
+    # 6. Attestation Metadata
     env.variables.update({
         "distroless_digest": distroless_meta.get("provenance", {}).get("digest", "N/A"),
         "distroless_url": distroless_meta.get("provenance", {}).get("url", "#"),
@@ -127,5 +121,6 @@ def define_env(env):
     def render_test_status(status: str) -> str:
         icons = {"passed": "✅", "failed": "❌", "broken": "💥"}
         return icons.get(status, "❓")
-        
-    debug_log("--- Injection Complete ---")
+
+    log.info("Environment variables successfully injected into MkDocs.")
+    group_end()

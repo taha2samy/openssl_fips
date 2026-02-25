@@ -1,16 +1,25 @@
 #!/usr/bin/env python3
 import re
 import csv
+import json
 import os
 import glob
+import sys
 
-# --- Configuration & Paths ---
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CSV_PATH = os.path.join(BASE_DIR, "../docs/assets/data/results.csv")  # حفظ CSV هنا
+# التعديل ده بيضمن إن السكريبت يضيف الـ Root لـ sys.path عشان يلاقي scripts.logger
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(SCRIPT_DIR)
+sys.path.append(ROOT_DIR)
+
+from scripts.logger import log, group_start, group_end, notice
+
+# تحديد المسارات بناءً على الـ ROOT_DIR
+LOG_DIR = os.path.join(SCRIPT_DIR, "bench_results")
+REPORTS_DIR = os.path.join(ROOT_DIR, "reports")
+CSV_PATH = os.path.join(ROOT_DIR, "docs", "assets", "data", "results.csv")
+JSON_PATH = os.path.join(REPORTS_DIR, "benchmark_data.json")
 
 def parse_raw_logs():
-    """Raw Data Extraction (Regex Engine)"""
-    LOG_DIR = os.path.join(BASE_DIR, "bench_results")
     all_data = []
     log_files = glob.glob(os.path.join(LOG_DIR, "*.log"))
     
@@ -18,7 +27,7 @@ def parse_raw_logs():
     version_regex = r'^version:\s*([\w\.]+)'
 
     if not log_files:
-        print("[-] No log files found in bench_results/*.log")
+        log.error(f"No log files found in {LOG_DIR}")
         return []
 
     for file_path in log_files:
@@ -28,7 +37,6 @@ def parse_raw_logs():
         with open(file_path, 'r', encoding='utf-8') as f:
             for line in f:
                 line = line.strip()
-                
                 v_match = re.search(version_regex, line, re.IGNORECASE)
                 if v_match:
                     current_version = v_match.group(1)
@@ -48,23 +56,47 @@ def parse_raw_logs():
                         "16384b": float(match.group(7).replace('k', ''))
                     })
     
-    os.makedirs(os.path.dirname(CSV_PATH), exist_ok=True)
-
     if all_data:
+        os.makedirs(os.path.dirname(CSV_PATH), exist_ok=True)
         keys = all_data[0].keys()
         with open(CSV_PATH, 'w', newline='', encoding='utf-8') as f:
             writer = csv.DictWriter(f, fieldnames=keys)
             writer.writeheader()
             writer.writerows(all_data)
-        print(f"[+] CSV saved to {CSV_PATH}")
+        notice(f"CSV data synced to docs")
 
     return all_data
 
+def transform_to_json(data):
+    structured = {"metadata": {}, "metrics": {}}
+    for entry in data:
+        algo, os_name, ver = entry['algorithm'], entry['os'], entry['version']
+        if os_name not in structured["metadata"]:
+            structured["metadata"][os_name] = {"openssl_version": ver}
+        if algo not in structured["metrics"]:
+            structured["metrics"][algo] = {}
+        structured["metrics"][algo][os_name] = [
+            entry['16b'], entry['64b'], entry['256b'], 
+            entry['1024b'], entry['8192b'], entry['16384b']
+        ]
+    return structured
+
 if __name__ == "__main__":
-    print("[*] Starting Benchmark Parser...")
-    extracted_data = parse_raw_logs()
+    group_start("Benchmark Telemetry Processor")
+    os.makedirs(REPORTS_DIR, exist_ok=True)
     
-    if extracted_data:
-        print(f"[+] Successfully parsed {len(extracted_data)} entries.")
-    else:
-        print("[-] Error: No telemetry data found.")
+    extracted = parse_raw_logs()
+    if not extracted:
+        log.error("Parsing failed: Check if benchmark logs exist.")
+        sys.exit(1)
+
+    try:
+        with open(JSON_PATH, 'w', encoding='utf-8') as f:
+            json.dump(transform_to_json(extracted), f, indent=4)
+        notice(f"Benchmark JSON updated successfully")
+    except Exception as e:
+        log.error(f"IO Error: {str(e)}")
+        sys.exit(1)
+        
+    log.info(f"Processed {len(extracted)} metrics across {len(set(d['os'] for d in extracted))} environments.")
+    group_end()

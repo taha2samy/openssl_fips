@@ -53,7 +53,7 @@ tasks:
     desc: Run the python package updater script
     cmds:
       - chmod +x scripts/wolfi-pkg-updater.py
-      - python3 scripts/wolfi-pkg-updater.py
+      - pipenv run python scripts/wolfi-pkg-updater.py
 
   docs:benchmark:
     desc: Run performance benchmarks
@@ -64,11 +64,9 @@ tasks:
     internal: true
   docs:parse-benchmark:
     desc: Parse benchmark results
-    dir: benchmark
     cmds:
-      - chmod +x ./parser.py
-      - ./parser.py
-    internal: true 
+      - chmod +x benchmark/parser.py
+      - pipenv run python benchmark/parser.py
   docs:benchmark_generate:
     desc: Generate documentation for benchmarks
     cmds:
