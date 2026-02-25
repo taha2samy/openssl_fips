@@ -4,6 +4,19 @@ import hcl2
 import sys
 import csv
 from datetime import datetime
+import platform
+import platform
+import multiprocessing
+import os
+
+def get_total_ram_gb():
+    try:
+        total_bytes = os.sysconf('SC_PAGE_SIZE') * os.sysconf('SC_PHYS_PAGES')
+        return round(total_bytes / (1024.**3), 1)
+    except ValueError:
+        return "N/A"
+
+
 
 # Path setup for internal modules
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -39,18 +52,32 @@ def load_hcl(path: str) -> dict:
         return {}
 
 def define_env(env):
+    @env.filter
+    def from_json(value):
+        return json.loads(value)
+
     group_start("MkDocs Data Injection")
     
-    # 1. Embedded CSV Data for Vega-Lite
-    csv_path = os.path.join(ROOT_DIR, "docs/assets/data/results.csv")
-    csv_values = []
-    if os.path.exists(csv_path):
+    reports_dir = os.path.join(ROOT_DIR, "reports")
+    csv_path_throughput = os.path.join(reports_dir, "results.csv")
+    csv_path_signatures = os.path.join(reports_dir, "signatures.csv")
+    
+    throughput_values = []
+    signature_values = []
+
+    if os.path.exists(csv_path_throughput):
         try:
-            with open(csv_path, encoding='utf-8') as f:
-                reader = csv.DictReader(f)
-                csv_values = list(reader)
+            with open(csv_path_throughput, encoding='utf-8') as f:
+                throughput_values = list(csv.DictReader(f))
         except Exception as e:
-            log.error(f"Failed to read CSV: {str(e)}")
+            log.error(f"Failed to read results.csv: {str(e)}")
+
+    if os.path.exists(csv_path_signatures):
+        try:
+            with open(csv_path_signatures, encoding='utf-8') as f:
+                signature_values = list(csv.DictReader(f))
+        except Exception as e:
+            log.error(f"Failed to read signatures.csv: {str(e)}")
     
     # 2. Configuration & Statistics
     bake_vars = load_hcl(os.path.join(ROOT_DIR, "docker-bake.hcl"))
@@ -102,7 +129,8 @@ def define_env(env):
         "test_stats": stats,
         "test_badge_color": "red" if (stats["failed"] + stats["broken"]) > 0 else "brightgreen",
         "benchmark_data": benchmarks,
-        "bench_results_raw": json.dumps(csv_values) # Embedded for Vega-Lite
+        "bench_results_raw": json.dumps(throughput_values),
+        "bench_signatures_raw": json.dumps(signature_values)
     })
 
     # 7. Dependency List
@@ -124,7 +152,14 @@ def define_env(env):
         "dev_url": dev_meta.get("provenance", {}).get("url", "#"),
         "dev_sbom_url": dev_meta.get("sbom", {}).get("url", "#"),
     })
-
+    env.variables["hardware_context"] = {
+        "system": platform.system(),                # e.g., Linux
+        "release": platform.release(),              # Kernel version
+        "architecture": platform.machine(),         # e.g., x86_64
+        "cpu_cores": multiprocessing.cpu_count(),   # Number of logical cores
+        "ram_gb": get_total_ram_gb(),               # Total RAM in GB
+        "runner": os.getenv("CI", "Local Machine")  # Checks if running in CI
+    }
     env.variables["github"] = {
         "repository": os.getenv("GITHUB_REPOSITORY", f"{owner}/{repo}"),
         "commit_sha": os.getenv("GITHUB_SHA", "0000000"),
