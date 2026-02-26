@@ -1,8 +1,7 @@
 exclude-paths:
   - "/path/.git"
-  - "/path/.github"
   - "/path/.devcontainer"
-  - "/path/infra"           # لاحظ إضافة /path في البداية
+  - "/path/infra"       
   - "/path/docs"
   - "/path/reports"
   - "/path/allure-report"
@@ -19,7 +18,7 @@ exclude-paths:
   - "/path/.vscode"
   - "/path/all-metadata"
 
-output-path: "/path/reports" # تأكد من المسار هنا أيضاً
+output-path: "/path/reports" 
 output-name: "kics-report"
 report-formats:
   - json
