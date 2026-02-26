@@ -191,6 +191,26 @@ jobs:
         run: task audit:multi
       - name: Parse benchmark data
         run: task docs:parse_benchmark_data
+
+
+      - name: Run KICS Scan
+        uses: 
+          checkmarx/kics-github-action@00def9108246ec656aea725db2167522d26a99d2  # v2.1.19
+        with:
+          path: '.'
+          config_path: './kics.yaml'
+          output_path: 'reports/'
+          output_formats: 'json,sarif'
+          enable_annotations: true
+          enable_jobs_summary: true
+          exclude_gitignore: true
+          ignore_on_exit: results
+
+      - name: Rename KICS Results
+        run: |
+          mv reports/results.json reports/kics-report.json
+          mv reports/results.sarif reports/kics-report.sarif
+
       - name: Build MkDocs site
         run: task docs:build-MkDocs-site
       - name: Deploy to GitHub Pages

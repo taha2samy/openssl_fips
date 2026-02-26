@@ -78,3 +78,8 @@ tasks:
     desc: Build the static MkDocs site
     cmds:
       - pipenv run mkdocs build
+  convert-ver-to-sha_action_of_github:
+    desc: convert version of github action versions to sh265
+    cmds:
+      - pipenv run python scripts/github_action_ver_to_sha.py
+    
