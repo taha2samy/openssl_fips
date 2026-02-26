@@ -1,6 +1,6 @@
-# :material-shield-check: Distroless Image Validation Report
+# :material-shield-check: Standard Image Validation Report
 
-This high-assurance report documents the automated verification process for the **Wolfi OpenSSL FIPS (Distroless)** image.
+This high-assurance report documents the automated verification process for the **Wolfi OpenSSL FIPS (Standard)** image.
 
 ---
 
@@ -11,21 +11,21 @@ This high-assurance report documents the automated verification process for the 
 -   :material-check-decagram:{ .md-typeset__success } **Passed Verifications**
     ---
     <span style="font-size: 2.2em; font-weight: 900; color: var(--md-code-hl-string-color);">
-      {{ distroless_report_FIPS_validation.summary.passed }}
+      {{ standard_report_FIPS_validation.summary.passed }}
     </span>
     *All cryptographic boundaries intact*
 
 -   :material-alert-decagram:{ .md-typeset__error } **Compliance Failures**
     ---
     <span style="font-size: 2.2em; font-weight: 900; color: var(--md-code-hl-keyword-color);">
-      {{ distroless_report_FIPS_validation.summary.failed }}
+      {{ standard_report_FIPS_validation.summary.failed }}
     </span>
     *Immediate remediation required*
 
 -   :material-clock-fast: **Total Latency**
     ---
     <span style="font-size: 2.2em; font-weight: 900; color: var(--md-default-fg-color--light);">
-      {{ distroless_report_FIPS_validation.duration | round(1) }}s
+      {{ standard_report_FIPS_validation.duration | round(1) }}s
     </span>
     *End-to-end execution time*
 
@@ -33,7 +33,7 @@ This high-assurance report documents the automated verification process for the 
 
 ---
 ## :material-clipboard-list: Test Details
-{% for test in distroless_report_FIPS_validation.tests %}
+{% for test in standard_report_FIPS_validation.tests %}
   {% set is_passed = test.outcome == "passed" %}
   {% set status_type = "success" if is_passed else "failure" %}
   {% set display_name = test.nodeid.split('::')[-1] | replace('test_', '') | replace('_', ' ') | title %}
