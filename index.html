@@ -920,9 +920,9 @@
 <hr />
 <div align="center" style="margin-bottom: 20px;">
   <!-- Dynamic Test Badges -->
-  <a href="compliance/fips-audit/"><img src="https://img.shields.io/badge/FIPS_Audit_Passed-86-brightgreen?style=for-the-badge&logo=checkmarx&logoColor=white" alt="Passed" /></a>
-  <a href="compliance/fips-audit/"><img src="https://img.shields.io/badge/FIPS_Audit_Failed-6-red?style=for-the-badge&logo=githubactions&logoColor=white" alt="Failed" /></a>
-  <a href="compliance/fips-audit/"><img src="https://img.shields.io/badge/Total_Vectors-92-blue?style=for-the-badge" alt="Total" /></a>
+  <a href="compliance/fips-audit/"><img src="https://img.shields.io/badge/FIPS_Audit_Passed-0-brightgreen?style=for-the-badge&logo=checkmarx&logoColor=white" alt="Passed" /></a>
+  <a href="compliance/fips-audit/"><img src="https://img.shields.io/badge/FIPS_Audit_Failed-0-brightgreen?style=for-the-badge&logo=githubactions&logoColor=white" alt="Failed" /></a>
+  <a href="compliance/fips-audit/"><img src="https://img.shields.io/badge/Total_Vectors-0-blue?style=for-the-badge" alt="Total" /></a>
 </div>
 
 <div align="center">
@@ -939,7 +939,7 @@
 <p>This image is specifically engineered for <strong>Enterprise, FedRAMP, and DoD IL5/IL6</strong> environments where regulatory compliance and absolute cryptographic integrity are non-negotiable.</p>
 <div class="admonition tip">
 <p class="admonition-title">Continuous Compliance State</p>
-<p>The metrics and attestations displayed on this portal are not static. They are dynamically generated from our automated test suites. This documentation reflects the state of the codebase as of <strong>2026-02-26</strong> from Commit <a href="https://github.com/taha2samy/openssl_fips/commit/64381a96b0bf1786a6c002a71154ba000f3eca69"><code>64381a9</code></a>.</p>
+<p>The metrics and attestations displayed on this portal are not static. They are dynamically generated from our automated test suites. This documentation reflects the state of the codebase as of <strong>2026-02-26</strong> from Commit <a href="https://github.com/taha2samy/openssl_fips/commit/cc2fc18aad5b7c76890f68b203b90a1ce1371b06"><code>cc2fc18</code></a>.</p>
 </div>
 <hr />
 <h2 id="core-architectural-pillars"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M232.5 5.2c14.9-6.9 32.1-6.9 47 0l218.6 101c8.5 3.9 13.9 12.4 13.9 21.8s-5.4 17.9-13.9 21.8l-218.6 101c-14.9 6.9-32.1 6.9-47 0l-218.6-101C5.4 145.8 0 137.3 0 128s5.4-17.9 13.9-21.8zM48.1 218.4l164.3 75.9c27.7 12.8 59.6 12.8 87.3 0L464 218.4l34.1 15.8c8.5 3.9 13.9 12.4 13.9 21.8s-5.4 17.9-13.9 21.8l-218.6 101c-14.9 6.9-32.1 6.9-47 0l-218.6-101C5.4 273.8 0 265.3 0 256s5.4-17.9 13.9-21.8L48 218.4zM13.9 362.2 48 346.4l164.3 75.9c27.7 12.8 59.6 12.8 87.3 0l164.3-75.9 34.1 15.8c8.5 3.9 13.9 12.4 13.9 21.8s-5.4 17.9-13.9 21.8l-218.6 101c-14.9 6.9-32.1 6.9-47 0l-218.5-101C5.4 401.8 0 393.3 0 384s5.4-17.9 13.9-21.8"/></svg></span> Core Architectural Pillars</h2>
@@ -959,31 +959,31 @@
 <div class="tabbed-block">
 <p><strong>The Ultimate Hardened Target:</strong> Contains no shell (<code>/bin/sh</code> is missing), no package manager, and no unnecessary OS libraries. This is the pure cryptographic engine intended for production microservices.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Pull the production-ready, attested distroless image</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless@sha256:49c7751084a0160ef1dfbae32028225c1376f5f3c02406f6cbaa15e2486ecae7
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless@sha256:dbec7489da23e5074c1ee57dbad0763608c20211d5fc5f57537f5a6e76f5d3d2
 </code></pre></div>
 <ul>
-<li><strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m23.5 17-5 5-3.5-3.5 1.5-1.5 2 2 3.5-3.5zM6 2c-1.11 0-2 .89-2 2v16c0 1.11.89 2 2 2h7.81c-.53-.91-.81-1.95-.81-3 0-.33.03-.67.08-1H6v-2h7.81c.46-.8 1.1-1.5 1.87-2H6v-2h12v1.08c.33-.05.67-.08 1-.08.34 0 .67.03 1 .08V8l-6-6m-1 1.5L18.5 9H13Z"/></svg></span> Provenance:</strong> <a href="https://github.com/taha2samy/openssl_fips/attestations/19824231">View SLSA L3 Attestation</a></li>
-<li><strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6h2v12H4zm3 0h1v12H7zm2 0h3v12H9zm4 0h1v12h-1zm3 0h2v12h-2zm3 0h1v12h-1zM2 4v4H0V4a2 2 0 0 1 2-2h4v2zm20-2a2 2 0 0 1 2 2v4h-2V4h-4V2zM2 16v4h4v2H2a2 2 0 0 1-2-2v-4zm20 4v-4h2v4a2 2 0 0 1-2 2h-4v-2z"/></svg></span> SBOM:</strong> <a href="https://github.com/taha2samy/openssl_fips/attestations/19824245">Download CycloneDX JSON</a></li>
+<li><strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m23.5 17-5 5-3.5-3.5 1.5-1.5 2 2 3.5-3.5zM6 2c-1.11 0-2 .89-2 2v16c0 1.11.89 2 2 2h7.81c-.53-.91-.81-1.95-.81-3 0-.33.03-.67.08-1H6v-2h7.81c.46-.8 1.1-1.5 1.87-2H6v-2h12v1.08c.33-.05.67-.08 1-.08.34 0 .67.03 1 .08V8l-6-6m-1 1.5L18.5 9H13Z"/></svg></span> Provenance:</strong> <a href="https://github.com/taha2samy/openssl_fips/attestations/19867534">View SLSA L3 Attestation</a></li>
+<li><strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6h2v12H4zm3 0h1v12H7zm2 0h3v12H9zm4 0h1v12h-1zm3 0h2v12h-2zm3 0h1v12h-1zM2 4v4H0V4a2 2 0 0 1 2-2h4v2zm20-2a2 2 0 0 1 2 2v4h-2V4h-4V2zM2 16v4h4v2H2a2 2 0 0 1-2-2v-4zm20 4v-4h2v4a2 2 0 0 1-2 2h-4v-2z"/></svg></span> SBOM:</strong> <a href="https://github.com/taha2samy/openssl_fips/attestations/19867558">Download CycloneDX JSON</a></li>
 </ul>
 </div>
 <div class="tabbed-block">
 <p><strong>Optimized for Observability:</strong> Includes standard POSIX utilities and a <code>/bin/bash</code> shell. Intended for local debugging, pipeline execution, or environments where interactive inspection of the cryptographic state is required.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Pull the standard debug environment</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5@sha256:abd28b03d0007e4f072b13194d36e584b7cbfe2ee898ba73ce93e9550122fc57
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5@sha256:5ef2659eba556ca2a3169832e329a3b14bcd1f990dc54ba3081e45133afa08f2
 </code></pre></div>
 <ul>
-<li><strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m23.5 17-5 5-3.5-3.5 1.5-1.5 2 2 3.5-3.5zM6 2c-1.11 0-2 .89-2 2v16c0 1.11.89 2 2 2h7.81c-.53-.91-.81-1.95-.81-3 0-.33.03-.67.08-1H6v-2h7.81c.46-.8 1.1-1.5 1.87-2H6v-2h12v1.08c.33-.05.67-.08 1-.08.34 0 .67.03 1 .08V8l-6-6m-1 1.5L18.5 9H13Z"/></svg></span> Provenance:</strong> <a href="https://github.com/taha2samy/openssl_fips/attestations/19824223">View SLSA L3 Attestation</a></li>
-<li><strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6h2v12H4zm3 0h1v12H7zm2 0h3v12H9zm4 0h1v12h-1zm3 0h2v12h-2zm3 0h1v12h-1zM2 4v4H0V4a2 2 0 0 1 2-2h4v2zm20-2a2 2 0 0 1 2 2v4h-2V4h-4V2zM2 16v4h4v2H2a2 2 0 0 1-2-2v-4zm20 4v-4h2v4a2 2 0 0 1-2 2h-4v-2z"/></svg></span> SBOM:</strong> <a href="https://github.com/taha2samy/openssl_fips/attestations/19824240">Download CycloneDX JSON</a></li>
+<li><strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m23.5 17-5 5-3.5-3.5 1.5-1.5 2 2 3.5-3.5zM6 2c-1.11 0-2 .89-2 2v16c0 1.11.89 2 2 2h7.81c-.53-.91-.81-1.95-.81-3 0-.33.03-.67.08-1H6v-2h7.81c.46-.8 1.1-1.5 1.87-2H6v-2h12v1.08c.33-.05.67-.08 1-.08.34 0 .67.03 1 .08V8l-6-6m-1 1.5L18.5 9H13Z"/></svg></span> Provenance:</strong> <a href="https://github.com/taha2samy/openssl_fips/attestations/19867522">View SLSA L3 Attestation</a></li>
+<li><strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6h2v12H4zm3 0h1v12H7zm2 0h3v12H9zm4 0h1v12h-1zm3 0h2v12h-2zm3 0h1v12h-1zM2 4v4H0V4a2 2 0 0 1 2-2h4v2zm20-2a2 2 0 0 1 2 2v4h-2V4h-4V2zM2 16v4h4v2H2a2 2 0 0 1-2-2v-4zm20 4v-4h2v4a2 2 0 0 1-2 2h-4v-2z"/></svg></span> SBOM:</strong> <a href="https://github.com/taha2samy/openssl_fips/attestations/19867550">Download CycloneDX JSON</a></li>
 </ul>
 </div>
 <div class="tabbed-block">
 <p><strong>The Builder's Foundation:</strong> Shipped with <code>build-base</code>, <code>linux-headers</code>, and <code>pkgconf</code>. Use this image as a multi-stage builder to compile your C/C++ or Rust applications against the validated FIPS module.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Pull the development and compilation toolkit</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-dev@sha256:52b68c4679783a7ae9b09af3eb1721ff451b10e78425ed5dd8c88614c83405eb
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-dev@sha256:3ffd7cc3d3db3b04bb2e39c689e7b34d177baa42adc48611ebd5fdcc256c9e54
 </code></pre></div>
 <ul>
-<li><strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m23.5 17-5 5-3.5-3.5 1.5-1.5 2 2 3.5-3.5zM6 2c-1.11 0-2 .89-2 2v16c0 1.11.89 2 2 2h7.81c-.53-.91-.81-1.95-.81-3 0-.33.03-.67.08-1H6v-2h7.81c.46-.8 1.1-1.5 1.87-2H6v-2h12v1.08c.33-.05.67-.08 1-.08.34 0 .67.03 1 .08V8l-6-6m-1 1.5L18.5 9H13Z"/></svg></span> Provenance:</strong> <a href="https://github.com/taha2samy/openssl_fips/attestations/19824228">View SLSA L3 Attestation</a></li>
-<li><strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6h2v12H4zm3 0h1v12H7zm2 0h3v12H9zm4 0h1v12h-1zm3 0h2v12h-2zm3 0h1v12h-1zM2 4v4H0V4a2 2 0 0 1 2-2h4v2zm20-2a2 2 0 0 1 2 2v4h-2V4h-4V2zM2 16v4h4v2H2a2 2 0 0 1-2-2v-4zm20 4v-4h2v4a2 2 0 0 1-2 2h-4v-2z"/></svg></span> SBOM:</strong> <a href="https://github.com/taha2samy/openssl_fips/attestations/19824260">Download CycloneDX JSON</a></li>
+<li><strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m23.5 17-5 5-3.5-3.5 1.5-1.5 2 2 3.5-3.5zM6 2c-1.11 0-2 .89-2 2v16c0 1.11.89 2 2 2h7.81c-.53-.91-.81-1.95-.81-3 0-.33.03-.67.08-1H6v-2h7.81c.46-.8 1.1-1.5 1.87-2H6v-2h12v1.08c.33-.05.67-.08 1-.08.34 0 .67.03 1 .08V8l-6-6m-1 1.5L18.5 9H13Z"/></svg></span> Provenance:</strong> <a href="https://github.com/taha2samy/openssl_fips/attestations/19867537">View SLSA L3 Attestation</a></li>
+<li><strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6h2v12H4zm3 0h1v12H7zm2 0h3v12H9zm4 0h1v12h-1zm3 0h2v12h-2zm3 0h1v12h-1zM2 4v4H0V4a2 2 0 0 1 2-2h4v2zm20-2a2 2 0 0 1 2 2v4h-2V4h-4V2zM2 16v4h4v2H2a2 2 0 0 1-2-2v-4zm20 4v-4h2v4a2 2 0 0 1-2 2h-4v-2z"/></svg></span> SBOM:</strong> <a href="https://github.com/taha2samy/openssl_fips/attestations/19867581">Download CycloneDX JSON</a></li>
 </ul>
 </div>
 </div>
