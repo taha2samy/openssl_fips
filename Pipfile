@@ -13,6 +13,8 @@ mkdocs-material = "*"
 mkdocs-macros-plugin = "*"
 mkdocs-charts-plugin = "*"
 pytest-json-report = "*"
+"ruamel.yaml" = "*"
+requests = "*"
 
 [dev-packages]
 

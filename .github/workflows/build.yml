@@ -7,7 +7,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository_owner }}/wolfi-openssl-fips
   repo_of_registry: wolfi-openssl-fips
-  
+
 
 jobs:
   build:
@@ -18,23 +18,23 @@ jobs:
     outputs:
       standard_digest: ${{ steps.extract_digests.outputs.standard_digest }}
       distroless_digest: ${{ steps.extract_digests.outputs.distroless_digest }}
-      development_digest: ${{ steps.extract_digests.outputs.development_digest }}
+      development_digest: ${{ steps.extract_digests.outputs.development_digest 
+        }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
-
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
+        uses: 
+          docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f  # v3
       - name: Log in to GHCR
-        uses: docker/login-action@v3
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9  # v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
-        uses: docker/bake-action@v6
+        uses: docker/bake-action@5be5f02ff8819ecd3092ea6b2e6261c31774f2b4  # v6
         env:
           DOCKER_BUILD_SUMMARY: false
           DOCKER_BUILD_RECORD_UPLOAD: false
@@ -67,11 +67,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target_name: [standard, distroless,development]
+        target_name: [standard, distroless, development]
 
     steps:
       - name: Log in to GHCR
-        uses: docker/login-action@v3
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9  # v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -88,26 +88,30 @@ jobs:
           fi
 
       - name: Attest Provenance
-        uses: actions/attest-build-provenance@v3
+        uses: 
+          actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a  # v3
         id: attest_provenance-image
         with:
-          subject-name: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips
+          subject-name: ghcr.io/${{ github.repository_owner 
+            }}/wolfi-openssl-fips
           subject-digest: ${{ steps.set_digest.outputs.digest }}
           push-to-registry: true
           show-summary: false
 
       - name: Generate SBOM (CycloneDX)
-        uses: anchore/sbom-action@v0.22.2
+        uses: anchore/sbom-action@28d71544de8eaf1b958d335707167c5f783590ad  # v0.22.2
         with:
-          image: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips@${{ steps.set_digest.outputs.digest }}
+          image: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips@${{ 
+            steps.set_digest.outputs.digest }}
           format: cyclonedx-json
           output-file: ${{ matrix.target_name }}.cyclonedx.json
 
       - name: Attest SBOM
-        uses: actions/attest-sbom@v3
+        uses: actions/attest-sbom@4651f806c01d8637787e274ac3bdf724ef169f34  # v3
         id: attest_sbom
         with:
-          subject-name: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips
+          subject-name: ghcr.io/${{ github.repository_owner 
+            }}/wolfi-openssl-fips
           subject-digest: ${{ steps.set_digest.outputs.digest }}
           sbom-path: ${{ matrix.target_name }}.cyclonedx.json
           push-to-registry: true
@@ -133,11 +137,11 @@ jobs:
           }' > ${{ matrix.target_name }}_attestation_details.json
 
       - name: Upload Attestation Metadata
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
         with:
           name: attestation-metadata-${{ matrix.target_name }}
           path: ${{ matrix.target_name }}_attestation_details.json
-          retention-days: 1  
+          retention-days: 1
 
 
   readme:
@@ -147,33 +151,33 @@ jobs:
       contents: write
       packages: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744  # v3
       - name: Download all metadata artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4
         with:
-          path: all-metadata 
-          pattern: attestation-metadata-* 
-          merge-multiple: true 
+          path: all-metadata
+          pattern: attestation-metadata-*
+          merge-multiple: true
 
       - name: Print JSON files and cleanup
         run: |
           echo "=========================================="
           echo "Displaying Attestation Details:"
           echo "=========================================="
-          
+
           for file in all-metadata/*.json; do
             echo "File: $file"
             cat "$file"
             echo -e "\n------------------------------------------"
           done
-          
+
       - name: install taskfile
         run: |
           sudo curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash
           sudo apt install task
-        
+
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c  # v4
         with:
           python-version: '3.13'
       - name: Install pipenv
@@ -190,7 +194,8 @@ jobs:
       - name: Build MkDocs site
         run: task docs:build-MkDocs-site
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+        uses: 
+          peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e  # v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./site
