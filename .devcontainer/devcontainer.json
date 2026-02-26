@@ -1,5 +1,5 @@
 {
-    "name": "Distroless Builder Environment",
+    "name": "Dev Container of Wolfi OpenSSL FIPS",
     "build": {
         "dockerfile": "dockerfile"
     },
