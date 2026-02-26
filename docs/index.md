@@ -98,3 +98,11 @@ cosign verify \
   --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
   {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}
 ```
+# :material-test-tube: Distroless Image Validation Report
+
+This report contains the automated security and functional testing results for the **Wolfi OpenSSL FIPS (Distroless)** image. The tests are executed automatically in an isolated CI/CD environment.
+
+---
+
+<span style="font-size: 2.5em; font-weight: 900; color: var(--md-code-hl-keyword-color);">
+</span>

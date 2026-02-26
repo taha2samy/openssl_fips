@@ -2,28 +2,35 @@ version: '3'
 
 vars:
   RESULTS_ROOT: "allure-results"
-  DEFAULT_IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless"
+  STANDERD_IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless"
+  DISTROLESS_IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:latest"
+  REPORT_DIR: "reports"
+  RESULTS_REPORT: "allure-report"
 
 tasks:
   run:
     desc: Run pytest locally on the host
     vars:
-      IMG_SAFE: '{{.IMAGE | default .DEFAULT_IMAGE}}'
+      IMG_SAFE: '{{.IMAGE | default .STANDERD_IMAGE}}'
       SAFE_NAME: '{{.IMG_SAFE | replace "/" "_" | replace ":" "_" | replace "." "_"}}'
     cmds:
-      - mkdir -p reports
-      - pipenv run pytest tests/tests/ --alluredir="{{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}}" --image="{{.IMG_SAFE}}" || true
+      - mkdir -p {{.REPORT_DIR}}
+      - mkdir -p {{.RESULTS_ROOT}}
+      - pipenv run pytest tests/tests/ --alluredir="{{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}}" --image="{{.IMG_SAFE}}" --json-report --json-report-file="{{.USER_WORKING_DIR}}/{{.REPORT_DIR}}/report_{{.REPORT_NAME}}.json" || true
       - echo "Image={{.IMG_SAFE}}" > "{{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}}/environment.properties"
-
   multi:
     cmds:
       - task: run
-        vars: { IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless" }
+        vars:
+          IMAGE: "{{.STANDERD_IMAGE}}"
+          REPORT_NAME: standard
       - task: run
-        vars: { IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:latest" }
+        vars: 
+          IMAGE: "{{.DISTROLESS_IMAGE}}"
+          REPORT_NAME: distroless
 
   clean:
     cmds:
       - rm -rf "{{.RESULTS_ROOT}}"
-      - rm -rf reports
-      - rm -rf allure-report
+      - rm -rf "{{.REPORT_DIR}}"
+      - rm -rf "{{.RESULTS_REPORT}}"

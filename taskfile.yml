@@ -53,7 +53,7 @@ tasks:
     desc: Run the python package updater script
     cmds:
       - chmod +x scripts/wolfi-pkg-updater.py
-      - pipenv run python scripts/wolfi-pkg-updater.py
+      - python scripts/wolfi-pkg-updater.py
 
   docs:generate_benchmark_data:
     desc: Run performance benchmarks
@@ -66,12 +66,9 @@ tasks:
     desc: Parse benchmark results
     cmds:
       - pipenv run python benchmark/parser.py
+      - pipenv run python benchmark/parser_signatures.py
 
-  docs:generate_docs_tests:
-      desc: Parses test results and build configs to generate full documentation
-      cmds:
-        - task: audit:multi
-        - pipenv run python scripts/generate_docs_tests.py
+
   docs:generate_readme:
       desc: Generates the README.md file
       cmds:
@@ -81,3 +78,19 @@ tasks:
     desc: Build the static MkDocs site
     cmds:
       - pipenv run mkdocs build
+  convert-ver-to-sha_action_of_github:
+    desc: convert version of github action versions to sh265
+    cmds:
+      - pipenv run python scripts/github_action_ver_to_sha.py
+    
+  scan-kics:
+    desc: "Run KICS scan with dynamic path handling"
+    cmds:
+      - sed -i 's/- "/- "\/path\//g' kics.yaml
+
+      - |
+        docker run --rm -v "$PWD":/path checkmarx/kics:latest scan \
+          -p /path \
+          --config /path/kics.yaml || true
+      - sed -i 's/\/path\///g' kics.yaml
+      - echo "KICS scan finished. Config restored and reports cleaned."
