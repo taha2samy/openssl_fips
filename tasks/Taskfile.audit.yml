@@ -16,14 +16,18 @@ tasks:
     cmds:
       - mkdir -p {{.REPORT_DIR}}
       - mkdir -p {{.RESULTS_ROOT}}
-      - pipenv run pytest tests/tests/ --alluredir="{{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}}" --image="{{.IMG_SAFE}}" --json-report --json-report-file="./{{.REPORT_DIR}}/report_{{.SAFE_NAME}}.json" || true
+      - pipenv run pytest tests/tests/ --alluredir="{{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}}" --image="{{.IMG_SAFE}}" --json-report --json-report-file="{{.USER_WORKING_DIR}}/{{.REPORT_DIR}}/report_{{.REPORT_NAME}}.json" || true
       - echo "Image={{.IMG_SAFE}}" > "{{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}}/environment.properties"
   multi:
     cmds:
       - task: run
-        vars: { IMAGE: "{{.STANDERD_IMAGE}}" }
+        vars:
+          IMAGE: "{{.STANDERD_IMAGE}}"
+          REPORT_NAME: standard
       - task: run
-        vars: { IMAGE: "{{.DISTROLESS_IMAGE}}" }
+        vars: 
+          IMAGE: "{{.DISTROLESS_IMAGE}}"
+          REPORT_NAME: distroless
 
   clean:
     cmds:

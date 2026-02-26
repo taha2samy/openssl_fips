@@ -61,7 +61,8 @@ def define_env(env):
     reports_dir = os.path.join(ROOT_DIR, "reports")
     csv_path_throughput = os.path.join(reports_dir, "results.csv")
     csv_path_signatures = os.path.join(reports_dir, "signatures.csv")
-    
+    env.variables["distroless_report_tests"] = load_json(os.path.join(ROOT_DIR, "reports", "report_ghcr_io_taha2samy_wolfi-openssl-fips_3_5_5-distroless.json"))
+    env.variables["standard_report_tests"] = load_json(os.path.join(ROOT_DIR, "reports", "report_ghcr_io_taha2samy_wolfi-openssl-fips_3_5_5-standard.json"))
     throughput_values = []
     signature_values = []
 

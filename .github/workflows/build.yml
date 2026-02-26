@@ -7,6 +7,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository_owner }}/wolfi-openssl-fips
   repo_of_registry: wolfi-openssl-fips
+  
 
 jobs:
   build:
@@ -183,7 +184,7 @@ jobs:
       - name: Generate benchmark data
         run: task docs:generate_benchmark_data
       - name: Generate docs tests
-        run: task docs:generate_docs_tests
+        run: task audit:multi
       - name: Parse benchmark data
         run: task docs:parse_benchmark_data
       - name: Build MkDocs site
