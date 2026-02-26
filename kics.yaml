@@ -1,0 +1,32 @@
+exclude-paths:
+  - "/path/.git"
+  - "/path/.github"
+  - "/path/.devcontainer"
+  - "/path/infra"           # لاحظ إضافة /path في البداية
+  - "/path/docs"
+  - "/path/reports"
+  - "/path/allure-report"
+  - "/path/allure-results"
+  - "/path/benchmark"
+  - "/path/tests"
+  - "/path/scripts"
+  - "/path/tasks"
+  - "/path/templates"
+  - "/path/main.py"
+  - "/path/Pipfile"
+  - "/path/Pipfile.lock"
+  - "/path/taskfile.yml"
+  - "/path/.vscode"
+  - "/path/all-metadata"
+
+output-path: "/path/reports" # تأكد من المسار هنا أيضاً
+output-name: "kics-report"
+report-formats:
+  - json
+  - sarif
+fail-on:
+  - critical
+  - high
+  - medium
+  - low
+ignore-on-exit: none

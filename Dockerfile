@@ -1,26 +1,19 @@
 # syntax=docker/dockerfile:1
 
-ARG FIPS_VERSION
-ARG CORE_VERSION
+ARG FIPS_VERSION=3.0.9
+ARG CORE_VERSION=3.1.0
+ARG BASE_IMAGE=cgr.dev/chainguard/wolfi-base:1.0
+ARG STATIC_IMAGE=cgr.dev/chainguard/static:1.0
 
-# base images
-ARG BASE_IMAGE=cgr.dev/chainguard/wolfi-base:latest
-ARG STATIC_IMAGE=cgr.dev/chainguard/static:latest
-
-# build deps
 ARG BUILD_BASE_VER
 ARG PERL_VER
 ARG LINUX_HEADERS_VER
 ARG WGET_VER
 ARG CA_CERTIFICATES_VER
-
-# runtime deps
 ARG LIBSTDC_PLUS_PLUS_VER
 ARG ZLIB_VER
 ARG TZDATA_VER
 ARG POSIX_LIBC_UTILS_VER
-
-# dev tools
 ARG PKGCONF_VER
 ARG PCRE_DEV_VER
 ARG ZLIB_DEV_VER
@@ -47,9 +40,10 @@ RUN --mount=type=cache,target=/var/cache/apk \
 WORKDIR /src
 RUN wget -q https://www.openssl.org/source/old/3.1/openssl-${FIPS_VERSION}.tar.gz || \
     wget -q https://www.openssl.org/source/openssl-${FIPS_VERSION}.tar.gz && \
-    tar -xf openssl-${FIPS_VERSION}.tar.gz && \
-    cd openssl-${FIPS_VERSION} && \
-    ./Configure enable-fips && \
+    tar -xf openssl-${FIPS_VERSION}.tar.gz
+
+WORKDIR /src/openssl-${FIPS_VERSION}
+RUN ./Configure enable-fips && \
     make -j$(nproc)
 
 FROM ${BASE_IMAGE} AS core-builder
@@ -66,12 +60,14 @@ RUN --mount=type=cache,target=/var/cache/apk \
     linux-headers=${LINUX_HEADERS_VER} \
     wget=${WGET_VER} \
     ca-certificates=${CA_CERTIFICATES_VER}
+
 WORKDIR /src
 RUN wget -q https://www.openssl.org/source/openssl-${CORE_VERSION}.tar.gz || \
     wget -q https://www.openssl.org/source/old/3.4/openssl-${CORE_VERSION}.tar.gz && \
-    tar -xf openssl-${CORE_VERSION}.tar.gz && \
-    cd openssl-${CORE_VERSION} && \
-    ./Configure enable-fips shared --prefix=/usr/local --openssldir=/usr/local/ssl && \
+    tar -xf openssl-${CORE_VERSION}.tar.gz
+
+WORKDIR /src/openssl-${CORE_VERSION}
+RUN ./Configure enable-fips shared --prefix=/usr/local --openssldir=/usr/local/ssl && \
     make -j$(nproc) && \
     make install_sw install_ssldirs
 
@@ -107,11 +103,6 @@ RUN /usr/local/bin/openssl fipsinstall \
 
 COPY conf/openssl.cnf /usr/local/ssl/openssl.cnf
 RUN cat /usr/local/ssl/fipsmodule.cnf
-# RUN sed -i 's/hmac-key-check = 0/hmac-key-check = 1/g' /usr/local/ssl/fipsmodule.cnf
-# RUN sed -i 's/tdes-encrypt-disabled = 0/tdes-encrypt-disabled = 1/g' /usr/local/ssl/fipsmodule.cnf
-# RUN sed -i 's/security-checks = 0/security-checks = 1/g' /usr/local/ssl/fipsmodule.cnf
-# RUN cat /usr/local/ssl/fipsmodule.cnf
-
 
 FROM ${BASE_IMAGE} AS helper
 ARG LIBSTDC_PLUS_PLUS_VER
@@ -123,8 +114,6 @@ RUN --mount=type=cache,target=/var/cache/apk \
 RUN addgroup -g 1000 openssl && adduser -u 1000 -G openssl -D -s /bin/bash openssl
 RUN mkdir -p /etc && touch /etc/nsswitch.conf
 RUN cp /usr/share/zoneinfo/UTC /etc/localtime && echo "UTC" > /etc/timezone
-RUN mkdir -p /etc && touch /etc/nsswitch.conf
-
 
 FROM ${BASE_IMAGE} AS openssl-standard
 ARG CORE_VERSION
@@ -166,7 +155,6 @@ ENV PATH="/usr/local/bin:${PATH}" \
     OPENSSL_MODULES=/usr/local/lib/ossl-modules \
     TZ=UTC
 
-
 USER openssl
 WORKDIR /home/openssl
 
@@ -174,6 +162,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=2s --retries=3 \
     CMD /usr/local/bin/openssl list -providers | grep -q fips || exit 1
 
 ENTRYPOINT ["/usr/local/bin/openssl"]
+
 FROM ${STATIC_IMAGE} AS openssl-distroless
 ARG CORE_VERSION
 ARG FIPS_VERSION
@@ -222,19 +211,19 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=2s --retries=3 \
 
 ENTRYPOINT ["/usr/local/bin/openssl"]
 
-
 FROM ${BASE_IMAGE} AS openssl-dev
+ARG CORE_VERSION
+ARG FIPS_VERSION
 ARG BUILD_BASE_VER
 ARG POSIX_LIBC_UTILS_VER
-ARG BUILD_BASE_VER
 ARG PKGCONF_VER
 ARG PCRE_DEV_VER
 ARG ZLIB_DEV_VER
-ARG POSIX_LIBC_UTILS_VER
 ARG BASH_VER
 ARG CURL_VER
 ARG JQ_VER
 ARG UNZIP_VER
+
 RUN --mount=type=cache,target=/var/cache/apk \
     apk add --no-cache \
     build-base=${BUILD_BASE_VER} \
@@ -252,12 +241,15 @@ COPY --from=fips-integrator /usr/local /usr/local
 RUN ln -sf /usr/local/lib/libssl.so.3 /usr/local/lib/libssl.so && \
     ln -sf /usr/local/lib/libcrypto.so.3 /usr/local/lib/libcrypto.so
 
+COPY --from=helper /etc/passwd /etc/group /etc/
+
 ENV PATH="/usr/local/bin:${PATH}" \
     CPATH="/usr/local/include" \
     LIBRARY_PATH="/usr/local/lib" \
     LD_LIBRARY_PATH="/usr/local/lib:/usr/local/lib64" \
     PKG_CONFIG_PATH="/usr/local/lib/pkgconfig" \
     OPENSSL_CONF=/usr/local/ssl/openssl.cnf
+
 LABEL org.opencontainers.image.title="Wolfi OpenSSL FIPS (development)" \
     org.opencontainers.image.description="FIPS 140-3 compliant OpenSSL container (development)" \
     org.opencontainers.image.vendor="taha2samy" \
@@ -266,4 +258,10 @@ LABEL org.opencontainers.image.title="Wolfi OpenSSL FIPS (development)" \
     org.opencontainers.image.licenses="Apache-2.0" \
     org.opencontainers.image.source="https://github.com/taha2samy/openssl_fips" 
 
-WORKDIR /src
+USER openssl
+WORKDIR /home/openssl
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=2s --retries=3 \
+    CMD /usr/local/bin/openssl list -providers | grep -q fips || exit 1
+
+ENTRYPOINT ["/bin/bash"]
