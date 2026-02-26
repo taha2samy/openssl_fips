@@ -206,10 +206,6 @@ jobs:
           exclude_gitignore: true
           ignore_on_exit: results
 
-      - name: Rename KICS Results
-        run: |
-          mv reports/results.json reports/kics-report.json
-          mv reports/results.sarif reports/kics-report.sarif
 
       - name: Build MkDocs site
         run: task docs:build-MkDocs-site
