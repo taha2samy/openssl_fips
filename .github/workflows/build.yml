@@ -218,7 +218,7 @@ jobs:
           path: reports/
 
   scan-compliance:
-    name: Run Centralized Scan - ${{ matrix.task_name }}
+    name: Run - ${{ matrix.task_name }}
     needs: [attest]
     runs-on: ubuntu-latest
     strategy:
