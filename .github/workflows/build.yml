@@ -144,13 +144,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
-      - name: Set up Python
-        uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c  # v4
-      - name: Setup Taskfile
-        uses: ./.github/actions/setup-task
-
-        with:
-          python-version: '3.13'
       - name: Setup Taskfile
         uses: ./.github/actions/setup-task
 
@@ -169,10 +162,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
-      - name: Set up Python
-        uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c  # v4
-        with:
-          python-version: '3.13'
       - name: Setup Taskfile
         uses: ./.github/actions/setup-task
       - name: Generate docs tests
@@ -220,6 +209,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+
+      - name: setup python
+        uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c  # v4
+        with:
+          python-version: '3.13'
       - name: Setup Taskfile
         uses: ./.github/actions/setup-task
 
@@ -276,10 +270,6 @@ jobs:
           done
 
 
-      - name: Set up Python
-        uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c  # v4
-        with:
-          python-version: '3.13'
 
       - name: Setup Taskfile
         uses: ./.github/actions/setup-task
