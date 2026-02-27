@@ -284,7 +284,8 @@ jobs:
           echo "------------------------------------------"
           ls -R reports/
           ls -R all-metadata/
-
+      - name: change permissions
+        run: sudo chmod -R 777 .
       - name: Build MkDocs site
         run: task docs:build-MkDocs-site
 
