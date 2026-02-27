@@ -251,13 +251,6 @@ jobs:
           path: reports/
 
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
-        with:
-          name: reports-trivy-${{ matrix.image_id }}-${{ matrix.compliance_id }}
-          path: reports/
-
-
   verify-and-debug:
     needs: [benchmarking, security-audit, kics-scan, scan-compliance]
     runs-on: ubuntu-latest
