@@ -110,7 +110,8 @@ jobs:
         uses: actions/attest-sbom@4651f806c01d8637787e274ac3bdf724ef169f34  # v3
         id: attest_sbom
         with:
-          subject-name: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips
+          subject-name: ghcr.io/${{ github.repository_owner 
+            }}/wolfi-openssl-fips
           subject-digest: ${{ steps.set_digest.outputs.digest }}
           sbom-path: ${{ matrix.target_name }}.cyclonedx.json
           push-to-registry: true

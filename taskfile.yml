@@ -95,4 +95,3 @@ tasks:
           --config /path/kics.yaml || true
       - sed -i 's/\/path\///g' kics.yaml
       - echo "KICS scan finished. Config restored and reports cleaned."
- 
