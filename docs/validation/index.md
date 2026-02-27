@@ -1,5 +1,4 @@
-# :material-shield-check: Automated Validation Overview
-
+# :material-shield-check-decagram: Automated Validation Overview
 
 This section documents the continuous security and functional verification process. Our validation strategy ensures that the cryptographic boundary remains intact across all distributed variants.
 
