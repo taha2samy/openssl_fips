@@ -110,8 +110,7 @@ jobs:
         uses: actions/attest-sbom@4651f806c01d8637787e274ac3bdf724ef169f34  # v3
         id: attest_sbom
         with:
-          subject-name: ghcr.io/${{ github.repository_owner 
-            }}/wolfi-openssl-fips
+          subject-name: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips
           subject-digest: ${{ steps.set_digest.outputs.digest }}
           sbom-path: ${{ matrix.target_name }}.cyclonedx.json
           push-to-registry: true
@@ -216,16 +215,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./site
 
-      - name: Commit generated docs
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add README.md
-
-          # commit only if there are changes
-          git diff --staged --quiet || git commit -m "Auto-update README and docs"
-
-          git push
       - name: Cleanup
         if: always()
         run: |
