@@ -1,0 +1,33 @@
+name: 'Cleanup Dangling GHCR Images'
+description: 'Delete container versions that have no tags'
+inputs:
+  package_name:
+    description: 'The name of the package/image to clean'
+    required: true
+  token:
+    description: 'GitHub Token with package delete permissions'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Delete dangling versions
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+      run: |
+        PACKAGE="${{ inputs.package_name }}"
+        echo "Searching for dangling versions in: $PACKAGE"
+        
+        VERSIONS=$(gh api /user/packages/container/$PACKAGE/versions \
+          --jq '.[] | select(.metadata.container.tags == null) | .id')
+        
+        if [ -z "$VERSIONS" ]; then
+          echo "No dangling versions found for $PACKAGE."
+        else
+          for version in $VERSIONS; do
+            echo "Deleting dangling version ID: $version"
+            gh api --method DELETE /user/packages/container/$PACKAGE/versions/$version || echo "Failed to delete $version"
+          done
+          echo "Cleanup completed for $PACKAGE."
+        fi

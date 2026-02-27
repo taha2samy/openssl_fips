@@ -1,10 +1,15 @@
 version: '3'
 
+output:
+  group:
+    begin: '::group::{{.TASK}}'
+    end: '::endgroup::'
+
 includes:
   infra: ./tasks/Taskfile.infra.yml
   audit: ./tasks/Taskfile.audit.yml
   report: ./tasks/Taskfile.report.yml
-
+  scan-compliance: ./tasks/Taskfile.scan-compliance.yml
 vars:
   DEFAULT_IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless"
   STANDARD_IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5"
@@ -51,11 +56,11 @@ tasks:
       - task: infra:clean
 
   update-pkgs:
+  
     desc: Run the python package updater script
     cmds:
       - chmod +x scripts/wolfi-pkg-updater.py
       - python scripts/wolfi-pkg-updater.py
-
   docs:generate_benchmark_data:
     desc: Run performance benchmarks
     dir: benchmark
@@ -75,23 +80,25 @@ tasks:
       cmds:
         - pipenv run python scripts/update_readme.py
 
-  docs:build-MkDocs-site:
-    desc: Build the static MkDocs site
-    cmds:
-      - pipenv run mkdocs build
+
   convert-ver-to-sha_action_of_github:
     desc: convert version of github action versions to sh265
     cmds:
-      - pipenv run python scripts/github_action_ver_to_sha.py
-    
-  scan-kics:
-    desc: "Run KICS scan with dynamic path handling"
-    cmds:
-      - sed -i 's/- "/- "\/path\//g' kics.yaml
+      - pipenv run python scripts/github_action_ver_to_sha.py 
 
-      - |
-        docker run --rm -v "$PWD":/path checkmarx/kics:latest scan \
-          -p /path \
-          --config /path/kics.yaml || true
-      - sed -i 's/\/path\///g' kics.yaml
-      - echo "KICS scan finished. Config restored and reports cleaned."
+  docs:serve:
+    desc: "Run MkDocs server locally for live preview"
+    cmds:
+      - pipenv run mkdocs serve --dev-addr 0.0.0.0:8000
+  
+
+  docs:build-MkDocs-site:
+      desc: "Build the final FIPS Boundary Security Dashboard"
+      summary: |
+        This task generates the static site (MkDocs).
+        It assumes all JSON reports (Trivy, KICS, Benchmarks) 
+        are already gathered in the 'reports/' folder.
+      cmds:
+        - echo "Building MkDocs Security Dashboard..."
+        - pipenv run mkdocs build --clean --strict -vvv
+        - echo "Done! The site is ready in the 'site/' directory."

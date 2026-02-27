@@ -17,55 +17,72 @@ def get_sha(repo, tag):
         sha = result.stdout.strip()
         return sha if is_sha(sha) else None
     except subprocess.CalledProcessError:
-        print(f"Failed to fetch SHA for {repo}@{tag} using gh cli")
+        print(f"   [!] Failed to fetch SHA for {repo}@{tag}")
         return None
 
-def pin_github_actions(yaml_file):
-    if not os.path.exists(yaml_file):
-        print(f"File not found: {yaml_file}")
+def process_steps(steps, yaml_obj):
+    updated = False
+    if not steps or not isinstance(steps, list):
+        return False
+
+    for step in steps:
+        uses = step.get('uses')
+        if not uses or '@' not in uses or uses.startswith('./'):
+            continue
+        
+        repo, version = uses.split('@', 1)
+        
+        if is_sha(version):
+            continue
+        
+        print(f"   [*] Fetching SHA for {repo}@{version}...")
+        new_sha = get_sha(repo, version)
+        
+        if new_sha:
+            step['uses'] = f"{repo}@{new_sha}"
+            print(f"   [+] Updated: {version} -> {new_sha[:7]}")
+            updated = True
+    return updated
+
+def pin_files(file_path):
+    if not os.path.exists(file_path):
+        print(f"File not found: {file_path}")
         return
 
+    print(f"\n--- Processing: {file_path} ---")
     yaml = YAML()
     yaml.preserve_quotes = True
     yaml.indent(mapping=2, sequence=4, offset=2)
     
-    with open(yaml_file, 'r', encoding='utf-8') as f:
+    with open(file_path, 'r', encoding='utf-8') as f:
         data = yaml.load(f)
 
-    updated = False
+    file_updated = False
 
-    for job_name, job_data in data.get('jobs', {}).items():
-        if not isinstance(job_data, dict):
-            continue
-            
-        for step in job_data.get('steps', []):
-            uses = step.get('uses')
-            if not uses or '@' not in uses:
-                continue
-            
-            repo, version = uses.split('@', 1)
-            
-            if is_sha(version):
-                print(f"Skipping: {repo} (Already uses SHA)")
-                continue
-            
-            new_sha = get_sha(repo, version)
-            if new_sha:
-                step['uses'] = f"{repo}@{new_sha}"
-                step.yaml_add_eol_comment(version, 'uses')
-                print(f"Updated:  {repo} | {version} -> {new_sha}")
-                updated = True
+    if 'jobs' in data:
+        for job_name, job_data in data['jobs'].items():
+            if isinstance(job_data, dict) and 'steps' in job_data:
+                if process_steps(job_data['steps'], yaml):
+                    file_updated = True
 
-    if updated:
-        with open(yaml_file, 'w', encoding='utf-8') as f:
+    elif 'runs' in data and 'steps' in data['runs']:
+        if process_steps(data['runs']['steps'], yaml):
+            file_updated = True
+
+    if file_updated:
+        with open(file_path, 'w', encoding='utf-8') as f:
             yaml.dump(data, f)
-        print(f"Done! File updated: {yaml_file}\n")
+        print(f"Done! {file_path} updated.")
+    else:
+        print(f"No changes needed for {file_path}.")
 
 if __name__ == "__main__":
-    workflows = [
+    files_to_pin = [
         ".github/workflows/build.yml",
-        ".github/workflows/main.yml"
+        ".github/workflows/main.yml",
+        ".github/actions/setup-task/action.yml",
+        ".github/actions/cleanup-ghcr/action.yml"
     ]
     
-    for wf in workflows:
-        pin_github_actions(wf)
+    for file in files_to_pin:
+        pin_files(file)
