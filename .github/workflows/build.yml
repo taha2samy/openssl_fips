@@ -286,7 +286,7 @@ jobs:
           ls -R all-metadata/
 
       - name: Build MkDocs site
-        run: sudo -E task docs:build-MkDocs-site
+        run: task docs:build-MkDocs-site
 
       - name: Deploy to GitHub Pages
         uses: 
