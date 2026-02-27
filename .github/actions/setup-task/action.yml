@@ -1,0 +1,16 @@
+name: 'Setup Taskfile'
+description: 'Install Taskfile globally using Cloudsmith script'
+runs:
+  using: "composite"
+  steps:
+    - name: Install Task
+      shell: bash
+      run: |
+        sudo curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash
+        sudo apt install task
+    - name: Install pipenv
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip
+        pip install pipenv
+        pipenv install
