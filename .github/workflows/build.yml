@@ -216,6 +216,7 @@ jobs:
 
   trivy-compliance-scan:
     name: Scan ${{ matrix.image_id }} - ${{ matrix.compliance_id }}
+    needs: [attest]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
