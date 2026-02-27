@@ -178,6 +178,10 @@ jobs:
         run: |
           sudo curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash
           sudo apt install task
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
       - name: Install pipenv
         run: |
           python -m pip install --upgrade pip
