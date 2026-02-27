@@ -213,41 +213,52 @@ jobs:
         with:
           name: reports-kics
           path: reports/
-  trivy-compliance-scan:
-      needs: [attest]
-      runs-on: ubuntu-latest
-      strategy:
-        fail-fast: false
-        matrix:
-          image_type: [standard, distroless, development]
-          compliance: [docker-cis-1.6.0, k8s-nsa-1.0, k8s-pss-restricted-0.1]
-          include:
-            - image_type: standard
-              image_ref: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips:3.5.5
-              scanners: "vuln,secret"
-            - image_type: distroless
-              image_ref: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips:3.5.5-distroless
-              scanners: "vuln,secret,misconfig"
-            - image_type: development
-              image_ref: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips:3.5.5-dev
-              scanners: "vuln,secret"
-      steps:
-        - name: Run Trivy Scan
-          uses: aquasecurity/trivy-action@0.33.1
-          with:
-            image-ref: ${{ matrix.image_ref }}
-            format: 'json'
-            compliance: ${{ matrix.compliance }}
-            output: 'reports/${{ matrix.image_type }}-${{ matrix.compliance }}_full.json'
-            scanners: ${{ matrix.scanners }}
-          env:
-            TRIVY_DISTRO: wolfi
 
-        - name: Upload Trivy Reports
-          uses: actions/upload-artifact@v4
-          with:
-            name: reports-trivy-${{ matrix.image_type }}-${{ matrix.compliance }}
-            path: reports/
+  trivy-compliance-scan:
+    name: Scan ${{ matrix.image_id }} - ${{ matrix.compliance_id }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image_id: [distroless, standard, development]
+        compliance_id: [docker-cis, k8s-nsa, k8s-pss-restricted]
+        include:
+          - image_id: distroless
+            image_ref: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless"
+            is_distroless: "true"
+          - image_id: standard
+            image_ref: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5"
+            is_distroless: "false"
+          - image_id: development
+            image_ref: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-dev"
+            is_distroless: "false"            
+          - compliance_id: docker-cis
+            full_compliance: "docker-cis-1.6.0"
+          - compliance_id: k8s-nsa
+            full_compliance: "k8s-nsa-1.0"
+          - compliance_id: k8s-pss-restricted
+            full_compliance: "k8s-pss-restricted-0.1"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Task
+        run: sudo curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash && sudo apt install task
+      - name: Run Specific Scan Task
+        run: |
+          task scan-image \
+            IMAGE="${{ matrix.image_ref }}" \
+            REPORT_ID="${{ matrix.image_id }}-${{ matrix.compliance_id }}" \
+            COMPLIANCE="${{ matrix.full_compliance }}" \
+            IS_DISTROLESS="${{ matrix.is_distroless }}" \
+            OS="wolfi"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports-trivy-${{ matrix.image_id }}-${{ matrix.compliance_id }}
+          path: reports/
+
 
   verify-and-debug:
     needs: [benchmarking, security-audit, kics-scan,trivy-compliance-scan]
