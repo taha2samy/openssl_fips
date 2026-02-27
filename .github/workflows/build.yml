@@ -249,6 +249,8 @@ jobs:
         run: sudo curl -1sLf 
           'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E 
           bash && sudo apt install task
+      - name: give permission to taskfile
+        run: sudo chmod 777 -R .
       - name: Run Specific Scan Task
         run: |
           task scan-compliance:scan-image \
