@@ -119,10 +119,10 @@ tasks:
         vars: { IMAGE: "{{.IMAGE}}", REPORT_ID: "{{.REPORT_ID}}", OS: "{{.OS}}" }
 
 
-  Scan-Distroless-from-all-compliance:
+  Scan-Distroless:
     desc: "scan distroless image"
     cmds:
-      - task: scan-image-all-compliances
+      - task: full-compliance
         vars:
           IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless"
           REPORT_ID: "distroless"
@@ -130,20 +130,20 @@ tasks:
           OS: "wolfi"
     
 
-  Scan-Standard-from-all-compliance:
+  Scan-Standard:
     desc: "scan standard image"
     cmds:
-      - task: scan-image-all-compliances
+      - task: full-compliance
         vars:
           IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5"
           REPORT_ID: "standard"
           IS_DISTROLESS: "false"
           OS: "wolfi"
 
-  Scan-Development-from-all-compliance:
+  Scan-Development:
     desc: "scan development image"
     cmds:
-      - task: scan-image-all-compliances
+      - task: full-compliance
         vars:
           IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-dev"
           REPORT_ID: "development"

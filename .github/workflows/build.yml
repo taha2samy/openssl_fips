@@ -225,11 +225,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - task_name: "scan-compliance:full-compliance"
+          - task_name: "scan-compliance:Scan-Distroless"
             id: "distroless"
-          - task_name: "scan-compliance:full-compliance"
+          - task_name: "scan-compliance:Scan-Standard"
             id: "standard"
-          - task_name: "scan-compliance:full-compliance"
+          - task_name: "scan-compliance:Scan-Development"
             id: "development"
 
     steps:
