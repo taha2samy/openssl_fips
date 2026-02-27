@@ -144,12 +144,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
-      - name: install taskfile
-        run: |
-          sudo curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash
-          sudo apt install task
       - name: Set up Python
         uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c  # v4
+      - name: Setup Taskfile
+        uses: ./.github/actions/setup-task
+
         with:
           python-version: '3.13'
       - name: Setup Taskfile
@@ -170,10 +169,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
-      - name: install taskfile
-        run: |
-          sudo curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash
-          sudo apt install task
       - name: Set up Python
         uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c  # v4
         with:
@@ -225,10 +220,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
-      - name: Install Task
-        run: |
-          sudo curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash
-          sudo apt install task
+      - name: Setup Taskfile
+        uses: ./.github/actions/setup-task
 
       - name: run trivy ${{ matrix.id }}
         run: |
@@ -282,10 +275,6 @@ jobs:
             echo -e "\n------------------------------------------"
           done
 
-      - name: Install Taskfile
-        run: |
-          sudo curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash
-          sudo apt install task
 
       - name: Set up Python
         uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c  # v4
