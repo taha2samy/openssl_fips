@@ -87,17 +87,10 @@ tasks:
   convert-ver-to-sha_action_of_github:
     desc: convert version of github action versions to sh265
     cmds:
-      - pipenv run python scripts/github_action_ver_to_sha.py
-    
-  scan-kics:
-    desc: "Run KICS scan with dynamic path handling"
+      - pipenv run python scripts/github_action_ver_to_sha.py 
+
+  docs:serve:
+    desc: "Run MkDocs server locally for live preview"
     cmds:
-      - sed -i 's/- "/- "\/path\//g' kics.yaml
-
-      - |
-        docker run --rm -v "$PWD":/path checkmarx/kics:latest scan \
-          -p /path \
-          --config /path/kics.yaml || true
-      - sed -i 's/\/path\///g' kics.yaml
-      - echo "KICS scan finished. Config restored and reports cleaned."
-
+      - mkdocs serve --dev-addr 0.0.0.0:8000
+  

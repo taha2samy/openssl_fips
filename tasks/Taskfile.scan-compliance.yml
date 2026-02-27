@@ -149,3 +149,16 @@ tasks:
           REPORT_ID: "development"
           IS_DISTROLESS: "false"
           OS: "wolfi"
+          
+  scan-kics:
+    desc: "Run KICS scan with dynamic path handling"
+    cmds:
+      - sed -i 's/- "/- "\/path\//g' kics.yaml
+
+      - |
+        docker run --rm -v "$PWD":/path checkmarx/kics:latest scan \
+          -p /path \
+          --config /path/kics.yaml || true
+      - sed -i 's/\/path\///g' kics.yaml
+      - echo "KICS scan finished. Config restored and reports cleaned."
+
