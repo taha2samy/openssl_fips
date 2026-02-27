@@ -318,16 +318,9 @@ jobs:
 
 
 
-      - name: Delete dangling GHCR images
-        if: always()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          PACKAGE="wolfi-openssl-fips"
-          echo "Scanning for untagged images in $PACKAGE..."
-          gh api /user/packages/container/$PACKAGE/versions \
-            --jq '.[] | select(.metadata.container.tags == null) | .id' |
-          while read version; do
-            echo "Deleting dangling version: $version"
-            gh api --method DELETE /user/packages/container/$PACKAGE/versions/$version || true
-          done
+      - name: Cleanup Dangling Images
+        uses: ./.github/actions/cleanup-ghcr
+        with:
+          package_name: "wolfi-openssl-fips"
+          token: ${{ secrets.GITHUB_TOKEN }}
+

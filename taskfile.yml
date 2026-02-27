@@ -80,10 +80,7 @@ tasks:
       cmds:
         - pipenv run python scripts/update_readme.py
 
-  docs:build-MkDocs-site:
-    desc: Build the static MkDocs site
-    cmds:
-      - pipenv run mkdocs build
+
   convert-ver-to-sha_action_of_github:
     desc: convert version of github action versions to sh265
     cmds:
@@ -103,5 +100,5 @@ tasks:
         are already gathered in the 'reports/' folder.
       cmds:
         - echo "Building MkDocs Security Dashboard..."
-        - pipenv run mkdocs build --clean --strict
+        - pipenv run mkdocs build --clean --strict -vvv
         - echo "Done! The site is ready in the 'site/' directory."

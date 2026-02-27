@@ -17,6 +17,7 @@ requests = "*"
 mkdocs-macros-plugin = "*"
 
 [dev-packages]
+mkdocs = "<2.0"
 
 [requires]
 python_version = "3.13"
