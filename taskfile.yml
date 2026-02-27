@@ -1,10 +1,15 @@
 version: '3'
 
+output:
+  group:
+    begin: '::group::{{.TASK}}'
+    end: '::endgroup::'
+
 includes:
   infra: ./tasks/Taskfile.infra.yml
   audit: ./tasks/Taskfile.audit.yml
   report: ./tasks/Taskfile.report.yml
-
+  scan-compliance: ./tasks/Taskfile.scan-compliance.yml
 vars:
   DEFAULT_IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless"
   STANDARD_IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5"
@@ -51,11 +56,11 @@ tasks:
       - task: infra:clean
 
   update-pkgs:
+  
     desc: Run the python package updater script
     cmds:
       - chmod +x scripts/wolfi-pkg-updater.py
       - python scripts/wolfi-pkg-updater.py
-
   docs:generate_benchmark_data:
     desc: Run performance benchmarks
     dir: benchmark

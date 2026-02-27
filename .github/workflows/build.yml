@@ -92,8 +92,7 @@ jobs:
           actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a  # v3
         id: attest_provenance-image
         with:
-          subject-name: ghcr.io/${{ github.repository_owner 
-            }}/wolfi-openssl-fips
+          subject-name: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips
           subject-digest: ${{ steps.set_digest.outputs.digest }}
           push-to-registry: true
           show-summary: false
@@ -110,8 +109,7 @@ jobs:
         uses: actions/attest-sbom@4651f806c01d8637787e274ac3bdf724ef169f34  # v3
         id: attest_sbom
         with:
-          subject-name: ghcr.io/${{ github.repository_owner 
-            }}/wolfi-openssl-fips
+          subject-name: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips
           subject-digest: ${{ steps.set_digest.outputs.digest }}
           sbom-path: ${{ matrix.target_name }}.cyclonedx.json
           push-to-registry: true
@@ -143,103 +141,121 @@ jobs:
           path: ${{ matrix.target_name }}_attestation_details.json
           retention-days: 1
 
+  benchmarking:
+      needs: [attest]
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+        - name: install taskfile
+          run: |
+            sudo curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash
+            sudo apt install task
+        - name: Set up Python
+          uses: actions/setup-python@v4
+          with:
+            python-version: '3.13'
+        - name: Install pipenv
+          run: |
+            python -m pip install --upgrade pip
+            pip install pipenv
+            pipenv install
+        - name: Generate benchmark data
+          run: task docs:generate_benchmark_data
+        - name: Parse benchmark data
+          run: task docs:parse_benchmark_data
+        - name: Upload Benchmarks
+          uses: actions/upload-artifact@v4
+          with:
+            name: reports-benchmarks
+            path: reports/
 
-  readme:
+  security-audit:
     needs: [attest]
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      packages: write
     steps:
-      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744  # v3
-      - name: Download all metadata artifacts
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4
-        with:
-          path: all-metadata
-          pattern: attestation-metadata-*
-          merge-multiple: true
-
-      - name: Print JSON files and cleanup
-        run: |
-          echo "=========================================="
-          echo "Displaying Attestation Details:"
-          echo "=========================================="
-
-          for file in all-metadata/*.json; do
-            echo "File: $file"
-            cat "$file"
-            echo -e "\n------------------------------------------"
-          done
-
+      - uses: actions/checkout@v4
       - name: install taskfile
         run: |
           sudo curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash
           sudo apt install task
-
-      - name: Set up Python
-        uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c  # v4
-        with:
-          python-version: '3.13'
       - name: Install pipenv
         run: |
           python -m pip install --upgrade pip
           pip install pipenv
           pipenv install
-      - name: Generate benchmark data
-        run: task docs:generate_benchmark_data
-      - name: Parse benchmark data
-        run: task docs:parse_benchmark_data
-
       - name: Generate docs tests
         run: task audit:multi
+      - name: Upload Audit Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports-audit
+          path: reports/
 
-      - name: just debug
-        run: |
-          tree -a
-          ls -la
-          cat reports/report_distroless.json
-          cat reports/report_standard.json
-
+  kics-scan:
+    needs: [attest]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
       - name: Run KICS Scan
-        uses: 
-          checkmarx/kics-github-action@00def9108246ec656aea725db2167522d26a99d2  # v2.1.19
+        uses: checkmarx/kics-github-action@v2.1.19
         with:
           path: '.'
           config_path: './kics.yaml'
           output_path: 'reports/'
           output_formats: 'json,sarif'
-          enable_annotations: true
-          enable_jobs_summary: true
-          exclude_gitignore: true
           ignore_on_exit: results
-
-
-      - name: Build MkDocs site
-        run: task docs:build-MkDocs-site
-      - name: Deploy to GitHub Pages
-        uses: 
-          peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e  # v4
+      - name: Upload KICS Reports
+        uses: actions/upload-artifact@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
+          name: reports-kics
+          path: reports/
+
+  verify-and-debug:
+    needs: [benchmarking, security-audit, kics-scan]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download all metadata artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-metadata
+          pattern: attestation-metadata-*
+          merge-multiple: true
+      
+      - name: Download all reports
+        uses: actions/download-artifact@v4
+        with:
+          path: reports
+          pattern: reports-*
+          merge-multiple: true
+
+      - name: Print JSON files
+        run: |
+          for file in all-metadata/*.json; do
+            echo "File: $file"
+            cat "$file"
+          done
+
+      - name: Debug and Verification
+        run: |
+          sudo apt-get install -y tree
+          tree -a .
+          ls -la reports/
 
       - name: Cleanup
         if: always()
-        run: |
-          echo "Cleaning up files..."
-          rm -rf all-metadata
+        run: rm -rf all-metadata
 
       - name: Delete dangling GHCR images
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           PACKAGE="wolfi-openssl-fips"
-
           gh api /user/packages/container/$PACKAGE/versions \
             --jq '.[] | select(.metadata.container.tags == null) | .id' |
           while read version; do
-            echo "Deleting version $version"
-            gh api --method DELETE \
-              /user/packages/container/$PACKAGE/versions/$version
+            gh api --method DELETE /user/packages/container/$PACKAGE/versions/$version || true
           done
-

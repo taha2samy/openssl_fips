@@ -10,7 +10,8 @@ tasks:
       OS: '{{.OS | default ""}}'
       IS_DISTROLESS: '{{.IS_DISTROLESS | default "false"}}'
       OUT_DIR: "reports"
-
+    silent: true
+    internal: true
     cmds:
       - mkdir -p "{{.OUT_DIR}}"
       - mkdir -p .trivycache
@@ -47,11 +48,11 @@ tasks:
           aquasec/trivy image --scanners secret,misconfig --format table "{{.IMAGE}}"
         {{end}}
       - rm -rf .trivycache
-
-    silent: false
+    
 
   scan-image-all-compliances:
     desc: "scan image with all compliances"
+    internal: true
     vars:
       IMAGE: "{{.IMAGE}}"
       REPORT_ID: "{{.REPORT_ID}}"
