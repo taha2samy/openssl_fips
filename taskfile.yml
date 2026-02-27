@@ -7,6 +7,7 @@ includes:
 
 vars:
   DEFAULT_IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless"
+  STANDARD_IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5"
   RESULTS_ROOT: "allure-results"
   REPORT_DIR: "allure-report"
   repo_of_registry: "wolfi-openssl-fips"
@@ -94,3 +95,4 @@ tasks:
           --config /path/kics.yaml || true
       - sed -i 's/\/path\///g' kics.yaml
       - echo "KICS scan finished. Config restored and reports cleaned."
+ 
