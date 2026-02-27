@@ -92,7 +92,8 @@ jobs:
           actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a  # v3
         id: attest_provenance-image
         with:
-          subject-name: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips
+          subject-name: ghcr.io/${{ github.repository_owner 
+            }}/wolfi-openssl-fips
           subject-digest: ${{ steps.set_digest.outputs.digest }}
           push-to-registry: true
           show-summary: false
@@ -109,7 +110,8 @@ jobs:
         uses: actions/attest-sbom@4651f806c01d8637787e274ac3bdf724ef169f34  # v3
         id: attest_sbom
         with:
-          subject-name: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips
+          subject-name: ghcr.io/${{ github.repository_owner 
+            }}/wolfi-openssl-fips
           subject-digest: ${{ steps.set_digest.outputs.digest }}
           sbom-path: ${{ matrix.target_name }}.cyclonedx.json
           push-to-registry: true
@@ -142,44 +144,44 @@ jobs:
           retention-days: 1
 
   benchmarking:
-      needs: [attest]
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
-        - name: install taskfile
-          run: |
-            sudo curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash
-            sudo apt install task
-        - name: Set up Python
-          uses: actions/setup-python@v4
-          with:
-            python-version: '3.13'
-        - name: Install pipenv
-          run: |
-            python -m pip install --upgrade pip
-            pip install pipenv
-            pipenv install
-        - name: Generate benchmark data
-          run: task docs:generate_benchmark_data
-        - name: Parse benchmark data
-          run: task docs:parse_benchmark_data
-        - name: Upload Benchmarks
-          uses: actions/upload-artifact@v4
-          with:
-            name: reports-benchmarks
-            path: reports/
-
-  security-audit:
     needs: [attest]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
       - name: install taskfile
         run: |
           sudo curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash
           sudo apt install task
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c  # v4
+        with:
+          python-version: '3.13'
+      - name: Install pipenv
+        run: |
+          python -m pip install --upgrade pip
+          pip install pipenv
+          pipenv install
+      - name: Generate benchmark data
+        run: task docs:generate_benchmark_data
+      - name: Parse benchmark data
+        run: task docs:parse_benchmark_data
+      - name: Upload Benchmarks
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+        with:
+          name: reports-benchmarks
+          path: reports/
+
+  security-audit:
+    needs: [attest]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+      - name: install taskfile
+        run: |
+          sudo curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash
+          sudo apt install task
+      - name: Set up Python
+        uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c  # v4
         with:
           python-version: '3.13'
       - name: Install pipenv
@@ -190,7 +192,7 @@ jobs:
       - name: Generate docs tests
         run: task audit:multi
       - name: Upload Audit Reports
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
         with:
           name: reports-audit
           path: reports/
@@ -199,9 +201,10 @@ jobs:
     needs: [attest]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
       - name: Run KICS Scan
-        uses: checkmarx/kics-github-action@v2.1.19
+        uses: 
+          checkmarx/kics-github-action@00def9108246ec656aea725db2167522d26a99d2  # v2.1.19
         with:
           path: '.'
           config_path: './kics.yaml'
@@ -209,7 +212,7 @@ jobs:
           output_formats: 'json,sarif'
           ignore_on_exit: results
       - name: Upload KICS Reports
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
         with:
           name: reports-kics
           path: reports/
@@ -232,7 +235,7 @@ jobs:
             is_distroless: "false"
           - image_id: development
             image_ref: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-dev"
-            is_distroless: "false"            
+            is_distroless: "false"
           - compliance_id: docker-cis
             full_compliance: "docker-cis-1.6.0"
           - compliance_id: k8s-nsa
@@ -241,13 +244,14 @@ jobs:
             full_compliance: "k8s-pss-restricted-0.1"
 
     steps:
-      - uses: actions/checkout@v4
-
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
       - name: Install Task
-        run: sudo curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash && sudo apt install task
+        run: sudo curl -1sLf 
+          'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E 
+          bash && sudo apt install task
       - name: Run Specific Scan Task
         run: |
-          task scan-image \
+          task scan-compliance:scan-image \
             IMAGE="${{ matrix.image_ref }}" \
             REPORT_ID="${{ matrix.image_id }}-${{ matrix.compliance_id }}" \
             COMPLIANCE="${{ matrix.full_compliance }}" \
@@ -255,29 +259,29 @@ jobs:
             OS="wolfi"
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
         with:
           name: reports-trivy-${{ matrix.image_id }}-${{ matrix.compliance_id }}
           path: reports/
 
 
   verify-and-debug:
-    needs: [benchmarking, security-audit, kics-scan,trivy-compliance-scan]
+    needs: [benchmarking, security-audit, kics-scan, trivy-compliance-scan]
     runs-on: ubuntu-latest
     permissions:
       contents: write
       packages: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
       - name: Download all metadata artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4
         with:
           path: all-metadata
           pattern: attestation-metadata-*
           merge-multiple: true
-      
+
       - name: Download all reports
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4
         with:
           path: reports
           pattern: reports-*
@@ -303,7 +307,7 @@ jobs:
       - name: Delete dangling GHCR images
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
+        run: |-
           PACKAGE="wolfi-openssl-fips"
           gh api /user/packages/container/$PACKAGE/versions \
             --jq '.[] | select(.metadata.container.tags == null) | .id' |
