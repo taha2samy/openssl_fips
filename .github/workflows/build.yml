@@ -171,7 +171,7 @@ jobs:
           name: reports-benchmarks
           path: reports/
 
-  security-audit:
+  fips-verification-suite:
     needs: [attest]
     runs-on: ubuntu-latest
     steps:
@@ -225,11 +225,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - task_name: "scan-compliance:Scan-Distroless-from-all-compliance"
+          - task_name: "scan-compliance:full-compliance"
             id: "distroless"
-          - task_name: "scan-compliance:Scan-Standard-from-all-compliance"
+          - task_name: "scan-compliance:full-compliance"
             id: "standard"
-          - task_name: "scan-compliance:Scan-Development-from-all-compliance"
+          - task_name: "scan-compliance:full-compliance"
             id: "development"
 
     steps:
@@ -252,7 +252,7 @@ jobs:
 
 
   verify-and-debug:
-    needs: [benchmarking, security-audit, kics-scan, scan-compliance]
+    needs: [benchmarking, fips-verification-suite, kics-scan, scan-compliance]
     runs-on: ubuntu-latest
     permissions:
       contents: write

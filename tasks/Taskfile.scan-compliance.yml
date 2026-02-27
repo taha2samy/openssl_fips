@@ -1,6 +1,39 @@
 version: '3'
 
 tasks:
+
+  update-db:
+    desc: "Update Trivy Vulnerability Database"
+    cmds:
+      - mkdir -p .trivycache
+      - docker run --rm -v "$(pwd)/.trivycache:/root/.cache" aquasec/trivy image --download-db-only
+
+
+  scan-security-full:
+    desc: "Deep security scan for all layers"
+    internal: true
+    silent: true
+    vars:
+      IMAGE: '{{.IMAGE}}'
+      REPORT_ID: '{{.REPORT_ID}}'
+      OS: '{{.OS}}'
+    cmds:
+      - mkdir -p reports
+      - |
+        echo "Running Deep Security Scan (All Layers)..."
+        docker run --rm \
+          -v /var/run/docker.sock:/var/run/docker.sock \
+          -v "$(pwd)/reports:/reports" \
+          -v "$(pwd)/.trivycache:/root/.cache" \
+          aquasec/trivy image \
+          --distro {{.OS}} \
+          --removed-pkgs \
+          --scanners vuln,secret,misconfig,license \
+          --format json \
+          --output "/reports/{{.REPORT_ID}}-security-full.json" \
+          "{{.IMAGE}}"
+
+
   scan-image:
     desc: "Scan image using Trivy inside Docker with Path protection"
     vars:
@@ -49,7 +82,7 @@ tasks:
       - rm -rf .trivycache
     
 
-  scan-image-all-compliances:
+  full-compliance:
     desc: "scan image with all compliances"
     internal: true
     vars:
@@ -82,6 +115,9 @@ tasks:
           COMPLIANCE: "{{.k8s_pss_restricted}}"
           OS: "{{.OS}}"
           IS_DISTROLESS: "{{.IS_DISTROLESS}}"
+      - task: scan-security-full
+        vars: { IMAGE: "{{.IMAGE}}", REPORT_ID: "{{.REPORT_ID}}", OS: "{{.OS}}" }
+
 
   Scan-Distroless-from-all-compliance:
     desc: "scan distroless image"
