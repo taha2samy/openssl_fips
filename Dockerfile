@@ -167,6 +167,23 @@ ENV PATH="/usr/local/bin:/usr/bin:/bin"
 FROM ${STATIC_IMAGE} AS standard
 COPY --from=producer /rootfs/standard /
 ENV PATH="/usr/local/bin:/usr/bin:/bin"
+USER root
+COPY --from=fips-integrator /usr/local/bin/openssl /usr/local/bin/openssl
+COPY --from=fips-integrator /usr/local/lib/libcrypto.so.3 /usr/local/lib/
+COPY --from=fips-integrator /usr/local/lib/libssl.so.3 /usr/local/lib/
+
+COPY --from=fips-integrator /usr/local/lib/ossl-modules /usr/local/lib/ossl-modules
+COPY --from=fips-integrator /usr/local/ssl /usr/local/ssl
+
+RUN ln -s /usr/local/lib/libcrypto.so.3 /usr/local/lib/libcrypto.so && \
+    ln -s /usr/local/lib/libssl.so.3 /usr/local/lib/libssl.so 
+ENV PATH="/usr/local/bin:${PATH}" \
+    LD_LIBRARY_PATH="/usr/local/lib:/usr/lib:/lib" \
+    SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
+    OPENSSL_CONF=/usr/local/ssl/openssl.cnf \
+    OPENSSL_MODULES=/usr/local/lib/ossl-modules \
+    TZ=UTC \
+    LANG=C.UTF-8
 
 
 FROM ${STATIC_IMAGE} AS development
@@ -277,25 +294,9 @@ LABEL org.opencontainers.image.title="Wolfi OpenSSL FIPS (Standard)" \
     org.opencontainers.image.fips-version="${FIPS_VERSION}"
 COPY --from=producer /rootfs/standard /
 
-COPY --from=fips-integrator /usr/local/bin/openssl /usr/local/bin/openssl
-COPY --from=fips-integrator /usr/local/lib/libcrypto.so.3 /usr/local/lib/
-COPY --from=fips-integrator /usr/local/lib/libssl.so.3 /usr/local/lib/
-
-COPY --from=fips-integrator /usr/local/lib/ossl-modules /usr/local/lib/ossl-modules
-COPY --from=fips-integrator /usr/local/ssl /usr/local/ssl
-
-RUN ln -s /usr/local/lib/libcrypto.so.3 /usr/local/lib/libcrypto.so && \
-    ln -s /usr/local/lib/libssl.so.3 /usr/local/lib/libssl.so 
-
 #ldconfig
 
-ENV PATH="/usr/local/bin:${PATH}" \
-    LD_LIBRARY_PATH="/usr/local/lib:/usr/lib:/lib" \
-    SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
-    OPENSSL_CONF=/usr/local/ssl/openssl.cnf \
-    OPENSSL_MODULES=/usr/local/lib/ossl-modules \
-    TZ=UTC \
-    LANG=C.UTF-8
+
 
 USER nonroot
 WORKDIR /home/user/nonroot
