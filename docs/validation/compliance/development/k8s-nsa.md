@@ -1,8 +1,9 @@
 {% set nsa_data = development_compliance['k8s_nsa'] %}
 {% set all_controls = nsa_data['SummaryControls'] %}
 
-{# --- Logic: Separate Controls using Namespace (Safe for MkDocs) --- #}
+{# --- Logic: Separate Controls (Container vs Cluster) --- #}
 {% set ns = namespace(manual=[], auto=[]) %}
+
 {% for ctrl in all_controls %}
   {% if "(Manual)" in ctrl['Name'] or "manual" in ctrl['Name']|lower %}
     {% set ns.manual = ns.manual + [ctrl] %}
@@ -11,7 +12,6 @@
   {% endif %}
 {% endfor %}
 
-{# --- Stats Calculation on AUTOMATED Only --- #}
 {% set total_auto = ns.auto | length %}
 {% set passed_auto = ns.auto | selectattr("TotalFail", "defined") | selectattr("TotalFail", "equalto", 0) | list | length %}
 {% set failed_auto = total_auto - passed_auto %}
@@ -89,4 +89,18 @@
 | ID | Hardening Control | Severity | Responsibility |
 | :---: | :--- | :---: | :---: |
 {% for control in ns.manual -%}
-| **{{ control['ID'] }}** | {{ control['Name'] }} | <span style="color: #616161;">{{ contr
+| **{{ control['ID'] }}** | {{ control['Name'] }} | <span style="color: #616161;">{{ control['Severity'] }}</span> | :material-kubernetes:{ style="color: #326ce5" title="Cluster Admin" } |
+{% endfor %}
+
+---
+
+## :fontawesome-solid-layer-group: Hardening Principles (Development SDK)
+
+The Development variant provides the tools necessary for building FIPS-compliant applications while maintaining a secure posture:
+
+1.  **Non-Root Execution:** Despite being a development image, the container runs as a non-privileged user to limit potential exploit impact.
+2.  **Verified Toolchain:** All binaries included (gcc, perl, etc.) are sourced from the hardened Wolfi ecosystem.
+3.  **SBOM Transparency:** This image includes a full CycloneDX SBOM to track all included development dependencies.
+
+---
+[:material-arrow-up: Back to Top](#nsa-kubernetes-hardening-development)
