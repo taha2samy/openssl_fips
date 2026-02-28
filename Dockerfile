@@ -91,8 +91,6 @@ RUN --mount=type=cache,target=/var/cache/apk \
     cp -a /etc/passwd /rootfs/distroless/etc/; \
     cp -a /etc/group /rootfs/distroless/etc/; \
     cp -a /etc/shadow /rootfs/distroless/etc/; \
-    cp /usr/share/zoneinfo/UTC /rootfs/distroless/etc/localtime; \
-    echo "UTC" > /rootfs/distroless/etc/timezone \
     echo "hosts: files dns" > /rootfs/distroless/etc/nsswitch.conf; \
     touch /rootfs/distroless/etc/resolv.conf /rootfs/distroless/etc/hosts
 
@@ -120,8 +118,6 @@ RUN --mount=type=cache,target=/var/cache/apk \
     cp -a /etc/passwd /rootfs/standard/etc/; \
     cp -a /etc/group /rootfs/standard/etc/; \
     cp -a /etc/shadow /rootfs/standard/etc/; \
-    cp /usr/share/zoneinfo/UTC /rootfs/standard/etc/localtime; \
-    echo "UTC" > /rootfs/standard/etc/timezone; \
     chroot /rootfs/standard /usr/bin/busybox --install -s /usr/bin; \
     ln -sf busybox /rootfs/standard/usr/bin/sh; \
     echo "hosts: files dns" > /rootfs/standard/etc/nsswitch.conf; \
@@ -159,8 +155,6 @@ RUN --mount=type=cache,target=/var/cache/apk \
     cp -a /etc/passwd /rootfs/development/etc/; \
     cp -a /etc/group /rootfs/development/etc/; \
     cp -a /etc/shadow /rootfs/development/etc/; \
-    cp /usr/share/zoneinfo/UTC /rootfs/development/etc/localtime; \
-    echo "UTC" > /rootfs/development/etc/timezone; \
     chroot /rootfs/development /usr/bin/busybox --install -s /usr/bin; \
     ln -sf busybox /rootfs/development/usr/bin/sh; \
     echo "hosts: files dns" > /rootfs/development/etc/nsswitch.conf; \
