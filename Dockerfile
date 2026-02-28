@@ -70,20 +70,31 @@ ARG JQ_VER
 ARG UNZIP_VER
 RUN mkdir -p /rootfs/distroless /rootfs/standard /rootfs/dev
 
-# 1. Generate DISTROLESS RootFS (Minimal)
 RUN --mount=type=cache,target=/var/cache/apk \
-    apk add --no-cache --initdb --root /rootfs/distroless \
+    set -eux; \
+    apk add --no-cache \
+    --initdb \
+    --root /rootfs/distroless \
+    --keys-dir /etc/apk/keys \
+    --repositories-file /etc/apk/repositories \
     wolfi-baselayout=${WOLFI_BASELAYOUT_VER} \
     wolfi-keys=${WOLFI_KEYS_VER} \
     glibc=${GLIBC_VER} \
     libgcc=${LIBGCC_VER} \
     zlib=${ZLIB_VER} \
     tzdata=${TZDATA_VER} \
-    ca-certificates=${CA_CERTIFICATES_VER}
+    ca-certificates=${CA_CERTIFICATES_VER}; \
+    mkdir -p /rootfs/distroless/etc/apk; \
+    cp -a /etc/apk/keys /rootfs/distroless/etc/apk/; \
+    cp /etc/apk/repositories /rootfs/distroless/etc/apk/
 
-# 2. Generate STANDARD RootFS (Runtime - NO BASH)
 RUN --mount=type=cache,target=/var/cache/apk \
-    apk add --no-cache --initdb --root /rootfs/standard \
+    set -eux; \
+    apk add --no-cache \
+    --initdb \
+    --root /rootfs/standard \
+    --keys-dir /etc/apk/keys \
+    --repositories-file /etc/apk/repositories \
     wolfi-baselayout=${WOLFI_BASELAYOUT_VER} \
     wolfi-keys=${WOLFI_KEYS_VER} \
     glibc=${GLIBC_VER} \
@@ -93,11 +104,19 @@ RUN --mount=type=cache,target=/var/cache/apk \
     ca-certificates=${CA_CERTIFICATES_VER} \
     busybox=${BUSYBOX_VER} \
     posix-libc-utils=${POSIX_LIBC_UTILS_VER} \
-    libstdc++=${LIBSTDC_PLUS_PLUS_VER}
+    libstdc++=${LIBSTDC_PLUS_PLUS_VER}; \
+    mkdir -p /rootfs/standard/etc/apk; \
+    cp -a /etc/apk/keys /rootfs/standard/etc/apk/; \
+    cp /etc/apk/repositories /rootfs/standard/etc/apk/
 
-# 3. Generate DEVELOPMENT RootFS (Full SDK)
+
 RUN --mount=type=cache,target=/var/cache/apk \
-    apk add --no-cache --initdb --root /rootfs/dev \
+    set -eux; \
+    apk add --no-cache \
+    --initdb \
+    --root /rootfs/standard \
+    --keys-dir /etc/apk/keys \
+    --repositories-file /etc/apk/repositories \
     wolfi-baselayout=${WOLFI_BASELAYOUT_VER} \
     wolfi-keys=${WOLFI_KEYS_VER} \
     glibc=${GLIBC_VER} \
@@ -106,16 +125,11 @@ RUN --mount=type=cache,target=/var/cache/apk \
     tzdata=${TZDATA_VER} \
     ca-certificates=${CA_CERTIFICATES_VER} \
     busybox=${BUSYBOX_VER} \
-    build-base=${BUILD_BASE_VER} \
-    perl=${PERL_VER} \
-    linux-headers=${LINUX_HEADERS_VER} \
-    wget=${WGET_VER} \
-    pkgconf=${PKGCONF_VER} \
-    pcre-dev=${PCRE_DEV_VER} \
-    zlib-dev=${ZLIB_DEV_VER} \
-    curl=${CURL_VER} \
-    jq=${JQ_VER} \
-    unzip=${UNZIP_VER}
+    posix-libc-utils=${POSIX_LIBC_UTILS_VER} \
+    libstdc++=${LIBSTDC_PLUS_PLUS_VER}; \
+    mkdir -p /rootfs/standard/etc/apk; \
+    cp -a /etc/apk/keys /rootfs/standard/etc/apk/; \
+    cp /etc/apk/repositories /rootfs/standard/etc/apk/
 
 FROM ${BASE_IMAGE} AS fips-builder
 ARG BUILD_BASE_VER
