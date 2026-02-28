@@ -71,14 +71,13 @@ ARG UNZIP_VER
 USER root
 RUN mkdir -p /rootfs/distroless /rootfs/standard /rootfs/development
 RUN apk add tree
+# -------------------------------------------------------------------------
+# Block 1: DISTROLESS (No Shell, No Busybox)
+# -------------------------------------------------------------------------
 RUN --mount=type=cache,target=/var/cache/apk \
     set -eux; \
-    apk add --no-cache \
-    --initdb \
-    --no-scripts \
-    --root /rootfs/distroless \
-    --keys-dir /etc/apk/keys \
-    --repositories-file /etc/apk/repositories \
+    apk add --no-cache --initdb --no-scripts --root /rootfs/distroless \
+    --keys-dir /etc/apk/keys --repositories-file /etc/apk/repositories \
     wolfi-baselayout=${WOLFI_BASELAYOUT_VER} \
     wolfi-keys=${WOLFI_KEYS_VER} \
     glibc=${GLIBC_VER} \
@@ -92,18 +91,19 @@ RUN --mount=type=cache,target=/var/cache/apk \
     cp -a /etc/passwd /rootfs/distroless/etc/; \
     cp -a /etc/group /rootfs/distroless/etc/; \
     cp -a /etc/shadow /rootfs/distroless/etc/; \
-    chroot /rootfs/distroless /usr/bin/busybox --install -s /usr/bin; \
-    ln -sf busybox /rootfs/distroless/usr/bin/sh
+    cp /usr/share/zoneinfo/UTC /rootfs/distroless/etc/localtime; \
+    echo "UTC" > /rootfs/distroless/etc/timezone \
+    echo "hosts: files dns" > /rootfs/distroless/etc/nsswitch.conf; \
+    touch /rootfs/distroless/etc/resolv.conf /rootfs/distroless/etc/hosts
 
 
+# -------------------------------------------------------------------------
+# Block 2: STANDARD (With Busybox & Shell)
+# -------------------------------------------------------------------------
 RUN --mount=type=cache,target=/var/cache/apk \
     set -eux; \
-    apk add --no-cache \
-    --initdb \
-    --no-scripts \
-    --root /rootfs/standard \
-    --keys-dir /etc/apk/keys \
-    --repositories-file /etc/apk/repositories \
+    apk add --no-cache --initdb --no-scripts --root /rootfs/standard \
+    --keys-dir /etc/apk/keys --repositories-file /etc/apk/repositories \
     wolfi-baselayout=${WOLFI_BASELAYOUT_VER} \
     wolfi-keys=${WOLFI_KEYS_VER} \
     glibc=${GLIBC_VER} \
@@ -120,17 +120,21 @@ RUN --mount=type=cache,target=/var/cache/apk \
     cp -a /etc/passwd /rootfs/standard/etc/; \
     cp -a /etc/group /rootfs/standard/etc/; \
     cp -a /etc/shadow /rootfs/standard/etc/; \
+    cp /usr/share/zoneinfo/UTC /rootfs/standard/etc/localtime; \
+    echo "UTC" > /rootfs/standard/etc/timezone; \
     chroot /rootfs/standard /usr/bin/busybox --install -s /usr/bin; \
-    ln -sf busybox /rootfs/standard/usr/bin/sh
+    ln -sf busybox /rootfs/standard/usr/bin/sh; \
+    echo "hosts: files dns" > /rootfs/standard/etc/nsswitch.conf; \
+    touch /rootfs/standard/etc/resolv.conf /rootfs/standard/etc/hosts
 
+
+# -------------------------------------------------------------------------
+# Block 3: DEVELOPMENT (With Busybox, Shell & SDK)
+# -------------------------------------------------------------------------
 RUN --mount=type=cache,target=/var/cache/apk \
     set -eux; \
-    apk add --no-cache \
-    --initdb \
-    --no-scripts \
-    --root /rootfs/development \
-    --keys-dir /etc/apk/keys \
-    --repositories-file /etc/apk/repositories \
+    apk add --no-cache --initdb --no-scripts --root /rootfs/development \
+    --keys-dir /etc/apk/keys --repositories-file /etc/apk/repositories \
     wolfi-baselayout=${WOLFI_BASELAYOUT_VER} \
     wolfi-keys=${WOLFI_KEYS_VER} \
     glibc=${GLIBC_VER} \
@@ -155,8 +159,12 @@ RUN --mount=type=cache,target=/var/cache/apk \
     cp -a /etc/passwd /rootfs/development/etc/; \
     cp -a /etc/group /rootfs/development/etc/; \
     cp -a /etc/shadow /rootfs/development/etc/; \
+    cp /usr/share/zoneinfo/UTC /rootfs/development/etc/localtime; \
+    echo "UTC" > /rootfs/development/etc/timezone; \
     chroot /rootfs/development /usr/bin/busybox --install -s /usr/bin; \
-    ln -sf busybox /rootfs/development/usr/bin/sh
+    ln -sf busybox /rootfs/development/usr/bin/sh; \
+    echo "hosts: files dns" > /rootfs/development/etc/nsswitch.conf; \
+    touch /rootfs/development/etc/resolv.conf /rootfs/development/etc/hosts
 
 
 
