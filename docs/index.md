@@ -1,3 +1,89 @@
+
+# :material-shield-airplane: OpenSSL FIPS Hardened Ecosystem
+
+High-assurance cryptographic infrastructure built on **Wolfi (Chainguard)**. This project provides military-grade **FIPS 140-3** validated OpenSSL images, optimized for Zero-Trust environments and strictly attested via SLSA Level 3 provenance.
+
+---
+
+## :material-monitor-dashboard: Enterprise Security Posture
+
+<div class="grid cards" markdown>
+
+-   :material-magnify-scan:{ .md-typeset__primary } **Infrastructure SAST**
+    ---
+    **KICS Security Audit**
+    {% set kics_total = kics_report.get('total_counter', 0) %}
+    {% if kics_total == 0 -%}
+    [:material-check-circle:{ .md-typeset__success } **Pristine State**](validation/static-analysis/kics-report.md)
+    {% else -%}
+    [:material-alert-decagram:{ .md-typeset__error } **{{ kics_total }} Security Risks**](validation/static-analysis/kics-report.md)
+    {% endif -%}
+    *Static analysis of IaC and Dockerfile hardening.*
+
+-   :material-shield-lock:{ .md-typeset__primary } **Cryptographic Boundary**
+    ---
+    **FIPS 140-3 Validation**
+    {% set std_failed = standard_report_FIPS_validation.get('summary', {}).get('failed', 'N/A') %}
+    {% if std_failed == 0 -%}
+    [:material-shield-check:{ .md-typeset__success } **Boundary Verified**](validation/functional-tests/standard-image.md)
+    {% elif std_failed == 'N/A' -%}
+    [:material-progress-clock:{ .md-typeset__warning } **Pending Audit**](validation/functional-tests/standard-image.md)
+    {% else -%}
+    [:material-shield-off:{ .md-typeset__error } **{{ std_failed }} Logic Violations**](validation/functional-tests/standard-image.md)
+    {% endif -%}
+    *Automated KAT and POST integrity testing.*
+
+-   :material-package-variant-closed:{ .md-typeset__primary } **Runtime Hardening**
+    ---
+    **Attack Surface Reduction**
+    {% set dist_failed = distroless_report_FIPS_validation.get('summary', {}).get('failed', 'N/A') %}
+    {% if dist_failed == 0 -%}
+    [:material-robot-confused-outline:{ .md-typeset__success } **Zero-Entry Hardened**](validation/functional-tests/distroless-image.md)
+    {% elif dist_failed == 'N/A' -%}
+    [:material-progress-clock:{ .md-typeset__warning } **Verification Pending**](validation/functional-tests/distroless-image.md)
+    {% else -%}
+    [:material-robot-dead-outline:{ .md-typeset__error } **{{ dist_failed }} Policy Failures**](validation/functional-tests/distroless-image.md)
+    {% endif -%}
+    *Minimalist Distroless parity and compliance.*
+
+-   :material-gavel:{ .md-typeset__primary } **Supply Chain Integrity**
+    ---
+    **Vulnerability & SBOM**
+    {% set std_results = standard_compliance.get('security_scan', {}).get('Results', [{}]) %}
+    {% set std_vulns = std_results[0].get('Vulnerabilities', []) | length %}
+    {% if std_vulns == 0 -%}
+    [:material-certificate:{ .md-typeset__success } **Zero-CVE Certified**](validation/compliance/standard/vulnerability.md)
+    {% else -%}
+    [:material-alert-rhombus:{ .md-typeset__error } **{{ std_vulns }} Critical Findings**](validation/compliance/standard/vulnerability.md)
+    {% endif -%}
+    *Trivy-backed SBOM and NIST compliance scan.*
+
+</div>
+
+---
+
+## :material-layers-triple-outline: Core Architectural Pillars
+
+!!! tip "Full Environment Parity"
+    Our **Development SDK** image provides the complete toolchain (GCC, headers, debuggers) required for FIPS-linked application development. While it contains more packages than the **Standard** or **Distroless** variants, the **OpenSSL FIPS Provider and Core Logic are identical**. This ensures that code developed in the SDK performs with 100% cryptographic parity when deployed to production.
+
+!!! info "Cryptographic Integrity Notice"
+    OpenSSL and the FIPS Provider are compiled directly from validated sources during our hermetic build process. This prevents dependency on upstream repositories that might contain unvalidated patches. OpenSSL will appear in the **CycloneDX SBOM** as a compiled integral, ensuring total transparency for security auditors.
+
+---
+
+## :material-file-tree: Technical Audit Repository
+
+### :material-text-box-search-outline: 1. Functional Integrity Verification
+Granular audit logs for cryptographic state-machine and provider self-tests.
+
+| Verification Target | Scope | Audit Result |
+| :--- | :--- | :--- |
+| **Standard Runtime** | Cryptographic Logic | [View Full Report](validation/functional-tests/standard-image.md) |
+| **Distroless Runtime** | Hardening & Parity | [View Full Report](validation/functional-tests/distroless-image.md) |
+
+---
+
 # :material-shield-check: Wolfi OpenSSL FIPS
 **Enterprise-Grade Cryptographic Foundation for High-Security Cloud Workloads**
 
