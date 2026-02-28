@@ -118,8 +118,6 @@ RUN --mount=type=cache,target=/var/cache/apk \
     cp -a /etc/passwd /rootfs/standard/etc/; \
     cp -a /etc/group /rootfs/standard/etc/; \
     cp -a /etc/shadow /rootfs/standard/etc/
-RUN echo "======================================================"
-RUN tree /rootfs/standard -a
 
 RUN --mount=type=cache,target=/var/cache/apk \
     set -eux; \
@@ -159,6 +157,8 @@ RUN /rootfs/standard/usr/bin/busybox --install -s /rootfs/standard/usr/bin && \
 
 RUN /rootfs/development/usr/bin/busybox --install -s /rootfs/development/usr/bin && \
     ln -sf busybox /rootfs/development/usr/bin/sh
+RUN echo "======================================================"
+RUN tree -a -F -i /rootfs/standard
 
 
 
