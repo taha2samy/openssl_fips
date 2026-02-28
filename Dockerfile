@@ -165,9 +165,15 @@ ENV PATH="/usr/local/bin:/usr/bin:/bin"
 
 
 FROM ${STATIC_IMAGE} AS standard
-COPY --from=producer /rootfs/standard /
-ENV PATH="/usr/local/bin:/usr/bin:/bin"
 USER root
+COPY --from=producer /rootfs/standard /
+ENV PATH="/usr/local/bin:${PATH}" \
+    LD_LIBRARY_PATH="/usr/local/lib:/usr/lib:/lib" \
+    SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
+    OPENSSL_CONF=/usr/local/ssl/openssl.cnf \
+    OPENSSL_MODULES=/usr/local/lib/ossl-modules \
+    TZ=UTC \
+    LANG=C.UTF-8
 COPY --from=fips-integrator /usr/local/bin/openssl /usr/local/bin/openssl
 COPY --from=fips-integrator /usr/local/lib/libcrypto.so.3 /usr/local/lib/
 COPY --from=fips-integrator /usr/local/lib/libssl.so.3 /usr/local/lib/
@@ -177,13 +183,7 @@ COPY --from=fips-integrator /usr/local/ssl /usr/local/ssl
 
 RUN ln -s /usr/local/lib/libcrypto.so.3 /usr/local/lib/libcrypto.so && \
     ln -s /usr/local/lib/libssl.so.3 /usr/local/lib/libssl.so 
-ENV PATH="/usr/local/bin:${PATH}" \
-    LD_LIBRARY_PATH="/usr/local/lib:/usr/lib:/lib" \
-    SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
-    OPENSSL_CONF=/usr/local/ssl/openssl.cnf \
-    OPENSSL_MODULES=/usr/local/lib/ossl-modules \
-    TZ=UTC \
-    LANG=C.UTF-8
+
 
 
 FROM ${STATIC_IMAGE} AS development
@@ -192,6 +192,7 @@ ENV PATH="/usr/local/bin:/usr/bin:/bin"
 
 
 FROM ${BASE_IMAGE} AS fips-builder
+USER root
 ARG BUILD_BASE_VER
 ARG PERL_VER
 ARG LINUX_HEADERS_VER
@@ -216,6 +217,7 @@ RUN ./Configure enable-fips && \
     make -j$(nproc)
 
 FROM ${BASE_IMAGE} AS core-builder
+USER root
 ARG CORE_VERSION
 ARG BUILD_BASE_VER
 ARG PERL_VER
@@ -241,6 +243,7 @@ RUN ./Configure enable-fips shared --prefix=/usr/local --openssldir=/usr/local/s
     make install_sw install_ssldirs
 
 FROM core-builder AS fips-integrator
+USER root
 ARG FIPS_VERSION
 RUN ldconfig
 COPY --from=fips-builder /src/openssl-${FIPS_VERSION}/providers/fips.so /usr/local/lib/ossl-modules/fips.so
