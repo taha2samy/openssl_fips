@@ -70,7 +70,7 @@ ARG JQ_VER
 ARG UNZIP_VER
 USER root
 RUN mkdir -p /rootfs/distroless /rootfs/standard /rootfs/development
-RUN add tree
+RUN apk add tree
 RUN --mount=type=cache,target=/var/cache/apk \
     set -eux; \
     apk add --no-cache \
@@ -118,7 +118,7 @@ RUN --mount=type=cache,target=/var/cache/apk \
     cp -a /etc/passwd /rootfs/standard/etc/; \
     cp -a /etc/group /rootfs/standard/etc/; \
     cp -a /etc/shadow /rootfs/standard/etc/
-RUN ehco "======================================================"
+RUN echo "======================================================"
 RUN tree /rootfs/standard -a
 
 RUN --mount=type=cache,target=/var/cache/apk \
