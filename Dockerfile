@@ -117,7 +117,7 @@ RUN --mount=type=cache,target=/var/cache/apk \
     cp -a /etc/group /rootfs/standard/etc/; \
     cp -a /etc/shadow /rootfs/standard/etc/
 RUN chroot /rootfs/standard /usr/bin/busybox --install -s /usr/bin
-#RUN ln -sf busybox /rootfs/standard/usr/bin/sh
+RUN ln -sf busybox /rootfs/standard/usr/bin/sh
 RUN echo "======================================================"
 RUN tree -a -F /rootfs/standard
 
