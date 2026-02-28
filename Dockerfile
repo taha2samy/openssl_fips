@@ -112,7 +112,7 @@ RUN --mount=type=cache,target=/var/cache/apk \
     libstdc++=${LIBSTDC_PLUS_PLUS_VER}; \
     mkdir -p /rootfs/standard/etc/apk; \
     cp -a /etc/apk/keys /rootfs/standard/etc/apk/; \
-    cp /etc/apk/repositories /rootfs/standard/etc/apk/ \
+    cp /etc/apk/repositories /rootfs/standard/etc/apk/; \
     cp -a /etc/passwd /rootfs/standard/etc/; \
     cp -a /etc/group /rootfs/standard/etc/; \
     cp -a /etc/shadow /rootfs/standard/etc/; \
