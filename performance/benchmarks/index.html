@@ -1660,17 +1660,17 @@
 <li>
 <p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 19h1a1 1 0 0 1 1 1h7v2h-7a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1H2v-2h7a1 1 0 0 1 1-1h1v-2H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-7zM4 3h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1m5 4h1V5H9zm0 8h1v-2H9zM5 5v2h2V5zm0 8v2h2v-2z"/></svg></span> <strong>Peak TLS Throughput (AES-GCM)</strong>
     ---
-    Achieved a sustained bulk encryption rate of <strong>7194.6 MB/s</strong> (AES-256-GCM @ 16KB payload). This proves the FIPS boundary does not create bottlenecks for high-bandwidth data streams or microservice API gateways.</p>
+    Achieved a sustained bulk encryption rate of <strong>7167.9 MB/s</strong> (AES-256-GCM @ 16KB payload). This proves the FIPS boundary does not create bottlenecks for high-bandwidth data streams or microservice API gateways.</p>
 </li>
 <li>
 <p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14z"/></svg></span> <strong>Superior Hashing Velocity</strong>
     ---
-    Recorded <strong>1608.7 MB/s</strong> peak throughput for SHA-512. Thanks to modern AVX/AVX2 instruction set optimizations included in Wolfi's upstream packages, the FIPS engine consistently beats the older default packages of standard OS distributions.</p>
+    Recorded <strong>1605.8 MB/s</strong> peak throughput for SHA-512. Thanks to modern AVX/AVX2 instruction set optimizations included in Wolfi's upstream packages, the FIPS engine consistently beats the older default packages of standard OS distributions.</p>
 </li>
 <li>
 <p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 4a8 8 0 0 1 8 8 8 8 0 0 1-8 8 8 8 0 0 1-8-8 8 8 0 0 1 8-8m0 2a6 6 0 0 0-6 6 6 6 0 0 0 6 6 6 6 0 0 0 6-6 6 6 0 0 0-6-6m-1 2h1.5v3.78l2.33 2.33-1.06 1.06L14 12.4zM2 18a1 1 0 0 1-1-1 1 1 0 0 1 1-1h3.83c.31.71.71 1.38 1.17 2zm1-5a1 1 0 0 1-1-1 1 1 0 0 1 1-1h2.05L5 12l.05 1zm1-5a1 1 0 0 1-1-1 1 1 0 0 1 1-1h3c-.46.62-.86 1.29-1.17 2z"/></svg></span> <strong>Instruction Pipelining (Scaling)</strong>
     ---
-    Demonstrates massive hardware acceleration efficiency. The engine processes 16KB chunks <strong>41x faster</strong> than 16-byte micro-chunks, proving highly efficient AES-NI cache utilization under heavy workloads.</p>
+    Demonstrates massive hardware acceleration efficiency. The engine processes 16KB chunks <strong>40x faster</strong> than 16-byte micro-chunks, proving highly efficient AES-NI cache utilization under heavy workloads.</p>
 </li>
 <li>
 <p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 17H7V7h10m4 4V9h-2V7a2 2 0 0 0-2-2h-2V3h-2v2h-2V3H9v2H7c-1.11 0-2 .89-2 2v2H3v2h2v2H3v2h2v2a2 2 0 0 0 2 2h2v2h2v-2h2v2h2v-2h2a2 2 0 0 0 2-2v-2h2v-2h-2v-2m-6 2h-2v-2h2m2-2H9v6h6z"/></svg></span> <strong>Kubernetes-Ready Footprint</strong>
@@ -1718,7 +1718,7 @@ We are not comparing OpenSSL 3.0 vs 3.5 in a theoretical vacuum; we are comparin
 </blockquote>
 <p><vegachart style='width: 100%'  class="vegalite">{
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "data": {"values": [{"os": "debian", "version": "3.0.18", "algorithm": "AES-256-GCM", "16b": "88448.0", "64b": "335354.69", "256b": "1171174.66", "1024b": "3164636.16", "8192b": "6656778.24", "16384b": "7232045.06"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha256", "16b": "233897.46", "64b": "822027.39", "256b": "2366867.46", "1024b": "4346260.48", "8192b": "5748236.29", "16384b": "5747474.43"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha512", "16b": "99319.66", "64b": "399899.33", "256b": "826397.04", "1024b": "1339658.24", "8192b": "1639907.33", "16384b": "1650851.84"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha3-256", "16b": "69180.86", "64b": "277000.7", "256b": "668518.4", "1024b": "790913.02", "8192b": "878043.14", "16384b": "886521.86"}, {"os": "fips", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "178689.54", "64b": "627849.54", "256b": "1993607.17", "1024b": "4470849.54", "8192b": "7099801.6", "16384b": "7367229.44"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha256", "16b": "279738.9", "64b": "930594.05", "256b": "2601634.82", "1024b": "4511926.27", "8192b": "5753430.02", "16384b": "5831114.75"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha512", "16b": "108848.53", "64b": "437174.46", "256b": "852637.7", "1024b": "1361731.58", "8192b": "1638465.54", "16384b": "1647263.74"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha3-256", "16b": "76125.44", "64b": "303500.48", "256b": "706775.04", "1024b": "801981.44", "8192b": "874684.42", "16384b": "877297.66"}, {"os": "alpine", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "124293.6", "64b": "460905.6", "256b": "1557845.76", "1024b": "3759694.85", "8192b": "6914170.88", "16384b": "7422951.42"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha256", "16b": "119033.49", "64b": "446943.62", "256b": "1477890.05", "1024b": "3378702.34", "8192b": "5538766.85", "16384b": "5847285.76"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha512", "16b": "72139.71", "64b": "299275.26", "256b": "679365.89", "1024b": "1240816.64", "8192b": "1608245.25", "16384b": "1657405.44"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha3-256", "16b": "52708.74", "64b": "216250.62", "256b": "584648.19", "1024b": "750047.23", "8192b": "871481.34", "16384b": "885751.81"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "AES-256-GCM", "16b": "1108990.51", "64b": "2627955.2", "256b": "5241687.04", "1024b": "6853403.65", "8192b": "7722541.06", "16384b": "7799226.37"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha256", "16b": "222522.58", "64b": "807740.03", "256b": "2314958.34", "1024b": "4340238.34", "8192b": "5773467.65", "16384b": "5962366.98"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha512", "16b": "95947.44", "64b": "386140.1", "256b": "814896.13", "1024b": "1327221.76", "8192b": "1638965.25", "16384b": "1666908.16"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha3-256", "16b": "65156.45", "64b": "262295.94", "256b": "649037.06", "1024b": "761766.91", "8192b": "876748.8", "16384b": "877854.72"}]},
+  "data": {"values": [{"os": "debian", "version": "3.0.18", "algorithm": "AES-256-GCM", "16b": "88582.08", "64b": "333001.22", "256b": "1169153.54", "1024b": "3156352.0", "8192b": "6677299.2", "16384b": "7228440.58"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha256", "16b": "235971.01", "64b": "827695.3", "256b": "2360070.14", "1024b": "4220675.07", "8192b": "5746540.54", "16384b": "5909053.44"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha512", "16b": "99645.58", "64b": "400036.67", "256b": "832728.06", "1024b": "1341365.25", "8192b": "1639825.41", "16384b": "1667547.14"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha3-256", "16b": "68937.12", "64b": "276750.21", "256b": "666720.51", "1024b": "788013.06", "8192b": "877633.54", "16384b": "887816.19"}, {"os": "fips", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "179831.63", "64b": "639743.68", "256b": "2002644.74", "1024b": "4494422.02", "8192b": "6980214.78", "16384b": "7339917.31"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha256", "16b": "270045.76", "64b": "945856.9", "256b": "2587224.06", "1024b": "4508317.7", "8192b": "5742993.41", "16384b": "5831065.6"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha512", "16b": "108343.34", "64b": "434512.9", "256b": "850796.8", "1024b": "1359902.72", "8192b": "1634598.91", "16384b": "1644298.24"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha3-256", "16b": "75844.26", "64b": "304060.61", "256b": "706875.14", "1024b": "802028.54", "8192b": "875077.63", "16384b": "876314.62"}, {"os": "alpine", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "124751.23", "64b": "463836.29", "256b": "1533171.97", "1024b": "3809600.51", "8192b": "6988726.27", "16384b": "7424098.3"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha256", "16b": "118322.93", "64b": "445185.15", "256b": "1473508.35", "1024b": "3410081.79", "8192b": "5534728.19", "16384b": "5830475.78"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha512", "16b": "72256.61", "64b": "299922.56", "256b": "679438.34", "1024b": "1241645.06", "8192b": "1619509.25", "16384b": "1657634.82"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha3-256", "16b": "52750.94", "64b": "216401.79", "256b": "584560.64", "1024b": "753551.36", "8192b": "871620.61", "16384b": "885260.29"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "AES-256-GCM", "16b": "1104612.48", "64b": "2637029.5", "256b": "5259137.28", "1024b": "6894663.68", "8192b": "7719108.61", "16384b": "7745667.07"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha256", "16b": "212970.48", "64b": "794134.46", "256b": "2315995.9", "1024b": "4335169.54", "8192b": "5776105.47", "16384b": "5956976.64"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha512", "16b": "96783.18", "64b": "388435.07", "256b": "817445.12", "1024b": "1330996.22", "8192b": "1639309.31", "16384b": "1661779.97"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha3-256", "16b": "65209.57", "64b": "255926.27", "256b": "648833.02", "1024b": "784101.38", "8192b": "876765.18", "16384b": "887619.58"}]},
   "transform": [
     {
       "calculate": "datum.algorithm", 
@@ -1770,7 +1770,7 @@ We are not comparing OpenSSL 3.0 vs 3.5 in a theoretical vacuum; we are comparin
 <p><strong>The ubiquitous industry standard for TLS handshakes and JWT signatures.</strong></p>
 <p><vegachart style='width: 100%'  class="vegalite">{
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "data": {"values": [{"os": "debian", "version": "3.0.18", "algorithm": "AES-256-GCM", "16b": "88448.0", "64b": "335354.69", "256b": "1171174.66", "1024b": "3164636.16", "8192b": "6656778.24", "16384b": "7232045.06"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha256", "16b": "233897.46", "64b": "822027.39", "256b": "2366867.46", "1024b": "4346260.48", "8192b": "5748236.29", "16384b": "5747474.43"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha512", "16b": "99319.66", "64b": "399899.33", "256b": "826397.04", "1024b": "1339658.24", "8192b": "1639907.33", "16384b": "1650851.84"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha3-256", "16b": "69180.86", "64b": "277000.7", "256b": "668518.4", "1024b": "790913.02", "8192b": "878043.14", "16384b": "886521.86"}, {"os": "fips", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "178689.54", "64b": "627849.54", "256b": "1993607.17", "1024b": "4470849.54", "8192b": "7099801.6", "16384b": "7367229.44"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha256", "16b": "279738.9", "64b": "930594.05", "256b": "2601634.82", "1024b": "4511926.27", "8192b": "5753430.02", "16384b": "5831114.75"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha512", "16b": "108848.53", "64b": "437174.46", "256b": "852637.7", "1024b": "1361731.58", "8192b": "1638465.54", "16384b": "1647263.74"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha3-256", "16b": "76125.44", "64b": "303500.48", "256b": "706775.04", "1024b": "801981.44", "8192b": "874684.42", "16384b": "877297.66"}, {"os": "alpine", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "124293.6", "64b": "460905.6", "256b": "1557845.76", "1024b": "3759694.85", "8192b": "6914170.88", "16384b": "7422951.42"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha256", "16b": "119033.49", "64b": "446943.62", "256b": "1477890.05", "1024b": "3378702.34", "8192b": "5538766.85", "16384b": "5847285.76"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha512", "16b": "72139.71", "64b": "299275.26", "256b": "679365.89", "1024b": "1240816.64", "8192b": "1608245.25", "16384b": "1657405.44"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha3-256", "16b": "52708.74", "64b": "216250.62", "256b": "584648.19", "1024b": "750047.23", "8192b": "871481.34", "16384b": "885751.81"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "AES-256-GCM", "16b": "1108990.51", "64b": "2627955.2", "256b": "5241687.04", "1024b": "6853403.65", "8192b": "7722541.06", "16384b": "7799226.37"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha256", "16b": "222522.58", "64b": "807740.03", "256b": "2314958.34", "1024b": "4340238.34", "8192b": "5773467.65", "16384b": "5962366.98"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha512", "16b": "95947.44", "64b": "386140.1", "256b": "814896.13", "1024b": "1327221.76", "8192b": "1638965.25", "16384b": "1666908.16"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha3-256", "16b": "65156.45", "64b": "262295.94", "256b": "649037.06", "1024b": "761766.91", "8192b": "876748.8", "16384b": "877854.72"}]},
+  "data": {"values": [{"os": "debian", "version": "3.0.18", "algorithm": "AES-256-GCM", "16b": "88582.08", "64b": "333001.22", "256b": "1169153.54", "1024b": "3156352.0", "8192b": "6677299.2", "16384b": "7228440.58"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha256", "16b": "235971.01", "64b": "827695.3", "256b": "2360070.14", "1024b": "4220675.07", "8192b": "5746540.54", "16384b": "5909053.44"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha512", "16b": "99645.58", "64b": "400036.67", "256b": "832728.06", "1024b": "1341365.25", "8192b": "1639825.41", "16384b": "1667547.14"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha3-256", "16b": "68937.12", "64b": "276750.21", "256b": "666720.51", "1024b": "788013.06", "8192b": "877633.54", "16384b": "887816.19"}, {"os": "fips", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "179831.63", "64b": "639743.68", "256b": "2002644.74", "1024b": "4494422.02", "8192b": "6980214.78", "16384b": "7339917.31"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha256", "16b": "270045.76", "64b": "945856.9", "256b": "2587224.06", "1024b": "4508317.7", "8192b": "5742993.41", "16384b": "5831065.6"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha512", "16b": "108343.34", "64b": "434512.9", "256b": "850796.8", "1024b": "1359902.72", "8192b": "1634598.91", "16384b": "1644298.24"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha3-256", "16b": "75844.26", "64b": "304060.61", "256b": "706875.14", "1024b": "802028.54", "8192b": "875077.63", "16384b": "876314.62"}, {"os": "alpine", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "124751.23", "64b": "463836.29", "256b": "1533171.97", "1024b": "3809600.51", "8192b": "6988726.27", "16384b": "7424098.3"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha256", "16b": "118322.93", "64b": "445185.15", "256b": "1473508.35", "1024b": "3410081.79", "8192b": "5534728.19", "16384b": "5830475.78"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha512", "16b": "72256.61", "64b": "299922.56", "256b": "679438.34", "1024b": "1241645.06", "8192b": "1619509.25", "16384b": "1657634.82"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha3-256", "16b": "52750.94", "64b": "216401.79", "256b": "584560.64", "1024b": "753551.36", "8192b": "871620.61", "16384b": "885260.29"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "AES-256-GCM", "16b": "1104612.48", "64b": "2637029.5", "256b": "5259137.28", "1024b": "6894663.68", "8192b": "7719108.61", "16384b": "7745667.07"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha256", "16b": "212970.48", "64b": "794134.46", "256b": "2315995.9", "1024b": "4335169.54", "8192b": "5776105.47", "16384b": "5956976.64"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha512", "16b": "96783.18", "64b": "388435.07", "256b": "817445.12", "1024b": "1330996.22", "8192b": "1639309.31", "16384b": "1661779.97"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha3-256", "16b": "65209.57", "64b": "255926.27", "256b": "648833.02", "1024b": "784101.38", "8192b": "876765.18", "16384b": "887619.58"}]},
   "transform": [
     {
       "filter": "test(/sha256/i, datum.algorithm)"
@@ -1808,7 +1808,7 @@ We are not comparing OpenSSL 3.0 vs 3.5 in a theoretical vacuum; we are comparin
 <p><strong>Optimized for 64-bit architectures, showing superior sustained throughput.</strong></p>
 <p><vegachart style='width: 100%'  class="vegalite">{
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "data": {"values": [{"os": "debian", "version": "3.0.18", "algorithm": "AES-256-GCM", "16b": "88448.0", "64b": "335354.69", "256b": "1171174.66", "1024b": "3164636.16", "8192b": "6656778.24", "16384b": "7232045.06"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha256", "16b": "233897.46", "64b": "822027.39", "256b": "2366867.46", "1024b": "4346260.48", "8192b": "5748236.29", "16384b": "5747474.43"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha512", "16b": "99319.66", "64b": "399899.33", "256b": "826397.04", "1024b": "1339658.24", "8192b": "1639907.33", "16384b": "1650851.84"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha3-256", "16b": "69180.86", "64b": "277000.7", "256b": "668518.4", "1024b": "790913.02", "8192b": "878043.14", "16384b": "886521.86"}, {"os": "fips", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "178689.54", "64b": "627849.54", "256b": "1993607.17", "1024b": "4470849.54", "8192b": "7099801.6", "16384b": "7367229.44"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha256", "16b": "279738.9", "64b": "930594.05", "256b": "2601634.82", "1024b": "4511926.27", "8192b": "5753430.02", "16384b": "5831114.75"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha512", "16b": "108848.53", "64b": "437174.46", "256b": "852637.7", "1024b": "1361731.58", "8192b": "1638465.54", "16384b": "1647263.74"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha3-256", "16b": "76125.44", "64b": "303500.48", "256b": "706775.04", "1024b": "801981.44", "8192b": "874684.42", "16384b": "877297.66"}, {"os": "alpine", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "124293.6", "64b": "460905.6", "256b": "1557845.76", "1024b": "3759694.85", "8192b": "6914170.88", "16384b": "7422951.42"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha256", "16b": "119033.49", "64b": "446943.62", "256b": "1477890.05", "1024b": "3378702.34", "8192b": "5538766.85", "16384b": "5847285.76"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha512", "16b": "72139.71", "64b": "299275.26", "256b": "679365.89", "1024b": "1240816.64", "8192b": "1608245.25", "16384b": "1657405.44"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha3-256", "16b": "52708.74", "64b": "216250.62", "256b": "584648.19", "1024b": "750047.23", "8192b": "871481.34", "16384b": "885751.81"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "AES-256-GCM", "16b": "1108990.51", "64b": "2627955.2", "256b": "5241687.04", "1024b": "6853403.65", "8192b": "7722541.06", "16384b": "7799226.37"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha256", "16b": "222522.58", "64b": "807740.03", "256b": "2314958.34", "1024b": "4340238.34", "8192b": "5773467.65", "16384b": "5962366.98"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha512", "16b": "95947.44", "64b": "386140.1", "256b": "814896.13", "1024b": "1327221.76", "8192b": "1638965.25", "16384b": "1666908.16"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha3-256", "16b": "65156.45", "64b": "262295.94", "256b": "649037.06", "1024b": "761766.91", "8192b": "876748.8", "16384b": "877854.72"}]},
+  "data": {"values": [{"os": "debian", "version": "3.0.18", "algorithm": "AES-256-GCM", "16b": "88582.08", "64b": "333001.22", "256b": "1169153.54", "1024b": "3156352.0", "8192b": "6677299.2", "16384b": "7228440.58"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha256", "16b": "235971.01", "64b": "827695.3", "256b": "2360070.14", "1024b": "4220675.07", "8192b": "5746540.54", "16384b": "5909053.44"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha512", "16b": "99645.58", "64b": "400036.67", "256b": "832728.06", "1024b": "1341365.25", "8192b": "1639825.41", "16384b": "1667547.14"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha3-256", "16b": "68937.12", "64b": "276750.21", "256b": "666720.51", "1024b": "788013.06", "8192b": "877633.54", "16384b": "887816.19"}, {"os": "fips", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "179831.63", "64b": "639743.68", "256b": "2002644.74", "1024b": "4494422.02", "8192b": "6980214.78", "16384b": "7339917.31"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha256", "16b": "270045.76", "64b": "945856.9", "256b": "2587224.06", "1024b": "4508317.7", "8192b": "5742993.41", "16384b": "5831065.6"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha512", "16b": "108343.34", "64b": "434512.9", "256b": "850796.8", "1024b": "1359902.72", "8192b": "1634598.91", "16384b": "1644298.24"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha3-256", "16b": "75844.26", "64b": "304060.61", "256b": "706875.14", "1024b": "802028.54", "8192b": "875077.63", "16384b": "876314.62"}, {"os": "alpine", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "124751.23", "64b": "463836.29", "256b": "1533171.97", "1024b": "3809600.51", "8192b": "6988726.27", "16384b": "7424098.3"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha256", "16b": "118322.93", "64b": "445185.15", "256b": "1473508.35", "1024b": "3410081.79", "8192b": "5534728.19", "16384b": "5830475.78"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha512", "16b": "72256.61", "64b": "299922.56", "256b": "679438.34", "1024b": "1241645.06", "8192b": "1619509.25", "16384b": "1657634.82"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha3-256", "16b": "52750.94", "64b": "216401.79", "256b": "584560.64", "1024b": "753551.36", "8192b": "871620.61", "16384b": "885260.29"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "AES-256-GCM", "16b": "1104612.48", "64b": "2637029.5", "256b": "5259137.28", "1024b": "6894663.68", "8192b": "7719108.61", "16384b": "7745667.07"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha256", "16b": "212970.48", "64b": "794134.46", "256b": "2315995.9", "1024b": "4335169.54", "8192b": "5776105.47", "16384b": "5956976.64"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha512", "16b": "96783.18", "64b": "388435.07", "256b": "817445.12", "1024b": "1330996.22", "8192b": "1639309.31", "16384b": "1661779.97"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha3-256", "16b": "65209.57", "64b": "255926.27", "256b": "648833.02", "1024b": "784101.38", "8192b": "876765.18", "16384b": "887619.58"}]},
   "transform": [
     {
       "filter": "test(/sha512/i, datum.algorithm)"
@@ -1846,7 +1846,7 @@ We are not comparing OpenSSL 3.0 vs 3.5 in a theoretical vacuum; we are comparin
 <p><strong>The modern NIST standard (Keccak), inherently resistant to length-extension attacks.</strong></p>
 <p><vegachart style='width: 100%'  class="vegalite">{
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "data": {"values": [{"os": "debian", "version": "3.0.18", "algorithm": "AES-256-GCM", "16b": "88448.0", "64b": "335354.69", "256b": "1171174.66", "1024b": "3164636.16", "8192b": "6656778.24", "16384b": "7232045.06"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha256", "16b": "233897.46", "64b": "822027.39", "256b": "2366867.46", "1024b": "4346260.48", "8192b": "5748236.29", "16384b": "5747474.43"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha512", "16b": "99319.66", "64b": "399899.33", "256b": "826397.04", "1024b": "1339658.24", "8192b": "1639907.33", "16384b": "1650851.84"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha3-256", "16b": "69180.86", "64b": "277000.7", "256b": "668518.4", "1024b": "790913.02", "8192b": "878043.14", "16384b": "886521.86"}, {"os": "fips", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "178689.54", "64b": "627849.54", "256b": "1993607.17", "1024b": "4470849.54", "8192b": "7099801.6", "16384b": "7367229.44"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha256", "16b": "279738.9", "64b": "930594.05", "256b": "2601634.82", "1024b": "4511926.27", "8192b": "5753430.02", "16384b": "5831114.75"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha512", "16b": "108848.53", "64b": "437174.46", "256b": "852637.7", "1024b": "1361731.58", "8192b": "1638465.54", "16384b": "1647263.74"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha3-256", "16b": "76125.44", "64b": "303500.48", "256b": "706775.04", "1024b": "801981.44", "8192b": "874684.42", "16384b": "877297.66"}, {"os": "alpine", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "124293.6", "64b": "460905.6", "256b": "1557845.76", "1024b": "3759694.85", "8192b": "6914170.88", "16384b": "7422951.42"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha256", "16b": "119033.49", "64b": "446943.62", "256b": "1477890.05", "1024b": "3378702.34", "8192b": "5538766.85", "16384b": "5847285.76"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha512", "16b": "72139.71", "64b": "299275.26", "256b": "679365.89", "1024b": "1240816.64", "8192b": "1608245.25", "16384b": "1657405.44"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha3-256", "16b": "52708.74", "64b": "216250.62", "256b": "584648.19", "1024b": "750047.23", "8192b": "871481.34", "16384b": "885751.81"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "AES-256-GCM", "16b": "1108990.51", "64b": "2627955.2", "256b": "5241687.04", "1024b": "6853403.65", "8192b": "7722541.06", "16384b": "7799226.37"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha256", "16b": "222522.58", "64b": "807740.03", "256b": "2314958.34", "1024b": "4340238.34", "8192b": "5773467.65", "16384b": "5962366.98"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha512", "16b": "95947.44", "64b": "386140.1", "256b": "814896.13", "1024b": "1327221.76", "8192b": "1638965.25", "16384b": "1666908.16"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha3-256", "16b": "65156.45", "64b": "262295.94", "256b": "649037.06", "1024b": "761766.91", "8192b": "876748.8", "16384b": "877854.72"}]},
+  "data": {"values": [{"os": "debian", "version": "3.0.18", "algorithm": "AES-256-GCM", "16b": "88582.08", "64b": "333001.22", "256b": "1169153.54", "1024b": "3156352.0", "8192b": "6677299.2", "16384b": "7228440.58"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha256", "16b": "235971.01", "64b": "827695.3", "256b": "2360070.14", "1024b": "4220675.07", "8192b": "5746540.54", "16384b": "5909053.44"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha512", "16b": "99645.58", "64b": "400036.67", "256b": "832728.06", "1024b": "1341365.25", "8192b": "1639825.41", "16384b": "1667547.14"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha3-256", "16b": "68937.12", "64b": "276750.21", "256b": "666720.51", "1024b": "788013.06", "8192b": "877633.54", "16384b": "887816.19"}, {"os": "fips", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "179831.63", "64b": "639743.68", "256b": "2002644.74", "1024b": "4494422.02", "8192b": "6980214.78", "16384b": "7339917.31"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha256", "16b": "270045.76", "64b": "945856.9", "256b": "2587224.06", "1024b": "4508317.7", "8192b": "5742993.41", "16384b": "5831065.6"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha512", "16b": "108343.34", "64b": "434512.9", "256b": "850796.8", "1024b": "1359902.72", "8192b": "1634598.91", "16384b": "1644298.24"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha3-256", "16b": "75844.26", "64b": "304060.61", "256b": "706875.14", "1024b": "802028.54", "8192b": "875077.63", "16384b": "876314.62"}, {"os": "alpine", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "124751.23", "64b": "463836.29", "256b": "1533171.97", "1024b": "3809600.51", "8192b": "6988726.27", "16384b": "7424098.3"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha256", "16b": "118322.93", "64b": "445185.15", "256b": "1473508.35", "1024b": "3410081.79", "8192b": "5534728.19", "16384b": "5830475.78"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha512", "16b": "72256.61", "64b": "299922.56", "256b": "679438.34", "1024b": "1241645.06", "8192b": "1619509.25", "16384b": "1657634.82"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha3-256", "16b": "52750.94", "64b": "216401.79", "256b": "584560.64", "1024b": "753551.36", "8192b": "871620.61", "16384b": "885260.29"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "AES-256-GCM", "16b": "1104612.48", "64b": "2637029.5", "256b": "5259137.28", "1024b": "6894663.68", "8192b": "7719108.61", "16384b": "7745667.07"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha256", "16b": "212970.48", "64b": "794134.46", "256b": "2315995.9", "1024b": "4335169.54", "8192b": "5776105.47", "16384b": "5956976.64"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha512", "16b": "96783.18", "64b": "388435.07", "256b": "817445.12", "1024b": "1330996.22", "8192b": "1639309.31", "16384b": "1661779.97"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha3-256", "16b": "65209.57", "64b": "255926.27", "256b": "648833.02", "1024b": "784101.38", "8192b": "876765.18", "16384b": "887619.58"}]},
   "transform": [
     {
       "filter": "test(/sha3-256/i, datum.algorithm)"
@@ -1903,23 +1903,23 @@ We are not comparing OpenSSL 3.0 vs 3.5 in a theoretical vacuum; we are comparin
 <tbody>
 <tr>
 <td style="text-align: left;"><strong>AES-256-GCM</strong> <br><em>(TLS 1.3 Bulk)</em></td>
-<td style="text-align: center;"><code>7194.56 MB/s</code></td>
-<td style="text-align: center;"><code>7616.43 MB/s</code></td>
-<td style="text-align: center;"><code>7248.98 MB/s</code></td>
+<td style="text-align: center;"><code>7167.89 MB/s</code></td>
+<td style="text-align: center;"><code>7564.13 MB/s</code></td>
+<td style="text-align: center;"><code>7250.1 MB/s</code></td>
 <td style="text-align: left;"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M249.9 66.8c10.4-14.3 7.2-34.3-7.1-44.7s-34.3-7.2-44.7 7.1l-106 145.7-37.5-37.5c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l64 64c6.6 6.6 15.8 10 25.1 9.3s17.9-5.5 23.4-13.1l128-176zm128 136c10.4-14.3 7.2-34.3-7.1-44.7s-34.3-7.2-44.7 7.1l-170 233.7-69.5-69.5c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l96 96c6.6 6.6 15.8 10 25.1 9.3s17.9-5.5 23.4-13.1l192-264z"/></svg></span> <strong>Zero-Penalty Parity</strong></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>SHA-256</strong> <br><em>(Signatures/JWT)</em></td>
-<td style="text-align: center;"><code>5694.45 MB/s</code></td>
-<td style="text-align: center;"><code>5822.62 MB/s</code></td>
-<td style="text-align: center;"><code>5710.24 MB/s</code></td>
+<td style="text-align: center;"><code>5694.4 MB/s</code></td>
+<td style="text-align: center;"><code>5817.36 MB/s</code></td>
+<td style="text-align: center;"><code>5693.82 MB/s</code></td>
 <td style="text-align: left;"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M384 160c-17.7 0-32-14.3-32-32s14.3-32 32-32h160c17.7 0 32 14.3 32 32v160c0 17.7-14.3 32-32 32s-32-14.3-32-32v-82.7L342.6 374.7c-12.5 12.5-32.8 12.5-45.3 0L192 269.3 54.6 406.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l160-160c12.5-12.5 32.8-12.5 45.3 0L320 306.7 466.7 160z"/></svg></span> <strong>Highly Optimized</strong></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>SHA-512</strong> <br><em>(64-bit Hashing)</em></td>
-<td style="text-align: center;"><code>1608.66 MB/s</code></td>
-<td style="text-align: center;"><code>1627.84 MB/s</code></td>
-<td style="text-align: center;"><code>1618.56 MB/s</code></td>
+<td style="text-align: center;"><code>1605.76 MB/s</code></td>
+<td style="text-align: center;"><code>1622.83 MB/s</code></td>
+<td style="text-align: center;"><code>1618.78 MB/s</code></td>
 <td style="text-align: left;"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M128 320H24.5c-24.9 0-40.2-27.1-27.4-48.5L50 183.3c8.7-14.5 24.3-23.3 41.2-23.3h95C262.3 31.1 375.8 24.6 451.7 35.7c12.8 1.9 22.8 11.9 24.6 24.6 11.1 75.9 4.6 189.4-124.3 265.5v95c0 16.9-8.8 32.5-23.3 41.2l-88.2 52.9c-21.3 12.8-48.5-2.6-48.5-27.4V384c0-35.3-28.7-64-64-64h-.1zm272-160a48 48 0 1 0-96 0 48 48 0 1 0 96 0"/></svg></span> <strong>Market Superiority</strong></td>
 </tr>
 </tbody>
@@ -1941,7 +1941,7 @@ We are not comparing OpenSSL 3.0 vs 3.5 in a theoretical vacuum; we are comparin
 <div class="tabbed-block">
 <p><vegachart style='width: 100%'  class="vegalite">{
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "data": {"values": [{"os": "debian", "version": "3.0.18", "algorithm": "rsa2048", "sign_ops": "3336.0", "verify_ops": "113691.0"}, {"os": "debian", "version": "3.0.18", "algorithm": "ecdsap256", "sign_ops": "110671.0", "verify_ops": "34954.0"}, {"os": "fips", "version": "3.5.5", "algorithm": "rsa2048", "sign_ops": "3329.0", "verify_ops": "113828.0"}, {"os": "fips", "version": "3.5.5", "algorithm": "ecdsap256", "sign_ops": "114279.0", "verify_ops": "35103.0"}, {"os": "alpine", "version": "3.5.5", "algorithm": "rsa2048", "sign_ops": "3320.0", "verify_ops": "110940.0"}, {"os": "alpine", "version": "3.5.5", "algorithm": "ecdsap256", "sign_ops": "104080.0", "verify_ops": "34368.0"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "rsa2048", "sign_ops": "3348.0", "verify_ops": "113730.0"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "ecdsap256", "sign_ops": "107213.0", "verify_ops": "34985.0"}]},
+  "data": {"values": [{"os": "debian", "version": "3.0.18", "algorithm": "rsa2048", "sign_ops": "3349.0", "verify_ops": "113844.0"}, {"os": "debian", "version": "3.0.18", "algorithm": "ecdsap256", "sign_ops": "109355.0", "verify_ops": "35092.0"}, {"os": "fips", "version": "3.5.5", "algorithm": "rsa2048", "sign_ops": "3353.0", "verify_ops": "114573.0"}, {"os": "fips", "version": "3.5.5", "algorithm": "ecdsap256", "sign_ops": "114404.4", "verify_ops": "35191.0"}, {"os": "alpine", "version": "3.5.5", "algorithm": "rsa2048", "sign_ops": "3333.0", "verify_ops": "110449.0"}, {"os": "alpine", "version": "3.5.5", "algorithm": "ecdsap256", "sign_ops": "101449.0", "verify_ops": "34377.0"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "rsa2048", "sign_ops": "3349.0", "verify_ops": "112762.0"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "ecdsap256", "sign_ops": "108525.0", "verify_ops": "35010.0"}]},
   "transform": [{"filter": "test(/rsa2048/i, datum.algorithm)"}],
   "mark": {"type": "bar", "tooltip": true, "cornerRadiusEnd": 3},
   "encoding": {
@@ -1955,7 +1955,7 @@ We are not comparing OpenSSL 3.0 vs 3.5 in a theoretical vacuum; we are comparin
 <div class="tabbed-block">
 <p><vegachart style='width: 100%'  class="vegalite">{
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "data": {"values": [{"os": "debian", "version": "3.0.18", "algorithm": "rsa2048", "sign_ops": "3336.0", "verify_ops": "113691.0"}, {"os": "debian", "version": "3.0.18", "algorithm": "ecdsap256", "sign_ops": "110671.0", "verify_ops": "34954.0"}, {"os": "fips", "version": "3.5.5", "algorithm": "rsa2048", "sign_ops": "3329.0", "verify_ops": "113828.0"}, {"os": "fips", "version": "3.5.5", "algorithm": "ecdsap256", "sign_ops": "114279.0", "verify_ops": "35103.0"}, {"os": "alpine", "version": "3.5.5", "algorithm": "rsa2048", "sign_ops": "3320.0", "verify_ops": "110940.0"}, {"os": "alpine", "version": "3.5.5", "algorithm": "ecdsap256", "sign_ops": "104080.0", "verify_ops": "34368.0"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "rsa2048", "sign_ops": "3348.0", "verify_ops": "113730.0"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "ecdsap256", "sign_ops": "107213.0", "verify_ops": "34985.0"}]},
+  "data": {"values": [{"os": "debian", "version": "3.0.18", "algorithm": "rsa2048", "sign_ops": "3349.0", "verify_ops": "113844.0"}, {"os": "debian", "version": "3.0.18", "algorithm": "ecdsap256", "sign_ops": "109355.0", "verify_ops": "35092.0"}, {"os": "fips", "version": "3.5.5", "algorithm": "rsa2048", "sign_ops": "3353.0", "verify_ops": "114573.0"}, {"os": "fips", "version": "3.5.5", "algorithm": "ecdsap256", "sign_ops": "114404.4", "verify_ops": "35191.0"}, {"os": "alpine", "version": "3.5.5", "algorithm": "rsa2048", "sign_ops": "3333.0", "verify_ops": "110449.0"}, {"os": "alpine", "version": "3.5.5", "algorithm": "ecdsap256", "sign_ops": "101449.0", "verify_ops": "34377.0"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "rsa2048", "sign_ops": "3349.0", "verify_ops": "112762.0"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "ecdsap256", "sign_ops": "108525.0", "verify_ops": "35010.0"}]},
   "transform": [{"filter": "test(/rsa2048/i, datum.algorithm)"}],
   "mark": {"type": "bar", "tooltip": true, "cornerRadiusEnd": 3},
   "encoding": {
@@ -1978,7 +1978,7 @@ We are not comparing OpenSSL 3.0 vs 3.5 in a theoretical vacuum; we are comparin
 <div class="tabbed-block">
 <p><vegachart style='width: 100%'  class="vegalite">{
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "data": {"values": [{"os": "debian", "version": "3.0.18", "algorithm": "rsa2048", "sign_ops": "3336.0", "verify_ops": "113691.0"}, {"os": "debian", "version": "3.0.18", "algorithm": "ecdsap256", "sign_ops": "110671.0", "verify_ops": "34954.0"}, {"os": "fips", "version": "3.5.5", "algorithm": "rsa2048", "sign_ops": "3329.0", "verify_ops": "113828.0"}, {"os": "fips", "version": "3.5.5", "algorithm": "ecdsap256", "sign_ops": "114279.0", "verify_ops": "35103.0"}, {"os": "alpine", "version": "3.5.5", "algorithm": "rsa2048", "sign_ops": "3320.0", "verify_ops": "110940.0"}, {"os": "alpine", "version": "3.5.5", "algorithm": "ecdsap256", "sign_ops": "104080.0", "verify_ops": "34368.0"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "rsa2048", "sign_ops": "3348.0", "verify_ops": "113730.0"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "ecdsap256", "sign_ops": "107213.0", "verify_ops": "34985.0"}]},
+  "data": {"values": [{"os": "debian", "version": "3.0.18", "algorithm": "rsa2048", "sign_ops": "3349.0", "verify_ops": "113844.0"}, {"os": "debian", "version": "3.0.18", "algorithm": "ecdsap256", "sign_ops": "109355.0", "verify_ops": "35092.0"}, {"os": "fips", "version": "3.5.5", "algorithm": "rsa2048", "sign_ops": "3353.0", "verify_ops": "114573.0"}, {"os": "fips", "version": "3.5.5", "algorithm": "ecdsap256", "sign_ops": "114404.4", "verify_ops": "35191.0"}, {"os": "alpine", "version": "3.5.5", "algorithm": "rsa2048", "sign_ops": "3333.0", "verify_ops": "110449.0"}, {"os": "alpine", "version": "3.5.5", "algorithm": "ecdsap256", "sign_ops": "101449.0", "verify_ops": "34377.0"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "rsa2048", "sign_ops": "3349.0", "verify_ops": "112762.0"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "ecdsap256", "sign_ops": "108525.0", "verify_ops": "35010.0"}]},
   "transform": [{"filter": "test(/ecdsap256/i, datum.algorithm)"}],
   "mark": {"type": "bar", "tooltip": true, "cornerRadiusEnd": 3},
   "encoding": {
@@ -1992,7 +1992,7 @@ We are not comparing OpenSSL 3.0 vs 3.5 in a theoretical vacuum; we are comparin
 <div class="tabbed-block">
 <p><vegachart style='width: 100%'  class="vegalite">{
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "data": {"values": [{"os": "debian", "version": "3.0.18", "algorithm": "rsa2048", "sign_ops": "3336.0", "verify_ops": "113691.0"}, {"os": "debian", "version": "3.0.18", "algorithm": "ecdsap256", "sign_ops": "110671.0", "verify_ops": "34954.0"}, {"os": "fips", "version": "3.5.5", "algorithm": "rsa2048", "sign_ops": "3329.0", "verify_ops": "113828.0"}, {"os": "fips", "version": "3.5.5", "algorithm": "ecdsap256", "sign_ops": "114279.0", "verify_ops": "35103.0"}, {"os": "alpine", "version": "3.5.5", "algorithm": "rsa2048", "sign_ops": "3320.0", "verify_ops": "110940.0"}, {"os": "alpine", "version": "3.5.5", "algorithm": "ecdsap256", "sign_ops": "104080.0", "verify_ops": "34368.0"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "rsa2048", "sign_ops": "3348.0", "verify_ops": "113730.0"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "ecdsap256", "sign_ops": "107213.0", "verify_ops": "34985.0"}]},
+  "data": {"values": [{"os": "debian", "version": "3.0.18", "algorithm": "rsa2048", "sign_ops": "3349.0", "verify_ops": "113844.0"}, {"os": "debian", "version": "3.0.18", "algorithm": "ecdsap256", "sign_ops": "109355.0", "verify_ops": "35092.0"}, {"os": "fips", "version": "3.5.5", "algorithm": "rsa2048", "sign_ops": "3353.0", "verify_ops": "114573.0"}, {"os": "fips", "version": "3.5.5", "algorithm": "ecdsap256", "sign_ops": "114404.4", "verify_ops": "35191.0"}, {"os": "alpine", "version": "3.5.5", "algorithm": "rsa2048", "sign_ops": "3333.0", "verify_ops": "110449.0"}, {"os": "alpine", "version": "3.5.5", "algorithm": "ecdsap256", "sign_ops": "101449.0", "verify_ops": "34377.0"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "rsa2048", "sign_ops": "3349.0", "verify_ops": "112762.0"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "ecdsap256", "sign_ops": "108525.0", "verify_ops": "35010.0"}]},
   "transform": [{"filter": "test(/ecdsap256/i, datum.algorithm)"}],
   "mark": {"type": "bar", "tooltip": true, "cornerRadiusEnd": 3},
   "encoding": {
@@ -2029,13 +2029,13 @@ We are not comparing OpenSSL 3.0 vs 3.5 in a theoretical vacuum; we are comparin
 <tr>
 <td style="text-align: left;"><strong>Symmetric</strong></td>
 <td style="text-align: left;">AES-256-GCM (16KB)</td>
-<td style="text-align: center;"><code>7194.6 MB/s</code></td>
+<td style="text-align: center;"><code>7167.9 MB/s</code></td>
 <td style="text-align: left;"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M249.9 66.8c10.4-14.3 7.2-34.3-7.1-44.7s-34.3-7.2-44.7 7.1l-106 145.7-37.5-37.5c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l64 64c6.6 6.6 15.8 10 25.1 9.3s17.9-5.5 23.4-13.1l128-176zm128 136c10.4-14.3 7.2-34.3-7.1-44.7s-34.3-7.2-44.7 7.1l-170 233.7-69.5-69.5c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l96 96c6.6 6.6 15.8 10 25.1 9.3s17.9-5.5 23.4-13.1l192-264z"/></svg></span> <strong>Industry Parity</strong></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>Hashing</strong></td>
 <td style="text-align: left;">SHA-512 (16KB)</td>
-<td style="text-align: center;"><code>1608.7 MB/s</code></td>
+<td style="text-align: center;"><code>1605.8 MB/s</code></td>
 <td style="text-align: left;"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M128 320H24.5c-24.9 0-40.2-27.1-27.4-48.5L50 183.3c8.7-14.5 24.3-23.3 41.2-23.3h95C262.3 31.1 375.8 24.6 451.7 35.7c12.8 1.9 22.8 11.9 24.6 24.6 11.1 75.9 4.6 189.4-124.3 265.5v95c0 16.9-8.8 32.5-23.3 41.2l-88.2 52.9c-21.3 12.8-48.5-2.6-48.5-27.4V384c0-35.3-28.7-64-64-64h-.1zm272-160a48 48 0 1 0-96 0 48 48 0 1 0 96 0"/></svg></span> <strong>Market Superior</strong></td>
 </tr>
 <tr>
@@ -2068,50 +2068,50 @@ We are not comparing OpenSSL 3.0 vs 3.5 in a theoretical vacuum; we are comparin
 <tr>
 <td style="text-align: left;">RSA2048</td>
 <td style="text-align: left;">Debian</td>
-<td style="text-align: center;"><code>3336.0</code></td>
-<td style="text-align: center;"><code>113691.0</code></td>
+<td style="text-align: center;"><code>3349.0</code></td>
+<td style="text-align: center;"><code>113844.0</code></td>
 </tr>
 <tr>
 <td style="text-align: left;">ECDSAP256</td>
 <td style="text-align: left;">Debian</td>
-<td style="text-align: center;"><code>110671.0</code></td>
-<td style="text-align: center;"><code>34954.0</code></td>
+<td style="text-align: center;"><code>109355.0</code></td>
+<td style="text-align: center;"><code>35092.0</code></td>
 </tr>
 <tr>
 <td style="text-align: left;">RSA2048</td>
 <td style="text-align: left;">Fips</td>
-<td style="text-align: center;"><code>3329.0</code></td>
-<td style="text-align: center;"><code>113828.0</code></td>
+<td style="text-align: center;"><code>3353.0</code></td>
+<td style="text-align: center;"><code>114573.0</code></td>
 </tr>
 <tr>
 <td style="text-align: left;">ECDSAP256</td>
 <td style="text-align: left;">Fips</td>
-<td style="text-align: center;"><code>114279.0</code></td>
-<td style="text-align: center;"><code>35103.0</code></td>
+<td style="text-align: center;"><code>114404.4</code></td>
+<td style="text-align: center;"><code>35191.0</code></td>
 </tr>
 <tr>
 <td style="text-align: left;">RSA2048</td>
 <td style="text-align: left;">Alpine</td>
-<td style="text-align: center;"><code>3320.0</code></td>
-<td style="text-align: center;"><code>110940.0</code></td>
+<td style="text-align: center;"><code>3333.0</code></td>
+<td style="text-align: center;"><code>110449.0</code></td>
 </tr>
 <tr>
 <td style="text-align: left;">ECDSAP256</td>
 <td style="text-align: left;">Alpine</td>
-<td style="text-align: center;"><code>104080.0</code></td>
-<td style="text-align: center;"><code>34368.0</code></td>
+<td style="text-align: center;"><code>101449.0</code></td>
+<td style="text-align: center;"><code>34377.0</code></td>
 </tr>
 <tr>
 <td style="text-align: left;">RSA2048</td>
 <td style="text-align: left;">Ubuntu</td>
-<td style="text-align: center;"><code>3348.0</code></td>
-<td style="text-align: center;"><code>113730.0</code></td>
+<td style="text-align: center;"><code>3349.0</code></td>
+<td style="text-align: center;"><code>112762.0</code></td>
 </tr>
 <tr>
 <td style="text-align: left;">ECDSAP256</td>
 <td style="text-align: left;">Ubuntu</td>
-<td style="text-align: center;"><code>107213.0</code></td>
-<td style="text-align: center;"><code>34985.0</code></td>
+<td style="text-align: center;"><code>108525.0</code></td>
+<td style="text-align: center;"><code>35010.0</code></td>
 </tr>
 </tbody>
 </table>
@@ -2126,7 +2126,7 @@ We are not comparing OpenSSL 3.0 vs 3.5 in a theoretical vacuum; we are comparin
 <p><vegachart style='width: 100%'  class="vegalite">{
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "AES-256-GCM Buffer Scaling Trajectory",
-  "data": {"values": [{"os": "debian", "version": "3.0.18", "algorithm": "AES-256-GCM", "16b": "88448.0", "64b": "335354.69", "256b": "1171174.66", "1024b": "3164636.16", "8192b": "6656778.24", "16384b": "7232045.06"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha256", "16b": "233897.46", "64b": "822027.39", "256b": "2366867.46", "1024b": "4346260.48", "8192b": "5748236.29", "16384b": "5747474.43"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha512", "16b": "99319.66", "64b": "399899.33", "256b": "826397.04", "1024b": "1339658.24", "8192b": "1639907.33", "16384b": "1650851.84"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha3-256", "16b": "69180.86", "64b": "277000.7", "256b": "668518.4", "1024b": "790913.02", "8192b": "878043.14", "16384b": "886521.86"}, {"os": "fips", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "178689.54", "64b": "627849.54", "256b": "1993607.17", "1024b": "4470849.54", "8192b": "7099801.6", "16384b": "7367229.44"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha256", "16b": "279738.9", "64b": "930594.05", "256b": "2601634.82", "1024b": "4511926.27", "8192b": "5753430.02", "16384b": "5831114.75"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha512", "16b": "108848.53", "64b": "437174.46", "256b": "852637.7", "1024b": "1361731.58", "8192b": "1638465.54", "16384b": "1647263.74"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha3-256", "16b": "76125.44", "64b": "303500.48", "256b": "706775.04", "1024b": "801981.44", "8192b": "874684.42", "16384b": "877297.66"}, {"os": "alpine", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "124293.6", "64b": "460905.6", "256b": "1557845.76", "1024b": "3759694.85", "8192b": "6914170.88", "16384b": "7422951.42"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha256", "16b": "119033.49", "64b": "446943.62", "256b": "1477890.05", "1024b": "3378702.34", "8192b": "5538766.85", "16384b": "5847285.76"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha512", "16b": "72139.71", "64b": "299275.26", "256b": "679365.89", "1024b": "1240816.64", "8192b": "1608245.25", "16384b": "1657405.44"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha3-256", "16b": "52708.74", "64b": "216250.62", "256b": "584648.19", "1024b": "750047.23", "8192b": "871481.34", "16384b": "885751.81"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "AES-256-GCM", "16b": "1108990.51", "64b": "2627955.2", "256b": "5241687.04", "1024b": "6853403.65", "8192b": "7722541.06", "16384b": "7799226.37"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha256", "16b": "222522.58", "64b": "807740.03", "256b": "2314958.34", "1024b": "4340238.34", "8192b": "5773467.65", "16384b": "5962366.98"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha512", "16b": "95947.44", "64b": "386140.1", "256b": "814896.13", "1024b": "1327221.76", "8192b": "1638965.25", "16384b": "1666908.16"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha3-256", "16b": "65156.45", "64b": "262295.94", "256b": "649037.06", "1024b": "761766.91", "8192b": "876748.8", "16384b": "877854.72"}]},
+  "data": {"values": [{"os": "debian", "version": "3.0.18", "algorithm": "AES-256-GCM", "16b": "88582.08", "64b": "333001.22", "256b": "1169153.54", "1024b": "3156352.0", "8192b": "6677299.2", "16384b": "7228440.58"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha256", "16b": "235971.01", "64b": "827695.3", "256b": "2360070.14", "1024b": "4220675.07", "8192b": "5746540.54", "16384b": "5909053.44"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha512", "16b": "99645.58", "64b": "400036.67", "256b": "832728.06", "1024b": "1341365.25", "8192b": "1639825.41", "16384b": "1667547.14"}, {"os": "debian", "version": "3.0.18", "algorithm": "sha3-256", "16b": "68937.12", "64b": "276750.21", "256b": "666720.51", "1024b": "788013.06", "8192b": "877633.54", "16384b": "887816.19"}, {"os": "fips", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "179831.63", "64b": "639743.68", "256b": "2002644.74", "1024b": "4494422.02", "8192b": "6980214.78", "16384b": "7339917.31"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha256", "16b": "270045.76", "64b": "945856.9", "256b": "2587224.06", "1024b": "4508317.7", "8192b": "5742993.41", "16384b": "5831065.6"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha512", "16b": "108343.34", "64b": "434512.9", "256b": "850796.8", "1024b": "1359902.72", "8192b": "1634598.91", "16384b": "1644298.24"}, {"os": "fips", "version": "3.5.5", "algorithm": "sha3-256", "16b": "75844.26", "64b": "304060.61", "256b": "706875.14", "1024b": "802028.54", "8192b": "875077.63", "16384b": "876314.62"}, {"os": "alpine", "version": "3.5.5", "algorithm": "AES-256-GCM", "16b": "124751.23", "64b": "463836.29", "256b": "1533171.97", "1024b": "3809600.51", "8192b": "6988726.27", "16384b": "7424098.3"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha256", "16b": "118322.93", "64b": "445185.15", "256b": "1473508.35", "1024b": "3410081.79", "8192b": "5534728.19", "16384b": "5830475.78"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha512", "16b": "72256.61", "64b": "299922.56", "256b": "679438.34", "1024b": "1241645.06", "8192b": "1619509.25", "16384b": "1657634.82"}, {"os": "alpine", "version": "3.5.5", "algorithm": "sha3-256", "16b": "52750.94", "64b": "216401.79", "256b": "584560.64", "1024b": "753551.36", "8192b": "871620.61", "16384b": "885260.29"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "AES-256-GCM", "16b": "1104612.48", "64b": "2637029.5", "256b": "5259137.28", "1024b": "6894663.68", "8192b": "7719108.61", "16384b": "7745667.07"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha256", "16b": "212970.48", "64b": "794134.46", "256b": "2315995.9", "1024b": "4335169.54", "8192b": "5776105.47", "16384b": "5956976.64"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha512", "16b": "96783.18", "64b": "388435.07", "256b": "817445.12", "1024b": "1330996.22", "8192b": "1639309.31", "16384b": "1661779.97"}, {"os": "ubuntu", "version": "3.0.13", "algorithm": "sha3-256", "16b": "65209.57", "64b": "255926.27", "256b": "648833.02", "1024b": "784101.38", "8192b": "876765.18", "16384b": "887619.58"}]},
   "transform": [
     {
       "filter": "test(/AES-256-GCM/i, datum.algorithm)"
@@ -2207,7 +2207,7 @@ We are not comparing OpenSSL 3.0 vs 3.5 in a theoretical vacuum; we are comparin
 <hr />
 <p>Legacy Operating Systems (like Debian/Ubuntu LTS) pin OpenSSL to older branches (e.g., 3.0.x) to preserve ABI stability over 5 years. <strong>Wolfi OS</strong> is a rolling-release distribution, shipping the highly-optimized <strong>OpenSSL <code>3.5.5</code></strong> by default. </p>
 <p><em>Dynamic Telemetry Insight:</em> Based on current execution data, Wolfi-FIPS </p>
-<p><strong>maintains parity within 1.2%</strong> of standard Ubuntu for SHA-512 throughput.</p>
+<p><strong>maintains parity within 1.1%</strong> of standard Ubuntu for SHA-512 throughput.</p>
 <p>You are actively gaining hardware-level optimizations that LTS distros lack.</p>
 </li>
 <li>
@@ -2245,162 +2245,162 @@ We are not comparing OpenSSL 3.0 vs 3.5 in a theoretical vacuum; we are comparin
 <tr>
 <td style="text-align: left;"><strong>AES-256-GCM</strong></td>
 <td style="text-align: left;">Wolfi-FIPS</td>
-<td style="text-align: center;"><code>178689.54</code></td>
-<td style="text-align: center;"><code>627849.54</code></td>
-<td style="text-align: center;"><code>1993607.17</code></td>
-<td style="text-align: center;"><code>4470849.54</code></td>
-<td style="text-align: center;"><code>7099801.6</code></td>
-<td style="text-align: center;"><code>7367229.44</code></td>
+<td style="text-align: center;"><code>179831.63</code></td>
+<td style="text-align: center;"><code>639743.68</code></td>
+<td style="text-align: center;"><code>2002644.74</code></td>
+<td style="text-align: center;"><code>4494422.02</code></td>
+<td style="text-align: center;"><code>6980214.78</code></td>
+<td style="text-align: center;"><code>7339917.31</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Ubuntu OOTB</td>
-<td style="text-align: center;"><code>1108990.51</code></td>
-<td style="text-align: center;"><code>2627955.2</code></td>
-<td style="text-align: center;"><code>5241687.04</code></td>
-<td style="text-align: center;"><code>6853403.65</code></td>
-<td style="text-align: center;"><code>7722541.06</code></td>
-<td style="text-align: center;"><code>7799226.37</code></td>
+<td style="text-align: center;"><code>1104612.48</code></td>
+<td style="text-align: center;"><code>2637029.5</code></td>
+<td style="text-align: center;"><code>5259137.28</code></td>
+<td style="text-align: center;"><code>6894663.68</code></td>
+<td style="text-align: center;"><code>7719108.61</code></td>
+<td style="text-align: center;"><code>7745667.07</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Debian OOTB</td>
-<td style="text-align: center;"><code>88448.0</code></td>
-<td style="text-align: center;"><code>335354.69</code></td>
-<td style="text-align: center;"><code>1171174.66</code></td>
-<td style="text-align: center;"><code>3164636.16</code></td>
-<td style="text-align: center;"><code>6656778.24</code></td>
-<td style="text-align: center;"><code>7232045.06</code></td>
+<td style="text-align: center;"><code>88582.08</code></td>
+<td style="text-align: center;"><code>333001.22</code></td>
+<td style="text-align: center;"><code>1169153.54</code></td>
+<td style="text-align: center;"><code>3156352.0</code></td>
+<td style="text-align: center;"><code>6677299.2</code></td>
+<td style="text-align: center;"><code>7228440.58</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Alpine OOTB</td>
-<td style="text-align: center;"><code>124293.6</code></td>
-<td style="text-align: center;"><code>460905.6</code></td>
-<td style="text-align: center;"><code>1557845.76</code></td>
-<td style="text-align: center;"><code>3759694.85</code></td>
-<td style="text-align: center;"><code>6914170.88</code></td>
-<td style="text-align: center;"><code>7422951.42</code></td>
+<td style="text-align: center;"><code>124751.23</code></td>
+<td style="text-align: center;"><code>463836.29</code></td>
+<td style="text-align: center;"><code>1533171.97</code></td>
+<td style="text-align: center;"><code>3809600.51</code></td>
+<td style="text-align: center;"><code>6988726.27</code></td>
+<td style="text-align: center;"><code>7424098.3</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>SHA-512</strong></td>
 <td style="text-align: left;">Wolfi-FIPS</td>
-<td style="text-align: center;"><code>108848.53</code></td>
-<td style="text-align: center;"><code>437174.46</code></td>
-<td style="text-align: center;"><code>852637.7</code></td>
-<td style="text-align: center;"><code>1361731.58</code></td>
-<td style="text-align: center;"><code>1638465.54</code></td>
-<td style="text-align: center;"><code>1647263.74</code></td>
+<td style="text-align: center;"><code>108343.34</code></td>
+<td style="text-align: center;"><code>434512.9</code></td>
+<td style="text-align: center;"><code>850796.8</code></td>
+<td style="text-align: center;"><code>1359902.72</code></td>
+<td style="text-align: center;"><code>1634598.91</code></td>
+<td style="text-align: center;"><code>1644298.24</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Ubuntu OOTB</td>
-<td style="text-align: center;"><code>95947.44</code></td>
-<td style="text-align: center;"><code>386140.1</code></td>
-<td style="text-align: center;"><code>814896.13</code></td>
-<td style="text-align: center;"><code>1327221.76</code></td>
-<td style="text-align: center;"><code>1638965.25</code></td>
-<td style="text-align: center;"><code>1666908.16</code></td>
+<td style="text-align: center;"><code>96783.18</code></td>
+<td style="text-align: center;"><code>388435.07</code></td>
+<td style="text-align: center;"><code>817445.12</code></td>
+<td style="text-align: center;"><code>1330996.22</code></td>
+<td style="text-align: center;"><code>1639309.31</code></td>
+<td style="text-align: center;"><code>1661779.97</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Debian OOTB</td>
-<td style="text-align: center;"><code>99319.66</code></td>
-<td style="text-align: center;"><code>399899.33</code></td>
-<td style="text-align: center;"><code>826397.04</code></td>
-<td style="text-align: center;"><code>1339658.24</code></td>
-<td style="text-align: center;"><code>1639907.33</code></td>
-<td style="text-align: center;"><code>1650851.84</code></td>
+<td style="text-align: center;"><code>99645.58</code></td>
+<td style="text-align: center;"><code>400036.67</code></td>
+<td style="text-align: center;"><code>832728.06</code></td>
+<td style="text-align: center;"><code>1341365.25</code></td>
+<td style="text-align: center;"><code>1639825.41</code></td>
+<td style="text-align: center;"><code>1667547.14</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Alpine OOTB</td>
-<td style="text-align: center;"><code>72139.71</code></td>
-<td style="text-align: center;"><code>299275.26</code></td>
-<td style="text-align: center;"><code>679365.89</code></td>
-<td style="text-align: center;"><code>1240816.64</code></td>
-<td style="text-align: center;"><code>1608245.25</code></td>
-<td style="text-align: center;"><code>1657405.44</code></td>
+<td style="text-align: center;"><code>72256.61</code></td>
+<td style="text-align: center;"><code>299922.56</code></td>
+<td style="text-align: center;"><code>679438.34</code></td>
+<td style="text-align: center;"><code>1241645.06</code></td>
+<td style="text-align: center;"><code>1619509.25</code></td>
+<td style="text-align: center;"><code>1657634.82</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>SHA-256</strong></td>
 <td style="text-align: left;">Wolfi-FIPS</td>
-<td style="text-align: center;"><code>279738.9</code></td>
-<td style="text-align: center;"><code>930594.05</code></td>
-<td style="text-align: center;"><code>2601634.82</code></td>
-<td style="text-align: center;"><code>4511926.27</code></td>
-<td style="text-align: center;"><code>5753430.02</code></td>
-<td style="text-align: center;"><code>5831114.75</code></td>
+<td style="text-align: center;"><code>270045.76</code></td>
+<td style="text-align: center;"><code>945856.9</code></td>
+<td style="text-align: center;"><code>2587224.06</code></td>
+<td style="text-align: center;"><code>4508317.7</code></td>
+<td style="text-align: center;"><code>5742993.41</code></td>
+<td style="text-align: center;"><code>5831065.6</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Ubuntu OOTB</td>
-<td style="text-align: center;"><code>222522.58</code></td>
-<td style="text-align: center;"><code>807740.03</code></td>
-<td style="text-align: center;"><code>2314958.34</code></td>
-<td style="text-align: center;"><code>4340238.34</code></td>
-<td style="text-align: center;"><code>5773467.65</code></td>
-<td style="text-align: center;"><code>5962366.98</code></td>
+<td style="text-align: center;"><code>212970.48</code></td>
+<td style="text-align: center;"><code>794134.46</code></td>
+<td style="text-align: center;"><code>2315995.9</code></td>
+<td style="text-align: center;"><code>4335169.54</code></td>
+<td style="text-align: center;"><code>5776105.47</code></td>
+<td style="text-align: center;"><code>5956976.64</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Debian OOTB</td>
-<td style="text-align: center;"><code>233897.46</code></td>
-<td style="text-align: center;"><code>822027.39</code></td>
-<td style="text-align: center;"><code>2366867.46</code></td>
-<td style="text-align: center;"><code>4346260.48</code></td>
-<td style="text-align: center;"><code>5748236.29</code></td>
-<td style="text-align: center;"><code>5747474.43</code></td>
+<td style="text-align: center;"><code>235971.01</code></td>
+<td style="text-align: center;"><code>827695.3</code></td>
+<td style="text-align: center;"><code>2360070.14</code></td>
+<td style="text-align: center;"><code>4220675.07</code></td>
+<td style="text-align: center;"><code>5746540.54</code></td>
+<td style="text-align: center;"><code>5909053.44</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Alpine OOTB</td>
-<td style="text-align: center;"><code>119033.49</code></td>
-<td style="text-align: center;"><code>446943.62</code></td>
-<td style="text-align: center;"><code>1477890.05</code></td>
-<td style="text-align: center;"><code>3378702.34</code></td>
-<td style="text-align: center;"><code>5538766.85</code></td>
-<td style="text-align: center;"><code>5847285.76</code></td>
+<td style="text-align: center;"><code>118322.93</code></td>
+<td style="text-align: center;"><code>445185.15</code></td>
+<td style="text-align: center;"><code>1473508.35</code></td>
+<td style="text-align: center;"><code>3410081.79</code></td>
+<td style="text-align: center;"><code>5534728.19</code></td>
+<td style="text-align: center;"><code>5830475.78</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>SHA3-256</strong></td>
 <td style="text-align: left;">Wolfi-FIPS</td>
-<td style="text-align: center;"><code>76125.44</code></td>
-<td style="text-align: center;"><code>303500.48</code></td>
-<td style="text-align: center;"><code>706775.04</code></td>
-<td style="text-align: center;"><code>801981.44</code></td>
-<td style="text-align: center;"><code>874684.42</code></td>
-<td style="text-align: center;"><code>877297.66</code></td>
+<td style="text-align: center;"><code>75844.26</code></td>
+<td style="text-align: center;"><code>304060.61</code></td>
+<td style="text-align: center;"><code>706875.14</code></td>
+<td style="text-align: center;"><code>802028.54</code></td>
+<td style="text-align: center;"><code>875077.63</code></td>
+<td style="text-align: center;"><code>876314.62</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Ubuntu OOTB</td>
-<td style="text-align: center;"><code>65156.45</code></td>
-<td style="text-align: center;"><code>262295.94</code></td>
-<td style="text-align: center;"><code>649037.06</code></td>
-<td style="text-align: center;"><code>761766.91</code></td>
-<td style="text-align: center;"><code>876748.8</code></td>
-<td style="text-align: center;"><code>877854.72</code></td>
+<td style="text-align: center;"><code>65209.57</code></td>
+<td style="text-align: center;"><code>255926.27</code></td>
+<td style="text-align: center;"><code>648833.02</code></td>
+<td style="text-align: center;"><code>784101.38</code></td>
+<td style="text-align: center;"><code>876765.18</code></td>
+<td style="text-align: center;"><code>887619.58</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Debian OOTB</td>
-<td style="text-align: center;"><code>69180.86</code></td>
-<td style="text-align: center;"><code>277000.7</code></td>
-<td style="text-align: center;"><code>668518.4</code></td>
-<td style="text-align: center;"><code>790913.02</code></td>
-<td style="text-align: center;"><code>878043.14</code></td>
-<td style="text-align: center;"><code>886521.86</code></td>
+<td style="text-align: center;"><code>68937.12</code></td>
+<td style="text-align: center;"><code>276750.21</code></td>
+<td style="text-align: center;"><code>666720.51</code></td>
+<td style="text-align: center;"><code>788013.06</code></td>
+<td style="text-align: center;"><code>877633.54</code></td>
+<td style="text-align: center;"><code>887816.19</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Alpine OOTB</td>
-<td style="text-align: center;"><code>52708.74</code></td>
-<td style="text-align: center;"><code>216250.62</code></td>
-<td style="text-align: center;"><code>584648.19</code></td>
-<td style="text-align: center;"><code>750047.23</code></td>
-<td style="text-align: center;"><code>871481.34</code></td>
-<td style="text-align: center;"><code>885751.81</code></td>
+<td style="text-align: center;"><code>52750.94</code></td>
+<td style="text-align: center;"><code>216401.79</code></td>
+<td style="text-align: center;"><code>584560.64</code></td>
+<td style="text-align: center;"><code>753551.36</code></td>
+<td style="text-align: center;"><code>871620.61</code></td>
+<td style="text-align: center;"><code>885260.29</code></td>
 </tr>
 </tbody>
 </table>
