@@ -31,8 +31,7 @@ ENTRYPOINT ["openssl"]
 EOF
 
 NPROC=$(nproc)
-TEST_TIME=3
-
+TEST_TIME=1
 set +e
 
 EVP_ALGS="aes-256-gcm sha256 sha512 sha3-256"
