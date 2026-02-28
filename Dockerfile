@@ -71,10 +71,11 @@ ARG UNZIP_VER
 USER root
 RUN mkdir -p /rootfs/distroless /rootfs/standard /rootfs/dev
 
-RUN --mount=type=cache,target=/var/cache/apk \
+RUN --mount=type=cache,target=/var/cache/apk  \
     set -eux; \
     apk add --no-cache \
     --initdb \
+    --no-scripts \
     --root /rootfs/distroless \
     --keys-dir /etc/apk/keys \
     --repositories-file /etc/apk/repositories \
@@ -93,6 +94,7 @@ RUN --mount=type=cache,target=/var/cache/apk \
     set -eux; \
     apk add --no-cache \
     --initdb \
+    --no-scripts \
     --root /rootfs/standard \
     --keys-dir /etc/apk/keys \
     --repositories-file /etc/apk/repositories \
@@ -115,6 +117,7 @@ RUN --mount=type=cache,target=/var/cache/apk \
     set -eux; \
     apk add --no-cache \
     --initdb \
+    --no-scripts \
     --root /rootfs/standard \
     --keys-dir /etc/apk/keys \
     --repositories-file /etc/apk/repositories \
