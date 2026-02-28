@@ -119,7 +119,7 @@ RUN --mount=type=cache,target=/var/cache/apk \
 RUN chroot /rootfs/standard /usr/bin/busybox --install -s /usr/bin
 #RUN ln -sf busybox /rootfs/standard/usr/bin/sh
 RUN echo "======================================================"
-RUN tree -a -F -i /rootfs/standard
+RUN tree -a -F /rootfs/standard
 
 # RUN --mount=type=cache,target=/var/cache/apk \
 #     set -eux; \
