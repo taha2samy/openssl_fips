@@ -233,7 +233,7 @@ LABEL org.opencontainers.image.title="Wolfi OpenSSL FIPS (Standard)" \
     org.opencontainers.image.vendor="taha2samy" \
     org.opencontainers.image.core-version="${CORE_VERSION}" \
     org.opencontainers.image.fips-version="${FIPS_VERSION}"
-
+USER root
 COPY --from=producer /rootfs/standard /
 
 RUN addgroup -g 1000 usernonroot && \
