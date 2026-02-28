@@ -244,19 +244,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+      - name: create stage directory
+        run: mkdir stage
       - name: Download all metadata artifacts
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4
         with:
-          path: all-metadata
-          pattern: attestation-metadata-*
+          path: stage/
+          pattern: .*
           merge-multiple: true
 
-      - name: Download all scan reports
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4
-        with:
-          path: reports
-          pattern: reports-*
-          merge-multiple: true
 
       - name: Print Attestation Details
         run: |
@@ -269,43 +265,43 @@ jobs:
             echo -e "\n------------------------------------------"
           done
 
-
-
-      - name: Setup Taskfile
-        uses: ./.github/actions/setup-task
-
-      - name: Tree and Directory Verification
+      - name: Print Attestation Details
         run: |
-          sudo apt-get install -y tree
-          echo "=========================================="
-          echo "Final Project Structure before MkDocs Build:"
-          echo "=========================================="
-          tree -a .
-          echo "------------------------------------------"
-          ls -R reports/
-          ls -R all-metadata/
-      - name: change permissions
-        run: sudo chmod -R 777 .
-      - name: debug
-        run: |
-          ls -la reports/ 
-          cat reports/report_standard.json
-          cat reports/report_distroless.json
-      - name: Build MkDocs site
-        run: task docs:build-MkDocs-site
+          ls -la stage/
 
-      - name: Deploy to GitHub Pages
-        uses: 
-          peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e  # v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
+      # - name: Setup Taskfile
+      #   uses: ./.github/actions/setup-task
+
+      # - name: Tree and Directory Verification
+      #   run: |
+      #     sudo apt-get install -y tree
+      #     echo "=========================================="
+      #     echo "Final Project Structure before MkDocs Build:"
+      #     echo "=========================================="
+      #     tree -a .
+      #     echo "------------------------------------------"
+      #     ls -R reports/
+      #     ls -R all-metadata/
+      # - name: change permissions
+      #   run: sudo chmod -R 777 .
+      # - name: debug
+      #   run: |
+      #     ls -la reports/ 
+      # - name: Build MkDocs site
+      #   run: task docs:build-MkDocs-site
+
+      # - name: Deploy to GitHub Pages
+      #   uses: 
+      #     peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e  # v4
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_dir: ./site
 
 
 
-      - name: Cleanup Dangling Images
-        uses: ./.github/actions/cleanup-ghcr
-        with:
-          package_name: "wolfi-openssl-fips"
-          token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Cleanup Dangling Images
+      #   uses: ./.github/actions/cleanup-ghcr
+      #   with:
+      #     package_name: "wolfi-openssl-fips"
+      #     token: ${{ secrets.GITHUB_TOKEN }}
 
