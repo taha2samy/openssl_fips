@@ -425,6 +425,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#artifact-tiers-quick-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Artifact Tiers &amp; Quick Start
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#image-tagging-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Image Tagging Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#continuous-compliance-engine-trivy" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1686,6 +1708,95 @@
 
 <p class="hero-desc">Welcome to the production-ready, <strong>FIPS 140-3</strong> validated OpenSSL environment. Built exclusively on top of the hardened, un-distro Wolfi ecosystem, this project is engineered from the ground up for Zero-Trust environments, strict cryptographic compliance boundaries, and immutable cloud-native workloads.</p>
 <hr />
+<div align="center" style="margin-top: 100px; margin-bottom: 50px;">
+  <h1 style="font-size: 3.5em; font-weight: 900; margin: 0; color: var(--md-primary-fg-color);">DEPLOYMENT ARTIFACTS</h1>
+  <p style="font-size: 1.8em; font-weight: 300; opacity: 0.8;">Verified Production Runtimes & SDKs</p>
+</div>
+
+<div class="hero-desc">
+<p>We compile and attest three distinct image variants, designed to cater to different stages of your Software Development Life Cycle (SDLC). Select the variant that matches your operational and security requirements.</p>
+</div>
+<hr />
+<h2 id="artifact-tiers-quick-start"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2 10.96a.985.985 0 0 1-.37-1.37L3.13 7c.11-.2.28-.34.47-.42l7.83-4.4c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.19.1.35.26.44.46l1.45 2.52c.28.48.11 1.09-.36 1.36l-1 .58v4.96c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-5.54c-.3.17-.68.18-1 0m10-6.81v6.7l5.96-3.35zM5 15.91l6 3.38v-6.71L5 9.21zm14 0v-3.22l-5 2.9c-.33.18-.7.17-1 .01v3.69zm-5.15-2.55 6.28-3.63-.58-1.01-6.28 3.63z"/></svg></span> Artifact Tiers &amp; Quick Start</h2>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5zm3.08 15L12 14.15 8.93 16l.81-3.5-2.71-2.34 3.58-.31L12 6.55l1.39 3.29 3.58.31-2.71 2.35z"/></svg></span> Production Distroless</label><label for="__tabbed_1_2"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 19V7H4v12zm0-16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm-7 14v-2h5v2zm-3.42-4L5.57 9H8.4l3.3 3.3c.39.39.39 1.03 0 1.42L8.42 17H5.59z"/></svg></span> Standard Image</label><label for="__tabbed_1_3"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m13.78 15.3 6 6 2.11-2.16-6-6zm3.72-5.2c-.39 0-.81-.05-1.14-.19L4.97 21.25l-2.11-2.11 7.41-7.4L8.5 9.96l-.72.7-1.45-1.41v2.86l-.7.7-3.52-3.56.7-.7h2.81l-1.4-1.41 3.56-3.56a2.976 2.976 0 0 1 4.22 0L9.89 5.74l1.41 1.4-.71.71 1.79 1.78 1.82-1.88c-.14-.33-.2-.75-.2-1.12a3.49 3.49 0 0 1 3.5-3.52c.59 0 1.11.14 1.58.42L16.41 6.2l1.5 1.5 2.67-2.67c.28.47.42.97.42 1.6 0 1.92-1.55 3.47-3.5 3.47"/></svg></span> Development SDK</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="admonition success">
+<p class="admonition-title">The Ultimate Hardened Target</p>
+<p><strong>Security Profile:</strong> Zero-entry surface. No shell (<code>/bin/sh</code> is missing), no package manager, and no unnecessary OS libraries. Intended for high-security production microservices.</p>
+</div>
+<p><div style="font-size: 1.2em;" markdown="1">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Pull the production-ready, attested Distroless image</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless
+</code></pre></div>
+</div></p>
+<p><strong>Verifiable Metadata:</strong>
+*   <strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m23.5 17-5 5-3.5-3.5 1.5-1.5 2 2 3.5-3.5zM6 2c-1.11 0-2 .89-2 2v16c0 1.11.89 2 2 2h7.81c-.53-.91-.81-1.95-.81-3 0-.33.03-.67.08-1H6v-2h7.81c.46-.8 1.1-1.5 1.87-2H6v-2h12v1.08c.33-.05.67-.08 1-.08.34 0 .67.03 1 .08V8l-6-6m-1 1.5L18.5 9H13Z"/></svg></span> L3 Provenance:</strong> <a href="https://github.com/taha2samy/openssl_fips/attestations/20068348">View Attestation</a>
+*   <strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6h2v12H4zm3 0h1v12H7zm2 0h3v12H9zm4 0h1v12h-1zm3 0h2v12h-2zm3 0h1v12h-1zM2 4v4H0V4a2 2 0 0 1 2-2h4v2zm20-2a2 2 0 0 1 2 2v4h-2V4h-4V2zM2 16v4h4v2H2a2 2 0 0 1-2-2v-4zm20 4v-4h2v4a2 2 0 0 1-2 2h-4v-2z"/></svg></span> CycloneDX SBOM:</strong> <a href="https://github.com/taha2samy/openssl_fips/attestations/20068351">Download JSON</a>
+*   <strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m21.41 11.58-9-9A2 2 0 0 0 11 2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 .59 1.42l9 9A2 2 0 0 0 13 22a2 2 0 0 0 1.41-.59l7-7A2 2 0 0 0 22 13a2 2 0 0 0-.59-1.42M13 20l-9-9V4h7l9 9M6.5 5A1.5 1.5 0 1 1 5 6.5 1.5 1.5 0 0 1 6.5 5"/></svg></span> Additional Tags:</strong> <code>distroless</code></p>
+</div>
+<div class="tabbed-block">
+<div class="admonition info">
+<p class="admonition-title">Optimized for Observability</p>
+<p><strong>Security Profile:</strong> Balanced hardening. Includes standard POSIX utilities and a <code>/bin/bash</code> shell. Intended for CI/CD pipeline execution and environments requiring interactive inspection.</p>
+</div>
+<p><div style="font-size: 1.2em;" markdown="1">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Pull the standard runtime and debugging environment</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5
+</code></pre></div>
+</div></p>
+<p><strong>Verifiable Metadata:</strong>
+*   <strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m23.5 17-5 5-3.5-3.5 1.5-1.5 2 2 3.5-3.5zM6 2c-1.11 0-2 .89-2 2v16c0 1.11.89 2 2 2h7.81c-.53-.91-.81-1.95-.81-3 0-.33.03-.67.08-1H6v-2h7.81c.46-.8 1.1-1.5 1.87-2H6v-2h12v1.08c.33-.05.67-.08 1-.08.34 0 .67.03 1 .08V8l-6-6m-1 1.5L18.5 9H13Z"/></svg></span> L3 Provenance:</strong> <a href="https://github.com/taha2samy/openssl_fips/attestations/20068352">View Attestation</a>
+*   <strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6h2v12H4zm3 0h1v12H7zm2 0h3v12H9zm4 0h1v12h-1zm3 0h2v12h-2zm3 0h1v12h-1zM2 4v4H0V4a2 2 0 0 1 2-2h4v2zm20-2a2 2 0 0 1 2 2v4h-2V4h-4V2zM2 16v4h4v2H2a2 2 0 0 1-2-2v-4zm20 4v-4h2v4a2 2 0 0 1-2 2h-4v-2z"/></svg></span> CycloneDX SBOM:</strong> <a href="https://github.com/taha2samy/openssl_fips/attestations/20068357">Download JSON</a>
+*   <strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m21.41 11.58-9-9A2 2 0 0 0 11 2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 .59 1.42l9 9A2 2 0 0 0 13 22a2 2 0 0 0 1.41-.59l7-7A2 2 0 0 0 22 13a2 2 0 0 0-.59-1.42M13 20l-9-9V4h7l9 9M6.5 5A1.5 1.5 0 1 1 5 6.5 1.5 1.5 0 0 1 6.5 5"/></svg></span> Additional Tags:</strong> <code>latest</code></p>
+</div>
+<div class="tabbed-block">
+<div class="admonition warning">
+<p class="admonition-title">The Builder's Foundation</p>
+<p><strong>Security Profile:</strong> Functional parity with Standard. Includes <code>build-base</code>, <code>headers</code>, and <code>pkgconf</code>. Designed to be used as a multi-stage builder to compile apps against the FIPS boundary.</p>
+</div>
+<p><div style="font-size: 1.2em;" markdown="1">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Pull the development toolchain and compilation toolkit</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-dev
+</code></pre></div>
+</div></p>
+<p><strong>Verifiable Metadata:</strong>
+*   <strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m23.5 17-5 5-3.5-3.5 1.5-1.5 2 2 3.5-3.5zM6 2c-1.11 0-2 .89-2 2v16c0 1.11.89 2 2 2h7.81c-.53-.91-.81-1.95-.81-3 0-.33.03-.67.08-1H6v-2h7.81c.46-.8 1.1-1.5 1.87-2H6v-2h12v1.08c.33-.05.67-.08 1-.08.34 0 .67.03 1 .08V8l-6-6m-1 1.5L18.5 9H13Z"/></svg></span> L3 Provenance:</strong> <a href="https://github.com/taha2samy/openssl_fips/attestations/20068349">View Attestation</a>
+*   <strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6h2v12H4zm3 0h1v12H7zm2 0h3v12H9zm4 0h1v12h-1zm3 0h2v12h-2zm3 0h1v12h-1zM2 4v4H0V4a2 2 0 0 1 2-2h4v2zm20-2a2 2 0 0 1 2 2v4h-2V4h-4V2zM2 16v4h4v2H2a2 2 0 0 1-2-2v-4zm20 4v-4h2v4a2 2 0 0 1-2 2h-4v-2z"/></svg></span> CycloneDX SBOM:</strong> <a href="https://github.com/taha2samy/openssl_fips/attestations/20068358">Download JSON</a>
+*   <strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m21.41 11.58-9-9A2 2 0 0 0 11 2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 .59 1.42l9 9A2 2 0 0 0 13 22a2 2 0 0 0 1.41-.59l7-7A2 2 0 0 0 22 13a2 2 0 0 0-.59-1.42M13 20l-9-9V4h7l9 9M6.5 5A1.5 1.5 0 1 1 5 6.5 1.5 1.5 0 0 1 6.5 5"/></svg></span> Additional Tags:</strong> <code>dev</code></p>
+</div>
+</div>
+</div>
+<hr />
+<h2 id="image-tagging-reference"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 7v2H9v6h1v2H6v-2h1V9H6V7zm6 0a2 2 0 0 1 2 2v6c0 1.11-.89 2-2 2h-4V7m4 2h-2v6h2z"/></svg></span> Image Tagging Reference</h2>
+<p>The following tags are maintained and updated automatically by our <strong>SLSA L3 pipeline</strong> for every release of OpenSSL <code>3.5.5</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Artifact Variant</th>
+<th style="text-align: left;">Version-Specific Tag</th>
+<th style="text-align: left;">Alias / Floating Tag</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Standard Image</strong></td>
+<td style="text-align: left;"><code>3.5.5</code></td>
+<td style="text-align: left;"><code>latest</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Distroless Runtime</strong></td>
+<td style="text-align: left;"><code>3.5.5-distroless</code></td>
+<td style="text-align: left;"><code>distroless</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Development SDK</strong></td>
+<td style="text-align: left;"><code>3.5.5-dev</code></td>
+<td style="text-align: left;"><code>dev</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
 <h2 id="continuous-compliance-engine-trivy"><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/trivy.png" width="55" align="top"> Continuous Compliance Engine (Trivy)</h2>
 <p>Our verification engine leverages <strong>Trivy</strong> to enforce a Zero-CVE posture and strict operational hardening across all image variants. Every build is cross-referenced against global security benchmarks.</p>
 <div class="card-grid">
@@ -1797,18 +1908,18 @@ A complete inventory listing every library, header, and compiler version used to
 <tbody>
 <tr>
 <td style="text-align: left;"><strong>Distroless Runtime</strong></td>
-<td style="text-align: left;"><a href="https://github.com/taha2samy/openssl_fips/attestations/20068132"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1M8 13h8v-2H8zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4a5 5 0 0 0 5-5 5 5 0 0 0-5-5"/></svg></span> View Attestation</a></td>
-<td style="text-align: left;"><a href="https://github.com/taha2samy/openssl_fips/attestations/20068138"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 20h14v-2H5m14-9h-4V3H9v6H5l7 7z"/></svg></span> CycloneDX JSON</a></td>
+<td style="text-align: left;"><a href="https://github.com/taha2samy/openssl_fips/attestations/20068348"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1M8 13h8v-2H8zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4a5 5 0 0 0 5-5 5 5 0 0 0-5-5"/></svg></span> View Attestation</a></td>
+<td style="text-align: left;"><a href="https://github.com/taha2samy/openssl_fips/attestations/20068351"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 20h14v-2H5m14-9h-4V3H9v6H5l7 7z"/></svg></span> CycloneDX JSON</a></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>Standard Image</strong></td>
-<td style="text-align: left;"><a href="https://github.com/taha2samy/openssl_fips/attestations/20068135"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1M8 13h8v-2H8zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4a5 5 0 0 0 5-5 5 5 0 0 0-5-5"/></svg></span> View Attestation</a></td>
-<td style="text-align: left;"><a href="https://github.com/taha2samy/openssl_fips/attestations/20068141"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 20h14v-2H5m14-9h-4V3H9v6H5l7 7z"/></svg></span> CycloneDX JSON</a></td>
+<td style="text-align: left;"><a href="https://github.com/taha2samy/openssl_fips/attestations/20068352"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1M8 13h8v-2H8zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4a5 5 0 0 0 5-5 5 5 0 0 0-5-5"/></svg></span> View Attestation</a></td>
+<td style="text-align: left;"><a href="https://github.com/taha2samy/openssl_fips/attestations/20068357"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 20h14v-2H5m14-9h-4V3H9v6H5l7 7z"/></svg></span> CycloneDX JSON</a></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>Development SDK</strong></td>
-<td style="text-align: left;"><a href="https://github.com/taha2samy/openssl_fips/attestations/20068134"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1M8 13h8v-2H8zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4a5 5 0 0 0 5-5 5 5 0 0 0-5-5"/></svg></span> View Attestation</a></td>
-<td style="text-align: left;"><a href="https://github.com/taha2samy/openssl_fips/attestations/20068144"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 20h14v-2H5m14-9h-4V3H9v6H5l7 7z"/></svg></span> CycloneDX JSON</a></td>
+<td style="text-align: left;"><a href="https://github.com/taha2samy/openssl_fips/attestations/20068349"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1M8 13h8v-2H8zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4a5 5 0 0 0 5-5 5 5 0 0 0-5-5"/></svg></span> View Attestation</a></td>
+<td style="text-align: left;"><a href="https://github.com/taha2samy/openssl_fips/attestations/20068358"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 20h14v-2H5m14-9h-4V3H9v6H5l7 7z"/></svg></span> CycloneDX JSON</a></td>
 </tr>
 </tbody>
 </table>
