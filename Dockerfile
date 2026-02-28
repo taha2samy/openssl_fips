@@ -159,37 +159,6 @@ RUN tree -a -F /rootfs/standard
 
 
 
-FROM ${STATIC_IMAGE} AS distroless
-COPY --from=producer /rootfs/distroless /
-ENV PATH="/usr/local/bin:/usr/bin:/bin"
-
-
-FROM ${STATIC_IMAGE} AS standard
-USER root
-COPY --from=producer /rootfs/standard /
-ENV PATH="/usr/local/bin:${PATH}" \
-    LD_LIBRARY_PATH="/usr/local/lib:/usr/lib:/lib" \
-    SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
-    OPENSSL_CONF=/usr/local/ssl/openssl.cnf \
-    OPENSSL_MODULES=/usr/local/lib/ossl-modules \
-    TZ=UTC \
-    LANG=C.UTF-8
-COPY --from=fips-integrator /usr/local/bin/openssl /usr/local/bin/openssl
-COPY --from=fips-integrator /usr/local/lib/libcrypto.so.3 /usr/local/lib/
-COPY --from=fips-integrator /usr/local/lib/libssl.so.3 /usr/local/lib/
-
-COPY --from=fips-integrator /usr/local/lib/ossl-modules /usr/local/lib/ossl-modules
-COPY --from=fips-integrator /usr/local/ssl /usr/local/ssl
-
-RUN ln -s /usr/local/lib/libcrypto.so.3 /usr/local/lib/libcrypto.so && \
-    ln -s /usr/local/lib/libssl.so.3 /usr/local/lib/libssl.so 
-
-
-
-FROM ${STATIC_IMAGE} AS development
-COPY --from=producer /rootfs/development /
-ENV PATH="/usr/local/bin:/usr/bin:/bin"
-
 
 FROM ${BASE_IMAGE} AS fips-builder
 USER root
@@ -310,6 +279,39 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=2s --retries=3 \
 ENTRYPOINT ["/usr/local/bin/openssl"]
 
 
+
+
+
+FROM ${STATIC_IMAGE} AS distroless
+COPY --from=producer /rootfs/distroless /
+ENV PATH="/usr/local/bin:/usr/bin:/bin"
+
+
+FROM ${STATIC_IMAGE} AS standard
+USER root
+COPY --from=producer /rootfs/standard /
+ENV PATH="/usr/local/bin:${PATH}" \
+    LD_LIBRARY_PATH="/usr/local/lib:/usr/lib:/lib" \
+    SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
+    OPENSSL_CONF=/usr/local/ssl/openssl.cnf \
+    OPENSSL_MODULES=/usr/local/lib/ossl-modules \
+    TZ=UTC \
+    LANG=C.UTF-8
+COPY --from=fips-integrator /usr/local/bin/openssl /usr/local/bin/openssl
+COPY --from=fips-integrator /usr/local/lib/libcrypto.so.3 /usr/local/lib/
+COPY --from=fips-integrator /usr/local/lib/libssl.so.3 /usr/local/lib/
+
+COPY --from=fips-integrator /usr/local/lib/ossl-modules /usr/local/lib/ossl-modules
+COPY --from=fips-integrator /usr/local/ssl /usr/local/ssl
+
+RUN ln -s /usr/local/lib/libcrypto.so.3 /usr/local/lib/libcrypto.so && \
+    ln -s /usr/local/lib/libssl.so.3 /usr/local/lib/libssl.so 
+
+
+
+FROM ${STATIC_IMAGE} AS development
+COPY --from=producer /rootfs/development /
+ENV PATH="/usr/local/bin:/usr/bin:/bin"
 
 FROM ${STATIC_IMAGE} AS openssl-distroless
 ARG CORE_VERSION
