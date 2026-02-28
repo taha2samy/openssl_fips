@@ -16,7 +16,7 @@ variable "PERL_VER" {
   default = "5.42.0-r2"
 }
 variable "LINUX_HEADERS_VER" {
-  default = "6.19.3-r0"
+  default = "6.19.4-r0"
 }
 variable "WGET_VER" {
   default = "1.25.0-r7"
@@ -56,4 +56,38 @@ variable "JQ_VER" {
 }
 variable "UNZIP_VER" {
   default = "6.0-r5"
+}
+variable "APK_TOOLS_VER" {
+  default = "2.14.10-r10"
+}
+variable "BUSYBOX_VER" {
+  default = "1.37.0-r54
+busybox-full-1.37.0-r54"
+}
+variable "GLIBC_VER" {
+  default = "2.43-r1"
+}
+variable "GLIBC_LOCALE_POSIX_VER" {
+  default = "2.43-r1"
+}
+variable "LD_LINUX_VER" {
+  default = "2.43-r1"
+}
+variable "LIBCRYPT1_VER" {
+  default = "2.43-r1"
+}
+variable "LIBXCRYPT_VER" {
+  default = "4.5.2-r2"
+}
+variable "LIBGCC_VER" {
+  default = "15.2.0-r9"
+}
+variable "WOLFI_BASE_VER" {
+  default = "1-r7"
+}
+variable "WOLFI_BASELAYOUT_VER" {
+  default = "20230201-r27"
+}
+variable "WOLFI_KEYS_VER" {
+  default = "1-r13"
 }

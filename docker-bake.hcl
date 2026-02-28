@@ -48,11 +48,24 @@ target "common" {
     BASE_IMAGE   = "${BASE_IMAGE}"
     STATIC_IMAGE = "${STATIC_IMAGE}"
 
+    # --- System Infrastructure (The ones you added) ---
+    APK_TOOLS_VER          = "${APK_TOOLS_VER}"
+    BUSYBOX_VER            = "${BUSYBOX_VER}"
+    GLIBC_VER              = "${GLIBC_VER}"
+    GLIBC_LOCALE_POSIX_VER = "${GLIBC_LOCALE_POSIX_VER}"
+    LD_LINUX_VER           = "${LD_LINUX_VER}"
+    LIBCRYPT1_VER          = "${LIBCRYPT1_VER}"
+    LIBXCRYPT_VER          = "${LIBXCRYPT_VER}"
+    LIBGCC_VER             = "${LIBGCC_VER}"
+    WOLFI_BASE_VER         = "${WOLFI_BASE_VER}"
+    WOLFI_BASELAYOUT_VER   = "${WOLFI_BASELAYOUT_VER}"
+    WOLFI_KEYS_VER         = "${WOLFI_KEYS_VER}"
+
     # --- Build Stage Packages (fips-builder & core-builder) ---
-    BUILD_BASE_VER    = "${BUILD_BASE_VER}"
-    PERL_VER          = "${PERL_VER}"
-    LINUX_HEADERS_VER = "${LINUX_HEADERS_VER}"
-    WGET_VER          = "${WGET_VER}"
+    BUILD_BASE_VER      = "${BUILD_BASE_VER}"
+    PERL_VER            = "${PERL_VER}"
+    LINUX_HEADERS_VER   = "${LINUX_HEADERS_VER}"
+    WGET_VER            = "${WGET_VER}"
     CA_CERTIFICATES_VER = "${CA_CERTIFICATES_VER}"
 
     # --- Runtime & Helper Packages (helper & openssl-standard) ---

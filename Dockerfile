@@ -1,10 +1,60 @@
 # syntax=docker/dockerfile:1
 
-ARG FIPS_VERSION=3.0.9
-ARG CORE_VERSION=3.1.0
-ARG BASE_IMAGE=cgr.dev/chainguard/wolfi-base:1.0
-ARG STATIC_IMAGE=cgr.dev/chainguard/static:1.0
+# --- Version Variables ---
+ARG FIPS_VERSION
+ARG CORE_VERSION
 
+# --- Base Images ---
+ARG BASE_IMAGE
+ARG STATIC_IMAGE
+
+# --- System Infrastructure (The ones you added) ---
+ARG APK_TOOLS_VER
+ARG BUSYBOX_VER
+ARG GLIBC_VER
+ARG GLIBC_LOCALE_POSIX_VER
+ARG LD_LINUX_VER
+ARG LIBCRYPT1_VER
+ARG LIBXCRYPT_VER
+ARG LIBGCC_VER
+ARG WOLFI_BASE_VER
+ARG WOLFI_BASELAYOUT_VER
+ARG WOLFI_KEYS_VER
+
+# --- Build Stage Packages ---
+ARG BUILD_BASE_VER
+ARG PERL_VER
+ARG LINUX_HEADERS_VER
+ARG WGET_VER
+ARG CA_CERTIFICATES_VER
+
+# --- Runtime & Helper Packages ---
+ARG LIBSTDC_PLUS_PLUS_VER
+ARG ZLIB_VER
+ARG TZDATA_VER
+ARG POSIX_LIBC_UTILS_VER
+
+# --- Dev Tools (SDK Only) ---
+ARG PKGCONF_VER
+ARG PCRE_DEV_VER
+ARG ZLIB_DEV_VER
+ARG BASH_VER
+ARG CURL_VER
+ARG JQ_VER
+ARG UNZIP_VER
+
+FROM ${BASE_IMAGE} AS producer
+ARG APK_TOOLS_VER
+ARG BUSYBOX_VER
+ARG GLIBC_VER
+ARG GLIBC_LOCALE_POSIX_VER
+ARG LD_LINUX_VER
+ARG LIBCRYPT1_VER
+ARG LIBXCRYPT_VER
+ARG LIBGCC_VER
+ARG WOLFI_BASE_VER
+ARG WOLFI_BASELAYOUT_VER
+ARG WOLFI_KEYS_VER
 ARG BUILD_BASE_VER
 ARG PERL_VER
 ARG LINUX_HEADERS_VER
@@ -21,6 +71,91 @@ ARG BASH_VER
 ARG CURL_VER
 ARG JQ_VER
 ARG UNZIP_VER
+
+
+
+# ========================================================
+# PRODUCER STAGE: Building 3 Isolated RootFS Environments
+# ========================================================
+FROM ${BASE_IMAGE} AS producer
+
+# --- Mandatory ARGs for Scoping ---
+ARG APK_TOOLS_VER
+ARG BUSYBOX_VER
+ARG GLIBC_VER
+ARG GLIBC_LOCALE_POSIX_VER
+ARG LD_LINUX_VER
+ARG LIBCRYPT1_VER
+ARG LIBXCRYPT_VER
+ARG LIBGCC_VER
+ARG WOLFI_BASE_VER
+ARG WOLFI_BASELAYOUT_VER
+ARG WOLFI_KEYS_VER
+ARG BUILD_BASE_VER
+ARG PERL_VER
+ARG LINUX_HEADERS_VER
+ARG WGET_VER
+ARG CA_CERTIFICATES_VER
+ARG LIBSTDC_PLUS_PLUS_VER
+ARG ZLIB_VER
+ARG TZDATA_VER
+ARG POSIX_LIBC_UTILS_VER
+ARG PKGCONF_VER
+ARG PCRE_DEV_VER
+ARG ZLIB_DEV_VER
+ARG BASH_VER
+ARG CURL_VER
+ARG JQ_VER
+ARG UNZIP_VER
+
+FROM ${BASE_IMAGE} AS producer
+RUN mkdir -p /rootfs/distroless /rootfs/standard /rootfs/dev
+
+# 1. Generate DISTROLESS RootFS (Minimalist Hardening)
+RUN apk add --no-cache --initdb --root /rootfs/distroless \
+    wolfi-baselayout=${WOLFI_BASELAYOUT_VER} \
+    wolfi-keys=${WOLFI_KEYS_VER} \
+    glibc=${GLIBC_VER} \
+    libgcc=${LIBGCC_VER} \
+    zlib=${ZLIB_VER} \
+    tzdata=${TZDATA_VER} \
+    ca-certificates=${CA_CERTIFICATES_VER}
+
+# 2. Generate STANDARD RootFS (Runtime/CLI Support)
+RUN apk add --no-cache --initdb --root /rootfs/standard \
+    wolfi-baselayout=${WOLFI_BASELAYOUT_VER} \
+    wolfi-keys=${WOLFI_KEYS_VER} \
+    glibc=${GLIBC_VER} \
+    libgcc=${LIBGCC_VER} \
+    zlib=${ZLIB_VER} \
+    tzdata=${TZDATA_VER} \
+    ca-certificates=${CA_CERTIFICATES_VER} \
+    busybox=${BUSYBOX_VER} \
+    bash=${BASH_VER} \
+    posix-libc-utils=${POSIX_LIBC_UTILS_VER} \
+    libstdc++=${LIBSTDC_PLUS_PLUS_VER}
+
+# 3. Generate DEVELOPMENT RootFS (Full SDK/Build Environment)
+RUN apk add --no-cache --initdb --root /rootfs/dev \
+    wolfi-baselayout=${WOLFI_BASELAYOUT_VER} \
+    wolfi-keys=${WOLFI_KEYS_VER} \
+    glibc=${GLIBC_VER} \
+    libgcc=${LIBGCC_VER} \
+    zlib=${ZLIB_VER} \
+    tzdata=${TZDATA_VER} \
+    ca-certificates=${CA_CERTIFICATES_VER} \
+    busybox=${BUSYBOX_VER} \
+    bash=${BASH_VER} \
+    build-base=${BUILD_BASE_VER} \
+    perl=${PERL_VER} \
+    linux-headers=${LINUX_HEADERS_VER} \
+    wget=${WGET_VER} \
+    pkgconf=${PKGCONF_VER} \
+    pcre-dev=${PCRE_DEV_VER} \
+    zlib-dev=${ZLIB_DEV_VER} \
+    curl=${CURL_VER} \
+    jq=${JQ_VER} \
+    unzip=${UNZIP_VER}
 
 FROM ${BASE_IMAGE} AS fips-builder
 ARG BUILD_BASE_VER
@@ -115,53 +250,50 @@ RUN addgroup -g 1000 openssl && adduser -u 1000 -G openssl -D -s /bin/bash opens
 RUN mkdir -p /etc && touch /etc/nsswitch.conf
 RUN cp /usr/share/zoneinfo/UTC /etc/localtime && echo "UTC" > /etc/timezone
 
-FROM ${BASE_IMAGE} AS openssl-standard
-ARG CORE_VERSION
-ARG FIPS_VERSION
+# ========================================================
+# FINAL: OpenSSL Standard (Surgical Precision)
+# ========================================================
+FROM ${STATIC_IMAGE} AS openssl-standard
+
 LABEL org.opencontainers.image.title="Wolfi OpenSSL FIPS (Standard)" \
-    org.opencontainers.image.description="FIPS 140-3 compliant OpenSSL container (standard)" \
     org.opencontainers.image.vendor="taha2samy" \
     org.opencontainers.image.core-version="${CORE_VERSION}" \
-    org.opencontainers.image.fips-version="${FIPS_VERSION}" \
-    org.opencontainers.image.licenses="Apache-2.0" \
-    org.opencontainers.image.source="https://github.com/taha2samy/openssl_fips" 
-ARG LIBSTDC_PLUS_PLUS_VER
-ARG TZDATA_VER
-ARG ZLIB_VER
+    org.opencontainers.image.fips-version="${FIPS_VERSION}"
 
-RUN --mount=type=cache,target=/var/cache/apk \
-    apk add --no-cache libgcc=${LIBSTDC_PLUS_PLUS_VER} tzdata=${TZDATA_VER} zlib=${ZLIB_VER}
+COPY --from=producer /rootfs/standard /
 
-COPY --from=helper /etc/passwd /etc/group /etc/
-COPY --from=helper /etc/ssl/certs /etc/ssl/certs
-COPY --from=helper /usr/share/zoneinfo/UTC /usr/share/zoneinfo/UTC
-COPY --from=helper /etc/localtime /etc/localtime
-COPY --from=helper /etc/timezone /etc/timezone
+RUN addgroup -g 1000 usernonroot && \
+    adduser -u 1000 -G usernonroot -D -s /bin/sh usernonroot
 
 COPY --from=fips-integrator /usr/local/bin/openssl /usr/local/bin/openssl
 COPY --from=fips-integrator /usr/local/lib/libcrypto.so.3 /usr/local/lib/
 COPY --from=fips-integrator /usr/local/lib/libssl.so.3 /usr/local/lib/
 
-RUN ln -s /usr/local/lib/libcrypto.so.3 /usr/local/lib/libcrypto.so && \
-    ln -s /usr/local/lib/libssl.so.3 /usr/local/lib/libssl.so
-
 COPY --from=fips-integrator /usr/local/lib/ossl-modules /usr/local/lib/ossl-modules
 COPY --from=fips-integrator /usr/local/ssl /usr/local/ssl
 
+RUN ln -s /usr/local/lib/libcrypto.so.3 /usr/local/lib/libcrypto.so && \
+    ln -s /usr/local/lib/libssl.so.3 /usr/local/lib/libssl.so
+ARG CORE_VERSION
+ARG FIPS_VERSION
+
 ENV PATH="/usr/local/bin:${PATH}" \
-    LD_LIBRARY_PATH="/usr/local/lib:/usr/local/lib64" \
+    LD_LIBRARY_PATH="/usr/local/lib:/usr/lib:/lib" \
     SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
     OPENSSL_CONF=/usr/local/ssl/openssl.cnf \
     OPENSSL_MODULES=/usr/local/lib/ossl-modules \
-    TZ=UTC
+    TZ=UTC \
+    LANG=C.UTF-8
 
-USER openssl
-WORKDIR /home/openssl
+USER usernonroot
+WORKDIR /home/usernonroot
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=2s --retries=3 \
     CMD /usr/local/bin/openssl list -providers | grep -q fips || exit 1
 
 ENTRYPOINT ["/usr/local/bin/openssl"]
+
+
 
 FROM ${STATIC_IMAGE} AS openssl-distroless
 ARG CORE_VERSION
