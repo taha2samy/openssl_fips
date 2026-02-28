@@ -286,6 +286,11 @@ jobs:
           ls -R all-metadata/
       - name: change permissions
         run: sudo chmod -R 777 .
+      - name: debug
+        run: |
+          ls -la reports/ 
+          cat reports/report_standard.json
+          cat reports/report_distroless.json
       - name: Build MkDocs site
         run: task docs:build-MkDocs-site
 
