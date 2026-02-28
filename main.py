@@ -108,10 +108,9 @@ def define_env(env):
     raw_benchmarks = load_json(os.path.join(ROOT_DIR, "reports", "benchmark_data.json"))
 
     # 3. Supply Chain Metadata
-    meta_root = os.path.join(ROOT_DIR, "all-metadata")
-    distroless_meta = load_json(os.path.join(meta_root, "distroless_attestation_details.json"))
-    standard_meta = load_json(os.path.join(meta_root, "standard_attestation_details.json"))
-    dev_meta = load_json(os.path.join(meta_root, "development_attestation_details.json"))
+    distroless_meta = load_json(os.path.join(reports_dir, "distroless_attestation_details.json"))
+    standard_meta = load_json(os.path.join(reports_dir, "standard_attestation_details.json"))
+    dev_meta = load_json(os.path.join(reports_dir, "development_attestation_details.json"))
 
     # 4. Processing Test Stats
     stats = summary.get("summary", {}).get(
