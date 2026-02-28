@@ -70,6 +70,7 @@ ARG JQ_VER
 ARG UNZIP_VER
 USER root
 RUN mkdir -p /rootfs/distroless /rootfs/standard /rootfs/development
+
 RUN --mount=type=cache,target=/var/cache/apk \
     set -eux; \
     apk add --no-cache \
@@ -88,9 +89,9 @@ RUN --mount=type=cache,target=/var/cache/apk \
     mkdir -p /rootfs/distroless/etc/apk; \
     cp -a /etc/apk/keys /rootfs/distroless/etc/apk/; \
     cp -a /etc/apk/repositories /rootfs/distroless/etc/apk/; \
-    cp -a /etc/passwd /rootfs/distroless/etc/ \
-    cp -a /etc/group /rootfs/distroless/etc/ \
-    cp -a /etc/shadow /rootfs/distroless/etc/ 
+    cp -a /etc/passwd /rootfs/distroless/etc/; \
+    cp -a /etc/group /rootfs/distroless/etc/; \
+    cp -a /etc/shadow /rootfs/distroless/etc/
 
 RUN --mount=type=cache,target=/var/cache/apk \
     set -eux; \
@@ -115,7 +116,7 @@ RUN --mount=type=cache,target=/var/cache/apk \
     cp -a /etc/apk/repositories /rootfs/standard/etc/apk/; \
     cp -a /etc/passwd /rootfs/standard/etc/; \
     cp -a /etc/group /rootfs/standard/etc/; \
-    cp -a /etc/shadow /rootfs/standard/etc/; 
+    cp -a /etc/shadow /rootfs/standard/etc/
 
 RUN --mount=type=cache,target=/var/cache/apk \
     set -eux; \
@@ -145,10 +146,10 @@ RUN --mount=type=cache,target=/var/cache/apk \
     unzip=${UNZIP_VER}; \
     mkdir -p /rootfs/development/etc/apk; \
     cp -a /etc/apk/keys /rootfs/development/etc/apk/; \
-    cp /etc/apk/repositories /rootfs/development/etc/apk/; \
+    cp -a /etc/apk/repositories /rootfs/development/etc/apk/; \
     cp -a /etc/passwd /rootfs/development/etc/; \
     cp -a /etc/group /rootfs/development/etc/; \
-    cp -a /etc/shadow /rootfs/development/etc/; 
+    cp -a /etc/shadow /rootfs/development/etc/
 
 FROM ${STATIC_IMAGE} AS distroless
 COPY --from=producer /rootfs/distroless /
