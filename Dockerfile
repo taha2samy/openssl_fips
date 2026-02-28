@@ -69,11 +69,11 @@ ARG CURL_VER
 ARG JQ_VER
 ARG UNZIP_VER
 USER root
-RUN mkdir -p /rootfs/distroless /rootfs/standard /rootfs/dev
-RUN addgroup -g 1000 usernonroot && \
-    adduser -u 1000 -G usernonroot -D -s /bin/sh usernonroot
+RUN mkdir -p /rootfs/distroless /rootfs/standard /rootfs/development
+RUN addgroup -g 1000 nonroot && \
+    adduser -u 1000 -G nonroot -D -s /bin/sh nonroot
 
-RUN --mount=type=cache,target=/var/cache/apk  \
+RUN --mount=type=cache,target=/var/cache/apk \
     set -eux; \
     apk add --no-cache \
     --initdb \
@@ -90,7 +90,10 @@ RUN --mount=type=cache,target=/var/cache/apk  \
     ca-certificates=${CA_CERTIFICATES_VER}; \
     mkdir -p /rootfs/distroless/etc/apk; \
     cp -a /etc/apk/keys /rootfs/distroless/etc/apk/; \
-    cp -a /etc/apk/repositories /rootfs/distroless/etc/apk/
+    cp -a /etc/apk/repositories /rootfs/distroless/etc/apk/; \
+    cp -a /etc/passwd /rootfs/distroless/etc/ \
+    cp -a /etc/group /rootfs/distroless/etc/ \
+    cp -a /etc/shadow /rootfs/distroless/etc/ 
 
 RUN --mount=type=cache,target=/var/cache/apk \
     set -eux; \
@@ -122,7 +125,7 @@ RUN --mount=type=cache,target=/var/cache/apk \
     apk add --no-cache \
     --initdb \
     --no-scripts \
-    --root /rootfs/standard \
+    --root /rootfs/development \
     --keys-dir /etc/apk/keys \
     --repositories-file /etc/apk/repositories \
     wolfi-baselayout=${WOLFI_BASELAYOUT_VER} \
@@ -134,10 +137,30 @@ RUN --mount=type=cache,target=/var/cache/apk \
     ca-certificates=${CA_CERTIFICATES_VER} \
     busybox=${BUSYBOX_VER} \
     posix-libc-utils=${POSIX_LIBC_UTILS_VER} \
-    libstdc++=${LIBSTDC_PLUS_PLUS_VER}; \
-    mkdir -p /rootfs/standard/etc/apk; \
-    cp -a /etc/apk/keys /rootfs/standard/etc/apk/; \
-    cp /etc/apk/repositories /rootfs/standard/etc/apk/
+    libstdc++=${LIBSTDC_PLUS_PLUS_VER} \
+    build-base=${BUILD_BASE_VER} \
+    pkgconf=${PKGCONF_VER} \
+    pcre-dev=${PCRE_DEV_VER} \
+    zlib-dev=${ZLIB_DEV_VER} \
+    bash=${BASH_VER} \
+    curl=${CURL_VER} \
+    jq=${JQ_VER} \
+    unzip=${UNZIP_VER}; \
+    mkdir -p /rootfs/development/etc/apk; \
+    cp -a /etc/apk/keys /rootfs/development/etc/apk/; \
+    cp /etc/apk/repositories /rootfs/development/etc/apk/; \
+    cp -a /etc/passwd /rootfs/development/etc/; \
+    cp -a /etc/group /rootfs/development/etc/; \
+    cp -a /etc/shadow /rootfs/development/etc/; 
+
+FROM ${STATIC_IMAGE} AS distroless
+COPY --from=producer /rootfs/distroless /
+
+FROM ${STATIC_IMAGE} AS standard
+COPY --from=producer /rootfs/standard /
+
+FROM ${STATIC_IMAGE} AS development
+COPY --from=producer /rootfs/development /
 
 FROM ${BASE_IMAGE} AS fips-builder
 ARG BUILD_BASE_VER
@@ -232,10 +255,9 @@ RUN addgroup -g 1000 openssl && adduser -u 1000 -G openssl -D -s /bin/bash opens
 RUN mkdir -p /etc && touch /etc/nsswitch.conf
 RUN cp /usr/share/zoneinfo/UTC /etc/localtime && echo "UTC" > /etc/timezone
 
-# ========================================================
-# FINAL: OpenSSL Standard (Surgical Precision)
-# ========================================================
-FROM ${STATIC_IMAGE} AS openssl-standard
+FROM standard AS openssl-standard
+ARG CORE_VERSION
+ARG FIPS_VERSION
 
 LABEL org.opencontainers.image.title="Wolfi OpenSSL FIPS (Standard)" \
     org.opencontainers.image.vendor="taha2samy" \
@@ -251,9 +273,8 @@ COPY --from=fips-integrator /usr/local/lib/ossl-modules /usr/local/lib/ossl-modu
 COPY --from=fips-integrator /usr/local/ssl /usr/local/ssl
 
 RUN ln -s /usr/local/lib/libcrypto.so.3 /usr/local/lib/libcrypto.so && \
-    ln -s /usr/local/lib/libssl.so.3 /usr/local/lib/libssl.so
-ARG CORE_VERSION
-ARG FIPS_VERSION
+    ln -s /usr/local/lib/libssl.so.3 /usr/local/lib/libssl.so \
+    ldconfig
 
 ENV PATH="/usr/local/bin:${PATH}" \
     LD_LIBRARY_PATH="/usr/local/lib:/usr/lib:/lib" \

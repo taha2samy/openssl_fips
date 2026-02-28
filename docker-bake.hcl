@@ -32,7 +32,7 @@ group "default" {
 target "common" {
   context    = "."
   dockerfile = "Dockerfile"
-  platforms  = ["linux/amd64", "linux/arm64"]
+  platforms  = ["linux/amd64"]
   output = [
     "type=registry,compression=zstd,force-compression=true"
   ]
