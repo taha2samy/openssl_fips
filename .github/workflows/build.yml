@@ -63,6 +63,7 @@ jobs:
       id-token: write
       attestations: write
       packages: write
+      contents: write
     strategy:
       fail-fast: false
       matrix:
