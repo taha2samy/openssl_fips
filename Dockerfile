@@ -68,6 +68,7 @@ ARG BASH_VER
 ARG CURL_VER
 ARG JQ_VER
 ARG UNZIP_VER
+USER root
 RUN mkdir -p /rootfs/distroless /rootfs/standard /rootfs/dev
 
 RUN --mount=type=cache,target=/var/cache/apk \
