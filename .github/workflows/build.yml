@@ -261,39 +261,39 @@ jobs:
           echo "=========================================="
           ls -R reports/
 
-      # - name: Setup Taskfile
-      #   uses: ./.github/actions/setup-task
+      - name: Setup Taskfile
+        uses: ./.github/actions/setup-task
 
-      # - name: Tree and Directory Verification
-      #   run: |
-      #     sudo apt-get install -y tree
-      #     echo "=========================================="
-      #     echo "Final Project Structure before MkDocs Build:"
-      #     echo "=========================================="
-      #     tree -a .
-      #     echo "------------------------------------------"
-      #     ls -R reports/
-      #     ls -R all-metadata/
-      # - name: change permissions
-      #   run: sudo chmod -R 777 .
-      # - name: debug
-      #   run: |
-      #     ls -la reports/ 
-      # - name: Build MkDocs site
-      #   run: task docs:build-MkDocs-site
+      - name: Tree and Directory Verification
+        run: |
+          sudo apt-get install -y tree
+          echo "=========================================="
+          echo "Final Project Structure before MkDocs Build:"
+          echo "=========================================="
+          tree -a .
+          echo "------------------------------------------"
+          ls -R reports/
+          ls -R all-metadata/
+      - name: change permissions
+        run: sudo chmod -R 777 .
+      - name: debug
+        run: |
+          ls -la reports/ 
+      - name: Build MkDocs site
+        run: task docs:build-MkDocs-site
 
-      # - name: Deploy to GitHub Pages
-      #   uses: 
-      #     peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e  # v4
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     publish_dir: ./site
+      - name: Deploy to GitHub Pages
+        uses: 
+          peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e  # v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
 
 
 
-      # - name: Cleanup Dangling Images
-      #   uses: ./.github/actions/cleanup-ghcr
-      #   with:
-      #     package_name: "wolfi-openssl-fips"
-      #     token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Cleanup Dangling Images
+        uses: ./.github/actions/cleanup-ghcr
+        with:
+          package_name: "wolfi-openssl-fips"
+          token: ${{ secrets.GITHUB_TOKEN }}
 
