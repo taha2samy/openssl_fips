@@ -334,34 +334,10 @@ The Wolfi-FIPS module proves that rigorous integrity checks do not slow down you
 
 ---
 
-<div class="contribution-box" markdown="1">
-
-## :material-bug-check: Security Contribution
-
-Our rigorous testing methodology goes beyond simple compliance. During the engineering of this infrastructure, we identified and documented a **Critical Logic Flaw** within the upstream OpenSSL FIPS provider.
-
-<div class="bug-card" markdown="1">
-**Verified Upstream Bug:** *OpenSSL FIPS Provider — Incorrect Boundary Logic*
-
-[:material-github: **VIEW VERIFIED ISSUE #30012 ON GITHUB**](https://github.com/openssl/openssl/issues/30012){ .bug-link }
-</div>
-
-*The discovery was verified and patched by the OpenSSL core team, increasing security standards for the global ecosystem.*
-
-</div>
 
 <br><br>
 
 
-
-
-
-
-
-
-
-
-`
 
 <div align="center" style="margin-top: 100px; margin-bottom: 40px;">
   <img src="https://www.safelogic.com/hs-fs/hubfs/FIPS-140-3-Validated-Badge%20426x500.png?width=318&height=373" width="180" alt="FIPS 140-3 Validated">
