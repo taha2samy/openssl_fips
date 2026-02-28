@@ -246,8 +246,8 @@ RUN /usr/local/bin/openssl fipsinstall \
     -no_short_mac
 
 COPY conf/openssl.cnf /usr/local/ssl/openssl.cnf
-RUN cat /usr/local/ssl/fipsmodule.cnf
-
+RUN ln -sf libcrypto.so.3 /usr/local/lib/libcrypto.so && \
+    ln -sf libssl.so.3 /usr/local/lib/libssl.so
 FROM ${BASE_IMAGE} AS helper
 ARG LIBSTDC_PLUS_PLUS_VER
 ARG ZLIB_VER
@@ -262,9 +262,12 @@ RUN cp /usr/share/zoneinfo/UTC /etc/localtime && echo "UTC" > /etc/timezone
 
 
 
+
+
+
+
 FROM ${STATIC_IMAGE} AS standard
 ARG STATIC_IMAGE
-USER root
 COPY --from=producer /rootfs/standard /
 ENV PATH="/usr/local/bin:${PATH}" \
     LD_LIBRARY_PATH="/usr/local/lib:/usr/lib:/lib" \
@@ -274,17 +277,15 @@ ENV PATH="/usr/local/bin:${PATH}" \
     TZ=UTC \
     LANG=C.UTF-8
 COPY --from=fips-integrator /usr/local/bin/openssl /usr/local/bin/openssl
-COPY --from=fips-integrator /usr/local/lib/libcrypto.so.3 /usr/local/lib/
-COPY --from=fips-integrator /usr/local/lib/libssl.so.3 /usr/local/lib/
-
+COPY --from=fips-integrator /usr/local/lib/libcrypto.so* /usr/local/lib/
+COPY --from=fips-integrator /usr/local/lib/libssl.so* /usr/local/lib/
 COPY --from=fips-integrator /usr/local/lib/ossl-modules /usr/local/lib/ossl-modules
 COPY --from=fips-integrator /usr/local/ssl /usr/local/ssl
-
-RUN ln -s /usr/local/lib/libcrypto.so.3 /usr/local/lib/libcrypto.so && \
-    ln -s /usr/local/lib/libssl.so.3 /usr/local/lib/libssl.so 
+USER nonroot
 
 FROM ${STATIC_IMAGE} AS distroless
-USER root
+ARG STATIC_IMAGE
+COPY --from=producer /rootfs/distroless /
 ENV PATH="/usr/local/bin:${PATH}" \
     LD_LIBRARY_PATH="/usr/local/lib:/usr/lib:/lib" \
     SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
@@ -293,20 +294,15 @@ ENV PATH="/usr/local/bin:${PATH}" \
     TZ=UTC \
     LANG=C.UTF-8
 COPY --from=fips-integrator /usr/local/bin/openssl /usr/local/bin/openssl
-COPY --from=fips-integrator /usr/local/lib/libcrypto.so.3 /usr/local/lib/
-COPY --from=fips-integrator /usr/local/lib/libssl.so.3 /usr/local/lib/
+COPY --from=fips-integrator /usr/local/lib/libcrypto.so* /usr/local/lib/
+COPY --from=fips-integrator /usr/local/lib/libssl.so* /usr/local/lib/
 COPY --from=fips-integrator /usr/local/lib/ossl-modules /usr/local/lib/ossl-modules
 COPY --from=fips-integrator /usr/local/ssl /usr/local/ssl
-COPY --from=fips-integrator /usr/local/lib/libcrypto.so.3 /usr/local/lib/
-COPY --from=fips-integrator /usr/local/lib/libssl.so.3 /usr/local/lib/
-COPY --from=fips-integrator /usr/local/lib/libcrypto.so.3 /usr/local/lib/
-COPY --from=fips-integrator /usr/local/lib/libssl.so.3 /usr/local/lib/
-
+USER nonroot
 
 FROM ${STATIC_IMAGE} AS development
 ARG STATIC_IMAGE
 COPY --from=producer /rootfs/development /
-USER root
 ENV PATH="/usr/local/bin:${PATH}" \
     LD_LIBRARY_PATH="/usr/local/lib:/usr/lib:/lib" \
     SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
@@ -315,13 +311,14 @@ ENV PATH="/usr/local/bin:${PATH}" \
     TZ=UTC \
     LANG=C.UTF-8
 COPY --from=fips-integrator /usr/local/bin/openssl /usr/local/bin/openssl
-COPY --from=fips-integrator /usr/local/lib/libcrypto.so.3 /usr/local/lib/
-COPY --from=fips-integrator /usr/local/lib/libssl.so.3 /usr/local/lib/
-
+COPY --from=fips-integrator /usr/local/lib/libcrypto.so* /usr/local/lib/
+COPY --from=fips-integrator /usr/local/lib/libssl.so* /usr/local/lib/
 COPY --from=fips-integrator /usr/local/lib/ossl-modules /usr/local/lib/ossl-modules
 COPY --from=fips-integrator /usr/local/ssl /usr/local/ssl
-RUN ln -s /usr/local/lib/libcrypto.so.3 /usr/local/lib/libcrypto.so && \
-    ln -s /usr/local/lib/libssl.so.3 /usr/local/lib/libssl.so 
+USER nonroot
+
+
+
 
 FROM standard AS openssl-standard
 ARG CORE_VERSION
@@ -347,10 +344,12 @@ ENTRYPOINT ["/usr/local/bin/openssl"]
 
 
 
-FROM ${STATIC_IMAGE} AS openssl-distroless
+
+
+
+FROM distroless AS openssl-distroless
 ARG CORE_VERSION
 ARG FIPS_VERSION
-COPY --from=producer /rootfs/distroless /
 
 LABEL org.opencontainers.image.title="Wolfi OpenSSL FIPS (distroless)" \
     org.opencontainers.image.description="FIPS 140-3 compliant OpenSSL container (distroless)" \
@@ -366,8 +365,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=2s --retries=3 \
 
 ENTRYPOINT ["/usr/local/bin/openssl"]
 
-FROM ${BASE_IMAGE} AS openssl-dev
-COPY --from=producer /rootfs/development /
+FROM development AS openssl-dev
 
 LABEL org.opencontainers.image.title="Wolfi OpenSSL FIPS (development)" \
     org.opencontainers.image.description="FIPS 140-3 compliant OpenSSL container (development)" \
