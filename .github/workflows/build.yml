@@ -18,7 +18,8 @@ jobs:
     outputs:
       standard_digest: ${{ steps.extract_digests.outputs.standard_digest }}
       distroless_digest: ${{ steps.extract_digests.outputs.distroless_digest }}
-      development_digest: ${{ steps.extract_digests.outputs.development_digest }}
+      development_digest: ${{ steps.extract_digests.outputs.development_digest 
+        }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
@@ -103,6 +104,10 @@ jobs:
           format: cyclonedx-json
           output-file: ${{ matrix.target_name }}.cyclonedx.json
           upload-artifact: false
+      - name: Attest SBOM
+        uses: actions/attest-sbom@4651f806c01d8637787e274ac3bdf724ef169f34
+        with:
+          sbom-path: ${{ matrix.target_name }}.cyclonedx.json
 
       - name: Attest SBOM
         uses: actions/attest-sbom@4651f806c01d8637787e274ac3bdf724ef169f34  # v3
@@ -141,7 +146,7 @@ jobs:
           retention-days: 1
 
       - name: Upload Clean SBOM
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: reports-sbom-${{ matrix.target_name }}
           path: ${{ matrix.target_name }}.cyclonedx.json
