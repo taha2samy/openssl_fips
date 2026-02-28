@@ -163,12 +163,18 @@ RUN ln -sf busybox sh
 
 FROM ${STATIC_IMAGE} AS distroless
 COPY --from=producer /rootfs/distroless /
+ENV PATH="/usr/local/bin:/usr/bin:/bin"
+
 
 FROM ${STATIC_IMAGE} AS standard
 COPY --from=producer /rootfs/standard /
+ENV PATH="/usr/local/bin:/usr/bin:/bin"
+
 
 FROM ${STATIC_IMAGE} AS development
 COPY --from=producer /rootfs/development /
+ENV PATH="/usr/local/bin:/usr/bin:/bin"
+
 
 FROM ${BASE_IMAGE} AS fips-builder
 ARG BUILD_BASE_VER
@@ -281,8 +287,9 @@ COPY --from=fips-integrator /usr/local/lib/ossl-modules /usr/local/lib/ossl-modu
 COPY --from=fips-integrator /usr/local/ssl /usr/local/ssl
 
 RUN ln -s /usr/local/lib/libcrypto.so.3 /usr/local/lib/libcrypto.so && \
-    ln -s /usr/local/lib/libssl.so.3 /usr/local/lib/libssl.so \
-    ldconfig
+    ln -s /usr/local/lib/libssl.so.3 /usr/local/lib/libssl.so 
+
+#ldconfig
 
 ENV PATH="/usr/local/bin:${PATH}" \
     LD_LIBRARY_PATH="/usr/local/lib:/usr/lib:/lib" \
@@ -292,8 +299,8 @@ ENV PATH="/usr/local/bin:${PATH}" \
     TZ=UTC \
     LANG=C.UTF-8
 
-USER usernonroot
-WORKDIR /home/usernonroot
+USER nonroot
+WORKDIR /home/user/nonroot
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=2s --retries=3 \
     CMD /usr/local/bin/openssl list -providers | grep -q fips || exit 1
