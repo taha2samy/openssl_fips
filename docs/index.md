@@ -131,15 +131,13 @@ Welcome to the production-ready, **FIPS 140-3** validated OpenSSL environment. B
 
 ---
 
-
-
 <div align="center" style="margin-top: 100px; margin-bottom: 50px;">
   <h1 style="font-size: 3.5em; font-weight: 900; margin: 0; color: var(--md-primary-fg-color);">DEPLOYMENT ARTIFACTS</h1>
-  <p style="font-size: 1.8em; font-weight: 300; opacity: 0.8;">Verified Production Runtimes & SDKs</p>
+  <p style="font-size: 1.8em; font-weight: 300; opacity: 0.8;">Secure Pull Commands & Cryptographic Digests</p>
 </div>
 
 <div class="hero-desc" markdown="1">
-We compile and attest three distinct image variants, designed to cater to different stages of your Software Development Life Cycle (SDLC). Select the variant that matches your operational and security requirements.
+Select the pull method that best fits your environment. For production workloads, we recommend pulling by **SHA256 Digest** to ensure absolute immutability and protection against tag-swapping.
 </div>
 
 ---
@@ -148,69 +146,81 @@ We compile and attest three distinct image variants, designed to cater to differ
 
 === ":material-shield-star: Production Distroless"
 
-    !!! success "The Ultimate Hardened Target"
-        **Security Profile:** Zero-entry surface. No shell (`/bin/sh` is missing), no package manager, and no unnecessary OS libraries. Intended for high-security production microservices.
+    !!! success "Zero-Surface Production Environment"
+        **Security Policy:** Minimalist rootfs with zero shell and zero utilities.
 
-    <div style="font-size: 1.2em;" markdown="1">
+    <div style="font-size: 1.15em;" markdown="1">
     ```bash
-    # Pull the production-ready, attested Distroless image
+    # Pull by Version Tag
     docker pull {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}-distroless
+
+    # Pull by Floating Tag
+    docker pull {{ registry }}/{{ owner }}/{{ repo_name }}:distroless
+
+    # Pull by Immutable Digest (Recommended)
+    docker pull {{ registry }}/{{ owner }}/{{ repo_name }}@{{ distroless_digest }}
     ```
     </div>
 
-    **Verifiable Metadata:**
+    **Integrity Metadata:**
     *   **:material-file-document-check: L3 Provenance:** [View Attestation]({{ distroless_url }})
     *   **:material-barcode-scan: CycloneDX SBOM:** [Download JSON]({{ distroless_sbom_url }})
-    *   **:material-tag-outline: Additional Tags:** `distroless`
 
 === ":material-console: Standard Image"
 
-    !!! info "Optimized for Observability"
-        **Security Profile:** Balanced hardening. Includes standard POSIX utilities and a `/bin/bash` shell. Intended for CI/CD pipeline execution and environments requiring interactive inspection.
+    !!! info "General Purpose Secure Runtime"
+        **Security Policy:** Hardened rootfs with interactive shell (`/bin/bash`) and CLI utilities.
 
-    <div style="font-size: 1.2em;" markdown="1">
+    <div style="font-size: 1.15em;" markdown="1">
     ```bash
-    # Pull the standard runtime and debugging environment
+    # Pull by Version Tag
     docker pull {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}
+
+    # Pull by Floating Tag
+    docker pull {{ registry }}/{{ owner }}/{{ repo_name }}:latest
+
+    # Pull by Immutable Digest (Recommended)
+    docker pull {{ registry }}/{{ owner }}/{{ repo_name }}@{{ standard_digest }}
     ```
     </div>
 
-    **Verifiable Metadata:**
+    **Integrity Metadata:**
     *   **:material-file-document-check: L3 Provenance:** [View Attestation]({{ standard_url }})
     *   **:material-barcode-scan: CycloneDX SBOM:** [Download JSON]({{ standard_sbom_url }})
-    *   **:material-tag-outline: Additional Tags:** `latest`
 
 === ":material-hammer-wrench: Development SDK"
 
-    !!! warning "The Builder's Foundation"
-        **Security Profile:** Functional parity with Standard. Includes `build-base`, `headers`, and `pkgconf`. Designed to be used as a multi-stage builder to compile apps against the FIPS boundary.
+    !!! warning "FIPS-Linked Build Agent"
+        **Security Policy:** Includes C toolchain, headers, and build tools for multi-stage compilation.
 
-    <div style="font-size: 1.2em;" markdown="1">
+    <div style="font-size: 1.15em;" markdown="1">
     ```bash
-    # Pull the development toolchain and compilation toolkit
+    # Pull by Version Tag
     docker pull {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}-dev
+
+    # Pull by Floating Tag
+    docker pull {{ registry }}/{{ owner }}/{{ repo_name }}:dev
+
+    # Pull by Immutable Digest (Recommended)
+    docker pull {{ registry }}/{{ owner }}/{{ repo_name }}@{{ dev_digest }}
     ```
     </div>
 
-    **Verifiable Metadata:**
+    **Integrity Metadata:**
     *   **:material-file-document-check: L3 Provenance:** [View Attestation]({{ dev_url }})
     *   **:material-barcode-scan: CycloneDX SBOM:** [Download JSON]({{ dev_sbom_url }})
-    *   **:material-tag-outline: Additional Tags:** `dev`
 
 ---
 
-## :material-identifier: Image Tagging Reference
+## :material-identifier: Cross-Variant Tagging Matrix
 
-The following tags are maintained and updated automatically by our **SLSA L3 pipeline** for every release of OpenSSL `{{ core_version }}`.
-
-| Artifact Variant | Version-Specific Tag | Alias / Floating Tag |
-| :--- | :--- | :--- |
-| **Standard Image** | `{{ core_version }}` | `latest` |
-| **Distroless Runtime** | `{{ core_version }}-distroless` | `distroless` |
-| **Development SDK** | `{{ core_version }}-dev` | `dev` |
+| Profile | Production (Distroless) | Runtime (Standard) | SDK (Development) |
+| :--- | :--- | :--- | :--- |
+| **Versioned** | `{{ core_version }}-distroless` | `{{ core_version }}` | `{{ core_version }}-dev` |
+| **Floating** | `distroless` | `latest` | `dev` |
+| **Registry** | `ghcr.io` | `ghcr.io` | `ghcr.io` |
 
 ---
-
 
 
 
