@@ -48,7 +48,8 @@ target "common" {
     BASE_IMAGE   = "${BASE_IMAGE}"
     STATIC_IMAGE = "${STATIC_IMAGE}"
 
-    # --- System Infrastructure (The ones you added) ---
+
+  # --- System Infrastructure ---
     APK_TOOLS_VER          = "${APK_TOOLS_VER}"
     BUSYBOX_VER            = "${BUSYBOX_VER}"
     GLIBC_VER              = "${GLIBC_VER}"
@@ -61,20 +62,20 @@ target "common" {
     WOLFI_BASELAYOUT_VER   = "${WOLFI_BASELAYOUT_VER}"
     WOLFI_KEYS_VER         = "${WOLFI_KEYS_VER}"
 
-    # --- Build Stage Packages (fips-builder & core-builder) ---
+  # --- Build Stage Packages ---
     BUILD_BASE_VER      = "${BUILD_BASE_VER}"
     PERL_VER            = "${PERL_VER}"
     LINUX_HEADERS_VER   = "${LINUX_HEADERS_VER}"
     WGET_VER            = "${WGET_VER}"
     CA_CERTIFICATES_VER = "${CA_CERTIFICATES_VER}"
 
-    # --- Runtime & Helper Packages (helper & openssl-standard) ---
+  # --- Runtime & Helper Packages ---
     LIBSTDC_PLUS_PLUS_VER = "${LIBSTDC_PLUS_PLUS_VER}"
     ZLIB_VER              = "${ZLIB_VER}"
     TZDATA_VER            = "${TZDATA_VER}"
     POSIX_LIBC_UTILS_VER  = "${POSIX_LIBC_UTILS_VER}"
 
-    # --- Dev Tools (openssl-dev) ---
+  # --- Dev Tools ---
     PKGCONF_VER  = "${PKGCONF_VER}"
     PCRE_DEV_VER = "${PCRE_DEV_VER}"
     ZLIB_DEV_VER = "${ZLIB_DEV_VER}"
@@ -82,6 +83,8 @@ target "common" {
     CURL_VER     = "${CURL_VER}"
     JQ_VER       = "${JQ_VER}"
     UNZIP_VER    = "${UNZIP_VER}"
+
+
   }
 }
 

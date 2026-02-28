@@ -4,11 +4,6 @@
 ARG FIPS_VERSION
 ARG CORE_VERSION
 
-# --- Base Images ---
-ARG BASE_IMAGE
-ARG STATIC_IMAGE
-
-# --- System Infrastructure (The ones you added) ---
 ARG APK_TOOLS_VER
 ARG BUSYBOX_VER
 ARG GLIBC_VER
@@ -43,7 +38,7 @@ ARG CURL_VER
 ARG JQ_VER
 ARG UNZIP_VER
 
-FROM ${BASE_IMAGE} AS producer
+FROM ${BASE_IMAGE} as producer
 ARG APK_TOOLS_VER
 ARG BUSYBOX_VER
 ARG GLIBC_VER
@@ -71,36 +66,6 @@ ARG BASH_VER
 ARG CURL_VER
 ARG JQ_VER
 ARG UNZIP_VER
-
-
-
-# ========================================================
-# PRODUCER STAGE: Building 3 Isolated RootFS Environments
-# ========================================================
-FROM ${BASE_IMAGE} AS producer
-
-# Re-declare all ARGs for this stage scope
-ARG WOLFI_BASELAYOUT_VER
-ARG WOLFI_KEYS_VER
-ARG GLIBC_VER
-ARG LIBGCC_VER
-ARG ZLIB_VER
-ARG TZDATA_VER
-ARG CA_CERTIFICATES_VER
-ARG BUSYBOX_VER
-ARG POSIX_LIBC_UTILS_VER
-ARG LIBSTDC_PLUS_PLUS_VER
-ARG BUILD_BASE_VER
-ARG PERL_VER
-ARG LINUX_HEADERS_VER
-ARG WGET_VER
-ARG PKGCONF_VER
-ARG PCRE_DEV_VER
-ARG ZLIB_DEV_VER
-ARG CURL_VER
-ARG JQ_VER
-ARG UNZIP_VER
-FROM ${BASE_IMAGE} as producer
 RUN mkdir -p /rootfs/distroless /rootfs/standard /rootfs/dev
 
 # 1. Generate DISTROLESS RootFS (Minimal)
