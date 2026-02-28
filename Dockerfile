@@ -70,9 +70,7 @@ ARG JQ_VER
 ARG UNZIP_VER
 USER root
 RUN mkdir -p /rootfs/distroless /rootfs/standard /rootfs/development
-RUN addgroup -g 1000 nonroot && \
-    adduser -u 1000 -G nonroot -D -s /bin/sh nonroot
-
+RUN addgroup -g 1000 nonroot && adduser -u 1000 -G nonroot -D -s /bin/sh nonroot
 RUN --mount=type=cache,target=/var/cache/apk \
     set -eux; \
     apk add --no-cache \
