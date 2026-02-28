@@ -61,8 +61,7 @@ variable "APK_TOOLS_VER" {
   default = "2.14.10-r10"
 }
 variable "BUSYBOX_VER" {
-  default = "1.37.0-r54
-busybox-full-1.37.0-r54"
+  default = "1.37.0-r54"
 }
 variable "GLIBC_VER" {
   default = "2.43-r1"

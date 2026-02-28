@@ -79,40 +79,33 @@ ARG UNZIP_VER
 # ========================================================
 FROM ${BASE_IMAGE} AS producer
 
-# --- Mandatory ARGs for Scoping ---
-ARG APK_TOOLS_VER
-ARG BUSYBOX_VER
-ARG GLIBC_VER
-ARG GLIBC_LOCALE_POSIX_VER
-ARG LD_LINUX_VER
-ARG LIBCRYPT1_VER
-ARG LIBXCRYPT_VER
-ARG LIBGCC_VER
-ARG WOLFI_BASE_VER
+# Re-declare all ARGs for this stage scope
 ARG WOLFI_BASELAYOUT_VER
 ARG WOLFI_KEYS_VER
+ARG GLIBC_VER
+ARG LIBGCC_VER
+ARG ZLIB_VER
+ARG TZDATA_VER
+ARG CA_CERTIFICATES_VER
+ARG BUSYBOX_VER
+ARG POSIX_LIBC_UTILS_VER
+ARG LIBSTDC_PLUS_PLUS_VER
 ARG BUILD_BASE_VER
 ARG PERL_VER
 ARG LINUX_HEADERS_VER
 ARG WGET_VER
-ARG CA_CERTIFICATES_VER
-ARG LIBSTDC_PLUS_PLUS_VER
-ARG ZLIB_VER
-ARG TZDATA_VER
-ARG POSIX_LIBC_UTILS_VER
 ARG PKGCONF_VER
 ARG PCRE_DEV_VER
 ARG ZLIB_DEV_VER
-ARG BASH_VER
 ARG CURL_VER
 ARG JQ_VER
 ARG UNZIP_VER
-
-FROM ${BASE_IMAGE} AS producer
+FROM ${BASE_IMAGE} as producer
 RUN mkdir -p /rootfs/distroless /rootfs/standard /rootfs/dev
 
-# 1. Generate DISTROLESS RootFS (Minimalist Hardening)
-RUN apk add --no-cache --initdb --root /rootfs/distroless \
+# 1. Generate DISTROLESS RootFS (Minimal)
+RUN --mount=type=cache,target=/var/cache/apk \
+    apk add --no-cache --initdb --root /rootfs/distroless \
     wolfi-baselayout=${WOLFI_BASELAYOUT_VER} \
     wolfi-keys=${WOLFI_KEYS_VER} \
     glibc=${GLIBC_VER} \
@@ -121,8 +114,9 @@ RUN apk add --no-cache --initdb --root /rootfs/distroless \
     tzdata=${TZDATA_VER} \
     ca-certificates=${CA_CERTIFICATES_VER}
 
-# 2. Generate STANDARD RootFS (Runtime/CLI Support)
-RUN apk add --no-cache --initdb --root /rootfs/standard \
+# 2. Generate STANDARD RootFS (Runtime - NO BASH)
+RUN --mount=type=cache,target=/var/cache/apk \
+    apk add --no-cache --initdb --root /rootfs/standard \
     wolfi-baselayout=${WOLFI_BASELAYOUT_VER} \
     wolfi-keys=${WOLFI_KEYS_VER} \
     glibc=${GLIBC_VER} \
@@ -131,12 +125,12 @@ RUN apk add --no-cache --initdb --root /rootfs/standard \
     tzdata=${TZDATA_VER} \
     ca-certificates=${CA_CERTIFICATES_VER} \
     busybox=${BUSYBOX_VER} \
-    bash=${BASH_VER} \
     posix-libc-utils=${POSIX_LIBC_UTILS_VER} \
     libstdc++=${LIBSTDC_PLUS_PLUS_VER}
 
-# 3. Generate DEVELOPMENT RootFS (Full SDK/Build Environment)
-RUN apk add --no-cache --initdb --root /rootfs/dev \
+# 3. Generate DEVELOPMENT RootFS (Full SDK)
+RUN --mount=type=cache,target=/var/cache/apk \
+    apk add --no-cache --initdb --root /rootfs/dev \
     wolfi-baselayout=${WOLFI_BASELAYOUT_VER} \
     wolfi-keys=${WOLFI_KEYS_VER} \
     glibc=${GLIBC_VER} \
@@ -145,7 +139,6 @@ RUN apk add --no-cache --initdb --root /rootfs/dev \
     tzdata=${TZDATA_VER} \
     ca-certificates=${CA_CERTIFICATES_VER} \
     busybox=${BUSYBOX_VER} \
-    bash=${BASH_VER} \
     build-base=${BUILD_BASE_VER} \
     perl=${PERL_VER} \
     linux-headers=${LINUX_HEADERS_VER} \

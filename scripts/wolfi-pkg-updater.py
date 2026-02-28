@@ -12,15 +12,19 @@ sys.path.append(ROOT_DIR)
 from scripts.logger import log, group_start, group_end, notice
 
 PACKAGES_TO_CHECK = [
+    # build / core
     "build-base",
     "perl",
     "linux-headers",
     "wget",
     "ca-certificates",
+    
+    # runtime
     "libstdc++",
     "zlib",
     "tzdata",
     "posix-libc-utils",
+    
     "pkgconf",
     "pcre-dev",
     "zlib-dev",
@@ -28,6 +32,7 @@ PACKAGES_TO_CHECK = [
     "curl",
     "jq",
     "unzip",
+
     "apk-tools",
     "busybox",
     "glibc",
@@ -92,6 +97,8 @@ def get_latest_package_version(base_image, package_name):
 
         if not full_package_string:
             return None
+
+        full_package_string = full_package_string.split('\n')[0].strip()
 
         prefix = f"{package_name}-"
 

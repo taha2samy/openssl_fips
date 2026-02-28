@@ -60,7 +60,7 @@ tasks:
     desc: Run the python package updater script
     cmds:
       - chmod +x scripts/wolfi-pkg-updater.py
-      - sudo -E python scripts/wolfi-pkg-updater.py
+      - python scripts/wolfi-pkg-updater.py
   docs:generate_benchmark_data:
     desc: Run performance benchmarks
     dir: benchmark

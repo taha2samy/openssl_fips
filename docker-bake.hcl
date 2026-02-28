@@ -37,7 +37,7 @@ target "common" {
     "type=registry,compression=zstd,force-compression=true"
   ]
   attest = [
-    "type=sbom,generator=docker/buildkit-syft-scanner,format=cyclonedx-json",
+    "type=sbom",
     "type=provenance,mode=max"
   ]
   args = {
