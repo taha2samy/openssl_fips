@@ -70,6 +70,8 @@ ARG JQ_VER
 ARG UNZIP_VER
 USER root
 RUN mkdir -p /rootfs/distroless /rootfs/standard /rootfs/dev
+RUN addgroup -g 1000 usernonroot && \
+    adduser -u 1000 -G usernonroot -D -s /bin/sh usernonroot
 
 RUN --mount=type=cache,target=/var/cache/apk  \
     set -eux; \
@@ -110,8 +112,11 @@ RUN --mount=type=cache,target=/var/cache/apk \
     libstdc++=${LIBSTDC_PLUS_PLUS_VER}; \
     mkdir -p /rootfs/standard/etc/apk; \
     cp -a /etc/apk/keys /rootfs/standard/etc/apk/; \
-    cp /etc/apk/repositories /rootfs/standard/etc/apk/
-
+    cp /etc/apk/repositories /rootfs/standard/etc/apk/ \
+    cp -a /etc/passwd /rootfs/standard/etc/; \
+    cp -a /etc/group /rootfs/standard/etc/; \
+    cp -a /etc/shadow /rootfs/standard/etc/; \
+    cp -a /etc/gshadow /rootfs/standard/etc/
 
 RUN --mount=type=cache,target=/var/cache/apk \
     set -eux; \
@@ -238,9 +243,6 @@ LABEL org.opencontainers.image.title="Wolfi OpenSSL FIPS (Standard)" \
     org.opencontainers.image.core-version="${CORE_VERSION}" \
     org.opencontainers.image.fips-version="${FIPS_VERSION}"
 COPY --from=producer /rootfs/standard /
-USER root
-RUN addgroup -g 1000 usernonroot && \
-    adduser -u 1000 -G usernonroot -D -s /bin/sh usernonroot
 
 COPY --from=fips-integrator /usr/local/bin/openssl /usr/local/bin/openssl
 COPY --from=fips-integrator /usr/local/lib/libcrypto.so.3 /usr/local/lib/
