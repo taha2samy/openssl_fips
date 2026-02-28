@@ -1,239 +1,451 @@
+---
+hide:
+  - navigation
+  - toc
+---
 
-# :material-shield-airplane: OpenSSL FIPS Hardened Ecosystem
+<style>
+  [data-md-color-scheme="slate"] .openssl-logo {
+    filter: brightness(0) invert(1) hue-rotate(180deg) saturate(100%) brightness(1.5);
+  }
 
-High-assurance cryptographic infrastructure built on **Wolfi (Chainguard)**. This project provides military-grade **FIPS 140-3** validated OpenSSL images, optimized for Zero-Trust environments and strictly attested via SLSA Level 3 provenance.
+  .md-typeset h1 {
+    font-weight: 900;
+    letter-spacing: -1px;
+  }
+
+  .md-typeset h2 .twemoji,
+  .md-typeset h2 svg {
+    width: 1.3em;
+    height: 1.3em;
+    vertical-align: middle;
+  }
+
+  .md-typeset li .twemoji,
+  .md-typeset li svg {
+    width: 1.2em;
+    height: 1.2em;
+    vertical-align: middle;
+  }
+
+  .hero-desc {
+    font-size: 1.15em;
+    line-height: 1.8;
+    text-align: center;
+    max-width: 860px;
+    margin: 20px auto 40px auto;
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    margin: 30px 0 50px 0;
+  }
+
+  .card {
+    padding: 28px;
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 16px;
+    background: var(--md-default-bg-color);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+
+  .card:hover {
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    transform: translateY(-2px);
+  }
+
+  .card-icon {
+    font-size: 2.2em;
+    margin-bottom: 12px;
+    line-height: 1;
+  }
+
+  .card-title {
+    font-size: 1.1em;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    color: #326ce5;
+  }
+
+  .card-body {
+    font-size: 0.95em;
+    line-height: 1.7;
+    opacity: 0.82;
+    margin: 0;
+  }
+
+  .contribution-box {
+    margin-top: 50px;
+    padding: 36px 40px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(50,108,229,0.07) 0%, rgba(103,58,183,0.07) 100%);
+    border: 2px solid #326ce5;
+  }
+
+  .bug-card {
+    margin: 24px 0;
+    padding: 20px 24px;
+    background: var(--md-default-bg-color);
+    border-left: 8px solid #673ab7;
+    border-radius: 6px;
+  }
+
+  .bug-link {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 1.05em;
+    font-weight: 800;
+    color: #673ab7 !important;
+    text-decoration: none;
+  }
+
+  .bug-link:hover { text-decoration: underline; }
+
+</style>
+
+
+
+
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/wolfi-dev/.github/main/profile/wolfi-logo-light-mode.svg#only-light" width="180" alt="Wolfi Linux">
+  <img src="https://raw.githubusercontent.com/wolfi-dev/.github/main/profile/wolfi-logo-dark-mode.svg#only-dark" width="180" alt="Wolfi Linux">
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://openssl-library.org/images/openssl_logo_library.svg" width="220" alt="OpenSSL" class="openssl-logo">
+</div>
+
+# :material-shield-check: Wolfi OpenSSL FIPS { align="center" }
+### High-Assurance Cryptographic Infrastructure { align="center" }
+
+
+<div align="center" style="margin: 14px 0 10px 0;">
+  <img src="https://img.shields.io/badge/Architecture-AMD64-0078D4?style=for-the-badge&logo=intel&logoColor=white" alt="AMD64">
+  &nbsp;
+  <img src="https://img.shields.io/badge/Architecture-ARM64-37AD4B?style=for-the-badge&logo=arm&logoColor=white" alt="ARM64">
+</div>
+
+Welcome to the production-ready, **FIPS 140-3** validated OpenSSL environment. Built exclusively on top of the hardened, un-distro Wolfi ecosystem, this project is engineered from the ground up for Zero-Trust environments, strict cryptographic compliance boundaries, and immutable cloud-native workloads.
+{: .hero-desc }
 
 ---
 
-## :material-monitor-dashboard: Enterprise Security Posture
 
-<div class="grid cards" markdown>
 
--   :material-magnify-scan:{ .md-typeset__primary } **Infrastructure SAST**
-    ---
-    **KICS Security Audit**
-    {% set kics_total = kics_report.get('total_counter', 0) %}
-    {% if kics_total == 0 -%}
-    [:material-check-circle:{ .md-typeset__success } **Pristine State**](validation/static-analysis/kics-report.md)
-    {% else -%}
-    [:material-alert-decagram:{ .md-typeset__error } **{{ kics_total }} Security Risks**](validation/static-analysis/kics-report.md)
-    {% endif -%}
-    *Static analysis of IaC and Dockerfile hardening.*
+## <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/trivy.png" width="55" align="top"> Continuous Compliance Engine (Trivy)
 
--   :material-shield-lock:{ .md-typeset__primary } **Cryptographic Boundary**
-    ---
-    **FIPS 140-3 Validation**
-    {% set std_failed = standard_report_FIPS_validation.get('summary', {}).get('failed', 'N/A') %}
-    {% if std_failed == 0 -%}
-    [:material-shield-check:{ .md-typeset__success } **Boundary Verified**](validation/functional-tests/standard-image.md)
-    {% elif std_failed == 'N/A' -%}
-    [:material-progress-clock:{ .md-typeset__warning } **Pending Audit**](validation/functional-tests/standard-image.md)
-    {% else -%}
-    [:material-shield-off:{ .md-typeset__error } **{{ std_failed }} Logic Violations**](validation/functional-tests/standard-image.md)
-    {% endif -%}
-    *Automated KAT and POST integrity testing.*
+Our verification engine leverages **Trivy** to enforce a Zero-CVE posture and strict operational hardening across all image variants. Every build is cross-referenced against global security benchmarks.
 
--   :material-package-variant-closed:{ .md-typeset__primary } **Runtime Hardening**
-    ---
-    **Attack Surface Reduction**
-    {% set dist_failed = distroless_report_FIPS_validation.get('summary', {}).get('failed', 'N/A') %}
-    {% if dist_failed == 0 -%}
-    [:material-robot-confused-outline:{ .md-typeset__success } **Zero-Entry Hardened**](validation/functional-tests/distroless-image.md)
-    {% elif dist_failed == 'N/A' -%}
-    [:material-progress-clock:{ .md-typeset__warning } **Verification Pending**](validation/functional-tests/distroless-image.md)
-    {% else -%}
-    [:material-robot-dead-outline:{ .md-typeset__error } **{{ dist_failed }} Policy Failures**](validation/functional-tests/distroless-image.md)
-    {% endif -%}
-    *Minimalist Distroless parity and compliance.*
+<div class="card-grid" markdown="1">
 
--   :material-gavel:{ .md-typeset__primary } **Supply Chain Integrity**
-    ---
-    **Vulnerability & SBOM**
-    {% set std_results = standard_compliance.get('security_scan', {}).get('Results', [{}]) %}
-    {% set std_vulns = std_results[0].get('Vulnerabilities', []) | length %}
-    {% if std_vulns == 0 -%}
-    [:material-certificate:{ .md-typeset__success } **Zero-CVE Certified**](validation/compliance/standard/vulnerability.md)
-    {% else -%}
-    [:material-alert-rhombus:{ .md-typeset__error } **{{ std_vulns }} Critical Findings**](validation/compliance/standard/vulnerability.md)
-    {% endif -%}
-    *Trivy-backed SBOM and NIST compliance scan.*
+<!-- Card 1: Vulnerability -->
+<div class="card" markdown="1">
+### :material-shield-bug: Vulnerability & SBOM Audit
+<div class="card-body" markdown="1">
+{% set std_results = standard_compliance.get('security_scan', {}).get('Results', [{}]) -%}
+{% set std_vulns = std_results[0].get('Vulnerabilities', []) | length -%}
+{% if std_vulns == 0 -%}
+[:material-check-decagram:{ .md-typeset__success } **Zero-CVE Verified**](validation/compliance/standard/vulnerability.md)
+{% else -%}
+[:material-alert-rhombus:{ .md-typeset__error } **{{ std_vulns }} CVEs Detected**](validation/compliance/standard/vulnerability.md)
+{% endif %}
+
+*   [:material-arrow-right: **Distroless Report**](validation/compliance/distroless/vulnerability.md)
+*   [:material-arrow-right: **Standard Report**](validation/compliance/standard/vulnerability.md)
+*   [:material-arrow-right: **Development Report**](validation/compliance/development/vulnerability.md)
+
+</div>
+</div>
+
+<!-- Card 2: CIS Docker -->
+<div class="card" markdown="1">
+### :material-docker: CIS Docker Benchmarks
+<div class="card-body" markdown="1">
+Static analysis of Docker runtime security and host-level best practices.
+
+*   [:material-arrow-right: **Standard**](validation/compliance/standard/docker-cis.md)
+*   [:material-arrow-right: **Distroless**](validation/compliance/distroless/docker-cis.md)
+*   [:material-arrow-right: **Development**](validation/compliance/development/docker-cis.md)
+</div>
+</div>
+
+<!-- Card 3: NSA/CISA -->
+<div class="card" markdown="1">
+### :material-kubernetes: NSA/CISA Hardening
+<div class="card-body" markdown="1">
+Validating infrastructure isolation and Kubernetes threat mitigation.
+
+*   [:material-arrow-right: **Standard**](validation/compliance/standard/k8s-nsa.md)
+*   [:material-arrow-right: **Distroless**](validation/compliance/distroless/k8s-nsa.md)
+*   [:material-arrow-right: **Development**](validation/compliance/development/k8s-nsa.md)
+</div>
+</div>
+
+<!-- Card 4: K8s PSS -->
+<div class="card" markdown="1">
+### :material-gavel: K8s PSS Restricted
+<div class="card-body" markdown="1">
+Verification of the highest cluster-level workload isolation standards.
+
+*   [:material-arrow-right: **Standard**](validation/compliance/standard/k8s-pss.md)
+*   [:material-arrow-right: **Distroless**](validation/compliance/distroless/k8s-pss.md)
+*   [:material-arrow-right: **Development**](validation/compliance/development/k8s-pss.md)
+</div>
+</div>
 
 </div>
 
 ---
 
-## :material-layers-triple-outline: Core Architectural Pillars
 
-!!! tip "Full Environment Parity"
-    Our **Development SDK** image provides the complete toolchain (GCC, headers, debuggers) required for FIPS-linked application development. While it contains more packages than the **Standard** or **Distroless** variants, the **OpenSSL FIPS Provider and Core Logic are identical**. This ensures that code developed in the SDK performs with 100% cryptographic parity when deployed to production.
+## <img src="https://www.kics.io/wp-content/uploads/2022/11/icon.svg" width="70" align="top"> Infrastructure SAST (KICS)
 
-!!! info "Cryptographic Integrity Notice"
-    OpenSSL and the FIPS Provider are compiled directly from validated sources during our hermetic build process. This prevents dependency on upstream repositories that might contain unvalidated patches. OpenSSL will appear in the **CycloneDX SBOM** as a compiled integral, ensuring total transparency for security auditors.
+<div class="hero-desc" markdown="1">
+Security begins at the architecture level. We employ **KICS (Keeping Infrastructure as Code Secure)** to perform deep static analysis on our `Dockerfile` and HCL files CI/CD pipelines, ensuring zero misconfigurations are injected into the build environment.
+</div>
+
+<div class="contribution-box" style="text-align: center; margin-bottom: 50px;" markdown="1">
+
+{% set kics_total = kics_report.get('total_counter', 0) -%}
+{% if kics_total == 0 -%}
+### :material-check-decagram:{ .md-typeset__success } **STATUS: PRISTINE INFRASTRUCTURE**
+Infrastructure code adheres to 100% of the defined security best practices.
+{% else -%}
+### :material-alert-circle:{ .md-typeset__error } **STATUS: {{ kics_total }} SECURITY RISKS IDENTIFIED**
+Static analysis has flagged configuration anomalies in the build layers.
+{% endif %}
+
+<br>
+
+[:material-text-box-search-outline: **OPEN FULL KICS AUDIT REPORT**](validation/static-analysis/kics-report.md){ .md-button .md-button--primary style="font-size: 1.2em; font-weight: 700; border-radius: 50px; padding: 10px 30px;" }
+
+</div>
 
 ---
 
-## :material-file-tree: Technical Audit Repository
 
-### :material-text-box-search-outline: 1. Functional Integrity Verification
-Granular audit logs for cryptographic state-machine and provider self-tests.
 
-| Verification Target | Scope | Audit Result |
+
+
+# :material-link-lock: Supply Chain Integrity { align="center" }
+### SLSA Level 3 Compliant & Verified { align="center" }
+
+<div align="center" style="margin-top: 60px;">
+  <img src="https://icon.icepanel.io/Technology/svg/GitHub-Actions.svg" width="80" alt="GitHub Actions">
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://slsa.dev/images/badge-exploded.svg" width="130" alt="SLSA Level 3">
+</div>
+
+
+<div class="hero-desc" markdown="1">
+We enforce absolute cryptographic provenance. Every build is governed by strict dependency pinning, signed via **Sigstore/OIDC**, and accompanied by a verifiable **CycloneDX SBOM** (Software Bill of Materials).
+</div>
+
+<div class="card-grid" markdown="1">
+
+<div class="card" markdown="1">
+### :material-pin-outline: Immutable Dependencies
+<div class="card-body">
+Every base image and package is pinned by <b>SHA256 digest</b> in <code>versions.hcl</code>. This ensures byte-for-byte reproducibility and prevents "upstream poisoning" attacks.
+</div>
+</div>
+
+<!-- Pillar 2: Provenance -->
+<div class="card" markdown="1">
+### :material-fingerprint: Verified Provenance
+<div class="card-body">
+Cryptographically signed build logs that prove exactly which Git Commit produced the specific image digest you are running.
+</div>
+</div>
+
+<!-- Pillar 3: SBOM -->
+<div class="card" markdown="1">
+### :material-file-document-check: CycloneDX SBOM
+<div class="card-body">
+A complete inventory listing every library, header, and compiler version used to construct the FIPS cryptographic boundary.
+</div>
+</div>
+
+</div>
+
+---
+
+### :material-certificate: Cryptographic Attestations
+*Publicly verifiable trust bundles for every artifact variant.*
+
+| Artifact Variant | L3 Provenance Link | SBOM Download |
 | :--- | :--- | :--- |
-| **Standard Runtime** | Cryptographic Logic | [View Full Report](validation/functional-tests/standard-image.md) |
-| **Distroless Runtime** | Hardening & Parity | [View Full Report](validation/functional-tests/distroless-image.md) |
+| **Distroless Runtime** | [:material-link: View Attestation]({{ distroless_url }}) | [:material-download: CycloneDX JSON]({{ distroless_sbom_url }}) |
+| **Standard Image** | [:material-link: View Attestation]({{ standard_url }}) | [:material-download: CycloneDX JSON]({{ standard_sbom_url }}) |
+| **Development SDK** | [:material-link: View Attestation]({{ dev_url }}) | [:material-download: CycloneDX JSON]({{ dev_sbom_url }}) |
 
 ---
 
-# :material-shield-check: Wolfi OpenSSL FIPS
-**Enterprise-Grade Cryptographic Foundation for High-Security Cloud Workloads**
 
----
 
-<div align="center" style="margin-bottom: 25px;">
-  <!-- Tier 1: Real-Time Audit Status (Forced dynamic values) -->
-  <p align="center">
-    <a href="validation/functional-tests/standard-image/">
-      <img src="https://img.shields.io/badge/FIPS_Audit_Passed-{{ test_stats.passed }}-brightgreen?style=for-the-badge&logo=checkmarx&logoColor=white" alt="Passed" />
-    </a>
-    <a href="validation/functional-tests/standard-image/">
-      <img src="https://img.shields.io/badge/Audit_Failed-{{ test_stats.failed }}-{{ test_badge_color }}?style=for-the-badge&logo=githubactions&logoColor=white" alt="Failed" />
-    </a>
-    <a href="validation/compliance/standard/vulnerability/">
-      {# --- Calculate if Zero CVE or not based on standard scan --- #}
-      {% set ns_v = namespace(total=0) %}
-      {% if standard_compliance.security_scan.Results is defined %}
-        {% for res in standard_compliance.security_scan.Results %}
-          {% if res.Vulnerabilities is defined %}
-            {% set ns_v.total = ns_v.total + res.Vulnerabilities | length %}
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-      
-      {% if ns_v.total == 0 %}
-        <img src="https://img.shields.io/badge/Security_Scan-Zero_CVE-brightgreen?style=for-the-badge&logo=dependabot&logoColor=white" alt="Zero CVE" />
-      {% else %}
-        <img src="https://img.shields.io/badge/Security_Scan-{{ ns_v.total }}_Issues-red?style=for-the-badge&logo=dependabot&logoColor=white" alt="CVEs Found" />
-      {% endif %}
-    </a>
-  </p>
 
-  <!-- Tier 2: Technical Specifications & Infrastructure -->
-  <p align="center">
-    <a href="https://github.com/wolfi-dev">
-      <img src="https://img.shields.io/badge/Base_OS-Wolfi-blue?style=flat-square&logo=linux&logoColor=white" alt="Wolfi OS" />
-    </a>
-    <a href="https://csrc.nist.gov/projects/cryptographic-module-validation-program/certificate/4282">
-      <img src="https://img.shields.io/badge/NIST_Provider-3.1.2-orange?style=flat-square&logo=keybase" alt="NIST Provider" />
-    </a>
-    <a href="https://slsa.dev/">
-      <img src="https://img.shields.io/badge/Supply_Chain-SLSA_L3-blueviolet?style=flat-square&logo=linuxfoundation" alt="SLSA L3" />
-    </a>
-    <img src="https://img.shields.io/badge/Arch-AMD64%20%7C%20ARM64-lightgrey?style=flat-square&logo=cpu" alt="Multi-Arch" />
-    <img src="https://img.shields.io/badge/License-Apache--2.0-lightgrey?style=flat-square" alt="License" />
-  </p>
+
+
+
+
+
+<div align="center" style="margin-top: 100px; margin-bottom: 30px;">
+  <div style="display: flex; justify-content: center; align-items: center; gap: 30px; margin-bottom: 20px;">
+    <img src="https://raw.githubusercontent.com/wolfi-dev/.github/main/profile/wolfi-logo-light-mode.svg#only-light" width="80" alt="Wolfi">
+    <img src="https://raw.githubusercontent.com/wolfi-dev/.github/main/profile/wolfi-logo-dark-mode.svg#only-dark" width="80" alt="Wolfi">
+    <span style="font-size: 2.5em; color: var(--md-default-fg-color--light); font-weight: 300;">VS</span>
+    <img src="https://icon.icepanel.io/Technology/svg/Ubuntu.svg" width="60" title="Ubuntu">
+    <img src="https://icon.icepanel.io/Technology/svg/Debian.svg" width="60" title="Debian">
+    <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/alpine-linux.svg" width="60" title="Alpine">
+  </div>
 </div>
 
----
-## :octicons-rocket-16: Executive Overview
-
-This repository maintains a production-hardened, **FIPS 140-3 Compliant** OpenSSL ecosystem. Built on **Wolfi OS** (the un-distro), this project is specifically engineered to eliminate legacy OS overhead and provide a **Zero-CVE** baseline for high-assurance environments (FedRAMP, DoD IL5, Financial Services).
-
-### :material-check-decagram: Verified Compliance Baseline
-Unlike generic container images, every build of this project is statically audited against:
-
-1.  **FIPS 140-3 Logic:** Mandatory self-tests and cryptographic boundary enforcement via a NIST-validated provider.
-2.  **CIS Docker Benchmark:** Hardening of the container runtime and configuration.
-3.  **NSA & CISA Hardening:** Adherence to the official "Kubernetes Hardening Guidance."
-4.  **K8s PSS Restricted:** Seamless scheduling in namespaces enforcing the strictest pod security standards.
-
-!!! info "Continuous Verification Note"
-    This dashboard is not static. All metrics, test results, and compliance scores are generated in real-time from our automated test suite on **{{ generation_date }}** from Commit [`{{ github.commit_sha[:7] }}`](https://github.com/{{ github.repository }}/commit/{{ github.commit_sha }}).
+# :material-speedometer: Performance Velocity { align="center" }
+### High-Speed Cryptography & Ecosystem Benchmarks { align="center" }
 
 
+<div class="hero-desc" style="text-align: center;" markdown="1">
+High-assurance security does not require a performance penalty. By utilizing **Wolfi's rolling-release architecture** and **OpenSSL {{ core_version }}**, our FIPS-validated module consistently achieves parity with, or outperforms, unhardened packages in legacy LTS distributions.
+</div>
 
+<br>
 
+<div class="card-grid" markdown="1">
 
-## :fontawesome-solid-layer-group: Core Architectural Pillars
+<!-- Optimization Insight -->
+<div class="card" markdown="1">
+### :material-lightning-bolt: Zero FIPS Penalty
+<div class="card-body">
+The Wolfi-FIPS module proves that rigorous integrity checks do not slow down your data. By leveraging <b>AVX/AVX2</b> instruction sets, we maintain peak velocity for bulk encryption and hashing.
+</div>
+</div>
 
-Our implementation does not just "add a FIPS flag"; it fundamentally restructures how the cryptographic boundary is enforced in a containerized environment.
-
-<div class="grid cards" markdown>
-
--   :material-lock-check: **Strict Cryptographic Boundary**
-    ---
-    The FIPS provider `{{ fips_version }}` is statically integrated and verified via **HMAC** upon every initialization (Power-On Self-Test). Any tampering with the binary triggers an immediate lockout.
-
--   :material-package-variant-closed: **Hermetic Build System**
-    ---
-    Built to **SLSA Level 3** standards. We eliminate supply chain risks by using pinned image digests and specific package versions. No external dependencies are pulled at runtime.
-
--   :material-shield-sync: **Zero-CVE Baseline**
-    ---
-    Leveraging the **Wolfi OS** "un-distro" philosophy. By stripping away legacy utilities and a dedicated package manager, we provide the smallest possible attack surface for production workloads.
-
--   :material-speedometer: **Hardware Optimization**
-    ---
-    High-performance assembly pathways for **AES-NI (x86)** and **NEON (ARM)** ensure that FIPS compliance incurs near-zero performance overhead compared to unvalidated engines.
+<!-- Architecture Insight -->
+<div class="card" markdown="1">
+### :material-trending-up: Ecosystem Optimization
+| Unlike legacy distros that pin older OpenSSL branches, Wolfi tracks modern upstream optimizations, providing immediate access to hardware acceleration features (AES-NI) for production workloads.
+</div>
 
 </div>
 
----
+[:material-chart-areaspline: **VIEW FULL COMPARATIVE PERFORMANCE AUDIT**](performance/benchmarks.md){ .md-button .md-button--primary }
 
-## :material-alert-decagram: Architectural Integrity Notice
-
-!!! failure "IMPORTANT: OpenSSL Visibility in SBOM & Scans"
-    When you audit the **Software Bill of Materials (SBOM)** or perform a **Vulnerability Scan**, you will notice that `OpenSSL` is **not** listed as a standard OS package (like `apk` or `dpkg`).
-
-    **This is the core foundation of our security model:**
-    To ensure absolute cryptographic integrity, we do not trust upstream repository binaries for critical primitives. Instead, this project **builds OpenSSL Core and the FIPS Provider from validated source code** during our hermetic build process. 
-    
-    They are integrated as **Static/Shared Integrals**, ensuring that the binaries you deploy are identical to those verified in our [Functional Core Audit](validation/functional-tests/standard-image.md). This prevents "Repository Poisoning" and guarantees a hardened cryptographic boundary.
 
 ---
 
+<div class="contribution-box" markdown="1">
+
+## :material-bug-check: Security Contribution
+
+Our rigorous testing methodology goes beyond simple compliance. During the engineering of this infrastructure, we identified and documented a **Critical Logic Flaw** within the upstream OpenSSL FIPS provider.
+
+<div class="bug-card" markdown="1">
+**Verified Upstream Bug:** *OpenSSL FIPS Provider — Incorrect Boundary Logic*
+
+[:material-github: **VIEW VERIFIED ISSUE #30012 ON GITHUB**](https://github.com/openssl/openssl/issues/30012){ .bug-link }
+</div>
+
+*The discovery was verified and patched by the OpenSSL core team, increasing security standards for the global ecosystem.*
+
+</div>
+
+<br><br>
 
 
-## :material-server-network: Deployment Tiers & Artifacts
 
-We provide three specialized variants of the OpenSSL FIPS container, each attested for integrity and optimized for different stages of the Software Development Life Cycle (SDLC).
 
-=== ":material-shield-star: Distroless (Production Target)"
 
-    **The Hardened Baseline:** Contains zero shell, zero package managers, and zero unnecessary OS libraries. This is the **most secure** variant, intended for production microservices to minimize the attack surface.
-    
-    ```bash
-    # Pull the production-ready, attested distroless image
-    docker pull {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}-distroless@{{ distroless_digest }}
-    ```
-    
-    *   **:material-file-document-check: SLSA Provenance:** [View L3 Attestation]({{ distroless_url }})
-    *   **:material-barcode-scan: Software Bill of Materials:** [Download CycloneDX JSON]({{ distroless_sbom_url }})
-    *   **:material-security: Compliance Status:** [:material-check-circle: View Hardening Report](validation/compliance/distroless/vulnerability.md)
 
-=== ":material-console: Standard (CI/CD & Debug)"
 
-    **Optimized for Observability:** Includes standard POSIX utilities and a `/bin/bash` shell. Use this variant in CI/CD pipelines or environments where interactive inspection of the cryptographic state is required.
-    
-    ```bash
-    # Pull the standard debug and verification environment
-    docker pull {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}@{{ standard_digest }}
-    ```
-    
-    *   **:material-file-document-check: SLSA Provenance:** [View L3 Attestation]({{ standard_url }})
-    *   **:material-barcode-scan: Software Bill of Materials:** [Download CycloneDX JSON]({{ standard_sbom_url }})
-    *   **:material-security: Compliance Status:** [:material-check-circle: View Hardening Report](validation/compliance/standard/vulnerability.md)
 
-=== ":material-hammer-wrench: Development (SDK & Multi-Stage)"
 
-    **The Builder Foundation:** Equipped with `build-base`, `linux-headers`, and `pkgconf`. Use this image as a multi-stage builder to compile C/C++, Rust, or Go applications against the validated FIPS module.
-    
-    ```bash
-    # Pull the development and compilation toolkit
-    docker pull {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}-dev@{{ dev_digest }}
-    ```
-    
-    *   **:material-file-document-check: SLSA Provenance:** [View L3 Attestation]({{ dev_url }})
-    *   **:material-barcode-scan: Software Bill of Materials:** [Download CycloneDX JSON]({{ dev_sbom_url }})
-    *   **:material-security: Compliance Status:** [:material-check-circle: View Hardening Report](validation/compliance/development/vulnerability.md)
 
----
+`
+
+<div align="center" style="margin-top: 100px; margin-bottom: 40px;">
+  <img src="https://www.safelogic.com/hs-fs/hubfs/FIPS-140-3-Validated-Badge%20426x500.png?width=318&height=373" width="180" alt="FIPS 140-3 Validated">
+</div>`
+
+# :material-shield-lock: FIPS Functional Integrity { align="center" }
+### Boundary Verification & State Machine Logic { align="center" }
+
+<div class="hero-desc" markdown="1">
+To ensure the cryptographic state-machine operates within strict **FIPS 140-3** parameters, we execute automated **Known Answer Tests (KAT)** and **Power-On Self-Tests (POST)** directly against the verified production binaries.
+</div>
+
+<div class="card-grid" markdown="1">
+
+<!-- Standard Variant Audit -->
+<div class="card" markdown="1">
+## :material-console: Standard Image Audit
+<div class="card-body" markdown="1">
+{% set std_f = standard_report_FIPS_validation.get('summary', {}).get('failed', 'N/A') -%}
+{% if std_f == 0 -%}
+<span style="color:#00c853; font-weight:900; font-size: 1.2em;">:material-check-decagram: LOGIC VALIDATED</span>
+{% else -%}
+<span style="color:#d50000; font-weight:900; font-size: 1.2em;">:material-alert-circle: {{ std_f }} VIOLATIONS</span>
+{% endif %}
+
+[View Forensic Functional Report](validation/functional-tests/standard-image.md)
+</div>
+</div>
+
+<!-- Distroless Variant Audit -->
+<div class="card" markdown="1">
+## :material-package-variant-closed: Distroless Image Audit
+<div class="card-body" markdown="1">
+{% set dist_f = distroless_report_FIPS_validation.get('summary', {}).get('failed', 'N/A') -%}
+{% if dist_f == 0 -%}
+<span style="color:#00c853; font-weight:900; font-size: 1.2em;">:material-check-decagram: BOUNDARY VERIFIED</span>
+{% else -%}
+<span style="color:#d50000; font-weight:900; font-size: 1.2em;">:material-alert-circle: {{ dist_f }} VIOLATIONS</span>
+{% endif %}
+
+[View Forensic Functional Report](validation/functional-tests/distroless-image.md)
+</div>
+</div>
+
+</div>
+
+<div class="contribution-box" markdown="1">
+
+## :material-bug-check: Security Contribution
+
+Our rigorous testing methodology goes beyond basic compliance. During the development of this high-assurance infrastructure using **OpenSSL 3.1.2**, we identified and documented a **Critical Logic Flaw** within the official upstream FIPS provider.
+
+!!! info "Technical Distinction"
+    This finding represents a **technical logic bug** in the provider's internal state handling. While not classified as a security vulnerability (CVE), its discovery ensures significantly higher reliability for the global OpenSSL ecosystem.
+
+<div class="bug-card" markdown="1">
+**Confirmed Upstream Bug Report:**  
+*OpenSSL FIPS Provider — Incorrect Boundary Integrity Logic*
+
+[:material-github: **VIEW VERIFIED ISSUE #30012 ON GITHUB**](https://github.com/openssl/openssl/issues/30012){ .bug-link }
+</div>
+
+
+</div>
+
+<br><br><br>
+
+[:material-arrow-up-circle: **Return to Top of Dashboard**](#wolfi-openssl-fips)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
