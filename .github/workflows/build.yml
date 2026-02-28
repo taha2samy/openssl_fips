@@ -156,6 +156,7 @@ jobs:
         with:
           name: reports-benchmarks
           path: reports/
+          retention-days: 1
 
   fips-verification-suite:
     needs: [attest]
@@ -171,6 +172,7 @@ jobs:
         with:
           name: reports-audit
           path: reports/
+          retention-days: 1
 
   kics-scan:
     needs: [attest]
@@ -191,6 +193,7 @@ jobs:
         with:
           name: reports-kics
           path: reports/
+          retention-days: 1
 
   scan-compliance:
     name: Run - ${{ matrix.task_name }}
@@ -227,6 +230,7 @@ jobs:
         with:
           name: reports-trivy-${{ matrix.id }}
           path: reports/
+          retention-days: 1
 
 
 
