@@ -245,18 +245,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
       - name: create stage directory
-        run: mkdir stage
+        run: mkdir reports
       - name: Download all metadata artifacts
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4
         with:
-          path: stage/
-          pattern: .*
+          path: reports/
+          pattern: "*"
           merge-multiple: true
 
 
-      - name: Print Attestation Details
+      - name: Verify and Print All Files
         run: |
-          ls -la stage/
+          echo "=========================================="
+          echo "All collected files (FLAT STRUCTURE):"
+          echo "=========================================="
+          ls -R reports/
 
       # - name: Setup Taskfile
       #   uses: ./.github/actions/setup-task
