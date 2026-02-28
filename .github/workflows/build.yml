@@ -256,17 +256,6 @@ jobs:
 
       - name: Print Attestation Details
         run: |
-          echo "=========================================="
-          echo "Displaying Attestation Details:"
-          echo "=========================================="
-          for file in all-metadata/*.json; do
-            echo "File: $file"
-            cat "$file"
-            echo -e "\n------------------------------------------"
-          done
-
-      - name: Print Attestation Details
-        run: |
           ls -la stage/
 
       # - name: Setup Taskfile
