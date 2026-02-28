@@ -133,6 +133,88 @@ Welcome to the production-ready, **FIPS 140-3** validated OpenSSL environment. B
 
 
 
+<div align="center" style="margin-top: 100px; margin-bottom: 50px;">
+  <h1 style="font-size: 3.5em; font-weight: 900; margin: 0; color: var(--md-primary-fg-color);">DEPLOYMENT ARTIFACTS</h1>
+  <p style="font-size: 1.8em; font-weight: 300; opacity: 0.8;">Verified Production Runtimes & SDKs</p>
+</div>
+
+<div class="hero-desc" markdown="1">
+We compile and attest three distinct image variants, designed to cater to different stages of your Software Development Life Cycle (SDLC). Select the variant that matches your operational and security requirements.
+</div>
+
+---
+
+## :material-package-variant: Artifact Tiers & Quick Start
+
+=== ":material-shield-star: Production Distroless"
+
+    !!! success "The Ultimate Hardened Target"
+        **Security Profile:** Zero-entry surface. No shell (`/bin/sh` is missing), no package manager, and no unnecessary OS libraries. Intended for high-security production microservices.
+
+    <div style="font-size: 1.2em;" markdown="1">
+    ```bash
+    # Pull the production-ready, attested Distroless image
+    docker pull {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}-distroless
+    ```
+    </div>
+
+    **Verifiable Metadata:**
+    *   **:material-file-document-check: L3 Provenance:** [View Attestation]({{ distroless_url }})
+    *   **:material-barcode-scan: CycloneDX SBOM:** [Download JSON]({{ distroless_sbom_url }})
+    *   **:material-tag-outline: Additional Tags:** `distroless`
+
+=== ":material-console: Standard Image"
+
+    !!! info "Optimized for Observability"
+        **Security Profile:** Balanced hardening. Includes standard POSIX utilities and a `/bin/bash` shell. Intended for CI/CD pipeline execution and environments requiring interactive inspection.
+
+    <div style="font-size: 1.2em;" markdown="1">
+    ```bash
+    # Pull the standard runtime and debugging environment
+    docker pull {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}
+    ```
+    </div>
+
+    **Verifiable Metadata:**
+    *   **:material-file-document-check: L3 Provenance:** [View Attestation]({{ standard_url }})
+    *   **:material-barcode-scan: CycloneDX SBOM:** [Download JSON]({{ standard_sbom_url }})
+    *   **:material-tag-outline: Additional Tags:** `latest`
+
+=== ":material-hammer-wrench: Development SDK"
+
+    !!! warning "The Builder's Foundation"
+        **Security Profile:** Functional parity with Standard. Includes `build-base`, `headers`, and `pkgconf`. Designed to be used as a multi-stage builder to compile apps against the FIPS boundary.
+
+    <div style="font-size: 1.2em;" markdown="1">
+    ```bash
+    # Pull the development toolchain and compilation toolkit
+    docker pull {{ registry }}/{{ owner }}/{{ repo_name }}:{{ core_version }}-dev
+    ```
+    </div>
+
+    **Verifiable Metadata:**
+    *   **:material-file-document-check: L3 Provenance:** [View Attestation]({{ dev_url }})
+    *   **:material-barcode-scan: CycloneDX SBOM:** [Download JSON]({{ dev_sbom_url }})
+    *   **:material-tag-outline: Additional Tags:** `dev`
+
+---
+
+## :material-identifier: Image Tagging Reference
+
+The following tags are maintained and updated automatically by our **SLSA L3 pipeline** for every release of OpenSSL `{{ core_version }}`.
+
+| Artifact Variant | Version-Specific Tag | Alias / Floating Tag |
+| :--- | :--- | :--- |
+| **Standard Image** | `{{ core_version }}` | `latest` |
+| **Distroless Runtime** | `{{ core_version }}-distroless` | `distroless` |
+| **Development SDK** | `{{ core_version }}-dev` | `dev` |
+
+---
+
+
+
+
+
 ## <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/trivy.png" width="55" align="top"> Continuous Compliance Engine (Trivy)
 
 Our verification engine leverages **Trivy** to enforce a Zero-CVE posture and strict operational hardening across all image variants. Every build is cross-referenced against global security benchmarks.

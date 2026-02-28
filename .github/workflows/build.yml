@@ -63,8 +63,6 @@ jobs:
       id-token: write
       attestations: write
       packages: write
-      contents: write
-      security-events: write
     strategy:
       fail-fast: false
       matrix:
@@ -105,8 +103,6 @@ jobs:
           format: cyclonedx-json
           output-file: ${{ matrix.target_name }}.cyclonedx.json
           upload-artifact: false
-          dependency-snapshot: true
-          
 
       - name: Attest SBOM
         uses: actions/attest-sbom@4651f806c01d8637787e274ac3bdf724ef169f34  # v3
