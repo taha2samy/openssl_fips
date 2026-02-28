@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1
+# syntax=docker/dockerfile:1.6
 
 # --- Base Images ---
 ARG BASE_IMAGE
