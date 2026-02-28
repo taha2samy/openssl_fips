@@ -1,8 +1,8 @@
 # syntax=docker/dockerfile:1.6
 
 # --- Base Images ---
-ARG BASE_IMAGE
-ARG STATIC_IMAGE
+ARG BASE_IMAGE="cgr.dev/chainguard/wolfi-base@sha256:9925d3017788558fa8f27e8bb160b791e56202b60c91fbcc5c867de3175986c8"
+ARG STATIC_IMAGE="cgr.dev/chainguard/static@sha256:11ec91f0372630a2ca3764cea6325bebb0189a514084463cbb3724e5bb350d14"
 # --- Version Variables ---
 ARG FIPS_VERSION
 ARG CORE_VERSION
@@ -70,7 +70,6 @@ ARG JQ_VER
 ARG UNZIP_VER
 USER root
 RUN mkdir -p /rootfs/distroless /rootfs/standard /rootfs/development
-RUN apk add tree
 # -------------------------------------------------------------------------
 # Block 1: DISTROLESS (No Shell, No Busybox)
 # -------------------------------------------------------------------------
