@@ -71,29 +71,27 @@ ARG UNZIP_VER
 USER root
 RUN mkdir -p /rootfs/distroless /rootfs/standard /rootfs/development
 RUN apk add tree
-RUN --mount=type=cache,target=/var/cache/apk \
-    set -eux; \
-    apk add --no-cache \
-    --initdb \
-    --no-scripts \
-    --root /rootfs/distroless \
-    --keys-dir /etc/apk/keys \
-    --repositories-file /etc/apk/repositories \
-    wolfi-baselayout=${WOLFI_BASELAYOUT_VER} \
-    wolfi-keys=${WOLFI_KEYS_VER} \
-    glibc=${GLIBC_VER} \
-    libgcc=${LIBGCC_VER} \
-    zlib=${ZLIB_VER} \
-    tzdata=${TZDATA_VER} \
-    ca-certificates=${CA_CERTIFICATES_VER}; \
-    mkdir -p /rootfs/distroless/etc/apk; \
-    cp -a /etc/apk/keys /rootfs/distroless/etc/apk/; \
-    cp -a /etc/apk/repositories /rootfs/distroless/etc/apk/; \
-    cp -a /etc/passwd /rootfs/distroless/etc/; \
-    cp -a /etc/group /rootfs/distroless/etc/; \
-    cp -a /etc/shadow /rootfs/distroless/etc/
-
-
+# RUN --mount=type=cache,target=/var/cache/apk \
+#     set -eux; \
+#     apk add --no-cache \
+#     --initdb \
+#     --no-scripts \
+#     --root /rootfs/distroless \
+#     --keys-dir /etc/apk/keys \
+#     --repositories-file /etc/apk/repositories \
+#     wolfi-baselayout=${WOLFI_BASELAYOUT_VER} \
+#     wolfi-keys=${WOLFI_KEYS_VER} \
+#     glibc=${GLIBC_VER} \
+#     libgcc=${LIBGCC_VER} \
+#     zlib=${ZLIB_VER} \
+#     tzdata=${TZDATA_VER} \
+#     ca-certificates=${CA_CERTIFICATES_VER}; \
+#     mkdir -p /rootfs/distroless/etc/apk; \
+#     cp -a /etc/apk/keys /rootfs/distroless/etc/apk/; \
+#     cp -a /etc/apk/repositories /rootfs/distroless/etc/apk/; \
+#     cp -a /etc/passwd /rootfs/distroless/etc/; \
+#     cp -a /etc/group /rootfs/distroless/etc/; \
+#     cp -a /etc/shadow /rootfs/distroless/etc/
 RUN --mount=type=cache,target=/var/cache/apk \
     set -eux; \
     apk add --no-cache \
@@ -118,47 +116,46 @@ RUN --mount=type=cache,target=/var/cache/apk \
     cp -a /etc/passwd /rootfs/standard/etc/; \
     cp -a /etc/group /rootfs/standard/etc/; \
     cp -a /etc/shadow /rootfs/standard/etc/
-
-RUN --mount=type=cache,target=/var/cache/apk \
-    set -eux; \
-    apk add --no-cache \
-    --initdb \
-    --no-scripts \
-    --root /rootfs/development \
-    --keys-dir /etc/apk/keys \
-    --repositories-file /etc/apk/repositories \
-    wolfi-baselayout=${WOLFI_BASELAYOUT_VER} \
-    wolfi-keys=${WOLFI_KEYS_VER} \
-    glibc=${GLIBC_VER} \
-    libgcc=${LIBGCC_VER} \
-    zlib=${ZLIB_VER} \
-    tzdata=${TZDATA_VER} \
-    ca-certificates=${CA_CERTIFICATES_VER} \
-    busybox=${BUSYBOX_VER} \
-    posix-libc-utils=${POSIX_LIBC_UTILS_VER} \
-    libstdc++=${LIBSTDC_PLUS_PLUS_VER} \
-    build-base=${BUILD_BASE_VER} \
-    pkgconf=${PKGCONF_VER} \
-    pcre-dev=${PCRE_DEV_VER} \
-    zlib-dev=${ZLIB_DEV_VER} \
-    bash=${BASH_VER} \
-    curl=${CURL_VER} \
-    jq=${JQ_VER} \
-    unzip=${UNZIP_VER}; \
-    mkdir -p /rootfs/development/etc/apk; \
-    cp -a /etc/apk/keys /rootfs/development/etc/apk/; \
-    cp -a /etc/apk/repositories /rootfs/development/etc/apk/; \
-    cp -a /etc/passwd /rootfs/development/etc/; \
-    cp -a /etc/group /rootfs/development/etc/; \
-    cp -a /etc/shadow /rootfs/development/etc/
-
-RUN /rootfs/standard/usr/bin/busybox --install -s /rootfs/standard/usr/bin && \
-    ln -sf busybox /rootfs/standard/usr/bin/sh
-
-RUN /rootfs/development/usr/bin/busybox --install -s /rootfs/development/usr/bin && \
-    ln -sf busybox /rootfs/development/usr/bin/sh
+RUN chroot /rootfs/standard /usr/bin/busybox --install -s /usr/bin
+#RUN ln -sf busybox /rootfs/standard/usr/bin/sh
 RUN echo "======================================================"
 RUN tree -a -F -i /rootfs/standard
+
+# RUN --mount=type=cache,target=/var/cache/apk \
+#     set -eux; \
+#     apk add --no-cache \
+#     --initdb \
+#     --no-scripts \
+#     --root /rootfs/development \
+#     --keys-dir /etc/apk/keys \
+#     --repositories-file /etc/apk/repositories \
+#     wolfi-baselayout=${WOLFI_BASELAYOUT_VER} \
+#     wolfi-keys=${WOLFI_KEYS_VER} \
+#     glibc=${GLIBC_VER} \
+#     libgcc=${LIBGCC_VER} \
+#     zlib=${ZLIB_VER} \
+#     tzdata=${TZDATA_VER} \
+#     ca-certificates=${CA_CERTIFICATES_VER} \
+#     busybox=${BUSYBOX_VER} \
+#     posix-libc-utils=${POSIX_LIBC_UTILS_VER} \
+#     libstdc++=${LIBSTDC_PLUS_PLUS_VER} \
+#     build-base=${BUILD_BASE_VER} \
+#     pkgconf=${PKGCONF_VER} \
+#     pcre-dev=${PCRE_DEV_VER} \
+#     zlib-dev=${ZLIB_DEV_VER} \
+#     bash=${BASH_VER} \
+#     curl=${CURL_VER} \
+#     jq=${JQ_VER} \
+#     unzip=${UNZIP_VER}; \
+#     mkdir -p /rootfs/development/etc/apk; \
+#     cp -a /etc/apk/keys /rootfs/development/etc/apk/; \
+#     cp -a /etc/apk/repositories /rootfs/development/etc/apk/; \
+#     cp -a /etc/passwd /rootfs/development/etc/; \
+#     cp -a /etc/group /rootfs/development/etc/; \
+#     cp -a /etc/shadow /rootfs/development/etc/
+
+# RUN /rootfs/standard/usr/bin/busybox --install -s /rootfs/standard/usr/bin && \
+#     ln -sf busybox /rootfs/standard/usr/bin/sh
 
 
 
