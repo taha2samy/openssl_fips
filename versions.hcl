@@ -16,7 +16,7 @@ variable "PERL_VER" {
   default = "5.42.0-r2"
 }
 variable "LINUX_HEADERS_VER" {
-  default = "6.19.3-r0"
+  default = "6.19.4-r0"
 }
 variable "WGET_VER" {
   default = "1.25.0-r7"
