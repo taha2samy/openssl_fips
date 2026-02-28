@@ -1,9 +1,11 @@
 # syntax=docker/dockerfile:1
 
+# --- Base Images ---
+ARG BASE_IMAGE
+ARG STATIC_IMAGE
 # --- Version Variables ---
 ARG FIPS_VERSION
 ARG CORE_VERSION
-
 ARG APK_TOOLS_VER
 ARG BUSYBOX_VER
 ARG GLIBC_VER
