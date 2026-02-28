@@ -210,7 +210,7 @@ RUN ./Configure enable-fips shared --prefix=/usr/local --openssldir=/usr/local/s
     make install_sw install_ssldirs
 
 FROM core-builder AS fips-integrator
-USER rooot
+USER root
 ARG FIPS_VERSION
 RUN ldconfig
 COPY --from=fips-builder /src/openssl-${FIPS_VERSION}/providers/fips.so /usr/local/lib/ossl-modules/fips.so
