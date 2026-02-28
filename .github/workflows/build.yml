@@ -267,17 +267,6 @@ jobs:
 
       - name: Setup Taskfile
         uses: ./.github/actions/setup-task
-
-      - name: Tree and Directory Verification
-        run: |
-          sudo apt-get install -y tree
-          echo "=========================================="
-          echo "Final Project Structure before MkDocs Build:"
-          echo "=========================================="
-          tree -a .
-          echo "------------------------------------------"
-          ls -R reports/
-          ls -R all-metadata/
       - name: change permissions
         run: sudo chmod -R 777 .
       - name: debug
