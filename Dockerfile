@@ -153,6 +153,14 @@ RUN --mount=type=cache,target=/var/cache/apk \
     cp -a /etc/passwd /rootfs/development/etc/; \
     cp -a /etc/group /rootfs/development/etc/; \
     cp -a /etc/shadow /rootfs/development/etc/
+RUN /rootfs/distroless/usr/bin/busybox --install -s /rootfs/distroless/usr/bin && \
+    ln -sf /usr/bin/sh /rootfs/distroless/bin/sh
+
+RUN /rootfs/standard/usr/bin/busybox --install -s /rootfs/standard/usr/bin && \
+    ln -sf /usr/bin/sh /rootfs/standard/bin/sh
+
+RUN /rootfs/development/usr/bin/busybox --install -s /rootfs/development/usr/bin && \
+    ln -sf /usr/bin/sh /rootfs/development/bin/sh
 
 FROM ${STATIC_IMAGE} AS distroless
 COPY --from=producer /rootfs/distroless /
