@@ -495,7 +495,41 @@ Our rigorous testing methodology goes beyond basic compliance. During the develo
 
 </div>
 
-<br><br><br>
+<br>
+
+<div align="center" style="margin-top: 100px; margin-bottom: 20px;">
+  <img src="https://taskfile.dev/img/logo.png" width="100" alt="Taskfile Logo">
+</div>
+
+# :material-console-line: Operational Excellence & Developer Experience { align="center" }
+### Unified Lifecycle Management { align="center" }
+
+<div class="hero-desc" markdown="1">
+We leverage **Taskfile** to orchestrate the entire project lifecycle—from localized unit testing and image synthesis to comprehensive compliance auditing. By utilizing **Docker as Executables** combined with Taskfile, we guarantee that the developer experience is bit-for-bit identical to our production CI/CD environment.
+</div>
+
+<div class="card-grid" markdown="1">
+
+<div class="card" markdown="1">
+### :material-sync: CI/CD Parity
+<div class="card-body">
+Eliminate the "It works on my machine" syndrome. Every command executed in GitHub Actions is available locally via simple task commands.
+</div>
+</div>
+
+<div class="card" markdown="1">
+### :material-layers-outline: Encapsulated Tooling
+<div class="card-body">
+Using Docker-wrapped tools ensures that security scanners, compilers, and linters remain version-consistent across all environments without local pollution.
+</div>
+</div>
+
+</div>
+
+[:material-book-open-page-variant: **EXPLORE PROJECT OPERATIONS & WORKFLOWS**](./OPERATIONS.md){ .md-button .md-button--primary style="font-size: 1.1em; font-weight: 700; padding: 12px 35px;" }
+
+
+---
 
 [:material-arrow-up-circle: **Return to Top of Dashboard**](#wolfi-openssl-fips)
 

@@ -82,8 +82,7 @@ tasks:
     
 
   full-compliance:
-    desc: "scan image with all compliances"
-    internal: true
+    desc: "scan image with all compliances and Vulnerability  and save them in {{.REPORT_DIR}}"
     vars:
       IMAGE: "{{.IMAGE}}"
       REPORT_ID: "{{.REPORT_ID}}"
@@ -119,7 +118,7 @@ tasks:
 
 
   Scan-Distroless:
-    desc: "scan distroless image"
+    desc: "scan distroless image on full compliance task"
     cmds:
       - task: full-compliance
         vars:
@@ -130,7 +129,7 @@ tasks:
     
 
   Scan-Standard:
-    desc: "scan standard image"
+    desc: "scan standard image on full compliance task"
     cmds:
       - task: full-compliance
         vars:
@@ -140,7 +139,7 @@ tasks:
           OS: "wolfi"
 
   Scan-Development:
-    desc: "scan development image"
+    desc: "scan development image on full compliance task"
     cmds:
       - task: full-compliance
         vars:

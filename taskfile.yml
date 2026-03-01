@@ -62,14 +62,14 @@ tasks:
       - task: infra:clean
 
   update-pkgs:
-    desc: Run the python package updater script
+    desc: Run the python package updater script to update wolfi packages and images in versions.hcl
     cmds:
       - chmod +x scripts/wolfi-pkg-updater.py
       - python scripts/wolfi-pkg-updater.py
 
 
-  convert-ver-to-sha_action_of_github:
-    desc: convert version of github action versions to sh265
+  convert-github-action-ver-to-sha:
+    desc: convert version of github action versions to sha1
     cmds:
       - pipenv run python scripts/github_action_ver_to_sha.py 
 

@@ -11,7 +11,6 @@ We rely on a **Hermetic Build** philosophy. This means zero external dependencie
 
 The following architecture diagram illustrates the flow from trusted source ingestion down to the attested deployment artifacts. 
 
-
 ```mermaid
 graph TD
     %% Global Styles
@@ -23,44 +22,44 @@ graph TD
     classDef kics fill:#00b0ff,stroke:#01579b,stroke-width:2px,color:#ffffff;
 
     subgraph SAST ["00. Infrastructure SAST"]
-        K1[":material-magnify-scan: KICS Security Audit<br/>'IaC & Dockerfile Static Analysis'"]:::kics
+        K1["KICS Security Audit<br/>'IaC & Dockerfile Static Analysis'"]:::kics
     end
 
     subgraph Ingestion ["01. Trusted Ingestion Layer"]
-        A[":material-linux: Wolfi Base Image<br/>'Pinned Digest'"]:::trusted
-        B[":material-code-braces: OpenSSL Core<br/>Source Code"]:::trusted
-        C[":material-shield-lock: FIPS Module<br/>Validated Source"]:::trusted
+        A["Wolfi Base Image<br/>'Pinned Digest'"]:::trusted
+        B["OpenSSL Core<br/>Source Code"]:::trusted
+        C["FIPS Module<br/>Validated Source"]:::trusted
     end
 
     subgraph FIPS_Boundary ["02. Cryptographic Construction"]
-        D[":material-cog: Compilation &<br/>Static Linking"]
-        E[":material-protocol: FIPS Install<br/>Integrity Protocol"]
-        F{":material-microscope: KAT & POST<br/>Integrity Check"}
+        D["Compilation &<br/>Static Linking"]
+        E["FIPS Install<br/>Integrity Protocol"]
+        F{"KAT & POST<br/>Integrity Check"}
         D --> E --> F
     end
 
     subgraph Supply_Chain ["03. Supply Chain Security"]
-        G[":material-file-document-check: SBOM Generation<br/>'CycloneDX JSON'"]:::attest
-        N[":material-github: Dependency Graph<br/>'GitHub Submission'"]:::attest
-        H[":material-fingerprint: Sigstore Signing<br/>'Keyless OIDC'"]:::attest
-        I[":material-certificate: SLSA Provenance<br/>'Level 3 Verified'"]:::attest
+        G["SBOM Generation<br/>'CycloneDX JSON'"]:::attest
+        N["Dependency Graph<br/>'GitHub Submission'"]:::attest
+        H["Sigstore Signing<br/>'Keyless OIDC'"]:::attest
+        I["SLSA Provenance<br/>'Level 3 Verified'"]:::attest
         G --> N
     end
 
     subgraph Compliance ["04. Compliance Gates (4 Tests per Variant)"]
         direction TB
         subgraph Gates ["Trivy Security & Policy Engine"]
-            T1[":material-shield-bug: 1. Vulnerability Scan"]
-            T2[":material-docker: 2. CIS Benchmark"]
-            T3[":material-kubernetes: 3. NSA/CISA Guide"]
-            T4[":material-gavel: 4. K8s PSS Restricted"]
+            T1["1. Vulnerability Scan"]
+            T2["2. CIS Benchmark"]
+            T3["3. NSA/CISA Guide"]
+            T4["4. K8s PSS Restricted"]
         end
     end
 
     subgraph Artifacts ["05. Attested Artifacts"]
-        J[":material-console: Standard Image"]:::artifact
-        K[":material-package-variant-closed: Distroless Image"]:::artifact
-        M[":material-hammer-wrench: Development Image"]:::artifact
+        J["Standard Image"]:::artifact
+        K["Distroless Image"]:::artifact
+        M["Development Image"]:::artifact
     end
 
     %% Flow Connections
@@ -68,14 +67,14 @@ graph TD
     Ingestion -->|Verify & Build| FIPS_Boundary
     FIPS_Boundary -->|Passed Self-Tests| Supply_Chain
     Supply_Chain -->|Validate Runtimes| Gates
-    
+
     %% Output to Final Artifacts
     Gates --> J
     Gates --> K
     Gates --> M
 
     %% Failure Path
-    F -- Failed --> L[Build Aborted]
+    F -- Failed --> L["Build Aborted"]
     style L fill:#f44336,stroke:#b71c1c,color:#ffffff
 
     class FIPS_Boundary boundary
@@ -97,3 +96,15 @@ We provide specialized variants optimized for security and operational flexibili
 | **Distroless** | `{{ core_version }}-distroless` | Static | No shell/manager. Pure cryptographic engine for production. |
 | **Development** | `{{ core_version }}-dev` | Wolfi (Dev) | Includes build tools (`gcc`, `make`) for compiling apps. |
 
+
+
+!!! info "[:material-github: 360° Dependency Visibility]"
+    Our security posture extends beyond the container itself. Every component in our software supply chain is tracked and monitored, including:
+
+    *   All **OS Packages** within the `Standard`, `Distroless`, and `Development` images.
+    *   The **Python (Pipenv) dependencies** used for our testing and automation scripts.
+    *   The **GitHub Actions** (`user/action@vX`) that orchestrate our CI/CD pipeline.
+
+    Every single one of these components is continuously monitored by the **GitHub Dependency Graph** and its integrated security advisory database. This provides real-time alerts for any newly discovered vulnerabilities across the entire stack.
+
+    [**Explore the Live Dependency Graph for a Complete Inventory**](https://github.com/taha2samy/openssl_fips/network/dependencies)

@@ -2,23 +2,17 @@ version: '3'
 
 tasks:
   generate_benchmark_data:
-    desc: Run performance benchmarks
+    desc: "Run performance benchmarks test for FIPS image vs debain  ubuntu alpine "
     dir: benchmark
     cmds:
       - chmod +x ./run_benchmark.sh
       - ./run_benchmark.sh
 
   parse_benchmark_data:
-    desc: Parse benchmark results
+    desc: Parse benchmark results to be csv files results.csv and signatures.csv.
     cmds:
       - pipenv run python benchmark/parser.py
       - pipenv run python benchmark/parser_signatures.py
-
-
-  generate_readme:
-      desc: Generates the README.md file
-      cmds:
-        - pipenv run python scripts/update_readme.py
 
   serve:
     desc: "Run MkDocs server locally for live preview"

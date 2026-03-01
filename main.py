@@ -8,7 +8,48 @@ import platform
 import platform
 import multiprocessing
 import os
+import subprocess
+import re
+from typing import Dict, List, Any
 
+def get_task_tree() -> Dict[str, List[Dict[str, str]]]:
+    try:
+        result = subprocess.run(["task", "--list"], capture_output=True, text=True, check=True)
+        lines = result.stdout.splitlines()
+        
+        tree = {}
+        
+        for line in lines:
+            line = line.strip()
+            if not line.startswith("*"):
+                continue
+                
+            match = re.match(r"\*\s+(.*?):\s+(.*)", line)
+            
+            if match:
+                full_name = match.group(1).strip()
+                description = match.group(2).strip()
+                
+                if ":" in full_name:
+                    parts = full_name.split(":", 1)
+                    namespace = parts[0]
+                    task_display_name = parts[1]
+                else:
+                    namespace = "General"
+                    task_display_name = full_name
+                
+                if namespace not in tree:
+                    tree[namespace] = []
+                    
+                tree[namespace].append({
+                    "full_name": full_name,
+                    "name": task_display_name,
+                    "description": description
+                })
+        
+        return tree
+    except Exception as e:
+        return {"Error": [{"full_name": "error", "description": str(e)}]}
 def get_total_ram_gb():
     try:
         total_bytes = os.sysconf('SC_PAGE_SIZE') * os.sysconf('SC_PHYS_PAGES')
@@ -63,6 +104,12 @@ def define_env(env):
             return datetime.fromisoformat(clean_date)
         except:
             return datetime.now()
+    
+    group_start("Taskfile Tree Generation")
+    task_tree = get_task_tree()
+    env.variables.update({
+        "task_tree": task_tree})
+    group_end()
 
     group_start("MkDocs Data Injection")
     

@@ -1,64 +1,84 @@
-# :material-shield-check: Distroless Image Validation Report
 
-This high-assurance report documents the automated verification process for the **Wolfi OpenSSL FIPS (Distroless)** image.
+# :material-cog-sync: Operational Excellence Guide
+### Unified Execution Framework & Reproducible Environments
+
+This project is engineered with a **"Shift-Left"** operational philosophy. By utilizing **Taskfile** as our orchestration engine and **Docker-wrapped binaries**, we ensure that the cryptographic boundary validation you run on your local workstation is bit-for-bit identical to the one executed in our FIPS-compliant CI/CD pipelines.
+
+---
+
+## :material-laptop-config: Local Environment Prerequisites
+
+To maintain the integrity of the build and audit process, your local environment must strictly adhere to the following minimalist footprint:
+
+*   **Python 3.13+**: The primary engine for metadata processing and data injection.
+*   **Pipenv**: Used for deterministic Python dependency management and virtual environment isolation.
+*   **Docker Engine**: Required to run "Executables as Containers," ensuring zero local tool pollution.
+*   **Task**: The task runner used to orchestrate the entire lifecycle. [Install Taskfile](https://taskfile.dev/installation/)
 
 ---
 
-## :material-chart-box-outline: Execution Summary
+## :material-layers-triple: The "Docker-as-Executable" Architecture
 
-<div class="grid cards" markdown>
+Every critical operation (Security Scanning, FIPS KAT Tests, Compliance Auditing) is encapsulated within a pre-configured Docker image. 
 
--   :material-check-decagram:{ .md-typeset__success } **Passed Verifications**
-    ---
-    <span style="font-size: 2.2em; font-weight: 900; color: var(--md-code-hl-string-color);">
-      {{ distroless_report_FIPS_validation.summary.passed }}
-    </span>
-    *All cryptographic boundaries intact*
+**Why this matters:**
+1.  **Zero Drift**: No version mismatch between your local `trivy` or `openssl` and the CI versions.
+2.  **Environment Isolation**: No need to install complex audit tools or FIPS providers on your host OS.
+3.  **Reproducibility**: If a compliance test fails in GitHub Actions, you can reproduce the exact failure locally with a single command.
 
--   :material-alert-decagram:{ .md-typeset__error } **Compliance Failures**
-    ---
-    <span style="font-size: 2.2em; font-weight: 900; color: var(--md-code-hl-keyword-color);">
-      {{ distroless_report_FIPS_validation.summary.failed }}
-    </span>
-    *Immediate remediation required*
+## :material-format-list-checks: Automated Operational Registry
 
--   :material-clock-fast: **Total Latency**
-    ---
-    <span style="font-size: 2.2em; font-weight: 900; color: var(--md-default-fg-color--light);">
-      {{ distroless_report_FIPS_validation.duration | round(1) }}s
-    </span>
-    *End-to-end execution time*
+This registry provides a live inventory of the project's orchestration layer. Each task is designed to be atomic, idempotent, and portable across developer workstations and CI runners.
 
-</div>
+{% for namespace, tasks in task_tree.items() %}
 
----
-## :material-clipboard-list: Test Details
-{% for test in distroless_report_FIPS_validation.tests %}
-  {% set is_passed = test.outcome == "passed" %}
-  {% set status_type = "success" if is_passed else "failure" %}
-  {% set display_name = test.nodeid.split('::')[-1] | replace('test_', '') | replace('_', ' ') | title %}
+### {% if namespace == "docs" %}:material-book-open-page-variant:{% elif namespace == "audit" %}:material-shield-search:{% elif namespace == "infra" %}:material-server-network:{% elif namespace == "scan-compliance" %}:material-security:{% elif namespace == "gh" %}:material-github:{% elif namespace == "report" %}:material-chart-box-outline:{% else %}:material-folder-zip-outline:{% endif %} Namespace: **{{ namespace | upper }}**
 
-??? {{ status_type }} "{{ display_name }} ({{ test.call.duration | round(2) if (test.call and test.call.duration) else '0' }}s)"
-
-    **File Path:** `{{ test.nodeid.split('::')[0] }}`
-
-    {% if not is_passed and test.call and test.call.crash %}
-    ---
-    **Failure Message:**
-    ```python
-    {{ test.call.crash.message | indent(4) }}
-    ```
-    {% endif %}
-
-    {% if test.call and test.call.log %}
-    ---
-    ??? info "View Logs"
-
-        ```bash
-        {% for log in test.call.log -%}
-        [{{ log.levelname }}] {{ log.msg }}
-        {% endfor %}
-        ```
-    {% endif %}
+| :material-console: Command | :material-text-box-search-outline: Operational Purpose |
+| :--- | :--- |
+{% for task in tasks -%}
+| <code style="color: #326ce5; font-weight: bold;">task {{ task.full_name }}</code> | {{ task.description }} |
+{% endfor %}
 
 {% endfor %}
+
+---
+
+## :material-rocket-launch: Standard Development Workflows
+
+### 1. Initialization & Setup
+Prepare the local bridge infrastructure and build the required audit images.
+```bash
+task setup
+```
+
+### 2. Executing FIPS Audit Suite
+Run the full functional verification against the FIPS boundary (Standard & Distroless).
+```bash
+task audit:multi
+```
+
+### 3. Compliance & Vulnerability Scanning
+Perform deep static analysis and container hardening checks.
+```bash
+task scan-compliance:Scan-Standard
+task scan-compliance:Scan-Distroless
+```
+
+### 4. Documentation & Performance Dashboard
+Generate performance benchmarks and build the local preview of this dashboard.
+```bash
+task docs:generate_benchmark_data
+task docs:serve
+```
+
+---
+
+## :material-shield-check: Integrity Guarantee
+
+!!! abstract "Parity Statement"
+    This project strictly follows **SLSA Level 3** supply chain standards. Every task defined here is an abstraction of the same logic used in `.github/workflows/build.yml`. By executing these tasks, you are participating in a verified, high-assurance cryptographic build process.
+
+---
+
+[:material-arrow-left-circle: **Back to Dashboard Index**](./index.md)
