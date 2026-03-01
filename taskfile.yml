@@ -26,7 +26,7 @@ vars:
   DEV_IMAGE: "{{.registry}}/{{.owner}}/{{.repo_of_registry}}:{{.CORE_VERSION}}-dev"
   RESULTS_ROOT: "reports"
   REPORT_DIR: "reports"
-  RESULTS_REPORT: "reports"
+  RESULTS_REPORT: "results/"
 tasks:
   echo-all-vars:
     desc: Display all project-related global variables
