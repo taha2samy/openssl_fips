@@ -65,6 +65,7 @@ jobs:
       attestations: write
       packages: write
       contents: write
+      security-events: write
     strategy:
       fail-fast: false
       matrix:
