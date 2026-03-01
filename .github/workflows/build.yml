@@ -114,7 +114,7 @@ jobs:
           dependency-snapshot: false
       - name: Upload SBOM to Dependency Graph
         run: |
-          task upload-sbom \
+          task gh:upload-sbom \
             FILE=${{ matrix.target_name }}.cyclonedx.json \
             TARGET=${{ matrix.target_name }} \
             REPO=${{ github.repository }}
