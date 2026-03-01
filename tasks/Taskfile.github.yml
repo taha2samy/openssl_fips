@@ -27,3 +27,17 @@ tasks:
     preconditions:
       - sh: command -v gh >/dev/null 2>&1
         msg: "GitHub CLI (gh) is not installed."
+
+
+  cleanup-cache:
+    desc: "Deletes ALL GitHub Actions build caches to force a fresh build"
+    silent: true
+    cmds:
+      - echo "Scanning for caches in {{.owner}}/{{.repo_of_code}}..."
+      - |
+        gh cache delete --all --repo {{.owner}}/{{.repo_of_code}} || \
+        (gh cache list --repo {{.owner}}/{{.repo_of_code}} --limit 100 --json id --jq '.[].id' | xargs -n 1 -I {} gh cache delete --repo {{.owner}}/{{.repo_of_code}} {})
+      - echo "All remote caches have been purged."
+    preconditions:
+      - sh: command -v gh >/dev/null 2>&1
+        msg: "GitHub CLI (gh) is not installed."
