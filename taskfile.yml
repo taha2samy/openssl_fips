@@ -103,7 +103,6 @@ tasks:
         - pipenv run mkdocs build --clean
         - echo "Done! The site is ready in the 'site/' directory."
   gh:upload-sbom:
-      internal: true
       cmds:
         - python3 scripts/upload_sbom.py {{.FILE}} {{.TARGET}} {{.REPO}}
       vars:
