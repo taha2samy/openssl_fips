@@ -6,7 +6,7 @@ tasks:
     desc: "Executes the FIPS 140-3 functional verification suite against a specific container image. Generates granular Allure telemetry and a JSON forensic report."
     
     vars:
-      IMG_SAFE: '{{.IMAGE | default .STANDERD_IMAGE}}'
+      IMG_SAFE: '{{.IMAGE | default .STANDARD_IMAGE}}'
       SAFE_NAME: '{{.IMG_SAFE | replace "/" "_" | replace ":" "_" | replace "." "_"}}'
     cmds:
       - mkdir -p {{.REPORT_DIR}}
@@ -18,7 +18,7 @@ tasks:
     cmds:
       - task: run
         vars:
-          IMAGE: "{{.STANDERD_IMAGE}}"
+          IMAGE: "{{.STANDARD_IMAGE}}"
           REPORT_NAME: standard
       - task: run
         vars: 
