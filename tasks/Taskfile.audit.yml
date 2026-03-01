@@ -1,11 +1,5 @@
 version: '3'
 
-vars:
-  RESULTS_ROOT: "allure-results"
-  STANDERD_IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless"
-  DISTROLESS_IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:latest"
-  REPORT_DIR: "reports"
-  RESULTS_REPORT: "allure-report"
 
 tasks:
   run:

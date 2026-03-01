@@ -124,7 +124,7 @@ tasks:
     cmds:
       - task: full-compliance
         vars:
-          IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless"
+          IMAGE: "{{.DISTROLESS_IMAGE}}"
           REPORT_ID: "distroless"
           IS_DISTROLESS: "true"
           OS: "wolfi"
@@ -135,7 +135,7 @@ tasks:
     cmds:
       - task: full-compliance
         vars:
-          IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5"
+          IMAGE: "{{.STANDERD_IMAGE}}"
           REPORT_ID: "standard"
           IS_DISTROLESS: "false"
           OS: "wolfi"
@@ -145,7 +145,7 @@ tasks:
     cmds:
       - task: full-compliance
         vars:
-          IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-dev"
+          IMAGE: "{{.DEV_IMAGE}}"
           REPORT_ID: "development"
           IS_DISTROLESS: "false"
           OS: "wolfi"

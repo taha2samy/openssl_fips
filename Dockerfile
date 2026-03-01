@@ -329,7 +329,6 @@ LABEL org.opencontainers.image.title="Wolfi OpenSSL FIPS (Standard)" \
     org.opencontainers.image.fips-version="${FIPS_VERSION}"
 COPY --from=producer /rootfs/standard /
 
-#ldconfig
 
 
 

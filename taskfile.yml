@@ -10,11 +10,18 @@ includes:
   audit: ./tasks/Taskfile.audit.yml
   report: ./tasks/Taskfile.report.yml
   scan-compliance: ./tasks/Taskfile.scan-compliance.yml
+  doc: ./tasks/Taskfile.doc.yml
+  gh: ./tasks/Taskfile.github.yml
+
 vars:
-  DEFAULT_IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless"
-  STANDARD_IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5"
-  RESULTS_ROOT: "allure-results"
-  REPORT_DIR: "allure-report"
+  FIPS_VERSION: "3.1.2"
+  CORE_VERSION: "3.5.5"
+  DISTROLESS_IMAGE: "{{.registry}}/{{.owner}}/{{.repo_of_registry}}:{{.CORE_VERSION}}-distroless"
+  STANDARD_IMAGE: "{{.registry}}/{{.owner}}/{{.repo_of_registry}}:{{.CORE_VERSION}}"
+  DEV_IMAGE: "{{.registry}}/{{.owner}}/{{.repo_of_registry}}:{{.CORE_VERSION}}-dev"
+  RESULTS_ROOT: "reports"
+  REPORT_DIR: "reports"
+  RESULTS_REPORT: "reports"
   repo_of_registry: "wolfi-openssl-fips"
   owner: "taha2samy"
   registry: "ghcr.io"
@@ -56,29 +63,10 @@ tasks:
       - task: infra:clean
 
   update-pkgs:
-  
     desc: Run the python package updater script
     cmds:
       - chmod +x scripts/wolfi-pkg-updater.py
       - python scripts/wolfi-pkg-updater.py
-  docs:generate_benchmark_data:
-    desc: Run performance benchmarks
-    dir: benchmark
-    cmds:
-      - chmod +x ./run_benchmark.sh
-      - ./run_benchmark.sh
-
-  docs:parse_benchmark_data:
-    desc: Parse benchmark results
-    cmds:
-      - pipenv run python benchmark/parser.py
-      - pipenv run python benchmark/parser_signatures.py
-
-
-  docs:generate_readme:
-      desc: Generates the README.md file
-      cmds:
-        - pipenv run python scripts/update_readme.py
 
 
   convert-ver-to-sha_action_of_github:
@@ -86,26 +74,3 @@ tasks:
     cmds:
       - pipenv run python scripts/github_action_ver_to_sha.py 
 
-  docs:serve:
-    desc: "Run MkDocs server locally for live preview"
-    cmds:
-      - pipenv run mkdocs serve --dev-addr 0.0.0.0:8000
-  
-
-  docs:build-MkDocs-site:
-      desc: "Build the final FIPS Boundary Security Dashboard"
-      summary: |
-        This task generates the static site (MkDocs).
-        It assumes all JSON reports (Trivy, KICS, Benchmarks) 
-        are already gathered in the 'reports/' folder.
-      cmds:
-        - echo "Building MkDocs Security Dashboard..."
-        - pipenv run mkdocs build --clean
-        - echo "Done! The site is ready in the 'site/' directory."
-  gh:upload-sbom:
-      cmds:
-        - pipenv run python scripts/upload_sbom.py {{.FILE}} {{.TARGET}} {{.REPO}}
-      vars:
-        FILE: '{{default "" .FILE}}'
-        TARGET: '{{default "" .TARGET}}'
-        REPO: '{{default "" .REPO}}'

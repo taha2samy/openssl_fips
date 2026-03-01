@@ -1,0 +1,13 @@
+version: '3'
+
+tasks:
+  just_ensure:
+    cmds:
+      - echo "Ensuring Taskfile.github.yml exists {{.DISTROLESS_IMAGE}}"
+  upload-sbom:
+    cmds:
+      - pipenv run python scripts/upload_sbom.py {{.FILE}} {{.TARGET}} {{.REPO}}
+    vars:
+      FILE: '{{default "" .FILE}}'
+      TARGET: '{{default "" .TARGET}}'
+      REPO: '{{default "" .REPO}}'
