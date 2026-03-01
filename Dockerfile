@@ -145,6 +145,9 @@ RUN --mount=type=cache,target=/var/cache/apk \
     pcre-dev=${PCRE_DEV_VER} \
     zlib-dev=${ZLIB_DEV_VER} \
     bash=${BASH_VER} \
+    curl=${CURL_VER} \
+    jq=${JQ_VER} \
+    unzip=${UNZIP_VER}; \
     mkdir -p /rootfs/development/etc/apk; \
     cp -a /etc/apk/keys /rootfs/development/etc/apk/; \
     cp -a /etc/apk/repositories /rootfs/development/etc/apk/; \
@@ -312,6 +315,7 @@ COPY --from=fips-integrator /usr/local/lib/libssl.so* /usr/local/lib/
 COPY --from=fips-integrator /usr/local/lib/ossl-modules /usr/local/lib/ossl-modules
 COPY --from=fips-integrator /usr/local/ssl /usr/local/ssl
 COPY --from=fips-builder /usr/local/include /usr/local/include
+
 USER nonroot
 
 
