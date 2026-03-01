@@ -78,15 +78,15 @@ def define_env(env):
     env.variables.update({"standard_compliance":{"docker_cis": load_json(os.path.join(reports_dir, "standard-docker-cis_full.json")),
                          "k8s_nsa": load_json(os.path.join(reports_dir, "standard-k8s-nsa_full.json")),
                          "k8s_pss_restricted": load_json(os.path.join(reports_dir, "standard-k8s-pss-restricted_full.json")),
-                         "security_scan": load_json(os.path.join(reports_dir, "standard-security_scan_full.json"))}})
+                         "security_scan": load_json(os.path.join(reports_dir, "standard-security-full.json"))}})
     env.variables.update({"distroless_compliance":{"docker_cis": load_json(os.path.join(reports_dir, "distroless-docker-cis_full.json")),
                          "k8s_nsa": load_json(os.path.join(reports_dir, "distroless-k8s-nsa_full.json")),
                          "k8s_pss_restricted": load_json(os.path.join(reports_dir, "distroless-k8s-pss-restricted_full.json")),
-                         "security_scan": load_json(os.path.join(reports_dir, "distroless-security_scan_full.json"))}})
+                         "security_scan": load_json(os.path.join(reports_dir, "distroless-security-full.json"))}})
     env.variables.update({"development_compliance":{"docker_cis": load_json(os.path.join(reports_dir, "development-docker-cis_full.json")),
                          "k8s_nsa": load_json(os.path.join(reports_dir, "development-k8s-nsa_full.json")),
                          "k8s_pss_restricted": load_json(os.path.join(reports_dir, "development-k8s-pss-restricted_full.json")),
-                         "security_scan": load_json(os.path.join(reports_dir, "development-security_scan_full.json"))}})
+                         "security_scan": load_json(os.path.join(reports_dir, "development-security-full.json"))}})
     if os.path.exists(csv_path_throughput):
         try:
             with open(csv_path_throughput, encoding='utf-8') as f:
@@ -108,10 +108,9 @@ def define_env(env):
     raw_benchmarks = load_json(os.path.join(ROOT_DIR, "reports", "benchmark_data.json"))
 
     # 3. Supply Chain Metadata
-    meta_root = os.path.join(ROOT_DIR, "all-metadata")
-    distroless_meta = load_json(os.path.join(meta_root, "distroless_attestation_details.json"))
-    standard_meta = load_json(os.path.join(meta_root, "standard_attestation_details.json"))
-    dev_meta = load_json(os.path.join(meta_root, "development_attestation_details.json"))
+    distroless_meta = load_json(os.path.join(reports_dir, "distroless_attestation_details.json"))
+    standard_meta = load_json(os.path.join(reports_dir, "standard_attestation_details.json"))
+    dev_meta = load_json(os.path.join(reports_dir, "development_attestation_details.json"))
 
     # 4. Processing Test Stats
     stats = summary.get("summary", {}).get(

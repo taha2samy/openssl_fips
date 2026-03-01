@@ -32,12 +32,12 @@ group "default" {
 target "common" {
   context    = "."
   dockerfile = "Dockerfile"
-  platforms  = ["linux/amd64", "linux/arm64"]
+  platforms  = ["linux/amd64"]
   output = [
     "type=registry,compression=zstd,force-compression=true"
   ]
   attest = [
-    "type=sbom,generator=docker/buildkit-syft-scanner,format=cyclonedx-json",
+    "type=sbom",
     "type=provenance,mode=max"
   ]
   args = {
@@ -48,20 +48,34 @@ target "common" {
     BASE_IMAGE   = "${BASE_IMAGE}"
     STATIC_IMAGE = "${STATIC_IMAGE}"
 
-    # --- Build Stage Packages (fips-builder & core-builder) ---
-    BUILD_BASE_VER    = "${BUILD_BASE_VER}"
-    PERL_VER          = "${PERL_VER}"
-    LINUX_HEADERS_VER = "${LINUX_HEADERS_VER}"
-    WGET_VER          = "${WGET_VER}"
+
+  # --- System Infrastructure ---
+    APK_TOOLS_VER          = "${APK_TOOLS_VER}"
+    BUSYBOX_VER            = "${BUSYBOX_VER}"
+    GLIBC_VER              = "${GLIBC_VER}"
+    GLIBC_LOCALE_POSIX_VER = "${GLIBC_LOCALE_POSIX_VER}"
+    LD_LINUX_VER           = "${LD_LINUX_VER}"
+    LIBCRYPT1_VER          = "${LIBCRYPT1_VER}"
+    LIBXCRYPT_VER          = "${LIBXCRYPT_VER}"
+    LIBGCC_VER             = "${LIBGCC_VER}"
+    WOLFI_BASE_VER         = "${WOLFI_BASE_VER}"
+    WOLFI_BASELAYOUT_VER   = "${WOLFI_BASELAYOUT_VER}"
+    WOLFI_KEYS_VER         = "${WOLFI_KEYS_VER}"
+
+  # --- Build Stage Packages ---
+    BUILD_BASE_VER      = "${BUILD_BASE_VER}"
+    PERL_VER            = "${PERL_VER}"
+    LINUX_HEADERS_VER   = "${LINUX_HEADERS_VER}"
+    WGET_VER            = "${WGET_VER}"
     CA_CERTIFICATES_VER = "${CA_CERTIFICATES_VER}"
 
-    # --- Runtime & Helper Packages (helper & openssl-standard) ---
+  # --- Runtime & Helper Packages ---
     LIBSTDC_PLUS_PLUS_VER = "${LIBSTDC_PLUS_PLUS_VER}"
     ZLIB_VER              = "${ZLIB_VER}"
     TZDATA_VER            = "${TZDATA_VER}"
     POSIX_LIBC_UTILS_VER  = "${POSIX_LIBC_UTILS_VER}"
 
-    # --- Dev Tools (openssl-dev) ---
+  # --- Dev Tools ---
     PKGCONF_VER  = "${PKGCONF_VER}"
     PCRE_DEV_VER = "${PCRE_DEV_VER}"
     ZLIB_DEV_VER = "${ZLIB_DEV_VER}"
@@ -69,6 +83,8 @@ target "common" {
     CURL_VER     = "${CURL_VER}"
     JQ_VER       = "${JQ_VER}"
     UNZIP_VER    = "${UNZIP_VER}"
+
+
   }
 }
 

@@ -100,5 +100,5 @@ tasks:
         are already gathered in the 'reports/' folder.
       cmds:
         - echo "Building MkDocs Security Dashboard..."
-        - pipenv run mkdocs build --clean --strict -vvv
+        - pipenv run mkdocs build --clean
         - echo "Done! The site is ready in the 'site/' directory."

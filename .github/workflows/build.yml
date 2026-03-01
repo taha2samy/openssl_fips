@@ -63,6 +63,8 @@ jobs:
       id-token: write
       attestations: write
       packages: write
+      contents: write
+      security-events: write
     strategy:
       fail-fast: false
       matrix:
@@ -97,11 +99,16 @@ jobs:
           show-summary: false
 
       - name: Generate SBOM (CycloneDX)
+        id: generate_sbom
         uses: anchore/sbom-action@28d71544de8eaf1b958d335707167c5f783590ad  # v0.22.2
         with:
           image: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips@${{steps.set_digest.outputs.digest }}
           format: cyclonedx-json
           output-file: ${{ matrix.target_name }}.cyclonedx.json
+          upload-artifact: false
+          dependency-snapshot: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Attest SBOM
         uses: actions/attest-sbom@4651f806c01d8637787e274ac3bdf724ef169f34  # v3
@@ -139,6 +146,13 @@ jobs:
           path: ${{ matrix.target_name }}_attestation_details.json
           retention-days: 1
 
+      - name: Upload Clean SBOM
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: reports-sbom-${{ matrix.target_name }}
+          path: ${{ matrix.target_name }}.cyclonedx.json
+          retention-days: 1
+
   benchmarking:
     needs: [attest]
     runs-on: ubuntu-latest
@@ -156,6 +170,7 @@ jobs:
         with:
           name: reports-benchmarks
           path: reports/
+          retention-days: 1
 
   fips-verification-suite:
     needs: [attest]
@@ -171,6 +186,7 @@ jobs:
         with:
           name: reports-audit
           path: reports/
+          retention-days: 1
 
   kics-scan:
     needs: [attest]
@@ -191,6 +207,7 @@ jobs:
         with:
           name: reports-kics
           path: reports/
+          retention-days: 1
 
   scan-compliance:
     name: Run - ${{ matrix.task_name }}
@@ -227,6 +244,7 @@ jobs:
         with:
           name: reports-trivy-${{ matrix.id }}
           path: reports/
+          retention-days: 1
 
 
 
@@ -244,48 +262,30 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+      - name: create stage directory
+        run: mkdir reports
       - name: Download all metadata artifacts
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4
         with:
-          path: all-metadata
-          pattern: attestation-metadata-*
+          path: reports/
+          pattern: "*"
           merge-multiple: true
 
-      - name: Download all scan reports
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4
-        with:
-          path: reports
-          pattern: reports-*
-          merge-multiple: true
 
-      - name: Print Attestation Details
+      - name: Verify and Print All Files
         run: |
           echo "=========================================="
-          echo "Displaying Attestation Details:"
+          echo "All collected files (FLAT STRUCTURE):"
           echo "=========================================="
-          for file in all-metadata/*.json; do
-            echo "File: $file"
-            cat "$file"
-            echo -e "\n------------------------------------------"
-          done
-
-
+          ls -R reports/
 
       - name: Setup Taskfile
         uses: ./.github/actions/setup-task
-
-      - name: Tree and Directory Verification
-        run: |
-          sudo apt-get install -y tree
-          echo "=========================================="
-          echo "Final Project Structure before MkDocs Build:"
-          echo "=========================================="
-          tree -a .
-          echo "------------------------------------------"
-          ls -R reports/
-          ls -R all-metadata/
       - name: change permissions
         run: sudo chmod -R 777 .
+      - name: debug
+        run: |
+          ls -la reports/ 
       - name: Build MkDocs site
         run: task docs:build-MkDocs-site
 

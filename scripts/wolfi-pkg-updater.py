@@ -25,14 +25,25 @@ PACKAGES_TO_CHECK = [
     "tzdata",
     "posix-libc-utils",
     
-    # dev tools
     "pkgconf",
     "pcre-dev",
     "zlib-dev",
     "bash",
     "curl",
     "jq",
-    "unzip"
+    "unzip",
+
+    "apk-tools",
+    "busybox",
+    "glibc",
+    "glibc-locale-posix",
+    "ld-linux",
+    "libcrypt1",
+    "libxcrypt",
+    "libgcc",
+    "wolfi-base",
+    "wolfi-baselayout",
+    "wolfi-keys"
 ]
 
 IMAGES_TO_CHECK = {
@@ -86,6 +97,8 @@ def get_latest_package_version(base_image, package_name):
 
         if not full_package_string:
             return None
+
+        full_package_string = full_package_string.split('\n')[0].strip()
 
         prefix = f"{package_name}-"
 
