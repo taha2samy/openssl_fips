@@ -16,14 +16,6 @@ class DependencyUploader:
         self.run_id = os.environ.get("GITHUB_RUN_ID", "manual")
         self.scanned_time = datetime.datetime.now().isoformat()
 
-    def _get_ecosystem(self, purl: str) -> str:
-        if not purl or not purl.startswith("pkg:"):
-            return "other"
-        try:
-            return purl.split(":")[1].split("/")[0].lower()
-        except (IndexError, AttributeError):
-            return "other"
-
     def _build_payload(self) -> Dict[str, Any]:
         if not os.path.exists(self.file_path):
             log.error(f"File not found: {self.file_path}")
@@ -35,34 +27,24 @@ class DependencyUploader:
         components = sbom_data.get("components", [])
         log.info(f"Processing {len(components)} components from {self.file_path}")
 
-        ecosystems: Dict[str, Dict[str, Any]] = {}
-
+        resolved = {}
         for comp in components:
             purl = comp.get("purl")
-            if not purl:
-                continue
-
-            eco = self._get_ecosystem(purl)
-            if eco not in ecosystems:
-                ecosystems[eco] = {}
-
-            ecosystems[eco][purl] = {
-                "package_url": purl,
-                "relationship": "direct",
-                "scope": "runtime",
-                "metadata": {
-                    "ecosystem": eco
+            if purl:
+                resolved[purl] = {
+                    "package_url": purl,
+                    "relationship": "direct",
+                    "scope": "runtime"
                 }
-            }
 
-        manifests = {}
-        for eco, deps in ecosystems.items():
-            manifest_id = f"{self.target}/{eco}"
-            manifests[manifest_id] = {
+        manifest_id = f"wolfi-{self.target}"
+        manifests = {
+            manifest_id: {
                 "name": manifest_id,
                 "file": {"source_location": self.file_path},
-                "resolved": deps
+                "resolved": resolved
             }
+        }
 
         return {
             "version": 0,
@@ -74,7 +56,7 @@ class DependencyUploader:
             },
             "detector": {
                 "name": "wolfi-fips-uploader",
-                "version": "1.2.0",
+                "version": "1.3.0",
                 "url": "https://github.com/taha2samy"
             },
             "scanned": self.scanned_time,
@@ -86,9 +68,8 @@ class DependencyUploader:
         try:
             payload = self._build_payload()
             
-            log.info(f"Uploading to {self.repo} via GitHub API")
-            log.info(f"Detected ecosystems: {list(payload['manifests'].keys())}")
-
+            log.info(f"Uploading snapshot to {self.repo}")
+            
             result = subprocess.run(
                 ["gh", "api", f"/repos/{self.repo}/dependency-graph/snapshots", 
                  "--method", "POST", "--input", "-"],
@@ -98,13 +79,13 @@ class DependencyUploader:
             )
 
             if result.returncode != 0:
-                log.error(f"API Error: {result.stderr.strip()}")
+                log.error(f"GitHub API Error: {result.stderr.strip()}")
                 sys.exit(1)
 
             notice(f"Successfully updated dependency graph for {self.target}")
             
         except Exception as e:
-            log.error(f"Execution failed: {str(e)}")
+            log.error(f"Unexpected failure: {str(e)}")
             sys.exit(1)
         finally:
             group_end()
