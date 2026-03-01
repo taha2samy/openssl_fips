@@ -43,7 +43,6 @@ tasks:
       OS: '{{.OS | default ""}}'
       IS_DISTROLESS: '{{.IS_DISTROLESS | default "false"}}'
       OUT_DIR: "reports"
-    silent: true
     cmds:
       - mkdir -p "{{.OUT_DIR}}"
       - mkdir -p .trivycache
@@ -135,7 +134,7 @@ tasks:
     cmds:
       - task: full-compliance
         vars:
-          IMAGE: "{{.STANDERD_IMAGE}}"
+          IMAGE: "{{.STANDARD_IMAGE}}"
           REPORT_ID: "standard"
           IS_DISTROLESS: "false"
           OS: "wolfi"
