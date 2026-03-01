@@ -117,7 +117,9 @@ RUN --mount=type=cache,target=/var/cache/apk \
     cp -a /etc/passwd /rootfs/standard/etc/; \
     cp -a /etc/group /rootfs/standard/etc/; \
     cp -a /etc/shadow /rootfs/standard/etc/; \
-    chroot /rootfs/standard /usr/bin/busybox --install -s /usr/bin; \
+    for applet in $(/rootfs/standard/usr/bin/busybox --list); do \
+        ln -sf busybox /rootfs/standard/usr/bin/$applet; \
+    done; \
     ln -sf busybox /rootfs/standard/usr/bin/sh; \
     echo "hosts: files dns" > /rootfs/standard/etc/nsswitch.conf; \
     touch /rootfs/standard/etc/resolv.conf /rootfs/standard/etc/hosts
@@ -154,8 +156,10 @@ RUN --mount=type=cache,target=/var/cache/apk \
     cp -a /etc/passwd /rootfs/development/etc/; \
     cp -a /etc/group /rootfs/development/etc/; \
     cp -a /etc/shadow /rootfs/development/etc/; \
-    chroot /rootfs/development /usr/bin/busybox --install -s /usr/bin; \
-    ln -sf busybox /rootfs/development/usr/bin/sh; \
+    for applet in $(/rootfs/standard/usr/bin/busybox --list); do \
+        ln -sf busybox /rootfs/standard/usr/bin/$applet; \
+    done; \
+    ln -sf busybox /rootfs/standard/usr/bin/sh; \
     echo "hosts: files dns" > /rootfs/development/etc/nsswitch.conf; \
     touch /rootfs/development/etc/resolv.conf /rootfs/development/etc/hosts
 
