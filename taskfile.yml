@@ -16,18 +16,17 @@ includes:
 vars:
   FIPS_VERSION: "3.1.2"
   CORE_VERSION: "3.5.5"
+  owner: "taha2samy"
+  registry: "ghcr.io"
+  repo_of_registry: "wolfi-openssl-fips"
+  repo_of_code: "openssl_fips"
+  repo_url: "https://github.com/{{.owner}}/{{.repo_of_code}}"
   DISTROLESS_IMAGE: "{{.registry}}/{{.owner}}/{{.repo_of_registry}}:{{.CORE_VERSION}}-distroless"
   STANDARD_IMAGE: "{{.registry}}/{{.owner}}/{{.repo_of_registry}}:{{.CORE_VERSION}}"
   DEV_IMAGE: "{{.registry}}/{{.owner}}/{{.repo_of_registry}}:{{.CORE_VERSION}}-dev"
   RESULTS_ROOT: "reports"
   REPORT_DIR: "reports"
   RESULTS_REPORT: "reports"
-  repo_of_registry: "wolfi-openssl-fips"
-  owner: "taha2samy"
-  registry: "ghcr.io"
-  repo_of_code: "openssl_fips"
-  repo_url: "https://github.com/{{.owner}}/{{.repo_of_code}}"
-
 tasks:
   echo-all-vars:
     desc: Display all project-related global variables
