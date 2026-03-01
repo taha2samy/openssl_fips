@@ -22,17 +22,6 @@ All technical details, including vulnerability audits, FIPS functional test resu
 
 ---
 
-## Artifact Verification
-Artifact integrity and provenance can be verified using the following protocol:
-
-```bash
-cosign verify \
-  --certificate-identity-regexp "^https://github.com/taha2samy/.*" \
-  --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
-  [IMAGE_REFERENCE]
-```
-
----
 
 ## Operations
 The project lifecycle is managed via Taskfile. Refer to the **Operational Excellence Guide** on the dashboard for instructions on setup, auditing, and local documentation rendering.
