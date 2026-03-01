@@ -145,7 +145,6 @@ RUN --mount=type=cache,target=/var/cache/apk \
     pcre-dev=${PCRE_DEV_VER} \
     zlib-dev=${ZLIB_DEV_VER} \
     bash=${BASH_VER} \
-    unzip=${UNZIP_VER}; \
     mkdir -p /rootfs/development/etc/apk; \
     cp -a /etc/apk/keys /rootfs/development/etc/apk/; \
     cp -a /etc/apk/repositories /rootfs/development/etc/apk/; \
