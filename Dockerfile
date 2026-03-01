@@ -314,7 +314,7 @@ COPY --from=fips-integrator /usr/local/lib/libcrypto.so* /usr/local/lib/
 COPY --from=fips-integrator /usr/local/lib/libssl.so* /usr/local/lib/
 COPY --from=fips-integrator /usr/local/lib/ossl-modules /usr/local/lib/ossl-modules
 COPY --from=fips-integrator /usr/local/ssl /usr/local/ssl
-COPY --from=fips-builder /usr/local/include /usr/local/include
+COPY --from=fips-integrator /usr/local/lib/*.a /usr/local/lib/
 
 USER nonroot
 
