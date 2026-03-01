@@ -33,7 +33,6 @@ def main():
         for comp in data.get("components", []):
             purl = comp.get("purl", "")
             if purl:
-                # استخراج الـ ecosystem من الـ purl (مثال: pkg:apk/wolfi -> apk)
                 ecosystem = "other"
                 try:
                     if purl.startswith("pkg:"):
