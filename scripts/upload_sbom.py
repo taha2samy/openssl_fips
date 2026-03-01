@@ -31,12 +31,23 @@ def main():
 
         resolved = {}
         for comp in data.get("components", []):
-            purl = comp.get("purl")
+            purl = comp.get("purl", "")
             if purl:
+                # استخراج الـ ecosystem من الـ purl (مثال: pkg:apk/wolfi -> apk)
+                ecosystem = "other"
+                try:
+                    if purl.startswith("pkg:"):
+                        ecosystem = purl.split(":")[1].split("/")[0]
+                except:
+                    pass
+
                 resolved[purl] = {
                     "package_url": purl,
                     "relationship": "direct",
-                    "scope": "runtime"
+                    "scope": "runtime",
+                    "metadata": {
+                        "ecosystem": ecosystem
+                    }
                 }
 
         payload = {
@@ -62,7 +73,7 @@ def main():
             }
         }
 
-        log.info(f"Submitting snapshot for {target} (Correlator: wolfi-fips-{target})")
+        log.info(f"Submitting snapshot for {target} with ecosystems metadata")
         
         result = subprocess.run(
             ["gh", "api", f"/repos/{repo}/dependency-graph/snapshots", "--method", "POST", "--input", "-"],
@@ -75,7 +86,7 @@ def main():
             log.error(f"GitHub API Error: {result.stderr}")
             sys.exit(1)
 
-        notice(f"Successfully uploaded SBOM for {target}. Results will overwrite previous {target} entries.")
+        notice(f"Successfully uploaded SBOM for {target} (Ecosystems included).")
         
     except Exception as e:
         log.error(f"Unexpected error during upload: {str(e)}")

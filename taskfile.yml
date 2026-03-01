@@ -104,7 +104,7 @@ tasks:
         - echo "Done! The site is ready in the 'site/' directory."
   gh:upload-sbom:
       cmds:
-        - python3 scripts/upload_sbom.py {{.FILE}} {{.TARGET}} {{.REPO}}
+        - pipenv run python scripts/upload_sbom.py {{.FILE}} {{.TARGET}} {{.REPO}}
       vars:
         FILE: '{{default "" .FILE}}'
         TARGET: '{{default "" .TARGET}}'
