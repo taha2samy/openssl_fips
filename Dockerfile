@@ -145,8 +145,6 @@ RUN --mount=type=cache,target=/var/cache/apk \
     pcre-dev=${PCRE_DEV_VER} \
     zlib-dev=${ZLIB_DEV_VER} \
     bash=${BASH_VER} \
-    curl=${CURL_VER} \
-    jq=${JQ_VER} \
     unzip=${UNZIP_VER}; \
     mkdir -p /rootfs/development/etc/apk; \
     cp -a /etc/apk/keys /rootfs/development/etc/apk/; \
@@ -247,6 +245,20 @@ RUN /usr/local/bin/openssl fipsinstall \
 COPY conf/openssl.cnf /usr/local/ssl/openssl.cnf
 RUN ln -sf libcrypto.so.3 /usr/local/lib/libcrypto.so && \
     ln -sf libssl.so.3 /usr/local/lib/libssl.so
+FROM ${BASE_IMAGE} AS helper
+ARG LIBSTDC_PLUS_PLUS_VER
+ARG ZLIB_VER
+ARG TZDATA_VER
+ARG POSIX_LIBC_UTILS_VER
+RUN --mount=type=cache,target=/var/cache/apk \
+    apk add --no-cache libstdc++=${LIBSTDC_PLUS_PLUS_VER} zlib=${ZLIB_VER} tzdata=${TZDATA_VER} posix-libc-utils=${POSIX_LIBC_UTILS_VER}
+RUN addgroup -g 1000 openssl && adduser -u 1000 -G openssl -D -s /bin/bash openssl
+RUN mkdir -p /etc && touch /etc/nsswitch.conf
+RUN cp /usr/share/zoneinfo/UTC /etc/localtime && echo "UTC" > /etc/timezone
+
+
+
+
 
 
 
@@ -295,6 +307,11 @@ ENV PATH="/usr/local/bin:${PATH}" \
     OPENSSL_MODULES=/usr/local/lib/ossl-modules \
     TZ=UTC \
     LANG=C.UTF-8
+COPY --from=fips-integrator /usr/local/bin/openssl /usr/local/bin/openssl
+COPY --from=fips-integrator /usr/local/lib/libcrypto.so* /usr/local/lib/
+COPY --from=fips-integrator /usr/local/lib/libssl.so* /usr/local/lib/
+COPY --from=fips-integrator /usr/local/lib/ossl-modules /usr/local/lib/ossl-modules
+COPY --from=fips-integrator /usr/local/ssl /usr/local/ssl
 USER nonroot
 
 
@@ -310,6 +327,7 @@ LABEL org.opencontainers.image.title="Wolfi OpenSSL FIPS (Standard)" \
     org.opencontainers.image.fips-version="${FIPS_VERSION}"
 COPY --from=producer /rootfs/standard /
 
+#ldconfig
 
 
 
@@ -345,7 +363,13 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=2s --retries=3 \
 ENTRYPOINT ["/usr/local/bin/openssl"]
 
 FROM development AS openssl-dev
-COPY --from=fips-integrator / /
+COPY --from=fips-integrator /usr/local/bin/openssl /usr/local/bin/openssl
+COPY --from=fips-integrator /usr/local/lib/libcrypto.so* /usr/local/lib/
+COPY --from=fips-integrator /usr/local/lib/libssl.so* /usr/local/lib/
+COPY --from=fips-integrator /usr/local/lib/ossl-modules /usr/local/lib/ossl-modules
+COPY --from=fips-integrator /usr/local/ssl /usr/local/ssl
+COPY --from=fips-integrator /usr/local/include /usr/local/include
+
 LABEL org.opencontainers.image.title="Wolfi OpenSSL FIPS (development)" \
     org.opencontainers.image.description="FIPS 140-3 compliant OpenSSL container (development)" \
     org.opencontainers.image.vendor="taha2samy" \
