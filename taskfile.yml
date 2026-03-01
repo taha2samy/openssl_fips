@@ -10,7 +10,7 @@ includes:
   audit: ./tasks/Taskfile.audit.yml
   report: ./tasks/Taskfile.report.yml
   scan-compliance: ./tasks/Taskfile.scan-compliance.yml
-  doc: ./tasks/Taskfile.doc.yml
+  docs: ./tasks/Taskfile.doc.yml
   gh: ./tasks/Taskfile.github.yml
 
 vars:
