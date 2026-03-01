@@ -1507,44 +1507,44 @@
     classDef kics fill:#00b0ff,stroke:#01579b,stroke-width:2px,color:#ffffff;
 
     subgraph SAST ["00. Infrastructure SAST"]
-        K1[":material-magnify-scan: KICS Security Audit&lt;br/&gt;'IaC &amp; Dockerfile Static Analysis'"]:::kics
+        K1["KICS Security Audit&lt;br/&gt;'IaC &amp; Dockerfile Static Analysis'"]:::kics
     end
 
     subgraph Ingestion ["01. Trusted Ingestion Layer"]
-        A[":material-linux: Wolfi Base Image&lt;br/&gt;'Pinned Digest'"]:::trusted
-        B[":material-code-braces: OpenSSL Core&lt;br/&gt;Source Code"]:::trusted
-        C[":material-shield-lock: FIPS Module&lt;br/&gt;Validated Source"]:::trusted
+        A["Wolfi Base Image&lt;br/&gt;'Pinned Digest'"]:::trusted
+        B["OpenSSL Core&lt;br/&gt;Source Code"]:::trusted
+        C["FIPS Module&lt;br/&gt;Validated Source"]:::trusted
     end
 
     subgraph FIPS_Boundary ["02. Cryptographic Construction"]
-        D[":material-cog: Compilation &amp;&lt;br/&gt;Static Linking"]
-        E[":material-protocol: FIPS Install&lt;br/&gt;Integrity Protocol"]
-        F{":material-microscope: KAT &amp; POST&lt;br/&gt;Integrity Check"}
+        D["Compilation &amp;&lt;br/&gt;Static Linking"]
+        E["FIPS Install&lt;br/&gt;Integrity Protocol"]
+        F{"KAT &amp; POST&lt;br/&gt;Integrity Check"}
         D --&gt; E --&gt; F
     end
 
     subgraph Supply_Chain ["03. Supply Chain Security"]
-        G[":material-file-document-check: SBOM Generation&lt;br/&gt;'CycloneDX JSON'"]:::attest
-        N[":material-github: Dependency Graph&lt;br/&gt;'GitHub Submission'"]:::attest
-        H[":material-fingerprint: Sigstore Signing&lt;br/&gt;'Keyless OIDC'"]:::attest
-        I[":material-certificate: SLSA Provenance&lt;br/&gt;'Level 3 Verified'"]:::attest
+        G["SBOM Generation&lt;br/&gt;'CycloneDX JSON'"]:::attest
+        N["Dependency Graph&lt;br/&gt;'GitHub Submission'"]:::attest
+        H["Sigstore Signing&lt;br/&gt;'Keyless OIDC'"]:::attest
+        I["SLSA Provenance&lt;br/&gt;'Level 3 Verified'"]:::attest
         G --&gt; N
     end
 
     subgraph Compliance ["04. Compliance Gates (4 Tests per Variant)"]
         direction TB
         subgraph Gates ["Trivy Security &amp; Policy Engine"]
-            T1[":material-shield-bug: 1. Vulnerability Scan"]
-            T2[":material-docker: 2. CIS Benchmark"]
-            T3[":material-kubernetes: 3. NSA/CISA Guide"]
-            T4[":material-gavel: 4. K8s PSS Restricted"]
+            T1["1. Vulnerability Scan"]
+            T2["2. CIS Benchmark"]
+            T3["3. NSA/CISA Guide"]
+            T4["4. K8s PSS Restricted"]
         end
     end
 
     subgraph Artifacts ["05. Attested Artifacts"]
-        J[":material-console: Standard Image"]:::artifact
-        K[":material-package-variant-closed: Distroless Image"]:::artifact
-        M[":material-hammer-wrench: Development Image"]:::artifact
+        J["Standard Image"]:::artifact
+        K["Distroless Image"]:::artifact
+        M["Development Image"]:::artifact
     end
 
     %% Flow Connections
@@ -1559,7 +1559,7 @@
     Gates --&gt; M
 
     %% Failure Path
-    F -- Failed --&gt; L[Build Aborted]
+    F -- Failed --&gt; L["Build Aborted"]
     style L fill:#f44336,stroke:#b71c1c,color:#ffffff
 
     class FIPS_Boundary boundary
@@ -1601,6 +1601,17 @@
 </tr>
 </tbody>
 </table>
+<div class="admonition info">
+<p class="admonition-title">[<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg></span> 360° Dependency Visibility]</p>
+<p>Our security posture extends beyond the container itself. Every component in our software supply chain is tracked and monitored, including:</p>
+<ul>
+<li>All <strong>OS Packages</strong> within the <code>Standard</code>, <code>Distroless</code>, and <code>Development</code> images.</li>
+<li>The <strong>Python (Pipenv) dependencies</strong> used for our testing and automation scripts.</li>
+<li>The <strong>GitHub Actions</strong> (<code>user/action@vX</code>) that orchestrate our CI/CD pipeline.</li>
+</ul>
+<p>Every single one of these components is continuously monitored by the <strong>GitHub Dependency Graph</strong> and its integrated security advisory database. This provides real-time alerts for any newly discovered vulnerabilities across the entire stack.</p>
+<p><a href="https://github.com/taha2samy/openssl_fips/network/dependencies"><strong>Explore the Live Dependency Graph for a Complete Inventory</strong></a></p>
+</div>
 
 
 
