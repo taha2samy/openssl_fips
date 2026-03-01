@@ -1498,50 +1498,72 @@
 <h2 id="the-cryptographic-boundary"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 3a4 4 0 0 1 4 4c0 1.86-1.27 3.43-3 3.87v2.26c.37.09.72.24 1.04.43l4.52-4.52C13.2 8.44 13 7.75 13 7a4 4 0 0 1 4-4 4 4 0 0 1 4 4 4 4 0 0 1-4 4c-.74 0-1.43-.2-2-.55L10.45 15c.35.57.55 1.26.55 2a4 4 0 0 1-4 4 4 4 0 0 1-4-4c0-1.86 1.27-3.43 3-3.87v-2.26C4.27 10.43 3 8.86 3 7a4 4 0 0 1 4-4m10 10a4 4 0 0 1 4 4 4 4 0 0 1-4 4 4 4 0 0 1-4-4 4 4 0 0 1 4-4m0 2a2 2 0 0 0-2 2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0-2-2"/></svg></span> The Cryptographic Boundary</h2>
 <p>The following architecture diagram illustrates the flow from trusted source ingestion down to the attested deployment artifacts. </p>
 <pre class="mermaid"><code>graph TD
-    %% Global Styles - High Contrast Palette (No White / No Black)
+    %% Global Styles
     classDef trusted fill:#009688,stroke:#004d40,stroke-width:2px,color:#ffffff;
     classDef boundary fill:#ff9800,stroke:#e65100,stroke-width:2px,stroke-dasharray: 6 4,color:#1a1a1a;
     classDef attest fill:#3f51b5,stroke:#1a237e,stroke-width:2px,color:#ffffff;
+    classDef audit fill:#673ab7,stroke:#311b92,stroke-width:2px,color:#ffffff;
     classDef artifact fill:#e91e63,stroke:#880e4f,stroke-width:2px,color:#ffffff;
+    classDef kics fill:#00b0ff,stroke:#01579b,stroke-width:2px,color:#ffffff;
 
-    subgraph Pipeline ["01. Trusted Ingestion Layer"]
-        A[Wolfi Base Image&lt;br/&gt;'cgr.dev/chainguard']:::trusted
-        B[OpenSSL Core 3.5.5&lt;br/&gt;Source Code]:::trusted
-        C[FIPS Module 3.1.2&lt;br/&gt;Validated Source]:::trusted
+    subgraph SAST ["00. Infrastructure SAST"]
+        K1[":material-magnify-scan: KICS Security Audit&lt;br/&gt;'IaC &amp; Dockerfile Static Analysis'"]:::kics
     end
 
-    subgraph FIPS_Boundary ["02. FIPS 140-3 Cryptographic Boundary"]
-        D[Compilation &amp; Static Linking]
-        E[fipsinstall Protocol]
-        F{Integrity Self-Tests&lt;br/&gt;POST / KAT}
-
-        D --&gt; E
-        E --&gt; F
+    subgraph Ingestion ["01. Trusted Ingestion Layer"]
+        A[":material-linux: Wolfi Base Image&lt;br/&gt;'Pinned Digest'"]:::trusted
+        B[":material-code-braces: OpenSSL Core&lt;br/&gt;Source Code"]:::trusted
+        C[":material-shield-lock: FIPS Module&lt;br/&gt;Validated Source"]:::trusted
     end
 
-    subgraph Security_Audit ["03. Attestation &amp; Supply Chain"]
-        G[SBOM Generation&lt;br/&gt;'CycloneDX']:::attest
-        H[Cosign Keyless Signing&lt;br/&gt;'Sigstore/OIDC']:::attest
-        I[SLSA Provenance&lt;br/&gt;'Level 3']:::attest
+    subgraph FIPS_Boundary ["02. Cryptographic Construction"]
+        D[":material-cog: Compilation &amp;&lt;br/&gt;Static Linking"]
+        E[":material-protocol: FIPS Install&lt;br/&gt;Integrity Protocol"]
+        F{":material-microscope: KAT &amp; POST&lt;br/&gt;Integrity Check"}
+        D --&gt; E --&gt; F
     end
 
-    subgraph Artifacts ["04. Attested Artifacts"]
-        J[Standard Image&lt;br/&gt;'Full Shell']:::artifact
-        K[Distroless Image&lt;br/&gt;'Static Binary']:::artifact
+    subgraph Supply_Chain ["03. Supply Chain Security"]
+        G[":material-file-document-check: SBOM Generation&lt;br/&gt;'CycloneDX JSON'"]:::attest
+        N[":material-github: Dependency Graph&lt;br/&gt;'GitHub Submission'"]:::attest
+        H[":material-fingerprint: Sigstore Signing&lt;br/&gt;'Keyless OIDC'"]:::attest
+        I[":material-certificate: SLSA Provenance&lt;br/&gt;'Level 3 Verified'"]:::attest
+        G --&gt; N
     end
 
-    %% Connections
-    Pipeline --&gt;|Integrity Check| FIPS_Boundary
-    FIPS_Boundary --&gt;|Validated MAC| Security_Audit
-    Security_Audit --&gt; J
-    Security_Audit --&gt; K
+    subgraph Compliance ["04. Compliance Gates (4 Tests per Variant)"]
+        direction TB
+        subgraph Gates ["Trivy Security &amp; Policy Engine"]
+            T1[":material-shield-bug: 1. Vulnerability Scan"]
+            T2[":material-docker: 2. CIS Benchmark"]
+            T3[":material-kubernetes: 3. NSA/CISA Guide"]
+            T4[":material-gavel: 4. K8s PSS Restricted"]
+        end
+    end
 
-    %% Styling Labels
-    F -- Passed --&gt; Security_Audit
+    subgraph Artifacts ["05. Attested Artifacts"]
+        J[":material-console: Standard Image"]:::artifact
+        K[":material-package-variant-closed: Distroless Image"]:::artifact
+        M[":material-hammer-wrench: Development Image"]:::artifact
+    end
+
+    %% Flow Connections
+    K1 --&gt;|Audit Blueprints| Ingestion
+    Ingestion --&gt;|Verify &amp; Build| FIPS_Boundary
+    FIPS_Boundary --&gt;|Passed Self-Tests| Supply_Chain
+    Supply_Chain --&gt;|Validate Runtimes| Gates
+
+    %% Output to Final Artifacts
+    Gates --&gt; J
+    Gates --&gt; K
+    Gates --&gt; M
+
+    %% Failure Path
     F -- Failed --&gt; L[Build Aborted]
     style L fill:#f44336,stroke:#b71c1c,color:#ffffff
 
-    class FIPS_Boundary boundary</code></pre>
+    class FIPS_Boundary boundary
+    class Gates audit</code></pre>
 <div class="admonition info">
 <p class="admonition-title">Runtime Integrity Check (FIPS POST)</p>
 <p>The FIPS POST (Power-On Self-Test) happens automatically on startup. If the <code>.so</code> binary is tampered with, the MAC verification fails and the container halts immediately.</p>
