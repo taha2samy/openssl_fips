@@ -43,7 +43,6 @@ tasks:
       OS: '{{.OS | default ""}}'
       IS_DISTROLESS: '{{.IS_DISTROLESS | default "false"}}'
       OUT_DIR: "reports"
-    silent: true
     cmds:
       - mkdir -p "{{.OUT_DIR}}"
       - mkdir -p .trivycache
@@ -83,8 +82,7 @@ tasks:
     
 
   full-compliance:
-    desc: "scan image with all compliances"
-    internal: true
+    desc: "scan image with all compliances and Vulnerability  and save them in {{.REPORT_DIR}}"
     vars:
       IMAGE: "{{.IMAGE}}"
       REPORT_ID: "{{.REPORT_ID}}"
@@ -120,32 +118,32 @@ tasks:
 
 
   Scan-Distroless:
-    desc: "scan distroless image"
+    desc: "scan distroless image on full compliance task"
     cmds:
       - task: full-compliance
         vars:
-          IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless"
+          IMAGE: "{{.DISTROLESS_IMAGE}}"
           REPORT_ID: "distroless"
           IS_DISTROLESS: "true"
           OS: "wolfi"
     
 
   Scan-Standard:
-    desc: "scan standard image"
+    desc: "scan standard image on full compliance task"
     cmds:
       - task: full-compliance
         vars:
-          IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5"
+          IMAGE: "{{.STANDARD_IMAGE}}"
           REPORT_ID: "standard"
           IS_DISTROLESS: "false"
           OS: "wolfi"
 
   Scan-Development:
-    desc: "scan development image"
+    desc: "scan development image on full compliance task"
     cmds:
       - task: full-compliance
         vars:
-          IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-dev"
+          IMAGE: "{{.DEV_IMAGE}}"
           REPORT_ID: "development"
           IS_DISTROLESS: "false"
           OS: "wolfi"

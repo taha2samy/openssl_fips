@@ -1,15 +1,10 @@
 version: '3'
 
-vars:
-  RESULTS_ROOT: "allure-results"
-  STANDERD_IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:3.5.5-distroless"
-  DISTROLESS_IMAGE: "ghcr.io/taha2samy/wolfi-openssl-fips:latest"
-  REPORT_DIR: "reports"
-  RESULTS_REPORT: "allure-report"
 
 tasks:
   run:
-    desc: Run pytest locally on the host
+    desc: "Executes the FIPS 140-3 functional verification suite against a specific container image. Generates granular Allure telemetry and a JSON forensic report."
+    
     vars:
       IMG_SAFE: '{{.IMAGE | default .STANDERD_IMAGE}}'
       SAFE_NAME: '{{.IMG_SAFE | replace "/" "_" | replace ":" "_" | replace "." "_"}}'
@@ -19,6 +14,7 @@ tasks:
       - pipenv run pytest tests/tests/ --alluredir="{{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}}" --image="{{.IMG_SAFE}}" --json-report --json-report-file="{{.USER_WORKING_DIR}}/{{.REPORT_DIR}}/report_{{.REPORT_NAME}}.json" || true
       - echo "Image={{.IMG_SAFE}}" > "{{.RESULTS_ROOT}}/audit_{{.SAFE_NAME}}/environment.properties"
   multi:
+    desc: "Executes the FIPS 140-3 functional verification suite against multiple container images (Standard and Distroless). Generates comprehensive Allure telemetry and JSON forensic reports for each variant."
     cmds:
       - task: run
         vars:
@@ -30,6 +26,7 @@ tasks:
           REPORT_NAME: distroless
 
   clean:
+    desc: "Cleans up all generated test artifacts, including Allure results, JSON reports, and temporary directories. {{.RESULTS_REPORT}} {{.REPORT_DIR}} {{.RESULTS_ROOT}} "
     cmds:
       - rm -rf "{{.RESULTS_ROOT}}"
       - rm -rf "{{.REPORT_DIR}}"

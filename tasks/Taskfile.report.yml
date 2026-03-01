@@ -1,8 +1,5 @@
 version: '3'
 
-vars:
-  RESULTS_DIR: "allure-results"
-  REPORT_DIR: "allure-report"
 
 tasks:
   v2:gen:
