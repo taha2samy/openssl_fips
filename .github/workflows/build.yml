@@ -100,6 +100,7 @@ jobs:
           show-summary: false
 
       - name: Generate SBOM (CycloneDX)
+        id: generate_sbom
         uses: anchore/sbom-action@28d71544de8eaf1b958d335707167c5f783590ad  # v0.22.2
         with:
           image: ghcr.io/${{ github.repository_owner }}/wolfi-openssl-fips@${{steps.set_digest.outputs.digest }}
