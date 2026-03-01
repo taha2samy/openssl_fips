@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 2,
+  "mediaType": "application/vnd.oci.image.manifest.v1+json",
+  "config": {
+    "mediaType": "application/vnd.oci.image.config.v1+json",
+    "digest": "sha256:928079f2c6b8c3e918b66b985d80d0a79456becb3e10d6291b47e5132882a25d",
+    "size": 5136
+  },
+  "layers": [
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+zstd",
+      "digest": "sha256:c7e81d9a8c08590d6000fd830cbc285b528ada8f70ede9c0bcee260100f5fabf",
+      "size": 351357
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+zstd",
+      "digest": "sha256:92005b88ecaae5d66d7cf44f043ce38f621af95172781433dd4a5667af89d4d8",
+      "size": 172913724
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+zstd",
+      "digest": "sha256:c544082f090abe938a90754e7b24677aca9cc63dcdd0d8629641792974dbba1e",
+      "size": 485491
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+zstd",
+      "digest": "sha256:34d062e9ba1de034fe11233de685ba319655407d7a237723e0628d84bdd081c5",
+      "size": 5280644
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+zstd",
+      "digest": "sha256:78c74b26b5fa842d82fcae53155ca6512e7a8d587699014aa01f67355e13f641",
+      "size": 575467
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+zstd",
+      "digest": "sha256:54e8086008f91819c8df553700994ac4a84a42d0393de673f3f471fc9d8f66a3",
+      "size": 987739
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+zstd",
+      "digest": "sha256:7b5a55cded99959406c154e6f9b1d77933c5ce4b346d4d2e4fc49ce5c02a46ca",
+      "size": 12090
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+zstd",
+      "digest": "sha256:47954fc1b0bb0c3a3439ac116508677e719b91aeaac3837cfb01af60b9e5c117",
+      "size": 3704527
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+zstd",
+      "digest": "sha256:c108a6d89ce9af77aa1631f5b25aebb508c13d22a0cc09ae211f2d23e27bcc50",
+      "size": 133
+    }
+  ]
+}

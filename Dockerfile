@@ -309,12 +309,7 @@ ENV PATH="/usr/local/bin:${PATH}" \
     OPENSSL_MODULES=/usr/local/lib/ossl-modules \
     TZ=UTC \
     LANG=C.UTF-8
-COPY --from=fips-integrator /usr/local/bin/openssl /usr/local/bin/openssl
-COPY --from=fips-integrator /usr/local/lib/libcrypto.so* /usr/local/lib/
-COPY --from=fips-integrator /usr/local/lib/libssl.so* /usr/local/lib/
-COPY --from=fips-integrator /usr/local/lib/ossl-modules /usr/local/lib/ossl-modules
-COPY --from=fips-integrator /usr/local/ssl /usr/local/ssl
-COPY --from=fips-integrator /usr/local/lib/*.a /usr/local/lib/
+COPY --from=fips-integrator /usr/local /usr/local
 
 USER nonroot
 
