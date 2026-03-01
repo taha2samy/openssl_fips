@@ -10,10 +10,14 @@ allure-pytest = "*"
 python-hcl2 = "*"
 jinja2 = "*"
 mkdocs-material = "*"
-mkdocs-macros-plugin = "*"
 mkdocs-charts-plugin = "*"
+pytest-json-report = "*"
+"ruamel.yaml" = "*"
+requests = "*"
+mkdocs-macros-plugin = "*"
 
 [dev-packages]
+mkdocs = "<2.0"
 
 [requires]
 python_version = "3.13"

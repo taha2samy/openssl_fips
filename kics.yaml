@@ -1,0 +1,24 @@
+exclude-paths:
+  - ".git"
+  - ".devcontainer"
+  - "infra"       
+  - "docs"
+  - "reports"
+  - "allure-report"
+  - "allure-results"
+  - "benchmark"
+  - "templates"
+  - ".vscode"
+  - "all-metadata"
+
+output-path: "reports" 
+output-name: "kics-report"
+report-formats:
+  - json
+  - sarif
+fail-on:
+  - critical
+  - high
+  - medium
+  - low
+ignore-on-exit: none

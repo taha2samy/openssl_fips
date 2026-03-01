@@ -14,7 +14,7 @@ from scripts.logger import log, group_start, group_end, notice
 
 LOG_DIR = os.path.join(SCRIPT_DIR, "bench_results")
 REPORTS_DIR = os.path.join(ROOT_DIR, "reports")
-CSV_PATH = os.path.join(ROOT_DIR, "docs", "assets", "data", "results.csv")
+CSV_PATH = os.path.join(ROOT_DIR, "reports","results.csv")
 JSON_PATH = os.path.join(REPORTS_DIR, "benchmark_data.json")
 
 def parse_raw_logs():

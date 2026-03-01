@@ -82,10 +82,30 @@ nav:
   - Architecture:
       - System Overview: architecture/index.md
       - Supply Chain: architecture/supply-chain.md
-  - Compliance & Audit:
-      - FIPS 140-3 Test Results: compliance/fips-audit.md
-      - Security Policy: compliance/security-policy.md
   - Performance:
       - Cryptographic Benchmarks: performance/benchmarks.md
-  - Operations Guide:
-      - Taskfile & Workflows: operations/taskfile-guide.md
+  - Validation:
+      - Validation Overview: validation/index.md
+      - Static Analysis: validation/static-analysis/kics-report.md
+      - Functional Tests:
+          - Standard & Dev Core: validation/functional-tests/standard-image.md
+          - Distroless Core: validation/functional-tests/distroless-image.md
+      - Compliance Reports:
+          - Standard Image:
+              - Vulnerability Scan: validation/compliance/standard/vulnerability.md
+              - CIS Docker Benchmark: validation/compliance/standard/docker-cis.md
+              - NSA K8s Hardening: validation/compliance/standard/k8s-nsa.md
+              - K8s PSS Restricted: validation/compliance/standard/k8s-pss.md
+          - Distroless Image:
+              - Vulnerability Scan: validation/compliance/distroless/vulnerability.md
+              - CIS Docker Benchmark: validation/compliance/distroless/docker-cis.md
+              - NSA K8s Hardening: validation/compliance/distroless/k8s-nsa.md
+              - K8s PSS Restricted: validation/compliance/distroless/k8s-pss.md
+          - Development SDK:
+              - Vulnerability Scan: validation/compliance/development/vulnerability.md
+              - CIS Docker Benchmark: validation/compliance/development/docker-cis.md
+              - NSA K8s Hardening: validation/compliance/development/k8s-nsa.md
+              - K8s PSS Restricted: validation/compliance/development/k8s-pss.md  
+            # - Operations Guide:
+  #     - Taskfile & Workflows: OPERATIONS.md
+  #     - Validation: validation/index.md

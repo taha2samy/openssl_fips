@@ -39,7 +39,7 @@ class TestSystemIntegrity:
     @allure.title("Verify Non-Root User Execution Enforcement")
     @allure.description("""
         Validates that the container is configured to execute as a non-privileged 
-        'openssl' user. Running as root is a security risk and violates 
+        'nonroot' user. Running as root is a security risk and violates 
         principle-of-least-privilege (PoLP) requirements for secure environments.
     """)
     @allure.severity(allure.severity_level.MINOR)
@@ -54,9 +54,9 @@ class TestSystemIntegrity:
             except subprocess.CalledProcessError as e:
                 pytest.fail(f"Failed to inspect docker image: {e.stderr}")
 
-        with allure.step("Verifying user identity is 'openssl'"):
-            assert configured_user == "openssl", \
-                f"Security Failure: Container is configured to run as '{configured_user or 'root'}', expected 'openssl'."
+        with allure.step("Verifying user identity is 'nonroot'"):
+            assert configured_user == "nonroot", \
+                f"Security Failure: Container is configured to run as '{configured_user or 'root'}', expected 'nonroot'."
 
         with allure.step("Recording container security metrics"):
             allure.dynamic.parameter("Effective User", configured_user)

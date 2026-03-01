@@ -32,21 +32,25 @@ EOF
 
 NPROC=$(nproc)
 TEST_TIME=1
-
 set +e
-ALGS="aes-256-gcm sha256 sha512 sha3-256 rsa2048 ecdsap256 ecdhp256"
-for alg in $ALGS; do
-    echo "Testing $alg..."
-    
-    docker run --rm --entrypoint sh fips-bench -c "openssl speed -multi $NPROC -seconds $TEST_TIME -evp $alg" >> "$RESULT_DIR/fips.log" 2>&1 || echo "$alg not supported" >> "$RESULT_DIR/fips.log"
-    
-    docker run --rm --entrypoint sh debian-bench -c "openssl speed -multi $NPROC -seconds $TEST_TIME -evp $alg" >> "$RESULT_DIR/debian.log" 2>&1 || echo "$alg not supported" >> "$RESULT_DIR/debian.log"
-    
-    docker run --rm --entrypoint sh alpine-bench -c "openssl speed -multi $NPROC -seconds $TEST_TIME -evp $alg" >> "$RESULT_DIR/alpine.log" 2>&1 || echo "$alg not supported" >> "$RESULT_DIR/alpine.log"
-    
-    docker run --rm --entrypoint sh ubuntu-bench -c "openssl speed -multi $NPROC -seconds $TEST_TIME -evp $alg" >> "$RESULT_DIR/ubuntu.log" 2>&1 || echo "$alg not supported" >> "$RESULT_DIR/ubuntu.log"
 
+EVP_ALGS="aes-256-gcm sha256 sha512 sha3-256"
+for alg in $EVP_ALGS; do
+    echo "Testing Symmetric (EVP): $alg..."
+    docker run --rm --entrypoint sh fips-bench -c "openssl speed -multi $NPROC -seconds $TEST_TIME -evp $alg" >> "$RESULT_DIR/fips.log" 2>&1
+    docker run --rm --entrypoint sh debian-bench -c "openssl speed -multi $NPROC -seconds $TEST_TIME -evp $alg" >> "$RESULT_DIR/debian.log" 2>&1
+    docker run --rm --entrypoint sh alpine-bench -c "openssl speed -multi $NPROC -seconds $TEST_TIME -evp $alg" >> "$RESULT_DIR/alpine.log" 2>&1
+    docker run --rm --entrypoint sh ubuntu-bench -c "openssl speed -multi $NPROC -seconds $TEST_TIME -evp $alg" >> "$RESULT_DIR/ubuntu.log" 2>&1
+done
+
+ASYM_ALGS="rsa2048 ecdsap256"
+for alg in $ASYM_ALGS; do
+    echo "Testing Asymmetric (Raw): $alg..."
+    docker run --rm --entrypoint sh fips-bench -c "openssl speed -multi $NPROC -seconds $TEST_TIME $alg" >> "$RESULT_DIR/fips.log" 2>&1
+    docker run --rm --entrypoint sh debian-bench -c "openssl speed -multi $NPROC -seconds $TEST_TIME $alg" >> "$RESULT_DIR/debian.log" 2>&1
+    docker run --rm --entrypoint sh alpine-bench -c "openssl speed -multi $NPROC -seconds $TEST_TIME $alg" >> "$RESULT_DIR/alpine.log" 2>&1
+    docker run --rm --entrypoint sh ubuntu-bench -c "openssl speed -multi $NPROC -seconds $TEST_TIME $alg" >> "$RESULT_DIR/ubuntu.log" 2>&1
 done
 
 set -e
-echo "✅ All logs generated in $RESULT_DIR"
+echo "✅ Benchmarks complete."

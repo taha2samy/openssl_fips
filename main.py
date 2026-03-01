@@ -2,13 +2,27 @@ import os
 import json
 import hcl2
 import sys
+import csv
 from datetime import datetime
+import platform
+import platform
+import multiprocessing
+import os
 
-# Setup path to import from scripts
+def get_total_ram_gb():
+    try:
+        total_bytes = os.sysconf('SC_PAGE_SIZE') * os.sysconf('SC_PHYS_PAGES')
+        return round(total_bytes / (1024.**3), 1)
+    except ValueError:
+        return "N/A"
+
+
+
+# Path setup for internal modules
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(ROOT_DIR)
 
-from scripts.logger import log, group_start, group_end, notice
+from scripts.logger import log, group_start, group_end
 
 def load_json(path: str) -> dict:
     if not os.path.exists(path):
@@ -38,30 +52,77 @@ def load_hcl(path: str) -> dict:
         return {}
 
 def define_env(env):
-    group_start("MkDocs Environment Injection")
+    @env.filter
+    def from_json(value):
+        return json.loads(value)
     
-    # 1. Load All Data Sources
+    @env.filter
+    def to_datetime(date_str):
+        try:
+            clean_date = date_str.replace('Z', '+00:00').split('.')[0]
+            return datetime.fromisoformat(clean_date)
+        except:
+            return datetime.now()
+
+    group_start("MkDocs Data Injection")
+    
+    reports_dir = os.path.join(ROOT_DIR, "reports")
+    csv_path_throughput = os.path.join(reports_dir, "results.csv")
+    csv_path_signatures = os.path.join(reports_dir, "signatures.csv")
+    env.variables.update ({"distroless_report_FIPS_validation": load_json(os.path.join(reports_dir, "report_distroless.json"))})
+    env.variables.update ({"standard_report_FIPS_validation": load_json(os.path.join(reports_dir, "report_standard.json"))})
+    env.variables.update({"kics_report": load_json(os.path.join(reports_dir, "kics-report.json"))})
+
+    throughput_values = []
+    signature_values = []
+    env.variables.update({"standard_compliance":{"docker_cis": load_json(os.path.join(reports_dir, "standard-docker-cis_full.json")),
+                         "k8s_nsa": load_json(os.path.join(reports_dir, "standard-k8s-nsa_full.json")),
+                         "k8s_pss_restricted": load_json(os.path.join(reports_dir, "standard-k8s-pss-restricted_full.json")),
+                         "security_scan": load_json(os.path.join(reports_dir, "standard-security-full.json"))}})
+    env.variables.update({"distroless_compliance":{"docker_cis": load_json(os.path.join(reports_dir, "distroless-docker-cis_full.json")),
+                         "k8s_nsa": load_json(os.path.join(reports_dir, "distroless-k8s-nsa_full.json")),
+                         "k8s_pss_restricted": load_json(os.path.join(reports_dir, "distroless-k8s-pss-restricted_full.json")),
+                         "security_scan": load_json(os.path.join(reports_dir, "distroless-security-full.json"))}})
+    env.variables.update({"development_compliance":{"docker_cis": load_json(os.path.join(reports_dir, "development-docker-cis_full.json")),
+                         "k8s_nsa": load_json(os.path.join(reports_dir, "development-k8s-nsa_full.json")),
+                         "k8s_pss_restricted": load_json(os.path.join(reports_dir, "development-k8s-pss-restricted_full.json")),
+                         "security_scan": load_json(os.path.join(reports_dir, "development-security-full.json"))}})
+    if os.path.exists(csv_path_throughput):
+        try:
+            with open(csv_path_throughput, encoding='utf-8') as f:
+                throughput_values = list(csv.DictReader(f))
+        except Exception as e:
+            log.error(f"Failed to read results.csv: {str(e)}")
+
+    if os.path.exists(csv_path_signatures):
+        try:
+            with open(csv_path_signatures, encoding='utf-8') as f:
+                signature_values = list(csv.DictReader(f))
+        except Exception as e:
+            log.error(f"Failed to read signatures.csv: {str(e)}")
+    
+    # 2. Configuration & Statistics
     bake_vars = load_hcl(os.path.join(ROOT_DIR, "docker-bake.hcl"))
     version_vars = load_hcl(os.path.join(ROOT_DIR, "versions.hcl"))
     summary = load_json(os.path.join(ROOT_DIR, "reports", "summary.json"))
     raw_benchmarks = load_json(os.path.join(ROOT_DIR, "reports", "benchmark_data.json"))
 
-    meta_root = os.path.join(ROOT_DIR, "all-metadata")
-    distroless_meta = load_json(os.path.join(meta_root, "distroless_attestation_details.json"))
-    standard_meta = load_json(os.path.join(meta_root, "standard_attestation_details.json"))
-    dev_meta = load_json(os.path.join(meta_root, "development_attestation_details.json"))
+    # 3. Supply Chain Metadata
+    distroless_meta = load_json(os.path.join(reports_dir, "distroless_attestation_details.json"))
+    standard_meta = load_json(os.path.join(reports_dir, "standard_attestation_details.json"))
+    dev_meta = load_json(os.path.join(reports_dir, "development_attestation_details.json"))
 
-    # 2. Process Test Statistics
+    # 4. Processing Test Stats
     stats = summary.get("summary", {}).get(
         "statistic",
         {"passed": 0, "failed": 0, "broken": 0, "total": 0}
     )
 
-    # 3. Benchmark Fallback Logic
+    # 5. Benchmark Fallback (prevents template errors if JSON is missing)
     if not raw_benchmarks or "metrics" not in raw_benchmarks:
-        log.warning("benchmark_data.json is missing or invalid. Using safety fallback.")
+        log.warning("Benchmark JSON missing. Injecting empty fallback structure.")
         benchmarks = {
-            "metadata": {"fips": {"openssl_version": "N/A"}, "ubuntu": {}, "alpine": {}, "debian": {}},
+            "metadata": {"fips": {"openssl_version": "N/A"}},
             "metrics": {
                 "AES-256-GCM": {"fips": [0]*6, "ubuntu": [0]*6, "debian": [0]*6, "alpine": [0]*6},
                 "sha256": {"fips": [0]*6, "ubuntu": [0]*6, "debian": [0]*6, "alpine": [0]*6},
@@ -72,10 +133,10 @@ def define_env(env):
     else:
         benchmarks = raw_benchmarks
 
-    # 4. Global Variables Injection
     owner = bake_vars.get("OWNER", "taha2samy")
     repo = bake_vars.get("REPO_NAME", "wolfi-openssl-fips")
 
+    # 6. Global Variable Injection
     env.variables.update({
         "project_name": os.getenv("PROJECT_NAME", "Wolfi OpenSSL FIPS"),
         "owner": owner,
@@ -89,16 +150,18 @@ def define_env(env):
         "test_stats": stats,
         "test_badge_color": "red" if (stats["failed"] + stats["broken"]) > 0 else "brightgreen",
         "benchmark_data": benchmarks,
+        "bench_results_raw": json.dumps(throughput_values),
+        "bench_signatures_raw": json.dumps(signature_values)
     })
 
-    # 5. Packages List
+    # 7. Dependency List
     env.variables["packages"] = [
         {"name": key.replace("_VER", "").replace("_", " ").title(), "version": value}
         for key, value in version_vars.items()
         if key not in {"BASE_IMAGE", "STATIC_IMAGE"}
     ]
 
-    # 6. Attestation Metadata
+    # 8. Provenance & SBOM URLs
     env.variables.update({
         "distroless_digest": distroless_meta.get("provenance", {}).get("digest", "N/A"),
         "distroless_url": distroless_meta.get("provenance", {}).get("url", "#"),
@@ -110,7 +173,14 @@ def define_env(env):
         "dev_url": dev_meta.get("provenance", {}).get("url", "#"),
         "dev_sbom_url": dev_meta.get("sbom", {}).get("url", "#"),
     })
-
+    env.variables["hardware_context"] = {
+        "system": platform.system(),                # e.g., Linux
+        "release": platform.release(),              # Kernel version
+        "architecture": platform.machine(),         # e.g., x86_64
+        "cpu_cores": multiprocessing.cpu_count(),   # Number of logical cores
+        "ram_gb": get_total_ram_gb(),               # Total RAM in GB
+        "runner": os.getenv("CI", "Local Machine")  # Checks if running in CI
+    }
     env.variables["github"] = {
         "repository": os.getenv("GITHUB_REPOSITORY", f"{owner}/{repo}"),
         "commit_sha": os.getenv("GITHUB_SHA", "0000000"),
@@ -122,5 +192,5 @@ def define_env(env):
         icons = {"passed": "✅", "failed": "❌", "broken": "💥"}
         return icons.get(status, "❓")
 
-    log.info("Environment variables successfully injected into MkDocs.")
+    log.info("Documentation context successfully injected.")
     group_end()
