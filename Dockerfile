@@ -247,20 +247,6 @@ RUN /usr/local/bin/openssl fipsinstall \
 COPY conf/openssl.cnf /usr/local/ssl/openssl.cnf
 RUN ln -sf libcrypto.so.3 /usr/local/lib/libcrypto.so && \
     ln -sf libssl.so.3 /usr/local/lib/libssl.so
-FROM ${BASE_IMAGE} AS helper
-ARG LIBSTDC_PLUS_PLUS_VER
-ARG ZLIB_VER
-ARG TZDATA_VER
-ARG POSIX_LIBC_UTILS_VER
-RUN --mount=type=cache,target=/var/cache/apk \
-    apk add --no-cache libstdc++=${LIBSTDC_PLUS_PLUS_VER} zlib=${ZLIB_VER} tzdata=${TZDATA_VER} posix-libc-utils=${POSIX_LIBC_UTILS_VER}
-RUN addgroup -g 1000 openssl && adduser -u 1000 -G openssl -D -s /bin/bash openssl
-RUN mkdir -p /etc && touch /etc/nsswitch.conf
-RUN cp /usr/share/zoneinfo/UTC /etc/localtime && echo "UTC" > /etc/timezone
-
-
-
-
 
 
 
@@ -309,11 +295,6 @@ ENV PATH="/usr/local/bin:${PATH}" \
     OPENSSL_MODULES=/usr/local/lib/ossl-modules \
     TZ=UTC \
     LANG=C.UTF-8
-COPY --from=fips-integrator /usr/local/bin/openssl /usr/local/bin/openssl
-COPY --from=fips-integrator /usr/local/lib/libcrypto.so* /usr/local/lib/
-COPY --from=fips-integrator /usr/local/lib/libssl.so* /usr/local/lib/
-COPY --from=fips-integrator /usr/local/lib/ossl-modules /usr/local/lib/ossl-modules
-COPY --from=fips-integrator /usr/local/ssl /usr/local/ssl
 USER nonroot
 
 
@@ -364,7 +345,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=2s --retries=3 \
 ENTRYPOINT ["/usr/local/bin/openssl"]
 
 FROM development AS openssl-dev
-
+COPY --from=fips-integrator / /
 LABEL org.opencontainers.image.title="Wolfi OpenSSL FIPS (development)" \
     org.opencontainers.image.description="FIPS 140-3 compliant OpenSSL container (development)" \
     org.opencontainers.image.vendor="taha2samy" \

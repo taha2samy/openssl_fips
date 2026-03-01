@@ -4,6 +4,9 @@ tasks:
   just_ensure:
     cmds:
       - echo "Ensuring Taskfile.github.yml exists {{.DISTROLESS_IMAGE}}"
+      - echo "{{.DISTROLESS_IMAGE}}"
+      - echo "{{.STANDARD_IMAGE}}"
+      - echo "{{.DEV_IMAGE}}"
   upload-sbom:
     cmds:
       - pipenv run python scripts/upload_sbom.py {{.FILE}} {{.TARGET}} {{.REPO}}
@@ -11,4 +14,16 @@ tasks:
       FILE: '{{default "" .FILE}}'
       TARGET: '{{default "" .TARGET}}'
       REPO: '{{default "" .REPO}}'
-      
+
+  cleanup-workflows:
+    desc: "Robust cleanup of ALL GitHub Actions workflow runs history"
+    silent: true
+    cmds:
+      - echo "Fetching workflow runs for {{.owner}}/{{.repo_of_code}}..."
+      - |
+        gh run list --repo {{.owner}}/{{.repo_of_code}} --limit 100 --json databaseId --jq '.[].databaseId' \
+        | xargs -I {} gh run delete --repo {{.owner}}/{{.repo_of_code}} {}
+      - echo "Cleanup process initiated successfully."
+    preconditions:
+      - sh: command -v gh >/dev/null 2>&1
+        msg: "GitHub CLI (gh) is not installed."
