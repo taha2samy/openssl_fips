@@ -26,7 +26,6 @@ All technical details, including vulnerability audits, FIPS functional test resu
 ## Operations
 The project lifecycle is managed via Taskfile. Refer to the **Operational Excellence Guide** on the dashboard for instructions on setup, auditing, and local documentation rendering.
 
----
+
 
 **License:** Apache-2.0  
-**Community:** Technical feedback and contributions are governed by the project principles outlined in the documentation.
