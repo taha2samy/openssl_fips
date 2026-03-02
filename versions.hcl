@@ -5,7 +5,7 @@ variable "BASE_IMAGE" {
   default = "cgr.dev/chainguard/wolfi-base@sha256:9925d3017788558fa8f27e8bb160b791e56202b60c91fbcc5c867de3175986c8"
 }
 variable "STATIC_IMAGE" {
-  default = "cgr.dev/chainguard/static@sha256:11ec91f0372630a2ca3764cea6325bebb0189a514084463cbb3724e5bb350d14"
+  default = "cgr.dev/chainguard/static@sha256:b24ac9892a647b64bc8341e6b9280885c44004b32ffc8d57d3218960280e1d89"
 }
 
 # --- Package Versions ---
@@ -31,7 +31,7 @@ variable "ZLIB_VER" {
   default = "1.3.2-r0"
 }
 variable "TZDATA_VER" {
-  default = "2025c-r0"
+  default = "2026a-r0"
 }
 variable "POSIX_LIBC_UTILS_VER" {
   default = "2.43-r1"
