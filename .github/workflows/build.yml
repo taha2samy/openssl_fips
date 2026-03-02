@@ -227,6 +227,8 @@ jobs:
     name: Run - ${{ matrix.task_name }}
     needs: [attest]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
