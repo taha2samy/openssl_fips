@@ -2,10 +2,10 @@
 
 # --- Base Images (Pinned by Digest) ---
 variable "BASE_IMAGE" {
-  default = "cgr.dev/chainguard/wolfi-base@sha256:9925d3017788558fa8f27e8bb160b791e56202b60c91fbcc5c867de3175986c8"
+  default = "cgr.dev/chainguard/wolfi-base@sha256:c11fcfc9f7497a947c2e1fa5d7b5171c0b6985d4f7fb1fcc68eaf1a62c76d048"
 }
 variable "STATIC_IMAGE" {
-  default = "cgr.dev/chainguard/static@sha256:b24ac9892a647b64bc8341e6b9280885c44004b32ffc8d57d3218960280e1d89"
+  default = "cgr.dev/chainguard/static@sha256:d6a97eb401cbc7c6d48be76ad81d7899b94303580859d396b52b67bc84ea7345"
 }
 
 # --- Package Versions ---
@@ -16,7 +16,7 @@ variable "PERL_VER" {
   default = "5.42.0-r2"
 }
 variable "LINUX_HEADERS_VER" {
-  default = "6.19.4-r0"
+  default = "6.19.5-r0"
 }
 variable "WGET_VER" {
   default = "1.25.0-r7"
@@ -85,7 +85,7 @@ variable "WOLFI_BASE_VER" {
   default = "1-r7"
 }
 variable "WOLFI_BASELAYOUT_VER" {
-  default = "20230201-r27"
+  default = "20230201-r28"
 }
 variable "WOLFI_KEYS_VER" {
   default = "1-r13"
