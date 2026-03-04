@@ -1,10 +1,8 @@
-import os
 import json
 import hcl2
 import sys
 import csv
 from datetime import datetime
-import platform
 import platform
 import multiprocessing
 import os
