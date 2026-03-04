@@ -2,7 +2,7 @@
 
 # --- Base Images (Pinned by Digest) ---
 variable "BASE_IMAGE" {
-  default = "cgr.dev/chainguard/wolfi-base@sha256:c11fcfc9f7497a947c2e1fa5d7b5171c0b6985d4f7fb1fcc68eaf1a62c76d048"
+  default = "cgr.dev/chainguard/wolfi-base@sha256:74cc4315c1344a40a7ac1e7d1b8f26cc7dba2256791338c0f12e745be950a143"
 }
 variable "STATIC_IMAGE" {
   default = "cgr.dev/chainguard/static@sha256:d6a97eb401cbc7c6d48be76ad81d7899b94303580859d396b52b67bc84ea7345"
@@ -28,7 +28,7 @@ variable "LIBSTDC_PLUS_PLUS_VER" {
   default = "15.2.0-r9"
 }
 variable "ZLIB_VER" {
-  default = "1.3.2-r0"
+  default = "1.3.2-r1"
 }
 variable "TZDATA_VER" {
   default = "2026a-r0"
@@ -43,13 +43,13 @@ variable "PCRE_DEV_VER" {
   default = "8.45-r7"
 }
 variable "ZLIB_DEV_VER" {
-  default = "1.3.2-r0"
+  default = "1.3.2-r1"
 }
 variable "BASH_VER" {
   default = "5.3-r5"
 }
 variable "CURL_VER" {
-  default = "8.18.0-r2"
+  default = "8.18.0-r3"
 }
 variable "JQ_VER" {
   default = "1.8.1-r3"
