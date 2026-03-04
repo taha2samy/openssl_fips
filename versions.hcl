@@ -34,7 +34,7 @@ variable "TZDATA_VER" {
   default = "2026a-r0"
 }
 variable "POSIX_LIBC_UTILS_VER" {
-  default = "2.43-r1"
+  default = "2.43-r2"
 }
 variable "PKGCONF_VER" {
   default = "2.5.1-r1"
@@ -64,16 +64,16 @@ variable "BUSYBOX_VER" {
   default = "1.37.0-r54"
 }
 variable "GLIBC_VER" {
-  default = "2.43-r1"
+  default = "2.43-r2"
 }
 variable "GLIBC_LOCALE_POSIX_VER" {
-  default = "2.43-r1"
+  default = "2.43-r2"
 }
 variable "LD_LINUX_VER" {
-  default = "2.43-r1"
+  default = "2.43-r2"
 }
 variable "LIBCRYPT1_VER" {
-  default = "2.43-r1"
+  default = "2.43-r2"
 }
 variable "LIBXCRYPT_VER" {
   default = "4.5.2-r2"
