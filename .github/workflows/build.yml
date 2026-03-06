@@ -320,3 +320,17 @@ jobs:
           package_name: "wolfi-openssl-fips"
           token: ${{ secrets.GITHUB_TOKEN }}
 
+
+  cleanup-ghcr-images:
+      needs: [readme]
+      runs-on: ubuntu-latest
+      permissions:
+        packages: write
+      steps:
+        - uses: dataaxiom/ghcr-cleanup-action@v1
+          with:
+            token: ${{ secrets.GITHUB_TOKEN }}
+            package: ${{ env.repo_of_registry }}
+            older-than: 1 day
+            delete-untagged: true
+            keep-n-tagged: 0  
