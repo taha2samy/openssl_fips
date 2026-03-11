@@ -2,7 +2,7 @@
 
 # --- Base Images (Pinned by Digest) ---
 variable "BASE_IMAGE" {
-  default = "cgr.dev/chainguard/wolfi-base@sha256:8f4bb89aa9962e60d9e975d229624a29e81185db286f796e87ed0f7333c1b69e"
+  default = "cgr.dev/chainguard/wolfi-base@sha256:a9a3a0c9fb954fd70b398afdd055d74a4f196095b9fdfbcfb13495aefeefd075"
 }
 variable "STATIC_IMAGE" {
   default = "cgr.dev/chainguard/static@sha256:2fdfacc8d61164aa9e20909dceec7cc28b9feb66580e8e1a65b9f2443c53b61b"
@@ -37,7 +37,7 @@ variable "POSIX_LIBC_UTILS_VER" {
   default = "2.43-r2"
 }
 variable "PKGCONF_VER" {
-  default = "2.5.1-r1"
+  default = "2.5.1-r2"
 }
 variable "PCRE_DEV_VER" {
   default = "8.45-r7"
