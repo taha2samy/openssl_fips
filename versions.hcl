@@ -46,7 +46,7 @@ variable "ZLIB_DEV_VER" {
   default = "1.3.2-r2"
 }
 variable "BASH_VER" {
-  default = "5.3-r5"
+  default = "5.3-r6"
 }
 variable "CURL_VER" {
   default = "8.19.0-r0"
