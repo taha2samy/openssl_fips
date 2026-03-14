@@ -16,7 +16,7 @@ variable "PERL_VER" {
   default = "5.42.0-r2"
 }
 variable "LINUX_HEADERS_VER" {
-  default = "6.19.6-r1"
+  default = "6.19.8-r0"
 }
 variable "WGET_VER" {
   default = "1.25.0-r7"
@@ -49,7 +49,7 @@ variable "BASH_VER" {
   default = "5.3-r5"
 }
 variable "CURL_VER" {
-  default = "8.18.0-r3"
+  default = "8.19.0-r0"
 }
 variable "JQ_VER" {
   default = "1.8.1-r4"
