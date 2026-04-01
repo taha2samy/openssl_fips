@@ -13,7 +13,7 @@ variable "BUILD_BASE_VER" {
   default = "1-r9"
 }
 variable "PERL_VER" {
-  default = "5.42.1-r1"
+  default = "5.42.2-r0"
 }
 variable "LINUX_HEADERS_VER" {
   default = "6.19.10-r0"
