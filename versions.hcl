@@ -2,7 +2,7 @@
 
 # --- Base Images (Pinned by Digest) ---
 variable "BASE_IMAGE" {
-  default = "cgr.dev/chainguard/wolfi-base@sha256:4ac37aff83b3f67e96674ddf86d878f8c2a8f16ef1420b02611600bbe94ea8c9"
+  default = "cgr.dev/chainguard/wolfi-base@sha256:0cff4df29a6597173dc8b813787318150141eb96ac783dc3ff4f5ff52c49a1e2"
 }
 variable "STATIC_IMAGE" {
   default = "cgr.dev/chainguard/static@sha256:77d8b8925dc27970ec2f48243f44c7a260d52c49cd778288e4ee97566e0cb75b"
@@ -16,7 +16,7 @@ variable "PERL_VER" {
   default = "5.42.2-r0"
 }
 variable "LINUX_HEADERS_VER" {
-  default = "7.0.5-r0"
+  default = "7.0.7-r0"
 }
 variable "WGET_VER" {
   default = "1.25.0-r14"
@@ -25,7 +25,7 @@ variable "CA_CERTIFICATES_VER" {
   default = "20260413-r0"
 }
 variable "LIBSTDC_PLUS_PLUS_VER" {
-  default = "15.2.0-r11"
+  default = "16.1.0-r0"
 }
 variable "ZLIB_VER" {
   default = "1.3.2-r3"
@@ -49,7 +49,7 @@ variable "BASH_VER" {
   default = "5.3-r12"
 }
 variable "CURL_VER" {
-  default = "8.20.0-r0"
+  default = "8.20.0-r1"
 }
 variable "JQ_VER" {
   default = "1.8.1-r4"
@@ -61,7 +61,7 @@ variable "APK_TOOLS_VER" {
   default = "2.14.10-r10"
 }
 variable "BUSYBOX_VER" {
-  default = "1.37.0-r57"
+  default = "1.37.0-r58"
 }
 variable "GLIBC_VER" {
   default = "2.43-r7"
@@ -79,7 +79,7 @@ variable "LIBXCRYPT_VER" {
   default = "4.5.2-r2"
 }
 variable "LIBGCC_VER" {
-  default = "15.2.0-r11"
+  default = "16.1.0-r0"
 }
 variable "WOLFI_BASE_VER" {
   default = "1-r7"
