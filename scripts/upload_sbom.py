@@ -57,7 +57,7 @@ class DependencyUploader:
             "detector": {
                 "name": "wolfi-fips-uploader",
                 "version": "1.3.0",
-                "url": "https://github.com/taha2samy"
+                "url": "https://github.com/taha2samy-3"
             },
             "scanned": self.scanned_time,
             "manifests": manifests

@@ -1,0 +1,12 @@
+{
+  "name": "wolfi-openssl-fips-web",
+  "version": "1.0.0",
+  "description": "Supply chain compliance and performance analytics dashboard for Wolfi OpenSSL FIPS",
+  "type": "module",
+  "scripts": {
+    "build": "node builder.js",
+    "dev": "node builder.js && node ../server.js"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

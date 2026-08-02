@@ -100,7 +100,7 @@ def main():
         with open(comparison_path, 'r') as f:
             table_of_comparison = f.read()
 
-    owner = bake_vars.get("OWNER", "taha2samy")
+    owner = bake_vars.get("OWNER", "taha2samy-3")
     repo_name = bake_vars.get("REPO_NAME", "wolfi-openssl-fips")
     registry = bake_vars.get("REGISTRY", "ghcr.io")
     core_version = bake_vars.get("CORE_VERSION", "3.5.5")

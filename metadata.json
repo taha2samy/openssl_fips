@@ -1,0 +1,5 @@
+{
+  "name": "Wolfi OpenSSL FIPS Dashboard",
+  "description": "Modern enterprise security and cryptographic validation dashboard for Wolfi OpenSSL FIPS, showing zero-CVE compliance and cryptographic benchmarks.",
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

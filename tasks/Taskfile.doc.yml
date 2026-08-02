@@ -2,31 +2,24 @@ version: '3'
 
 tasks:
   generate_benchmark_data:
-    desc: "Run performance benchmarks test for FIPS image vs debain  ubuntu alpine "
+    desc: "Run performance benchmarks test for FIPS image vs debian ubuntu alpine"
     dir: benchmark
     cmds:
       - chmod +x ./run_benchmark.sh
       - ./run_benchmark.sh
 
   parse_benchmark_data:
-    desc: Parse benchmark results to be csv files results.csv and signatures.csv.
+    desc: "Parse benchmark results to be csv files results.csv and signatures.csv."
     cmds:
-      - pipenv run python benchmark/parser.py
-      - pipenv run python benchmark/parser_signatures.py
+      - pipenv run python benchmark/parser.py || python3 benchmark/parser.py
+      - pipenv run python benchmark/parser_signatures.py || python3 benchmark/parser_signatures.py
+
+  build:
+    desc: "Compile all reports into web/data.json and build static dashboard"
+    cmds:
+      - node web/builder.js
 
   serve:
-    desc: "Run MkDocs server locally for live preview"
+    desc: "Run local Node.js preview server for the web dashboard"
     cmds:
-      - pipenv run mkdocs serve --dev-addr 0.0.0.0:8000
-  
-
-  build-MkDocs-site:
-      desc: "Build the final FIPS Boundary Security Dashboard"
-      summary: |
-        This task generates the static site (MkDocs).
-        It assumes all JSON reports (Trivy, KICS, Benchmarks) 
-        are already gathered in the 'reports/' folder.
-      cmds:
-        - echo "Building MkDocs Security Dashboard..."
-        - pipenv run mkdocs build --clean
-        - echo "Done! The site is ready in the 'site/' directory."
+      - cd web && node cli.js --serve

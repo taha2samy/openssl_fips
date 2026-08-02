@@ -16,7 +16,7 @@ includes:
 vars:
   FIPS_VERSION: "3.1.2"
   CORE_VERSION: "3.5.5"
-  owner: "taha2samy"
+  owner: "taha2samy-3"
   registry: "ghcr.io"
   repo_of_registry: "wolfi-openssl-fips"
   repo_of_code: "openssl_fips"
